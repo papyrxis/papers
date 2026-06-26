@@ -1,0 +1,21 @@
+# LaTeX build artifacts
+build/
+*.aux
+*.log
+*.out
+*.toc
+*.bbl
+*.blg
+*.synctex.gz
+*.fdb_latexmk
+*.fls
+*.idx
+*.ilg
+*.ind
+*.run.xml
+*.bcf
+
+# Editor
+*.swp
+*.swo
+.DS_Store
