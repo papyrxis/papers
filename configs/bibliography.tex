@@ -1,0 +1,36 @@
+\usepackage[
+  backend=biber,
+  bibstyle=numeric,         
+  citestyle=verbose-note,   
+  sorting=none,             
+  autocite=footnote,        
+  ibidtracker=constrict,    
+  pagetracker=true,
+  citetracker=true,
+  maxbibnames=99,
+  maxcitenames=3,
+  giveninits=true,
+  url=true,
+  doi=true,
+  eprint=true,
+  backref=true              
+]{biblatex}
+
+\renewcommand{\thefootnote}{[\arabic{footnote}]}
+\renewcommand{\footnotesize}{\small}
+\renewcommand{\footnoterule}{%
+  \kern -3pt
+  \hrule width 0.4\textwidth height 0.4pt
+  \kern 3pt
+}
+\setlength{\footnotesep}{0.8\baselineskip}
+
+\setlength{\bibitemsep}{0.4\baselineskip}
+\setlength{\bibhang}{1.5em}
+
+\setcounter{biburllcpenalty}{7000}
+\setcounter{biburlucpenalty}{8000}
+
+\renewbibmacro{in:}{%
+  \ifentrytype{article}{}{\printtext{\bibstring{in}\intitlepunct}}%
+}

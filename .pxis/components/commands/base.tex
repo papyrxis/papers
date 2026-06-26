@@ -1,0 +1,33 @@
+\makeatletter
+
+\newcommand{\provideCommand}[1]{%
+  \@ifundefined{#1}{}{\let#1\relax}%
+}
+
+\makeatother
+
+% Complexity notation
+\providecommand{\bigO}{\ensuremath{\mathcal{O}}}
+\providecommand{\bigOmega}{\ensuremath{\Omega}}
+\providecommand{\bigTheta}{\ensuremath{\Theta}}
+\providecommand{\littleo}{\ensuremath{o}}
+\providecommand{\littleomega}{\ensuremath{\omega}}
+% Number sets
+\providecommand{\Naturals}{\ensuremath{\mathbb{N}}}
+\providecommand{\Integers}{\ensuremath{\mathbb{Z}}}
+\providecommand{\Rationals}{\ensuremath{\mathbb{Q}}}
+\providecommand{\Reals}{\ensuremath{\mathbb{R}}}
+\providecommand{\Complex}{\ensuremath{\mathbb{C}}}
+
+% Probability
+\providecommand{\Prob}{\ensuremath{\mathbb{P}}}
+\providecommand{\Expect}{\ensuremath{\mathbb{E}}}
+\providecommand{\Var}{\ensuremath{\operatorname{Var}}}
+
+% Set notation
+\newcommand{\set}[1]{\{#1\}}
+\newcommand{\setbuilder}[2]{\{#1 \mid #2\}}
+
+% Text formatting
+\newcommand{\keyword}[1]{\textcolor{accent}{\textbf{#1}}}
+\newcommand{\term}[1]{\textit{#1}}

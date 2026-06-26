@@ -1,0 +1,105 @@
+\usepackage[
+  a4paper,
+  top=2.5cm,
+  bottom=2.5cm,
+  inner=3cm,
+  outer=2.5cm,
+  headheight=1.2cm,
+  headsep=0.8cm,
+  footskip=1cm,
+  marginparwidth=2cm,
+  marginparsep=0.3cm
+]{geometry}
+
+\usepackage{setspace}
+\setstretch{1.25}
+
+\setlength{\parindent}{1.5em}
+\setlength{\parskip}{0.4ex plus 0.2ex minus 0.1ex}
+
+\tolerance=2000
+\hbadness=1000
+\emergencystretch=15pt
+
+\usepackage{float}
+\usepackage{placeins}
+\usepackage{afterpage}
+
+\renewcommand{\topfraction}{0.85}
+\renewcommand{\bottomfraction}{0.70}
+\renewcommand{\textfraction}{0.1}
+\renewcommand{\floatpagefraction}{0.8}
+
+\setcounter{topnumber}{3}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{5}
+
+\usepackage{enumitem}
+
+\setlist[itemize]{
+  leftmargin=20pt,
+  itemsep=4pt plus 1pt minus 1pt,
+  parsep=2pt plus 1pt minus 1pt,
+  topsep=8pt plus 2pt minus 2pt
+}
+
+\setlist[enumerate]{
+  leftmargin=25pt,
+  itemsep=4pt plus 1pt minus 1pt,
+  parsep=2pt plus 1pt minus 1pt,
+  topsep=8pt plus 2pt minus 2pt
+}
+
+\setlist[description]{
+  leftmargin=0pt,
+  itemsep=6pt plus 2pt minus 1pt,
+  parsep=2pt plus 1pt minus 1pt,
+  topsep=8pt plus 2pt minus 2pt,
+  font=\bfseries\color{accent}
+}
+
+\widowpenalty=10000
+\clubpenalty=10000
+\brokenpenalty=7500
+\predisplaypenalty=10000
+\postdisplaypenalty=2500
+\displaywidowpenalty=3000
+
+\lefthyphenmin=3
+\righthyphenmin=3
+
+\linepenalty=10
+\adjdemerits=10000
+
+\raggedbottom
+
+\usepackage{tocloft}
+\usepackage{titletoc}
+
+\setlength{\cftbeforetoctitleskip}{0pt}
+\setlength{\cftaftertoctitleskip}{3ex}
+\setlength{\cftbeforepartskip}{2ex plus 0.5ex}
+\setlength{\cftbeforechapskip}{1.2ex plus 0.3ex}
+\setlength{\cftbeforesecskip}{0.8ex plus 0.2ex}
+\setlength{\cftbeforesubsecskip}{0.4ex plus 0.1ex}
+
+\setlength{\cftchapnumwidth}{3em}
+\setlength{\cftsecnumwidth}{3em}
+\setlength{\cftsubsecnumwidth}{3.5em}
+
+\renewcommand{\cftpartfont}{\Large\sffamily\bfseries\color{primary}}
+\renewcommand{\cftpartpagefont}{\Large\sffamily\bfseries\color{primary}}
+\renewcommand{\cftpartleader}{\cftdotfill{\cftpartdotsep}}
+\renewcommand{\cftpartdotsep}{4.5}
+
+\renewcommand{\cftchapfont}{\large\sffamily\bfseries\color{primary}}
+\renewcommand{\cftchappagefont}{\large\sffamily\bfseries\color{primary}}
+\renewcommand{\cftchapleader}{\cftdotfill{\cftchapdotsep}}
+\renewcommand{\cftchapdotsep}{2.6}
+
+\renewcommand{\cftsecfont}{\sffamily\color{textprimary}}
+\renewcommand{\cftsecpagefont}{\sffamily\color{textprimary}}
+\renewcommand{\cftsecleader}{\cftdotfill{\cftsecdotsep}}
+
+\renewcommand{\cftsubsecfont}{\small\sffamily\color{textsecondary}}
+\renewcommand{\cftsubsecpagefont}{\small\sffamily\color{textsecondary}}

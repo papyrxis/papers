@@ -1,0 +1,156 @@
+\usepackage{tcolorbox}
+\tcbuselibrary{most}
+\tcbset{
+  genixcallout/.style={
+    enhanced,
+    colback=white,
+    colframe=white,
+    colbacktitle=white,
+    boxrule=0pt,
+    sharp corners,
+    titlerule=0pt,
+    toptitle=2pt,
+    bottomtitle=2pt,
+    fonttitle=\sffamily\bfseries\small,
+    left=13pt,
+    right=10pt,
+    top=6pt,
+    bottom=7pt,
+    before skip=10pt,
+    after skip=14pt,
+    breakable,
+  },
+  genixblock/.style={
+    enhanced,
+    colback=white,
+    colframe=white,
+    boxrule=0pt,
+    sharp corners,
+    left=14pt,
+    right=12pt,
+    top=10pt,
+    bottom=10pt,
+    before skip=10pt,
+    after skip=14pt,
+    breakable,
+    parbox=false,
+  },
+}
+
+% ── Callout boxes ─────────────────────────────────────────────────────────────
+\newtcolorbox{notebox}[1][]{%
+  genixcallout,
+  borderline west={2pt}{0pt}{genixblue},
+  coltitle=genixblue,
+  title=Note,
+  #1
+}
+
+\newtcolorbox{tipbox}[1][]{%
+  genixcallout,
+  borderline west={2pt}{0pt}{genixlightblue},
+  coltitle=genixlightblue,
+  title=Tip,
+  #1
+}
+
+\newtcolorbox{warningbox}[1][]{%
+  genixcallout,
+  borderline west={2.5pt}{0pt}{warncolor},
+  coltitle=warncolor,
+  title=Warning,
+  #1
+}
+
+\newtcolorbox{examplebox}[1][]{%
+  genixcallout,
+  borderline west={2pt}{0pt}{genixgray},
+  coltitle=genixgray,
+  title=Example,
+  #1
+}
+
+% ── Formal math-style boxes ───────────────────────────────────────────────────
+\newtcolorbox{definitionbox}[2][]{%
+  enhanced,
+  colback=genixblue!4,
+  colframe=genixblue!60,
+  boxrule=0.8pt,
+  arc=0pt,
+  sharp corners,
+  left=14pt,
+  right=14pt,
+  top=10pt,
+  bottom=10pt,
+  breakable,
+  before skip=12pt,
+  after skip=14pt,
+  title={\small\textbf{Definition\if\relax\detokenize{#2}\relax\else~\ref*{#2}\fi}},
+  fonttitle=\sffamily\bfseries,
+  coltitle=genixblue!80,
+  #1
+}
+
+\newtcolorbox{theorembox}[2][]{%
+  enhanced,
+  colback=genixnavy!4,
+  colframe=genixnavy!60,
+  boxrule=0.8pt,
+  arc=0pt,
+  sharp corners,
+  left=14pt,
+  right=14pt,
+  top=10pt,
+  bottom=10pt,
+  breakable,
+  before skip=12pt,
+  after skip=14pt,
+  title={\small\textbf{Theorem\if\relax\detokenize{#2}\relax\else~\ref*{#2}\fi}},
+  fonttitle=\sffamily\bfseries,
+  coltitle=genixnavy!85,
+  #1
+}
+
+\newtcolorbox{corollarybox}[2][]{%
+  enhanced,
+  colback=genixnavy!2,
+  colframe=genixnavy!35,
+  boxrule=0.5pt,
+  arc=0pt,
+  sharp corners,
+  left=14pt,
+  right=14pt,
+  top=9pt,
+  bottom=9pt,
+  breakable,
+  before skip=10pt,
+  after skip=12pt,
+  title={\small\textbf{Corollary\if\relax\detokenize{#2}\relax\else~\ref*{#2}\fi}},
+  fonttitle=\sffamily\bfseries,
+  coltitle=genixnavy!75,
+  #1
+}
+
+\newtcolorbox{lemmabox}[2][]{%
+  genixcallout,
+  borderline west={2.5pt}{0pt}{genixnavy!55},
+  coltitle=genixnavy!75,
+  title=\textbf{Lemma\if\relax\detokenize{#2}\relax\else~\ref*{#2}\fi},
+  #1
+}
+
+\newtcolorbox{remarkbox}[1][]{%
+  genixcallout,
+  borderline west={1.5pt}{0pt}{genixgray},
+  coltitle=genixgray,
+  title=Remark,
+  \small,
+  #1
+}
+
+\newtcolorbox{proofbox}[1][]{%
+  genixblock,
+  colback=subtle,
+  colframe=subtle,
+  #1
+}
