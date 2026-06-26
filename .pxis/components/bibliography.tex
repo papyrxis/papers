@@ -1,19 +1,20 @@
 \usepackage[
   backend=biber,
-  bibstyle=numeric,         
-  citestyle=verbose-note,   
-  sorting=none,             
-  autocite=footnote,        
-  ibidtracker=constrict,    
+  bibstyle=authortitle,
+  citestyle=verbose-note,
+  sorting=nyt,
+  autocite=footnote,
+  ibidtracker=constrict,
   pagetracker=true,
   citetracker=true,
   maxbibnames=99,
   maxcitenames=3,
+  dashed=false,
   giveninits=true,
   url=true,
   doi=true,
   eprint=true,
-  backref=true              
+  backref=true
 ]{biblatex}
 
 \renewcommand{\thefootnote}{[\arabic{footnote}]}
@@ -34,3 +35,12 @@
 \renewbibmacro{in:}{%
   \ifentrytype{article}{}{\printtext{\bibstring{in}\intitlepunct}}%
 }
+
+\AtEveryBibitem{%
+  \ifentrytype{book}{\clearfield{url}}{}%
+  \ifentrytype{article}{\clearfield{url}}{}%
+}
+
+\DeclareNameAlias{sortname}{family-given}
+
+\providecommand{\FooterAuthorName}{Mahdi Mamashli (Genix)}

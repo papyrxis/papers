@@ -4,7 +4,7 @@
 % Metadata — filled in per paper by scripts/generate.sh
 % These tokens are replaced before LaTeX ever sees this file.
 % This file is the inherited template: it is never edited directly
-% inside papers/papers/<slug>/ — that copy is regenerated every time
+% inside papers/<slug>/ — that copy is regenerated every time
 % from this template + configs/papers/<slug>.conf + the paper's
 % sections/*.tex files. Edit THIS file to change the shape every
 % paper shares; edit the .conf / sections/ to change one paper.
@@ -12,11 +12,14 @@
 
 \input{../../.pxis/preset}
 \input{../../configs/paper-styles}
+
+\renewcommand{\FooterAuthorName}{Mahdi Mamashli (Genix)}
+
 \applyPaperStyle{academic}
 
 \addbibresource{references/paper.bib}
 
-% ─── Metadata ────────────────────────────────────────────────────────────
+% ─── Metadata ─────────────────────────────────────────────────────────────────
 \title{A Function-Theoretic Definition of Data: Resolving Representational Ambiguity in Systems Design}
 \author{%
   Mahdi Mamashli (Genix)\\
@@ -31,7 +34,7 @@
   pdfkeywords={data representation, formal definition, information theory, type safety, serialization, systems design},
 }
 
-% ─── Document ────────────────────────────────────────────────────────────
+% ─── Document ─────────────────────────────────────────────────────────────────
 \begin{document}
 
 \maketitle
