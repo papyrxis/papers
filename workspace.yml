@@ -1,0 +1,44 @@
+project:
+  type: article
+  title: "Papers — Mahdi Mamashli (Genix)"
+  author: "Mahdi Mamashli (Genix)"
+  email: "bitsgenix@gmail.com"
+  url: "https://github.com/papyrxis/papers"
+
+build:
+  engine: pdflatex
+  bibtex: biber
+  output_dir: build
+  source: "main.tex"
+
+version:
+  source: git
+  fallback: "dev"
+
+components:
+  - fonts
+  - math
+  - graphics
+  - tables
+  - hyperref
+  - colors
+  - layout
+  - bibliography
+  - paper-styles
+  - code
+  - commands/base
+
+colors:
+  scheme: genix
+
+copyright:
+  type: cc-by-sa
+  year: "auto"
+  holder: "Mahdi Mamashli (Genix)"
+
+overrides:
+  dir: "configs"
+  mode: replace
+
+paper:
+  default_style: personal

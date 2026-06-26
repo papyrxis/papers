@@ -1,0 +1,47 @@
+\documentclass[@PAPER_FONTSIZE@,a4paper]{article}
+
+% ============================================================
+% Metadata — filled in per paper by scripts/generate.sh
+% These tokens are replaced before LaTeX ever sees this file.
+% This file is the inherited template: it is never edited directly
+% inside papers/papers/<slug>/ — that copy is regenerated every time
+% from this template + configs/papers/<slug>.conf + the paper's
+% sections/*.tex files. Edit THIS file to change the shape every
+% paper shares; edit the .conf / sections/ to change one paper.
+% ============================================================
+
+\input{@PXIS_PATH@/preset}
+\input{@CONFIGS_PATH@/paper-styles}
+\applyPaperStyle{@PAPER_STYLE@}
+
+\addbibresource{@BIB_PATH@}
+
+% ─── Metadata ────────────────────────────────────────────────────────────
+\title{@PAPER_TITLE@}
+\author{%
+  @PAPER_AUTHOR@\\
+  \small\texttt{@PAPER_EMAIL@}%
+}
+\date{@PAPER_YEAR@}
+
+\hypersetup{
+  pdftitle={@PDF_TITLE@},
+  pdfauthor={@PAPER_AUTHOR@},
+  pdfsubject={@PDF_SUBJECT@},
+  pdfkeywords={@PDF_KEYWORDS@},
+}
+
+% ─── Document ────────────────────────────────────────────────────────────
+\begin{document}
+
+\maketitle
+
+\input{frontmatter/abstract}
+\newpage
+@TOCBLOCK@
+
+@SECTIONS@
+
+@BACKMATTER@
+
+\end{document}

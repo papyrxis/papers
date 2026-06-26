@@ -1,0 +1,141 @@
+# ─────────────────────────────────────────────────────────────────
+# Release workflow — triggered on version tags (v*)
+# Builds the document PDF and publishes a GitHub Release.
+#
+# HOW TO USE:
+#   git tag v1.0.0
+#   git push --tags
+#
+# The workflow:
+#   1. Builds your PDF(s) using TeX Live
+#   2. Creates a GitHub Release with the PDF attached
+#   3. Extracts release notes from CHANGELOG.md if present
+#
+# CONFIGURATION:
+#   Set DOCUMENT_SOURCE below to your main .tex file.
+#   For multi-document projects (volumes), see the matrix example.
+# ─────────────────────────────────────────────────────────────────
+
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # ── Change this to your main .tex file ──────────────────────
+  DOCUMENT_SOURCE: main.tex
+  # ────────────────────────────────────────────────────────────
+
+jobs:
+  build:
+    name: Build PDF
+    runs-on: ubuntu-latest
+    container:
+      image: texlive/texlive:latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Install prerequisites
+        run: apt-get update && apt-get install -y --no-install-recommends make git bash python3 python3-yaml
+
+      - name: Verify workspace is synced
+        run: |
+          if [[ ! -f .pxis/preset.tex ]]; then
+            echo "::notice::Running sync (no committed .pxis/preset.tex found)"
+            bash workspace/src/sync.sh
+          fi
+
+      - name: Build document
+        run: make build
+
+      - name: Find PDF
+        id: pdf
+        run: |
+          PDF=$(find build/ -name "*.pdf" | head -1)
+          [[ -z "$PDF" ]] && { echo "::error::No PDF found in build/"; exit 1; }
+          echo "path=$PDF" >> "$GITHUB_OUTPUT"
+          echo "name=$(basename "$PDF")" >> "$GITHUB_OUTPUT"
+          echo "Built: $PDF ($(du -sh "$PDF" | cut -f1))"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pdf
+          path: ${{ steps.pdf.outputs.path }}
+          retention-days: 7
+
+  release:
+    name: Publish Release
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download PDF
+        uses: actions/download-artifact@v4
+        with:
+          name: pdf
+          path: release/
+
+      - name: Extract version
+        id: ver
+        run: echo "version=${GITHUB_REF#refs/tags/v}" >> "$GITHUB_OUTPUT"
+
+      - name: Build release notes
+        run: |
+          VERSION="${{ steps.ver.outputs.version }}"
+
+          if [[ -f CHANGELOG.md ]] && grep -q "## \[$VERSION\]" CHANGELOG.md; then
+            sed -n "/## \[$VERSION\]/,/^## \[/p" CHANGELOG.md | sed '$d' > body.md
+          else
+            cat > body.md <<EOF
+          ## Release ${{ github.ref_name }}
+
+          See [CHANGELOG](CHANGELOG.md) for full history.
+          EOF
+          fi
+
+      - name: Determine pre-release
+        id: pre
+        run: |
+          [[ "${{ steps.ver.outputs.version }}" == *-* ]] \
+            && echo "flag=true" >> "$GITHUB_OUTPUT" \
+            || echo "flag=false" >> "$GITHUB_OUTPUT"
+
+      - name: Delete existing release for this tag (if any)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release view "${{ github.ref_name }}" >/dev/null 2>&1 \
+            && gh release delete "${{ github.ref_name }}" --yes \
+            || true
+
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: "${{ github.ref_name }}"
+          body_path: body.md
+          files: release/*.pdf
+          draft: false
+          prerelease: ${{ steps.pre.outputs.flag }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,130 @@
+# ─────────────────────────────────────────────────────────────────
+# Pre-release workflow — builds on every push to main
+# Publishes a rolling "latest-pre-release" so you can always
+# grab the current draft PDF without tagging.
+#
+# The build is marked as pre-release and labelled with the
+# commit SHA and date, e.g.:
+#   pre-release-2026-07-01-a3f9c12
+# ─────────────────────────────────────────────────────────────────
+
+name: Pre-Release
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '**.tex'
+      - '**.bib'
+      - '.pxis/**'
+      - 'workspace.yml'
+      - '.github/workflows/pre-release.yml'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pre-release-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build PDF
+    runs-on: ubuntu-latest
+    container:
+      image: texlive/texlive:latest
+    outputs:
+      pre_tag: ${{ steps.meta.outputs.pre_tag }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install prerequisites
+        run: apt-get update && apt-get install -y --no-install-recommends make git bash python3 python3-yaml
+
+      - name: Compute build identifier
+        id: meta
+        run: |
+          SHORT="${GITHUB_SHA:0:7}"
+          DATE="$(date -u '+%Y-%m-%d')"
+          TAG="pre-release-${DATE}-${SHORT}"
+          echo "short=$SHORT"   >> "$GITHUB_OUTPUT"
+          echo "date=$DATE"     >> "$GITHUB_OUTPUT"
+          echo "pre_tag=$TAG"   >> "$GITHUB_OUTPUT"
+
+      - name: Verify workspace is synced
+        run: |
+          if [[ ! -f .pxis/preset.tex ]]; then
+            bash workspace/src/sync.sh
+          fi
+
+      - name: Build document
+        run: make build
+
+      - name: Find and rename PDF
+        id: pdf
+        run: |
+          SRC=$(find build/ -name "*.pdf" | head -1)
+          [[ -z "$SRC" ]] && { echo "::error::No PDF found"; exit 1; }
+          BASE="${SRC%.pdf}"
+          DEST="${BASE}__${{ steps.meta.outputs.pre_tag }}.pdf"
+          cp "$SRC" "$DEST"
+          echo "path=$DEST" >> "$GITHUB_OUTPUT"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pre-release-pdf
+          path: ${{ steps.pdf.outputs.path }}
+          retention-days: 14
+
+  publish:
+    name: Publish Pre-Release
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: pre-release-pdf
+          path: release/
+
+      - name: Remove existing latest-pre-release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release view latest-pre-release >/dev/null 2>&1 \
+            && gh release delete latest-pre-release --yes --cleanup-tag \
+            || true
+
+      - name: Publish pre-release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: latest-pre-release
+          name: "Latest Draft (${{ needs.build.outputs.pre_tag }})"
+          body: |
+            Automated draft build from `main`.
+
+            | Field  | Value |
+            |--------|-------|
+            | Tag    | `${{ needs.build.outputs.pre_tag }}` |
+            | Commit | [`${{ github.sha }}`](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}) |
+            | Date   | ${{ needs.build.outputs.pre_tag }} |
+
+            > This is a draft snapshot, not a stable release.
+            > For stable releases, see the [releases page](${{ github.server_url }}/${{ github.repository }}/releases?q=v*).
+          files: release/*.pdf
+          prerelease: true
+          draft: false
+          make_latest: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
