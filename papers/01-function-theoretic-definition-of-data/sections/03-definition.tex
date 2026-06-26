@@ -1,0 +1,90 @@
+\section{A Function-Theoretic Definition of Data}
+\label{sec:definition}
+
+\subsection{Motivating Example}
+
+Consider the five bytes \texttt{0x41 0x52 0x4C 0x49 0x5A}. Under one set
+of assumptions, this is the ASCII string \texttt{"ARLIZ"}; under another,
+it is five unsigned 8-bit integers, $\{65, 82, 76, 73, 90\}$; under a
+third, it is the first five bytes of an arbitrary binary file format. The
+underlying bytes are identical in every case. What differs is the
+\emph{interpretation function} applied to a fixed set of positions---exactly
+the structure this section formalizes.
+
+\subsection{Formal Definition}
+
+\begin{definition}[Index Set and Value Set]
+\label{def:index-value}
+An \emph{index set} $I$ is a set whose elements serve as positions or
+addresses. A \emph{value set} $V$ is a set whose elements serve as the
+possible contents at a position.
+\end{definition}
+
+\begin{definition}[Datum]
+\label{def:datum}
+A \emph{datum} is an element $v \in V$, drawn from some value set $V$,
+designated as the content held at a single index.
+\end{definition}
+
+\begin{definition}[Collection of Data]
+\label{def:collection}
+A \emph{collection of data} $D$ over index set $I$ and value set $V$ is a
+total function
+\[
+  D : I \to V
+\]
+assigning to every index $i \in I$ exactly one value $D(i) \in V$.
+\end{definition}
+
+This definition requires three conditions to hold for $D$ to be well-defined:
+
+\paragraph{Condition 1 (Totality).}
+$D$ must be defined for every $i \in I$. A structure that leaves some
+indices unassigned is a \emph{partial function}, and any operation that
+assumes totality is unsound when applied to it without first checking the
+domain.
+
+\paragraph{Condition 2 (Functionality).}
+For every $i \in I$, $D(i)$ must denote a single, determinate value in $V$.
+A mapping that assigns multiple candidate values to the same index---for
+instance, two fields claiming the same byte offset under different schema
+versions---is not a function and therefore not a single well-defined
+collection of data.
+
+\paragraph{Condition 3 (Codomain Consistency).}
+Every value $D(i)$ must belong to the \emph{same} value set $V$ for all
+$i \in I$, where $V$ is fixed in advance of constructing $D$.
+
+\begin{definition}[Functional Equality]
+\label{def:equality}
+Two collections of data $D_1 : I_1 \to V_1$ and $D_2 : I_2 \to V_2$ are
+\emph{equal}, written $D_1 = D_2$, if and only if $I_1 = I_2$, $V_1 = V_2$,
+and $D_1(i) = D_2(i)$ for every $i \in I_1$.
+\end{definition}
+
+This is a stronger condition than equality of the underlying byte
+representation. Two structures can share an identical byte-level encoding
+while differing in $V$---the ARLIZ example above---and
+Definition~\ref{def:equality} correctly classifies them as unequal
+collections of data.
+
+\subsection{Relation to Sequences, Tuples, and Multisets}
+
+The function-theoretic definition deliberately generalizes several structures
+often used informally as synonyms for ``data'':
+
+\begin{description}
+  \item[Sequence / array.]
+    The special case $I = \{0, 1, \dots, n-1\}$, i.e., a function from a
+    finite, contiguous, totally ordered index set into $V$. Arrays are data
+    over the specific index set that integer addressing supplies.
+  \item[Tuple.]
+    The special case where $I$ is small and fixed, and $V$ is permitted to
+    vary per index ($D(i) \in V_i$). Tuples relax Condition~3 deliberately
+    and explicitly---a structurally different move from the unsound
+    \emph{implicit} relaxation described in Section~\ref{sec:implications}.
+  \item[Multiset.]
+    Corresponds to the case where $I$ is considered only up to a permutation.
+    Multisets are a quotient of the function-theoretic structure, not an
+    alternative to it.
+\end{description}

@@ -1,0 +1,62 @@
+\section{Introduction}
+\label{sec:intro}
+
+Every working system that stores, transmits, or processes information
+ultimately operates on what its designers call ``data.'' Yet the term resists
+a precise, operational definition. Database textbooks describe data as
+``raw facts'' that have not yet been processed into meaning~\autocite{Rob2013};
+information-science references describe data as a coherent organization of
+such facts~\autocite{Ratzan2004}; international guidelines describe data as facts
+or instructions ``expressed in a standardized way'' suitable for communication
+or processing~\autocite{UNESCO2008}; and general dictionaries treat data as
+``facts or things known, used as the basis for inference''~\autocite{Webster1934}.
+These characterizations are not wrong, but they are not formal. None specifies
+what structure a collection of facts must have before it can be indexed,
+copied, compared for equality, or serialized.
+
+This gap surfaces in production systems as a recognizable family of defects:
+
+\begin{description}
+  \item[Schema drift.]
+    Two components silently disagree about what an index or field name
+    denotes, despite operating on byte-identical data.
+  \item[Type confusion.]
+    A fixed byte sequence is reinterpreted under a different type assumption
+    than the one under which it was written---the structural basis of an
+    entire class of memory-safety and deserialization vulnerabilities~\autocite{CWE843}.
+  \item[Unsound equality.]
+    Two values are treated as equal because they share a representation,
+    despite differing in the value set the comparison silently assumes.
+  \item[Serialization ambiguity.]
+    A wire format under-specifies the index set or value set well enough
+    that two conformant implementations disagree on interpretation.
+\end{description}
+
+Each defect has a common root: an implicit assumption about the
+\emph{domain}, \emph{codomain}, or \emph{mapping} underlying a piece of data
+was never stated, and therefore could not be checked.
+
+\subsection{Contribution}
+
+This paper contributes:
+\begin{enumerate}
+  \item A formal statement of the function-theoretic definition with explicit
+        well-definedness conditions (Section~\ref{sec:definition}), clarifying
+        its relationship to sequences, tuples, multisets, and relations.
+  \item A comparative analysis (Section~\ref{sec:related}) positioning the
+        definition against Floridi's GDI, Zins' faceted classification, and
+        the DIKW hierarchy.
+  \item Four corollaries (Section~\ref{sec:implications}) connecting specific
+        structural properties to recurring engineering failure modes, with
+        worked examples.
+  \item A discussion (Section~\ref{sec:discussion}) of scope, limitations,
+        and directions for future work.
+\end{enumerate}
+
+\subsection{Scope}
+
+This paper is concerned with data as treated by computing systems: stored,
+addressed, transmitted, and interpreted. It does not attempt a complete
+philosophical account of the data--information--knowledge distinction, nor
+does it adjudicate the broader debate over whether data are theory-laden or
+``given'' in some stronger epistemological sense~\autocite{Floridi2005}.

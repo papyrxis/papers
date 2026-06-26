@@ -1,0 +1,112 @@
+\section{Implications for Systems Design}
+\label{sec:implications}
+
+Each corollary below follows from a violation of one of the three
+well-definedness conditions in Section~\ref{sec:definition}.
+
+\subsection{Schema Drift as a Domain Mismatch}
+
+\begin{corollary}
+\label{cor:schema-drift}
+Two components that operate on data with different index sets
+$I_1 \neq I_2$, while assuming $I_1 = I_2$, will silently diverge in
+behaviour whenever $I_1 \triangle I_2 \neq \emptyset$, regardless of
+agreement on $V$.
+\end{corollary}
+
+\begin{example}
+A producer service serializes records as a function
+$D : \{\mathtt{id}, \mathtt{name}, \mathtt{email}\} \to V$.
+A consumer, built against an earlier schema, deserializes under the
+assumption $I' = \{\mathtt{id}, \mathtt{name}\}$. Both components agree on
+$V$ and on the values for the shared indices, so no value-level error
+occurs; the defect is purely a domain mismatch
+($\mathtt{email} \in I \setminus I'$), and it manifests only when a
+downstream consumer eventually requires the \texttt{email} index. Framing
+this as a domain mismatch makes explicit what monitoring should check: not
+value correctness, but $I_1 = I_2$ prior to any value-level comparison.
+\end{example}
+
+\subsection{Type Confusion as a Codomain Violation}
+
+\begin{corollary}
+\label{cor:type-confusion}
+A fixed byte-level representation reinterpreted under value sets
+$V \neq V'$ for the same indices is not a disagreement about content;
+it is the construction of two distinct, both internally well-defined,
+functions $D : I \to V$ and $D' : I \to V'$.
+\end{corollary}
+
+\begin{example}
+The five-byte sequence from Section~\ref{sec:definition} is, under
+$V = \text{ASCII codepoints}$, the string \texttt{"ARLIZ"}; under
+$V' = \text{unsigned-8-bit integers}$, it is the tuple $(65, 82, 76, 73, 90)$.
+Both $D$ and $D'$ individually satisfy Conditions~1--3. The defect arises
+specifically when a system constructs $D$ under one codomain assumption and
+a different component---or an attacker-controlled input path---consumes the
+identical bytes under $V'$ without that change of codomain being checked.
+This is the structural pattern underlying deserialization and memory-safety
+vulnerabilities~\autocite{CWE843}.
+\end{example}
+
+\subsection{Unsound Equality from Representational Identity}
+
+\begin{corollary}
+\label{cor:equality}
+Representational identity (byte-for-byte equality of an encoding) is
+necessary but not sufficient for functional equality
+(Definition~\ref{def:equality}); systems that conflate the two will
+classify distinct collections of data as equal whenever they share a
+codomain-independent encoding.
+\end{corollary}
+
+\begin{example}
+A caching layer that hashes raw bytes to detect duplicate records will
+conflate $D$ and $D'$ from the example above, treating the string
+\texttt{"ARLIZ"} and the integer tuple $(65, 82, 76, 73, 90)$ as identical
+cache entries. The corollary identifies precisely which structural component
+(the codomain $V$) the cache's equality check fails to account for, which
+suggests the fix directly: equality checks intended to operate on data must
+incorporate $V$ as part of the comparison key.
+\end{example}
+
+\subsection{Serialization Ambiguity as Under-Specified Domain or Codomain}
+
+\begin{corollary}
+\label{cor:serialization}
+A wire format specification that does not fully determine $I$ and $V$ for a
+given message admits multiple, individually well-defined, mutually
+incompatible deserializations of the same byte stream---a defect that
+conformance testing against a single reference implementation cannot detect.
+\end{corollary}
+
+\begin{example}
+A binary protocol that specifies field positions (constraining $I$) but
+leaves a numeric field's signedness unspecified (under-constraining $V$) is
+satisfied by both a producer writing the field as a signed integer and a
+consumer reading it as unsigned. Both implementations are internally
+consistent; the specification itself is the source of the defect. A
+specification is unambiguous exactly when it determines $I$ and $V$
+completely.
+\end{example}
+
+\subsection{Summary}
+
+Table~\ref{tab:corollaries} summarizes the correspondence between structural
+conditions and failure modes.
+
+\begin{table}[htbp]
+\centering
+\caption{Structural conditions and their associated failure modes.}
+\label{tab:corollaries}
+\begin{tabular}{lll}
+\hline
+\textbf{Violated Condition} & \textbf{Failure Mode} & \textbf{Corollary} \\
+\hline
+Totality / domain agreement   & Schema drift           & \ref{cor:schema-drift} \\
+Codomain consistency          & Type confusion         & \ref{cor:type-confusion} \\
+Functional vs.\ rep.\ equality & Unsound equality       & \ref{cor:equality} \\
+Domain or codomain under-spec & Serialization ambiguity & \ref{cor:serialization} \\
+\hline
+\end{tabular}
+\end{table}

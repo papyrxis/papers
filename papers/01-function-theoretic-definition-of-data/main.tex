@@ -1,0 +1,59 @@
+\documentclass[12pt,a4paper]{article}
+
+% ============================================================
+% Metadata — filled in per paper by scripts/generate.sh
+% These tokens are replaced before LaTeX ever sees this file.
+% This file is the inherited template: it is never edited directly
+% inside papers/papers/<slug>/ — that copy is regenerated every time
+% from this template + configs/papers/<slug>.conf + the paper's
+% sections/*.tex files. Edit THIS file to change the shape every
+% paper shares; edit the .conf / sections/ to change one paper.
+% ============================================================
+
+\input{../../.pxis/preset}
+\input{../../configs/paper-styles}
+\applyPaperStyle{academic}
+
+\addbibresource{references/paper.bib}
+
+% ─── Metadata ────────────────────────────────────────────────────────────
+\title{A Function-Theoretic Definition of Data: Resolving Representational Ambiguity in Systems Design}
+\author{%
+  Mahdi Mamashli (Genix)\\
+  \small\texttt{bitsgenix@gmail.com}%
+}
+\date{2026}
+
+\hypersetup{
+  pdftitle={A Function-Theoretic Definition of Data: Resolving Representational Ambiguity in Systems Design},
+  pdfauthor={Mahdi Mamashli (Genix)},
+  pdfsubject={data representation, formal definition, systems design},
+  pdfkeywords={data representation, formal definition, information theory, type safety, serialization, systems design},
+}
+
+% ─── Document ────────────────────────────────────────────────────────────
+\begin{document}
+
+\maketitle
+
+\input{frontmatter/abstract}
+\newpage
+\tableofcontents
+\newpage
+
+\input{sections/01-introduction}
+
+\input{sections/02-related-work}
+
+\input{sections/03-definition}
+
+\input{sections/04-implications}
+
+\input{sections/05-discussion}
+
+\input{sections/06-conclusion}
+
+
+\input{backmatter/bibliography}
+
+\end{document}

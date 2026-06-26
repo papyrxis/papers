@@ -1,0 +1,25 @@
+% frontmatter/abstract.tex — written by hand for this paper.
+% Included right after \maketitle by the generated main.tex.
+
+\begin{abstract}
+The term \emph{data} is among the most frequently used and least precisely
+defined concepts in computing. Standard references converge on an informal
+characterization of data as ``raw facts,'' but none specify the formal
+structure that makes a collection of facts addressable, comparable, or
+processable by a machine. This representational ambiguity propagates into
+system design as schema drift, serialization defects, and a class of
+type-confusion vulnerabilities that arise when a fixed byte sequence is
+silently reinterpreted under an unstated indexing or typing assumption.
+This paper makes the case for treating data formally as a
+\emph{function from an index set to a value set}, sharpens this definition
+with explicit well-definedness conditions, and positions it against three
+existing frameworks: Floridi's General Definition of Information, Zins'
+faceted classification, and the DIKW hierarchy. We derive four corollaries
+connecting this definition directly to recurring failure modes in software
+engineering---implicit schema coupling, byte-level reinterpretation,
+unsound equality checks, and ambiguous serialization contracts---with
+worked examples for each.
+\end{abstract}
+
+\paragraph{Keywords} data representation; formal definition; information theory;
+type safety; serialization; systems design; data semantics.

@@ -1,0 +1,40 @@
+\section{Discussion}
+\label{sec:discussion}
+
+\subsection{Relationship to Existing Frameworks}
+
+The function-theoretic definition does not compete with the GDI, Zins'
+classification, or the DIKW hierarchy---it occupies a gap each leaves open
+by design. This is a deliberate scoping choice: the contribution of this
+paper is structural precision at the data tier specifically, not a new
+account of how data becomes information or knowledge.
+
+\subsection{Limitations}
+
+Two cases stress the definition's assumptions:
+
+\paragraph{Streaming or unbounded data.}
+When $I$ is not known in advance---an open-ended sensor stream, for
+instance---Definition~\ref{def:collection}'s totality condition cannot be
+checked against a fixed, enumerable $I$. The definition still applies at
+any finite prefix or window of the stream, but the unbounded stream itself
+requires treating $I$ as a fixed well-ordered set (e.g., $\mathbb{N}$)
+with totality understood as ``defined for every index produced so far.''
+
+\paragraph{Genuinely unstructured data.}
+Free-text notes prior to any tagging or field extraction resist a useful
+index set by design. Imposing one prematurely---treating the data as a
+function from character position to character---is technically valid but
+discards exactly the information a downstream NLP pipeline exists to
+recover. The function-theoretic definition is correct but not yet
+\emph{useful} at the byte-indexed level; its value reappears once a
+downstream process imposes a more meaningful index set.
+
+\subsection{Threats to Validity}
+
+The corollaries are illustrated with representative, constructed examples
+rather than an empirical defect-mining study. We consider the corollaries
+conceptually validated---each is a direct logical consequence of
+Definitions~\ref{def:collection} and~\ref{def:equality}---but their
+\emph{practical prevalence} as a fraction of real-world defects is an
+empirical question this paper does not measure.
