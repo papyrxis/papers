@@ -12,8 +12,8 @@ CONF="$ROOT/configs/papers/${SLUG}.conf"
 TEMPLATE="$ROOT/main.tex"
 PAPER_DIR="$ROOT/papers/${SLUG}"
 
-[[ -f "$CONF" ]]     || die "no config for paper '$SLUG' (expected $CONF)"
-[[ -f "$TEMPLATE" ]] || die "template not found ($TEMPLATE)"
+[[ -f "$CONF" ]]      || die "no config for paper '$SLUG' (expected $CONF)"
+[[ -f "$TEMPLATE" ]]  || die "template not found ($TEMPLATE)"
 [[ -d "$PAPER_DIR" ]] || die "paper directory not found ($PAPER_DIR)"
 
 source <(tr -d '\r' < "$CONF")
@@ -21,6 +21,12 @@ source <(tr -d '\r' < "$CONF")
 : "${PAPER_TITLE:?PAPER_TITLE not set in $CONF}"
 : "${PAPER_STYLE:?PAPER_STYLE not set in $CONF}"
 : "${SECTIONS:?SECTIONS not set in $CONF}"
+
+# Validate style
+case "${PAPER_STYLE}" in
+  personal|single-column|two-column|academic|ieee|journal) ;;
+  *) die "Unknown PAPER_STYLE '${PAPER_STYLE}'. Valid: personal | single-column | two-column | academic | ieee | journal" ;;
+esac
 
 PAPER_AUTHOR="${PAPER_AUTHOR:-Mahdi Mamashli (Genix)}"
 PAPER_EMAIL="${PAPER_EMAIL:-bitsgenix@gmail.com}"
@@ -38,6 +44,7 @@ CONFIGS_PATH="../../configs"
 
 OUTPUT="$PAPER_DIR/main.tex"
 
+# Build \input{...} blocks
 SECTIONS_BLOCK=""
 for s in "${SECTIONS[@]}"; do
   SECTIONS_BLOCK+="\\input{${s}}"$'\n\n'

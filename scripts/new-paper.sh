@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
-# scripts/new-paper.sh — Scaffold a new paper.
 # Usage:
 #   bash scripts/new-paper.sh <slug> [style]
+#
 # Examples:
 #   bash scripts/new-paper.sh 02-type-confusion-taxonomy academic
 #   bash scripts/new-paper.sh 03-why-endianness-matters personal
+#   bash scripts/new-paper.sh 04-network-protocols ieee
+#   bash scripts/new-paper.sh 05-data-structures journal
 
 set -euo pipefail
 
@@ -26,8 +28,8 @@ YEAR="$(date -u '+%Y')"
 [[ -z "$SLUG" ]] && error "Usage: $0 <slug> [style]"
 
 case "$STYLE" in
-  personal|academic|ieee|two-column|single-column) ;;
-  *) error "Unknown style '$STYLE'. Options: personal | academic | ieee | two-column | single-column" ;;
+  personal|single-column|two-column|academic|ieee|journal) ;;
+  *) error "Unknown style '$STYLE'. Options: personal | single-column | two-column | academic | ieee | journal" ;;
 esac
 
 PAPER_DIR="$ROOT/papers/$SLUG"
@@ -48,33 +50,35 @@ log "Title:       $TITLE"
 mkdir -p "$PAPER_DIR"/{sections,figures,references,frontmatter,backmatter}
 mkdir -p "$ROOT/configs/papers"
 
-# ── configs/papers/<slug>.conf ──────────────────────────────────────────
+# ── TOC default per style ────────────────────────────────────────────────────
 TOC="false"
-[[ "$STYLE" == "academic" ]] && TOC="true"
+[[ "$STYLE" == "academic" || "$STYLE" == "journal" ]] && TOC="true"
 
+# ── configs/papers/<slug>.conf ───────────────────────────────────────────────
 cat > "$CONF" <<CONFEOF
 # configs/papers/${SLUG}.conf — metadata for this paper
 # Sourced by scripts/generate.sh and scripts/build.sh.
 
-PAPER_TITLE="$TITLE"
+PAPER_TITLE="${TITLE}"
 PAPER_AUTHOR="Mahdi Mamashli (Genix)"
 PAPER_EMAIL="bitsgenix@gmail.com"
-PAPER_STYLE="$STYLE"
-PAPER_YEAR="$YEAR"
+PAPER_STYLE="${STYLE}"
+PAPER_YEAR="${YEAR}"
 PAPER_FONTSIZE="12pt"
 
-PDF_TITLE="$TITLE"
+PDF_TITLE="${TITLE}"
 PDF_SUBJECT=""
 PDF_KEYWORDS=""
 
 BIB_FILE="references/paper.bib"
-TOC="$TOC"
+TOC="${TOC}"
 
 ENGINE="pdflatex"
 BIBTEX="biber"
 
-# Content, in reading order. Add/reorder freely; create the matching
-# file under sections/ and re-run 'make paper PAPER=$SLUG'.
+# Content sections, in reading order.
+# Add/reorder freely; create the matching file under sections/
+# and re-run: make paper PAPER=${SLUG}
 SECTIONS=(
   "sections/01-introduction"
   "sections/02-background"
@@ -83,14 +87,13 @@ SECTIONS=(
   "sections/05-conclusion"
 )
 
-# Backmatter, in order. bibliography is required for citations to print;
-# remove it only if the paper truly has none.
+# Backmatter, in order. Remove bibliography only if there are no citations.
 BACKMATTER=(
   "backmatter/bibliography"
 )
 CONFEOF
 
-# ── frontmatter/abstract.tex ────────────────────────────────────────────
+# ── frontmatter/abstract.tex ────────────────────────────────────────────────
 cat > "$PAPER_DIR/frontmatter/abstract.tex" <<'EOF'
 % frontmatter/abstract.tex — written by hand for this paper.
 % Included right after \maketitle by the generated main.tex.
@@ -104,11 +107,11 @@ finding.
 \paragraph{Keywords} keyword one; keyword two; keyword three.
 EOF
 
-# ── backmatter/bibliography.tex ─────────────────────────────────────────
+# ── backmatter/bibliography.tex ──────────────────────────────────────────────
 cat > "$PAPER_DIR/backmatter/bibliography.tex" <<'EOF'
 % backmatter/bibliography.tex
 % \input by main.tex (generated) as the final BACKMATTER item.
-% Prints every \autocite/\cite'd source as a numbered Appendix list.
+% Prints every \autocite/\cite'd source as a numbered list.
 
 \appendix
 \section*{Bibliography}
@@ -116,7 +119,7 @@ cat > "$PAPER_DIR/backmatter/bibliography.tex" <<'EOF'
 \printbibliography[heading=none]
 EOF
 
-# ── sections/*.tex stubs ─────────────────────────────────────────────────
+# ── sections/*.tex stubs ─────────────────────────────────────────────────────
 cat > "$PAPER_DIR/sections/01-introduction.tex" <<'EOF'
 \section{Introduction}
 \label{sec:intro}
@@ -155,11 +158,15 @@ cat > "$PAPER_DIR/sections/05-conclusion.tex" <<'EOF'
 One paragraph: problem, approach, finding, future work.
 EOF
 
-# ── references/paper.bib ─────────────────────────────────────────────────
+# ── references/paper.bib ─────────────────────────────────────────────────────
 cat > "$PAPER_DIR/references/paper.bib" <<'EOF'
 % BibTeX references for this paper.
-% Cite with \autocite{key} in the section files — numeric marker,
-% footnote with full reference on the same page.
+% Cite with \autocite{key} in the section files:
+%   - inserts a numbered footnote with the full reference on that page
+%   - bibliography style: authortitle (author name shown in footnote)
+%
+% Example usage:
+%   As shown by~\autocite{turing1950} and further explored in~\autocite{example2024}.
 
 @article{example2024,
   author  = {Last, First},
@@ -171,28 +178,49 @@ cat > "$PAPER_DIR/references/paper.bib" <<'EOF'
   pages   = {1--10},
   doi     = {10.0000/example},
 }
+
+@book{examplebook2023,
+  author    = {Author, Full Name},
+  title     = {Book Title Here},
+  publisher = {Publisher Name},
+  year      = {2023},
+  address   = {City},
+}
 EOF
 
-# ── figures/README ────────────────────────────────────────────────────────
 cat > "$PAPER_DIR/figures/README.md" <<'EOF'
 # Figures
 
 Place all figures for this paper here. Supported formats: PDF, PNG, EPS.
 
-  \begin{figure}[htbp]
-    \centering
-    \includegraphics[width=0.9\linewidth]{figures/my-figure}
-    \caption{Caption text.}
-    \label{fig:my-figure}
-  \end{figure}
+```latex
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.9\linewidth]{figures/my-figure}
+  \caption{Caption text.}
+  \label{fig:my-figure}
+\end{figure}
+```
 EOF
 
-# ── Generate the initial main.tex ────────────────────────────────────────
 bash "$SCRIPT_DIR/generate.sh" "$SLUG"
 
-# ── Update LIST_OF_PAPERS ─────────────────────────────────────────────────
-LIST="$ROOT/papers/LIST_OF_PAPERS"
-echo "$SLUG  [$STYLE]  $TITLE" >> "$LIST"
+LIST="$ROOT/papers/LIST_OF_PAPERS.md"
+if [[ ! -f "$LIST" ]]; then
+  cat > "$LIST" <<'LISTEOF'
+# Papers — List of Papers
+
+| # | Slug | Style | Title |
+|---|------|-------|-------|
+LISTEOF
+fi
+
+NUM=$(grep -c '^|' "$LIST" 2>/dev/null | tail -1 || echo 0)
+NUM=$(( NUM - 1 ))  # subtract header rows
+[[ $NUM -lt 1 ]] && NUM=1
+
+# Append new row
+echo "| ${NUM} | \`${SLUG}\` | ${STYLE} | ${TITLE} |" >> "$LIST"
 
 echo ""
 success "Scaffolded: papers/$SLUG"
@@ -201,8 +229,18 @@ echo -e "  ${CYAN}Style:${RESET}   $STYLE"
 echo -e "  ${CYAN}Title:${RESET}   $TITLE"
 echo ""
 echo -e "  ${CYAN}Next steps:${RESET}"
-echo -e "    1. Write content in papers/$SLUG/sections/*.tex"
-echo -e "    2. Write the abstract in papers/$SLUG/frontmatter/abstract.tex"
-echo -e "    3. Add references to papers/$SLUG/references/paper.bib"
-echo -e "    4. Build: make paper PAPER=$SLUG"
+echo -e "    1. Write the abstract:  papers/$SLUG/frontmatter/abstract.tex"
+echo -e "    2. Write sections:      papers/$SLUG/sections/*.tex"
+echo -e "    3. Add references:      papers/$SLUG/references/paper.bib"
+echo -e "    4. Build the PDF:       make paper PAPER=$SLUG"
+echo ""
+echo -e "  ${CYAN}Style info:${RESET}"
+case "$STYLE" in
+  personal)      echo -e "    Charter font, generous margins, author + page + year footer" ;;
+  single-column) echo -e "    Charter font, symmetric margins, minimal footer" ;;
+  two-column)    echo -e "    Charter font, two columns, accent-colored header rule" ;;
+  academic)      echo -e "    Times font, theorem environments, author footer, TOC enabled" ;;
+  ieee)          echo -e "    Times font, IEEE two-column, uppercase section headings" ;;
+  journal)       echo -e "    Palatino font, 1.3× spacing, running header, full footer, TOC enabled" ;;
+esac
 echo ""
