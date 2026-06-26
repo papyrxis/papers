@@ -1,6 +1,4 @@
 #!/usr/bin/env bash
-# scripts/list-papers.sh — List all papers with status and style
-
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -23,7 +21,6 @@ for conf in "$ROOT"/configs/papers/*.conf; do
   slug="$(basename "$conf" .conf)"
 
   PAPER_STYLE=""
-  # shellcheck disable=SC1090
   source <(tr -d '\r' < "$conf") 2>/dev/null || true
   style="${PAPER_STYLE:-—}"
 

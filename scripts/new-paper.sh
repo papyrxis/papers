@@ -1,18 +1,7 @@
 #!/usr/bin/env bash
 # scripts/new-paper.sh — Scaffold a new paper.
-#
-# Creates:
-#   configs/papers/<slug>.conf        — metadata + SECTIONS list (edit this)
-#   papers/<slug>/sections/*.tex      — stub content files (edit these)
-#   papers/<slug>/frontmatter/abstract.tex
-#   papers/<slug>/backmatter/bibliography.tex
-#   papers/<slug>/references/paper.bib
-#   papers/<slug>/figures/
-#   papers/<slug>/main.tex            — GENERATED, do not edit by hand
-#
 # Usage:
 #   bash scripts/new-paper.sh <slug> [style]
-#
 # Examples:
 #   bash scripts/new-paper.sh 02-type-confusion-taxonomy academic
 #   bash scripts/new-paper.sh 03-why-endianness-matters personal
