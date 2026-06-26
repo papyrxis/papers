@@ -1,4 +1,4 @@
-name: Pre-Release
+name: Pre-Release (Latest Draft)
 
 on:
   push:
@@ -7,6 +7,7 @@ on:
     paths:
       - '**.tex'
       - '**.bib'
+      - 'configs/**'
       - '.pxis/**'
       - 'workspace.yml'
       - '.github/workflows/pre-release.yml'
@@ -20,13 +21,14 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # ────────────────────────────────────────────────────────────────────────────
+  # Job 1: Build all papers to PDF (parallel matrix)
+  # ────────────────────────────────────────────────────────────────────────────
   build:
-    name: Build PDF
+    name: Build PDFs
     runs-on: ubuntu-latest
     container:
       image: texlive/texlive:latest
-    outputs:
-      pre_tag: ${{ steps.meta.outputs.pre_tag }}
 
     steps:
       - name: Checkout
@@ -35,48 +37,48 @@ jobs:
           submodules: recursive
 
       - name: Install prerequisites
-        run: apt-get update && apt-get install -y --no-install-recommends make git bash python3 python3-yaml
-
-      - name: Compute build identifier
-        id: meta
-        shell: bash
         run: |
-          SHORT="${GITHUB_SHA:0:7}"
-          DATE="$(date -u '+%Y-%m-%d')"
-          TAG="pre-release-${DATE}-${SHORT}"
+          apt-get update
+          apt-get install -y --no-install-recommends make git bash python3 python3-yaml
 
-          echo "short=$SHORT" >> "$GITHUB_OUTPUT"
-          echo "date=$DATE" >> "$GITHUB_OUTPUT"
-          echo "pre_tag=$TAG" >> "$GITHUB_OUTPUT"
-
-      - name: Verify workspace is synced
+      - name: Sync workspace (.pxis/)
         run: |
           if [[ ! -f .pxis/preset.tex ]]; then
+            echo "::notice::.pxis/preset.tex missing — running workspace sync"
             bash workspace/src/sync.sh
           fi
 
-      - name: Build document
+      - name: Build all papers
         run: make build
 
-      - name: Find and rename PDF
-        id: pdf
+      - name: Collect PDFs
+        id: collect
         run: |
-          SRC=$(find build/ -name "*.pdf" | head -1)
-          [[ -z "$SRC" ]] && { echo "::error::No PDF found"; exit 1; }
-          BASE="${SRC%.pdf}"
-          DEST="${BASE}__${{ steps.meta.outputs.pre_tag }}.pdf"
-          cp "$SRC" "$DEST"
-          echo "path=$DEST" >> "$GITHUB_OUTPUT"
+          mkdir -p release/
+          find build/ -maxdepth 1 -name "*.pdf" -exec cp {} release/ \;
+          count=$(find release/ -name "*.pdf" | wc -l)
+          echo "count=$count" >> "$GITHUB_OUTPUT"
+          echo "Built $count PDF(s):"
+          ls -lh release/*.pdf 2>/dev/null || echo "  (none)"
 
-      - name: Upload artifact
+      - name: Fail if no PDFs built
+        if: steps.collect.outputs.count == '0'
+        run: |
+          echo "::error::No PDFs were produced. Check LaTeX logs above."
+          exit 1
+
+      - name: Upload PDFs artifact
         uses: actions/upload-artifact@v4
         with:
-          name: pre-release-pdf
-          path: ${{ steps.pdf.outputs.path }}
+          name: latest-pdfs
+          path: release/*.pdf
           retention-days: 14
 
+  # ────────────────────────────────────────────────────────────────────────────
+  # Job 2: Publish / update the stable "latest" pre-release tag
+  # ────────────────────────────────────────────────────────────────────────────
   publish:
-    name: Publish Pre-Release
+    name: Publish Latest Draft
     needs: build
     runs-on: ubuntu-latest
 
@@ -84,11 +86,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Download artifact
+      - name: Download PDFs
         uses: actions/download-artifact@v4
         with:
-          name: pre-release-pdf
+          name: latest-pdfs
           path: release/
+
+      - name: Build date
+        id: meta
+        run: |
+          echo "date=$(date -u '+%Y-%m-%d')" >> "$GITHUB_OUTPUT"
+          echo "time=$(date -u '+%H:%M UTC')" >> "$GITHUB_OUTPUT"
 
       - name: Remove existing latest-pre-release
         env:
@@ -98,21 +106,38 @@ jobs:
             && gh release delete latest-pre-release --yes --cleanup-tag \
             || true
 
+      - name: Collect paper list for release body
+        id: papers
+        run: |
+          LIST=""
+          for pdf in release/*.pdf; do
+            [[ -f "$pdf" ]] || continue
+            name="$(basename "$pdf")"
+            LIST="${LIST}- \`${name}\`"$'\n'
+          done
+          echo "list<<EOF" >> "$GITHUB_OUTPUT"
+          echo "$LIST" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+
       - name: Publish pre-release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: latest-pre-release
-          name: "Latest Draft (${{ needs.build.outputs.pre_tag }})"
+          name: "Latest Draft — ${{ steps.meta.outputs.date }}"
           body: |
-            Automated draft build from `main`.
+            Automated draft build from `main`. PDFs are rebuilt on every push.
 
             | Field  | Value |
             |--------|-------|
-            | Tag    | `${{ needs.build.outputs.pre_tag }}` |
+            | Date   | `${{ steps.meta.outputs.date }}` |
+            | Time   | `${{ steps.meta.outputs.time }}` |
             | Commit | [`${{ github.sha }}`](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}) |
-            | Date   | ${{ needs.build.outputs.pre_tag }} |
 
-            > This is a draft snapshot, not a stable release.
+            **Papers in this build:**
+
+            ${{ steps.papers.outputs.list }}
+
+            > This is a rolling draft snapshot, not a stable release.
             > For stable releases, see the [releases page](${{ github.server_url }}/${{ github.repository }}/releases?q=v*).
           files: release/*.pdf
           prerelease: true
