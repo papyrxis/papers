@@ -1,20 +1,23 @@
 \section{Conclusion}
 \label{sec:conclusion}
 
-We have argued that the informal ``raw facts'' characterization of data,
-while not incorrect, lacks the structural precision needed to reason about
-indexing, typing, and equality---precision that a function-theoretic
-definition, $D : I \to V$ together with explicit totality, functionality,
-and codomain-consistency conditions, supplies directly. We positioned this
-definition against three established frameworks and showed it to be
-compatible with, and presupposed by, each. We then derived four corollaries
-connecting specific violations of the definition's structural conditions to
-four recurring classes of systems-engineering defect, providing worked
-examples showing each correspondence concretely.
+The informal ``raw facts'' characterization of data is not wrong, but it
+was never going to be enough on its own. It has nothing to say about
+indexing, typing, or equality---precisely the three things a
+function-theoretic definition, $D : I \to V$ together with explicit
+totality, functionality, and codomain-consistency conditions, settles
+directly. We placed that definition next to three established frameworks
+and found it compatible with, and quietly presupposed by, all three. From
+there we derived four corollaries, each tying a specific violation of the
+definition's structural conditions to a recurring class of
+systems-engineering defect, with a worked example showing the connection
+concretely rather than asserting it.
 
-Future work falls into three categories: an empirical study mining a defect
-corpus to estimate how large a fraction of each defect category corresponds
-to a violation of one of Conditions~1--3; full formal treatment of the
-streaming and unstructured-data extensions; and static or runtime
-verification tooling that checks index set and value set agreement at
-serialization and deserialization boundaries.
+What is left falls into three buckets: an empirical study that mines a
+real defect corpus to see how much of each defect category actually
+traces back to a violation of Conditions 1 through 3; a fuller formal
+treatment of the streaming and unstructured-data cases sketched in
+Section~\ref{sec:discussion}; and tooling, static or runtime, that checks
+index-set and value-set agreement at the exact serialization and
+deserialization boundaries where this paper's corollaries say the
+trouble starts.

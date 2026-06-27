@@ -3,43 +3,50 @@
 
 \subsection{Informal and Lexical Definitions}
 
-The etymological root of \emph{data}---the Latin \emph{datum},
-``that which is given''---already carries a structural implication:
-a datum is received rather than derived, a starting point for inference
-rather than its product~\autocite{Webster1934}. Standard reference works
-preserve this sense without formalizing it. Rob and Coronel define data as
-raw, unprocessed facts~\autocite{Rob2013}; Ratzan characterizes
-\emph{information} as a coherent, organized collection of
-data~\autocite{Ratzan2004}; UNESCO adds a requirement that data be
+The word itself already hints at the structure this paper wants to make
+explicit. \emph{Data} comes from the Latin \emph{datum}, ``that which is
+given''---a datum is received, not derived; a starting point for
+reasoning, not its product~\autocite{websters1934}. Standard references
+keep that sense without ever formalizing it. Rob and Coronel call data
+raw, unprocessed facts~\autocite{rob2013}; Ratzan treats
+\emph{information}, not data, as the organized, coherent thing, leaving
+data as whatever sits underneath it~\autocite{ratzan2004}; UNESCO comes
+closest to a structural requirement when it insists that data be
 ``expressed in a standardized way, suitable for being communicated,
-interpreted, or processed''~\autocite{UNESCO2008}---the closest any of these
-sources comes to a structural requirement.
+interpreted, or processed''~\autocite{unesco2008}---which is a real
+constraint, but not yet one stated in terms anyone could check
+mechanically.
 
 \subsection{Floridi's General Definition of Information}
 
-Floridi's General Definition of Information (GDI) characterizes information
-as data that are well-formed, meaningful, and (in some variants) truthful,
-with data themselves treated as ``lack of uniformity'' between two states of
-a system~\autocite{Floridi2010}. The GDI deliberately treats the underlying
-notion of data as a primitive; the function-theoretic definition supplies the
-structural detail that the GDI leaves unspecified at the data level by design.
+Floridi's General Definition of Information treats information as data
+that happen to be well-formed, meaningful, and---in some versions of the
+definition---true, and it treats data themselves as little more than a
+primitive: a ``lack of uniformity'' between two states of a
+system~\autocite{floridi2010}. That move is deliberate on Floridi's part;
+the GDI is built to explain how information arises \emph{from} data, not
+to specify what data are made of. The function-theoretic definition fills
+in exactly the structural detail the GDI leaves out by design, at the
+layer underneath where Floridi's own account begins.
 
 \subsection{Zins' Faceted Classification}
 
-Zins surveys a wide range of conceptions of data, information, and knowledge
-and organizes them into faceted categories, distinguishing views that treat
-data as \emph{objects} from views that treat data as \emph{signals} or
-\emph{representations} of facts~\autocite{Zins2007}. The function-theoretic
-definition proposes a structure compatible with the \emph{representation}
-facet specifically, on the grounds that representation---something standing
-for something else, addressably---is the facet computing systems actually
-instantiate.
+Zins surveys a wide range of ways people have tried to define data,
+information, and knowledge, and sorts them into facets---some treat data
+as \emph{objects}, others as \emph{signals}, others as
+\emph{representations} of facts~\autocite{zins2007}. The definition argued
+for here sits squarely inside the representation facet, and not by
+accident: something standing in for something else, addressably, is the
+one facet a computing system actually has to instantiate in order to run
+at all.
 
 \subsection{The DIKW Hierarchy}
 
-The data--information--knowledge--wisdom hierarchy~\autocite{Ackoff1989,Rowley2007}
-is widely used to describe the progressive enrichment of data through
-organization and interpretation. It is frequently presented without a
-precise definition of its lowest tier. The function-theoretic definition is
-intended as a precise characterization of exactly that tier, compatible with
-and presupposed by every DIKW-style account.
+The data--information--knowledge--wisdom hierarchy is one of the more
+widely cited ways of describing how raw data get progressively enriched
+through organization and interpretation~\autocite{ackoff1989,rowley2007}.
+What it is almost never given is a precise account of its own lowest
+rung---what ``data'' means at the bottom of that hierarchy is usually
+assumed rather than stated. That is the gap this paper is aimed at: a
+characterization of exactly that tier, one every DIKW-style account
+already presupposes whether it says so or not.

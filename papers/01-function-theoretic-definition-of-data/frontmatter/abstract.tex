@@ -1,24 +1,22 @@
-% frontmatter/abstract.tex — written by hand for this paper.
-% Included right after \maketitle by the generated main.tex.
-
 \begin{abstract}
-The term \emph{data} is among the most frequently used and least precisely
-defined concepts in computing. Standard references converge on an informal
-characterization of data as ``raw facts,'' but none specify the formal
-structure that makes a collection of facts addressable, comparable, or
-processable by a machine. This representational ambiguity propagates into
-system design as schema drift, serialization defects, and a class of
-type-confusion vulnerabilities that arise when a fixed byte sequence is
-silently reinterpreted under an unstated indexing or typing assumption.
-This paper makes the case for treating data formally as a
-\emph{function from an index set to a value set}, sharpens this definition
-with explicit well-definedness conditions, and positions it against three
-existing frameworks: Floridi's General Definition of Information, Zins'
-faceted classification, and the DIKW hierarchy. We derive four corollaries
-connecting this definition directly to recurring failure modes in software
+\emph{Data} is one of the most frequently used and least precisely defined
+words in computing. The references that do define it converge on
+something like ``raw facts,'' which is not wrong, but it never specifies
+the structure a collection of facts actually needs before a machine can
+index it, compare it, or move it across a wire. That gap does not stay
+abstract for long: it resurfaces as schema drift, as serialization
+defects, and as a whole class of type-confusion vulnerabilities, all
+arising from the same root cause---a fixed byte sequence quietly
+reinterpreted under an indexing or typing assumption nobody wrote down.
+This paper argues for treating data formally as a \emph{function from an
+index set to a value set}, states that definition with explicit
+well-definedness conditions, and places it against three existing
+frameworks: Floridi's General Definition of Information, Zins' faceted
+classification, and the DIKW hierarchy. From the definition we derive four
+corollaries connecting it directly to recurring failure modes in software
 engineering---implicit schema coupling, byte-level reinterpretation,
-unsound equality checks, and ambiguous serialization contracts---with
-worked examples for each.
+unsound equality checks, and ambiguous serialization contracts---each with
+a worked example.
 \end{abstract}
 
 \paragraph{Keywords} data representation; formal definition; information theory;

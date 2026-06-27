@@ -3,13 +3,15 @@
 
 \subsection{Motivating Example}
 
-Consider the five bytes \texttt{0x41 0x52 0x4C 0x49 0x5A}. Under one set
-of assumptions, this is the ASCII string \texttt{"ARLIZ"}; under another,
-it is five unsigned 8-bit integers, $\{65, 82, 76, 73, 90\}$; under a
-third, it is the first five bytes of an arbitrary binary file format. The
-underlying bytes are identical in every case. What differs is the
-\emph{interpretation function} applied to a fixed set of positions---exactly
-the structure this section formalizes.
+Take the five bytes \texttt{0x41 0x52 0x4C 0x49 0x5A}. Read one way, this
+is the ASCII string \texttt{"ARLIZ"}. Read another way, it is five
+unsigned 8-bit integers, $\{65, 82, 76, 73, 90\}$. Read a third way, it is
+simply the first five bytes of some binary file whose format hasn't been
+specified yet. The bytes themselves never change across these three
+readings---what changes is the \emph{interpretation function} applied to
+a fixed set of positions, and that distinction, between the bytes and
+whatever is reading them, is exactly the structure this section sets out
+to formalize.
 
 \subsection{Formal Definition}
 
@@ -36,24 +38,28 @@ total function
 assigning to every index $i \in I$ exactly one value $D(i) \in V$.
 \end{definition}
 
-This definition requires three conditions to hold for $D$ to be well-defined:
+Three conditions have to hold before $D$ counts as well-defined at all,
+and each one corresponds to a specific way a real system can fail.
 
 \paragraph{Condition 1 (Totality).}
 $D$ must be defined for every $i \in I$. A structure that leaves some
-indices unassigned is a \emph{partial function}, and any operation that
-assumes totality is unsound when applied to it without first checking the
-domain.
+indices unassigned is, formally, a \emph{partial} function, not a total
+one---and any operation built on the assumption of totality will misbehave,
+silently, the moment it is handed a structure that does not actually have it.
 
 \paragraph{Condition 2 (Functionality).}
-For every $i \in I$, $D(i)$ must denote a single, determinate value in $V$.
-A mapping that assigns multiple candidate values to the same index---for
-instance, two fields claiming the same byte offset under different schema
-versions---is not a function and therefore not a single well-defined
-collection of data.
+For every $i \in I$, $D(i)$ has to name exactly one value in $V$, not a
+choice among several. A mapping that assigns two candidate values to the
+same index---two fields both claiming the same byte offset under
+different schema versions is the usual way this happens in
+practice---is not a function in the first place, and therefore is not one
+well-defined collection of data, no matter how the rest of the system
+treats it.
 
 \paragraph{Condition 3 (Codomain Consistency).}
-Every value $D(i)$ must belong to the \emph{same} value set $V$ for all
-$i \in I$, where $V$ is fixed in advance of constructing $D$.
+Every value $D(i)$ has to belong to the \emph{same} $V$, for every $i \in
+I$, and $V$ has to be fixed before $D$ is constructed---not discovered
+afterward, by whatever happens to read the bytes back.
 
 \begin{definition}[Functional Equality]
 \label{def:equality}
@@ -62,29 +68,33 @@ Two collections of data $D_1 : I_1 \to V_1$ and $D_2 : I_2 \to V_2$ are
 and $D_1(i) = D_2(i)$ for every $i \in I_1$.
 \end{definition}
 
-This is a stronger condition than equality of the underlying byte
-representation. Two structures can share an identical byte-level encoding
-while differing in $V$---the ARLIZ example above---and
-Definition~\ref{def:equality} correctly classifies them as unequal
-collections of data.
+This is a stricter condition than matching byte representations, and the
+difference is not academic. Two structures can be byte-for-byte identical
+under encoding while differing in $V$---the ARLIZ example above is
+already an instance of this---and Definition~\ref{def:equality} correctly
+calls them unequal, even though a system that hashes raw bytes to check
+for duplicates never would.
 
 \subsection{Relation to Sequences, Tuples, and Multisets}
 
-The function-theoretic definition deliberately generalizes several structures
-often used informally as synonyms for ``data'':
+A few structures get used informally as if they were just other words for
+``data.'' They are not synonyms; they are special cases, and it is worth
+being precise about which constraint each one relaxes or fixes:
 
 \begin{description}
   \item[Sequence / array.]
-    The special case $I = \{0, 1, \dots, n-1\}$, i.e., a function from a
-    finite, contiguous, totally ordered index set into $V$. Arrays are data
-    over the specific index set that integer addressing supplies.
+    The case where $I = \{0, 1, \dots, n-1\}$---a function from a finite,
+    contiguous, ordered index set into $V$. An array, in other words, is
+    just data over the particular index set that integer addressing
+    happens to supply.
   \item[Tuple.]
-    The special case where $I$ is small and fixed, and $V$ is permitted to
-    vary per index ($D(i) \in V_i$). Tuples relax Condition~3 deliberately
-    and explicitly---a structurally different move from the unsound
-    \emph{implicit} relaxation described in Section~\ref{sec:implications}.
+    The case where $I$ is small and fixed, but $V$ is allowed to vary
+    per index, so that $D(i) \in V_i$ rather than a single shared $V$.
+    A tuple relaxes Condition~3 \emph{deliberately and explicitly}---which
+    is the structural opposite of the unsound, implicit relaxation
+    described in Section~\ref{sec:implications}.
   \item[Multiset.]
-    Corresponds to the case where $I$ is considered only up to a permutation.
-    Multisets are a quotient of the function-theoretic structure, not an
-    alternative to it.
+    The case where $I$ only matters up to permutation. A multiset is a
+    quotient of the function-theoretic structure, not a competing
+    definition of it.
 \end{description}

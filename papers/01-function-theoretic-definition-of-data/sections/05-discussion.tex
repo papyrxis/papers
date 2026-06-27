@@ -3,38 +3,42 @@
 
 \subsection{Relationship to Existing Frameworks}
 
-The function-theoretic definition does not compete with the GDI, Zins'
-classification, or the DIKW hierarchy---it occupies a gap each leaves open
-by design. This is a deliberate scoping choice: the contribution of this
-paper is structural precision at the data tier specifically, not a new
-account of how data becomes information or knowledge.
+None of this is meant to compete with the GDI, with Zins' classification,
+or with the DIKW hierarchy. Each of those frameworks leaves a gap open by
+design, and the function-theoretic definition is built to sit inside that
+gap, not replace what surrounds it. The contribution here is structural
+precision at the data tier specifically---not a new theory of how data
+becomes information, or how information becomes knowledge.
 
 \subsection{Limitations}
 
-Two cases stress the definition's assumptions:
+Two cases push against the edges of what this definition assumes.
 
 \paragraph{Streaming or unbounded data.}
-When $I$ is not known in advance---an open-ended sensor stream, for
-instance---Definition~\ref{def:collection}'s totality condition cannot be
-checked against a fixed, enumerable $I$. The definition still applies at
-any finite prefix or window of the stream, but the unbounded stream itself
-requires treating $I$ as a fixed well-ordered set (e.g., $\mathbb{N}$)
-with totality understood as ``defined for every index produced so far.''
+When $I$ is not fixed in advance---an open-ended sensor stream is the
+obvious example---Definition~\ref{def:collection}'s totality condition
+cannot be checked against a complete, enumerable $I$, because there isn't
+one yet. The definition still holds at any finite prefix or window of the
+stream; the unbounded case just requires treating $I$ as a fixed,
+well-ordered set such as $\mathbb{N}$, with totality reinterpreted as
+``defined for every index produced so far'' rather than ``defined for
+every index, full stop.''
 
 \paragraph{Genuinely unstructured data.}
-Free-text notes prior to any tagging or field extraction resist a useful
-index set by design. Imposing one prematurely---treating the data as a
-function from character position to character---is technically valid but
-discards exactly the information a downstream NLP pipeline exists to
-recover. The function-theoretic definition is correct but not yet
-\emph{useful} at the byte-indexed level; its value reappears once a
-downstream process imposes a more meaningful index set.
+Free-text notes, before any tagging or field extraction has happened,
+resist a useful index set on purpose. Treating such text as a function
+from character position to character is technically valid---nothing in
+the definition forbids it---but it throws away exactly the structure a
+downstream NLP pipeline exists to recover. The definition is not wrong
+here so much as premature: its value reappears once some later stage
+imposes a more meaningful index set on the same text.
 
 \subsection{Threats to Validity}
 
-The corollaries are illustrated with representative, constructed examples
-rather than an empirical defect-mining study. We consider the corollaries
-conceptually validated---each is a direct logical consequence of
-Definitions~\ref{def:collection} and~\ref{def:equality}---but their
-\emph{practical prevalence} as a fraction of real-world defects is an
-empirical question this paper does not measure.
+Every corollary above is illustrated with a constructed, representative
+example, not pulled from an empirical defect-mining study. We treat the
+corollaries as conceptually settled---each follows directly from
+Definitions~\ref{def:collection} and~\ref{def:equality}, with nothing left
+to argue about logically---but how large a share of real-world defects
+they actually account for is an empirical question, and this paper does
+not attempt to measure it.
