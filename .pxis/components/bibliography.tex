@@ -1,23 +1,20 @@
 \usepackage[
   backend=biber,
-  bibstyle=authortitle,
-  citestyle=verbose-note,
-  sorting=nyt,
+  style=chicago-notes,
   autocite=footnote,
   ibidtracker=constrict,
   pagetracker=true,
   citetracker=true,
   maxbibnames=99,
   maxcitenames=3,
-  dashed=false,
-  giveninits=true,
+  giveninits=false,
   url=true,
   doi=true,
   eprint=true,
-  backref=true
+  backref=false
 ]{biblatex}
 
-\renewcommand{\thefootnote}{[\arabic{footnote}]}
+\renewcommand{\thefootnote}{\arabic{footnote}}
 \renewcommand{\footnotesize}{\small}
 \renewcommand{\footnoterule}{%
   \kern -3pt
@@ -26,21 +23,8 @@
 }
 \setlength{\footnotesep}{0.8\baselineskip}
 
-\setlength{\bibitemsep}{0.4\baselineskip}
+\setlength{\bibitemsep}{0.6\baselineskip}
 \setlength{\bibhang}{1.5em}
 
 \setcounter{biburllcpenalty}{7000}
 \setcounter{biburlucpenalty}{8000}
-
-\renewbibmacro{in:}{%
-  \ifentrytype{article}{}{\printtext{\bibstring{in}\intitlepunct}}%
-}
-
-\AtEveryBibitem{%
-  \ifentrytype{book}{\clearfield{url}}{}%
-  \ifentrytype{article}{\clearfield{url}}{}%
-}
-
-\DeclareNameAlias{sortname}{family-given}
-
-\providecommand{\FooterAuthorName}{Mahdi Mamashli (Genix)}
