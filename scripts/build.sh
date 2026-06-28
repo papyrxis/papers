@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
 # Usage:
-#   bash scripts/build.sh <slug>            Generate + build one paper
-#   bash scripts/build.sh <slug> --watch    Watch mode
-#   bash scripts/build.sh all               Build every paper with a .conf
+#   bash scripts/build.sh <slug|#>            Generate + build one paper
+#   bash scripts/build.sh <slug|#> --watch    Watch mode
+#   bash scripts/build.sh all                  Build every paper with a .conf
+#
+# <slug|#> accepts either the full paper slug (01-the-nature-of-data)
+# or its position in `make list` (1, 2, 3, ...).
 
 set -euo pipefail
 
@@ -10,6 +13,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 GENERATE="$SCRIPT_DIR/generate.sh"
 BUILD_DIR="$ROOT/build"
+source "$SCRIPT_DIR/lib/resolve-paper.sh"
 
 RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[1;33m'
 BLUE='\033[0;34m'; RESET='\033[0m'
@@ -19,10 +23,13 @@ success() { echo -e "${GREEN}[build]${RESET} $*"; }
 warn()    { echo -e "${YELLOW}[build]${RESET} $*"; }
 die()     { echo -e "${RED}[build]${RESET} $*" >&2; exit 1; }
 
-usage() { echo "Usage: $(basename "$0") <slug|all> [--watch]" >&2; exit 1; }
+usage() { echo "Usage: $(basename "$0") <slug|#|all> [--watch]" >&2; exit 1; }
 
 [[ $# -ge 1 ]] || usage
 SLUG="$1"
+if [[ "$SLUG" != "all" ]]; then
+  SLUG="$(resolve_paper "$ROOT" "$SLUG")" || exit 1
+fi
 WATCH=false
 [[ "${2:-}" == "--watch" ]] && WATCH=true
 

@@ -2,4 +2,4 @@
 
 | # | Slug | Style | Title |
 |---|------|-------|-------|
-| 1 | `01-the-nature-of-data` | academic | The Nature of Data |
+| 01 | `01-the-nature-of-data` | academic | The Nature of Data |

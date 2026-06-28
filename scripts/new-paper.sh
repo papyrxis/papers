@@ -1,12 +1,6 @@
 #!/usr/bin/env bash
 # Usage:
 #   bash scripts/new-paper.sh <slug> [style]
-#
-# Examples:
-#   bash scripts/new-paper.sh 02-type-confusion-taxonomy academic
-#   bash scripts/new-paper.sh 03-why-endianness-matters personal
-#   bash scripts/new-paper.sh 04-network-protocols ieee
-#   bash scripts/new-paper.sh 05-data-structures journal
 
 set -euo pipefail
 
@@ -38,8 +32,6 @@ CONF="$ROOT/configs/papers/${SLUG}.conf"
 [[ -d "$PAPER_DIR" ]] && error "Paper already exists: papers/$SLUG"
 [[ -f "$CONF" ]]      && error "Config already exists: configs/papers/${SLUG}.conf"
 
-# Derive a human-readable title from the slug: strip leading "NN-",
-# replace hyphens with spaces, title-case the rest.
 RAW="${SLUG#[0-9][0-9]-}"
 TITLE="$(echo "$RAW" | sed 's/-/ /g' | awk '{for(i=1;i<=NF;i++) $i=toupper(substr($i,1,1)) tolower(substr($i,2)); print}')"
 
@@ -50,11 +42,8 @@ log "Title:       $TITLE"
 mkdir -p "$PAPER_DIR"/{sections,figures,references,frontmatter,backmatter}
 mkdir -p "$ROOT/configs/papers"
 
-# ── TOC default per style ────────────────────────────────────────────────────
 TOC="false"
 [[ "$STYLE" == "academic" || "$STYLE" == "journal" ]] && TOC="true"
-
-# ── configs/papers/<slug>.conf ───────────────────────────────────────────────
 cat > "$CONF" <<CONFEOF
 # configs/papers/${SLUG}.conf — metadata for this paper
 # Sourced by scripts/generate.sh and scripts/build.sh.
@@ -158,7 +147,6 @@ cat > "$PAPER_DIR/sections/05-conclusion.tex" <<'EOF'
 One paragraph: problem, approach, finding, future work.
 EOF
 
-# ── references/paper.bib ─────────────────────────────────────────────────────
 cat > "$PAPER_DIR/references/paper.bib" <<'EOF'
 % BibTeX references for this paper.
 % Cite with \autocite{key} in the section files:
@@ -205,22 +193,7 @@ EOF
 
 bash "$SCRIPT_DIR/generate.sh" "$SLUG"
 
-LIST="$ROOT/papers/LIST_OF_PAPERS.md"
-if [[ ! -f "$LIST" ]]; then
-  cat > "$LIST" <<'LISTEOF'
-# Papers — List of Papers
-
-| # | Slug | Style | Title |
-|---|------|-------|-------|
-LISTEOF
-fi
-
-NUM=$(grep -c '^|' "$LIST" 2>/dev/null | tail -1 || echo 0)
-NUM=$(( NUM - 1 ))  # subtract header rows
-[[ $NUM -lt 1 ]] && NUM=1
-
-# Append new row
-echo "| ${NUM} | \`${SLUG}\` | ${STYLE} | ${TITLE} |" >> "$LIST"
+bash "$SCRIPT_DIR/list-papers.sh" >/dev/null
 
 echo ""
 success "Scaffolded: papers/$SLUG"

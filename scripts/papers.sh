@@ -7,6 +7,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+source "$SCRIPT_DIR/lib/resolve-paper.sh"
 
 # ── Colors ────────────────────────────────────────────────────────────────────
 RED='\033[0;31m'
@@ -168,9 +169,11 @@ cmd_watch() {
 
 # ── Clean ────────────────────────────────────────────────────────────────────
 cmd_clean() {
-  local slug="${1:-}"
+  local input="${1:-}"
 
-  if [[ -n "$slug" ]]; then
+  if [[ -n "$input" ]]; then
+    local slug
+    slug="$(resolve_paper "$ROOT" "$input")" || exit 1
     log "Cleaning build artifacts for: $slug"
     rm -rf "$ROOT/build/$slug"
     find "$ROOT/papers/$slug" -type f \
@@ -195,7 +198,39 @@ cmd_clean() {
   fi
 }
 
-# ── Help ─────────────────────────────────────────────────────────────────────
+# ── Export to Markdown ───────────────────────────────────────────────────────
+cmd_export() {
+  local target="${1:-}"
+
+  if [[ -z "$target" ]]; then
+    echo ""
+    echo -e "${BOLD}  Export Paper to Markdown${RESET}"
+    echo ""
+    cmd_list
+
+    read -rp "  Slug to export (or 'all'): " target
+    [[ -z "$target" ]] && error "Slug cannot be empty."
+  fi
+
+  bash "$SCRIPT_DIR/export.sh" "$target"
+}
+
+cmd_delete() {
+  local target="${1:-}"
+
+  if [[ -z "$target" ]]; then
+    echo ""
+    echo -e "${BOLD}  Delete Paper${RESET}"
+    echo ""
+    cmd_list
+
+    read -rp "  Slug to delete: " target
+    [[ -z "$target" ]] && error "Slug cannot be empty."
+  fi
+
+  bash "$SCRIPT_DIR/delete-paper.sh" "$target"
+}
+
 cmd_help() {
   echo ""
   echo -e "${BOLD}  papers CLI — Genix${RESET}"
@@ -205,42 +240,51 @@ cmd_help() {
   echo -e "    bash scripts/papers.sh                  Interactive menu"
   echo -e "    bash scripts/papers.sh <command> [args]  Direct command"
   echo ""
+  echo -e "  Anywhere a <slug> is expected, its number from ${BOLD}list${RESET} works too."
+  echo ""
   echo -e "  ${CYAN}Commands:${RESET}"
-  echo -e "    ${BOLD}new${RESET}    <slug> [style]  Scaffold a new paper"
-  echo -e "    ${BOLD}build${RESET}  <slug|all>      Build paper(s) to PDF"
-  echo -e "    ${BOLD}watch${RESET}  <slug>          Auto-rebuild on file change"
-  echo -e "    ${BOLD}list${RESET}                   List all papers"
-  echo -e "    ${BOLD}styles${RESET}                 Show available styles"
-  echo -e "    ${BOLD}clean${RESET}  [slug]          Remove build artifacts"
-  echo -e "    ${BOLD}help${RESET}                   Show this help"
+  echo -e "    ${BOLD}new${RESET}     <slug> [style]   Scaffold a new paper"
+  echo -e "    ${BOLD}build${RESET}   <slug|#|all>      Build paper(s) to PDF"
+  echo -e "    ${BOLD}export${RESET}  <slug|#|all>      Export paper(s) to Markdown"
+  echo -e "    ${BOLD}watch${RESET}   <slug|#>          Auto-rebuild on file change"
+  echo -e "    ${BOLD}list${RESET}                       List all papers"
+  echo -e "    ${BOLD}styles${RESET}                     Show available styles"
+  echo -e "    ${BOLD}clean${RESET}   [slug|#]          Remove build artifacts"
+  echo -e "    ${BOLD}delete${RESET}  <slug|#>          Delete a paper completely"
+  echo -e "    ${BOLD}help${RESET}                       Show this help"
   echo ""
   echo -e "  ${CYAN}Examples:${RESET}"
   echo -e "    bash scripts/papers.sh new 02-type-theory academic"
   echo -e "    bash scripts/papers.sh build 01-function-theoretic-definition-of-data"
-  echo -e "    bash scripts/papers.sh build all"
-  echo -e "    bash scripts/papers.sh watch 02-type-theory"
-  echo -e "    bash scripts/papers.sh clean 01-function-theoretic-definition-of-data"
+  echo -e "    bash scripts/papers.sh build 1"
+  echo -e "    bash scripts/papers.sh export 1"
+  echo -e "    bash scripts/papers.sh watch 2"
+  echo -e "    bash scripts/papers.sh clean 1"
+  echo -e "    bash scripts/papers.sh delete 1"
   echo ""
   echo -e "  ${CYAN}Makefile shortcuts:${RESET}"
   echo -e "    make new-paper SLUG=<slug> STYLE=<style>"
-  echo -e "    make paper     PAPER=<slug>"
+  echo -e "    make paper     PAPER=<slug|#>"
+  echo -e "    make export    PAPER=<slug|#|all>"
   echo -e "    make build"
   echo -e "    make list"
+  echo -e "    make delete-paper PAPER=<slug|#>"
   echo -e "    make clean"
   echo ""
 }
 
-# ── Interactive menu ──────────────────────────────────────────────────────────
 interactive_menu() {
   print_banner
   echo -e "  ${CYAN}What would you like to do?${RESET}"
   echo ""
   echo -e "  ${BOLD}[1]${RESET}  new      — Scaffold a new paper"
   echo -e "  ${BOLD}[2]${RESET}  build    — Build a paper to PDF"
-  echo -e "  ${BOLD}[3]${RESET}  watch    — Watch mode (auto-rebuild)"
-  echo -e "  ${BOLD}[4]${RESET}  list     — List all papers"
-  echo -e "  ${BOLD}[5]${RESET}  styles   — Show available styles"
-  echo -e "  ${BOLD}[6]${RESET}  clean    — Remove build artifacts"
+  echo -e "  ${BOLD}[3]${RESET}  export   — Export a paper to Markdown"
+  echo -e "  ${BOLD}[4]${RESET}  watch    — Watch mode (auto-rebuild)"
+  echo -e "  ${BOLD}[5]${RESET}  list     — List all papers"
+  echo -e "  ${BOLD}[6]${RESET}  styles   — Show available styles"
+  echo -e "  ${BOLD}[7]${RESET}  clean    — Remove build artifacts"
+  echo -e "  ${BOLD}[8]${RESET}  delete   — Delete a paper completely"
   echo -e "  ${BOLD}[q]${RESET}  quit"
   echo ""
   read -rp "  Choice: " choice
@@ -248,26 +292,29 @@ interactive_menu() {
   case "$choice" in
     1|new)    cmd_new ;;
     2|build)  cmd_build ;;
-    3|watch)  cmd_watch ;;
-    4|list)   cmd_list ;;
-    5|styles) cmd_styles ;;
-    6|clean)  cmd_clean ;;
+    3|export) cmd_export ;;
+    4|watch)  cmd_watch ;;
+    5|list)   cmd_list ;;
+    6|styles) cmd_styles ;;
+    7|clean)  cmd_clean ;;
+    8|delete) cmd_delete ;;
     q|quit)   echo ""; dim "  Bye!"; echo ""; exit 0 ;;
     *)        warn "Unknown choice: $choice"; interactive_menu ;;
   esac
 }
 
-# ── Dispatch ──────────────────────────────────────────────────────────────────
 CMD="${1:-}"
 shift || true
 
 case "$CMD" in
   new)    cmd_new    "$@" ;;
   build)  cmd_build  "$@" ;;
+  export) cmd_export "$@" ;;
   watch)  cmd_watch  "$@" ;;
   list)   cmd_list ;;
   styles) cmd_styles ;;
   clean)  cmd_clean  "$@" ;;
+  delete) cmd_delete "$@" ;;
   help|-h|--help) cmd_help ;;
   "")     interactive_menu ;;
   *)      error "Unknown command: $CMD. Run: bash scripts/papers.sh help" ;;
