@@ -200,19 +200,33 @@ cmd_clean() {
 
 # ── Export to Markdown ───────────────────────────────────────────────────────
 cmd_export() {
-  local target="${1:-}"
+  local slug="${1:-}"
+  shift || true
+  local platform_targets=("$@")
 
-  if [[ -z "$target" ]]; then
+  if [[ -z "$slug" ]]; then
     echo ""
     echo -e "${BOLD}  Export Paper to Markdown${RESET}"
     echo ""
     cmd_list
 
-    read -rp "  Slug to export (or 'all'): " target
-    [[ -z "$target" ]] && error "Slug cannot be empty."
+    read -rp "  Slug to export (or 'all'): " slug
+    [[ -z "$slug" ]] && error "Slug cannot be empty."
+
+    echo ""
+    echo "  Platform target(s) — comma-separated, or blank for all:"
+    echo "    devto, medium, reddit, ieee, ssrn, scirp, journal, personal"
+    read -rp "  Target(s): " targets_input
+    if [[ -n "$targets_input" ]]; then
+      IFS=',' read -ra raw_targets <<< "$targets_input"
+      platform_targets=()
+      for t in "${raw_targets[@]}"; do
+        platform_targets+=("$(echo "$t" | tr -d ' ')")
+      done
+    fi
   fi
 
-  bash "$SCRIPT_DIR/export.sh" "$target"
+  bash "$SCRIPT_DIR/export.sh" "$slug" "${platform_targets[@]}"
 }
 
 cmd_delete() {

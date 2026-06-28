@@ -9,9 +9,13 @@ else
     WORKSPACE_SRC := $(WORKSPACE_ROOT)/src
 endif
 
-PAPER ?=
+PAPER  ?=
+TARGET ?=
+AVAILABLE_TARGETS := $(notdir $(basename $(wildcard scripts/lib/targets/*.target.sh)))
+AVAILABLE_TARGETS := $(AVAILABLE_TARGETS:.target=)
 
-.PHONY: all build sync clean watch version new-paper generate list help export delete-paper
+.PHONY: all build sync clean watch version new-paper generate list help \
+        export targets delete-paper
 
 all: help
 
@@ -32,9 +36,18 @@ build:
 
 export:
 ifndef PAPER
-	$(error PAPER is not set. Usage: make export PAPER=<slug|#|all>)
+	$(error PAPER is not set. Usage: make export PAPER=<slug|#|all> [TARGET=<target ...>])
 endif
-	@bash scripts/export.sh "$(PAPER)"
+	@bash scripts/export.sh "$(PAPER)" $(TARGET)
+
+targets:
+	@echo ""
+	@echo "  Export targets (scripts/lib/targets/*.target.sh):"
+	@echo "  ──────────────────────────────────────────────────────────"
+	@for t in $(AVAILABLE_TARGETS); do echo "    $$t"; done
+	@echo ""
+	@echo "  Usage: make export PAPER=<slug|#|all> TARGET=\"<target ...>\""
+	@echo ""
 
 sync:
 	@bash $(WORKSPACE_SRC)/sync.sh
@@ -89,9 +102,13 @@ help:
 	@echo ""
 	@echo "  make generate PAPER=<slug|#>           Regenerate main.tex only"
 	@echo "  make paper    PAPER=<slug|#>           Generate + build one paper to PDF"
-	@echo "  make export   PAPER=<slug|#|all>       Export one or all papers to Markdown"
 	@echo "  make build                              Generate + build every paper to PDF"
 	@echo "  make watch    PAPER=<slug|#>           Auto-rebuild on save"
+	@echo ""
+	@echo "  make export   PAPER=<slug|#|all> [TARGET=<t ...>]"
+	@echo "                                           Export to Markdown, customized per platform"
+	@echo "                                           (omit TARGET for every platform at once)"
+	@echo "  make targets                            List available export platforms"
 	@echo ""
 	@echo "  make list                               List all papers (also syncs the README index)"
 	@echo "  make delete-paper PAPER=<slug|#>       Delete a paper completely"
@@ -103,6 +120,10 @@ help:
 	@echo "    make paper PAPER=01-function-theoretic-definition-of-data"
 	@echo "    make paper PAPER=1"
 	@echo "    make export PAPER=1"
+	@echo "    make export PAPER=1 TARGET=devto"
+	@echo "    make export PAPER=1 TARGET=\"devto medium\""
+	@echo "    make export PAPER=all"
+	@echo "    make targets"
 	@echo "    make delete-paper PAPER=2"
 	@echo ""
 

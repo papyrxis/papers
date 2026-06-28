@@ -1,3 +1,30 @@
+-- clean-export.lua
+--
+-- Pandoc Lua filter shared by every export target. Strips LaTeX-only
+-- residue (raw \ref/\autoref, layout markers, theorem-environment Divs)
+-- and normalizes whatever citeproc produces (author-date or numeric)
+-- into plain Markdown with no leftover HTML.
+--
+-- Target-specific behavior is controlled by two environment variables,
+-- set by export.sh before invoking pandoc:
+--   EXPORT_REFERENCES_HEADING  — text for the bibliography heading
+--                                 (e.g. "References", "Bibliography",
+--                                 "Works Cited"). Defaults to "References".
+--   EXPORT_REFERENCES_NUMBERED — "1" to render the bibliography as a
+--                                 numbered Markdown list (clean for
+--                                 numeric-citation targets); unset/"0"
+--                                 to keep it as plain paragraphs
+--                                 (the right shape for author-date styles).
+
+local function env_or(name, default)
+  local v = os.getenv(name)
+  if v == nil or v == "" then return default end
+  return v
+end
+
+local REFERENCES_HEADING  = env_or("EXPORT_REFERENCES_HEADING", "References")
+local REFERENCES_NUMBERED = env_or("EXPORT_REFERENCES_NUMBERED", "0") == "1"
+
 local function strip_outer_emph(block)
   if block.t ~= "Para" and block.t ~= "Plain" then
     return block
@@ -31,13 +58,20 @@ local function is_theorem_div(div)
   return false
 end
 
-local CITEPROC_CLASSES = {
-  ["references"] = true, ["csl-bib-body"] = true, ["csl-entry"] = true,
+local BIBLIOGRAPHY_CONTAINER_CLASSES = {
+  ["references"] = true, ["csl-bib-body"] = true,
 }
 
-local function is_citeproc_div(div)
+local function is_bibliography_container(div)
   for _, c in ipairs(div.classes) do
-    if CITEPROC_CLASSES[c] then return true end
+    if BIBLIOGRAPHY_CONTAINER_CLASSES[c] then return true end
+  end
+  return false
+end
+
+local function is_csl_entry(div)
+  for _, c in ipairs(div.classes) do
+    if c == "csl-entry" then return true end
   end
   return false
 end
@@ -61,9 +95,60 @@ local function clean_theorem_block(block)
   return strip_outer_emph(block)
 end
 
+local function flatten_csl_spans(inlines)
+  local out = {}
+  for _, el in ipairs(inlines) do
+    if el.t == "Span" then
+      local is_left_margin = false
+      for _, c in ipairs(el.classes) do
+        if c == "csl-left-margin" then is_left_margin = true end
+      end
+      if is_left_margin and REFERENCES_NUMBERED then
+        -- drop the "[1] " marker entirely; the Markdown list supplies it
+      else
+        for _, inner in ipairs(el.content) do
+          table.insert(out, inner)
+        end
+      end
+    else
+      table.insert(out, el)
+    end
+  end
+  return out
+end
+
+local function flatten_csl_entry_div(div)
+  local blocks = {}
+  for _, block in ipairs(div.content) do
+    if block.t == "Para" or block.t == "Plain" then
+      local inlines = flatten_csl_spans(block.content)
+      local ctor = block.t == "Para" and pandoc.Para or pandoc.Plain
+      table.insert(blocks, ctor(inlines))
+    else
+      table.insert(blocks, block)
+    end
+  end
+  return blocks
+end
+
 function Div(div)
-  if is_citeproc_div(div) then
+  if is_bibliography_container(div) then
+    if REFERENCES_NUMBERED then
+      local items = {}
+      for _, block in ipairs(div.content) do
+        table.insert(items, { block })
+      end
+      if #items > 0 then
+        return pandoc.OrderedList(items)
+      end
+      return {}
+    end
+
     return div.content
+  end
+
+  if is_csl_entry(div) then
+    return flatten_csl_entry_div(div)
   end
 
   if not is_theorem_div(div) then
@@ -76,6 +161,14 @@ function Div(div)
   end
 
   return pandoc.BlockQuote(new_blocks)
+end
+
+function Header(el)
+  if #el.content == 1 and el.content[1].t == "Str"
+     and (el.content[1].text == "Bibliography" or el.identifier == "bibliography") then
+    return pandoc.Header(el.level, { pandoc.Str(REFERENCES_HEADING) }, el.attr)
+  end
+  return nil
 end
 
 local function strip_html_tags(s)
@@ -122,17 +215,23 @@ function Link(el)
   if not is_crossref and el.target:match("^#") then
     is_crossref = true
   end
-  if not is_crossref then
-    return nil
+  if is_crossref then
+    local content = el.content
+    if #content == 1 and content[1].t == "Str" then
+      local text = content[1].text
+      local bare = text:match("^%[(.-)%]$")
+      if bare then
+        return pandoc.Str(bare)
+      end
+    end
+    return content
   end
 
-  local content = el.content
-  if #content == 1 and content[1].t == "Str" then
-    local text = content[1].text
-    local bare = text:match("^%[(.-)%]$")
-    if bare then
-      return pandoc.Str(bare)
+  for _, c in ipairs(el.classes or {}) do
+    if c == "uri" then
+      return pandoc.Link({ pandoc.Str(el.target) }, el.target, el.title)
     end
   end
-  return content
+
+  return nil
 end

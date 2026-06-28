@@ -1,0 +1,18 @@
+TARGET_LABEL="dev.to"
+CSL_FILE="ieee.csl"
+REFERENCES_HEADING="References"
+REFERENCES_NUMBERED="1"
+OUTPUT_EXT="md"
+
+EXTRA_LUA_FILTER="$SCRIPT_DIR/lib/devto-math.lua"
+
+FRONT_MATTER_TEMPLATE='---
+title: "{{TITLE}}"
+published: false
+tags: {{TAGS}}
+---
+'
+FRONT_MATTER_COMMENTED="1"
+
+INCLUDE_H1_TITLE="1"
+INCLUDE_BYLINE="1"
