@@ -1,0 +1,33 @@
+\begin{abstract}
+The word \emph{data} is among the most heavily used and least precisely defined
+terms in computing. Standard references converge on an informal characterization
+of data as ``raw facts,'' but none specifies what structural properties a
+collection of facts must possess before it can be addressed, compared, or
+processed by a machine. This ambiguity is not merely philosophical: it
+propagates into system design as schema drift, type-confusion vulnerabilities,
+unsound equality checks, and serialization defects, each traceable to an
+unstated assumption about what index or value set a piece of data inhabits.
+This paper offers a unified account of data, representation, and interpretation
+across three registers. First, we ground the concept etymologically and
+lexically, tracing the word \emph{datum} from its Latin root through
+contemporary technical usage to expose a consistent structural implication that
+informal definitions leave tacit. Second, we formalize data as a \emph{function
+from an index set to a value set}, with explicit totality, functionality, and
+codomain-consistency conditions, and show how this framing subsumes sequences,
+tuples, and multisets as special cases. Third, we introduce the
+data--information--knowledge hierarchy as the interpretive scaffolding through
+which machines, which operate at the data level alone, are made to produce
+outcomes meaningful to human beings, and argue that the engineering of this
+transition is the central problem of data representation. We derive four
+corollaries connecting violations of the formal definition's conditions to
+recurring engineering failure modes---schema drift, type confusion, unsound
+equality, and serialization ambiguity---and illustrate each with a worked
+example. The paper concludes by distinguishing data from representation,
+arguing that the choice of representation is always contingent and external to
+the data itself, and that understanding this distinction is a prerequisite for
+principled reasoning about encoding, type systems, and protocols.
+\end{abstract}
+
+\paragraph{Keywords.} data; representation; interpretation; formal definition;
+data--information--knowledge hierarchy; type safety; schema drift;
+serialization; systems design.
