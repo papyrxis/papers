@@ -1,76 +1,75 @@
 \section{Introduction}
 \label{sec:introduction}
 
-Every working system that stores, transmits, or processes information operates
-ultimately on what its designers call ``data.'' The term appears in database
+Every working system that stores, transmits, or processes information operates,
+in the end, on what its designers call ``data.'' The term shows up in database
 textbooks, programming language specifications, legal frameworks, and
-information-science curricula. Yet it resists a precise, operational definition.
-Database texts describe data as ``raw facts'' awaiting
+information-science curricula, yet it somehow resists a precise, operational
+definition. Database texts describe data as ``raw facts'' awaiting
 processing~\autocite{rob2013}; information-science references describe data as
 facts organized for communication~\autocite{ratzan2004}; international
 guidelines call data ``facts, concepts, or instructions expressed in a
 standardized way, suitable for being communicated, interpreted, or processed,
 whether by people or by automated systems''~\autocite{unesco2008}; and general
 dictionaries treat data as ``facts or things known, used as the basis for
-inference or calculation''~\autocite{oed2023}. These characterizations are not
-wrong, but they are not formal: none specifies what structure a collection of
-facts must have before it can be indexed, copied, compared for equality, or
-serialized without ambiguity.
-
-This gap is not an academic inconvenience. It surfaces in production systems as
-a recognizable family of defects. Schema drift occurs when two components
-silently disagree about what an index or field name denotes, despite operating
-on byte-identical data. Type confusion~\autocite{cwe843} occurs when a fixed
-byte sequence is reinterpreted under a different type assumption than the one
-under which it was written. Unsound equality occurs when two values are treated
-as equal because they share a representation, despite differing in the value set
-the comparison silently assumes. Serialization ambiguity occurs when a wire
-format under-specifies the index set or value set well enough that two
-conformant implementations disagree on interpretation. Each defect has a common
-root: an implicit assumption about the domain, codomain, or mapping underlying
-a piece of data was never stated and therefore could not be checked.
-
-Addressing this gap requires more than choosing one informal definition over
-another. It requires examining, in sequence, what data are, how data become
-meaningful, and how meaning is encoded back into data that machines can
-process---that is, it requires a unified account of data, representation, and
-interpretation. That is the aim of this paper.
+inference or calculation''~\autocite{oed2023}. None of these is wrong, exactly,
+but none of them is formal either. None specifies what structure a collection
+of facts must have before it can be indexed, copied, compared for equality, or
+serialized without ambiguity.\\
+This gap is not an academic inconvenience. It shows up in production systems
+as a recognizable family of bugs. Schema drift happens when two components
+silently disagree about what an index or field name means, even while
+operating on byte-identical data. Type confusion~\autocite{cwe843} happens when
+a fixed byte sequence gets reinterpreted under a type assumption different from
+the one it was originally written under. Unsound equality happens when two
+values are treated as equal just because they share a representation, even
+though they differ in the value set the comparison is silently assuming. And
+serialization ambiguity happens when a wire format under-specifies the index
+set or value set badly enough that two conformant implementations end up
+disagreeing on what the data actually means. Each of these has the same root
+cause: an implicit assumption about the domain, codomain, or mapping behind a
+piece of data was never written down, and so it could never be checked.\\
+Closing this gap takes more than just picking one informal definition over
+another. It requires working through, in order, what data actually are, how
+data come to mean something, and how that meaning gets encoded back into data
+a machine can process. In other words, it requires a unified account of data,
+representation, and interpretation. That is what this paper sets out to do.
 
 \subsection{Contribution}
 
-This paper contributes three things:
+This paper makes three contributions:
 
 \begin{enumerate}
   \item \textbf{A lexical and etymological grounding} (Section~\ref{sec:what-is-data})
-        that traces the concept of data from its Latin root through
-        contemporary usage to expose the structural implication that informal
-        definitions share but never state.
+        that traces the concept of data from its Latin root to contemporary
+        usage in order to surface a structural implication that informal
+        definitions all share but never actually state.
   \item \textbf{A formal treatment} (Section~\ref{sec:formal-definition}) of
         data as a total function from an index set to a value set, with
-        explicit well-definedness conditions, a precise equality criterion, and
-        a systematic account of how common data structures---sequences, tuples,
-        multisets---emerge as special cases of this definition.
+        explicit well-definedness conditions, a precise equality criterion,
+        and a systematic account of how the usual data structures, sequences,
+        tuples, multisets, fall out as special cases of this one definition.
   \item \textbf{A unified account of data, information, and representation}
         (Sections~\ref{sec:data-information-knowledge}
         and~\ref{sec:data-and-representation}) showing how the formal
-        definition grounds the data--information--knowledge hierarchy and how
-        the contingency of representation follows directly from the
+        definition grounds the data--information--knowledge hierarchy, and how
+        the contingency of representation follows directly once you adopt the
         function-theoretic view.
 \end{enumerate}
 
-We derive four engineering corollaries in Section~\ref{sec:implications},
-connecting specific violations of the formal conditions to the failure modes
-listed above, and conclude in Section~\ref{sec:conclusion} with directions for
-future work.
+In Section~\ref{sec:implications} we derive four engineering corollaries that
+connect specific violations of the formal conditions to the failure modes
+listed above, and we close in Section~\ref{sec:conclusion} with some
+directions for future work.
 
 \subsection{Scope and Assumptions}
 
-This paper is concerned with data as treated by computing systems: stored,
-addressed, transmitted, and interpreted. It does not attempt a complete
-philosophical account of the data--information--knowledge distinction, nor does
-it adjudicate the debate over whether data are theory-laden or ``given'' in a
-stronger epistemological sense. The formal treatment is intentionally
-minimalist: it introduces only the mathematical structure necessary to make the
-engineering corollaries precise, and no more. For readers seeking a full
-philosophical treatment, Floridi~\autocite{floridi2010} and
-Zins~\autocite{zins2007} are the standard entry points.
+This paper is concerned with data the way computing systems treat it: stored,
+addressed, transmitted, interpreted. It is not trying to give a complete
+philosophical account of the data--information--knowledge distinction, and it
+does not take a side in the debate over whether data are theory-laden or
+``given'' in some stronger epistemological sense. The formal treatment here is
+deliberately minimal. It introduces only the mathematical structure needed to
+make the engineering corollaries precise, nothing beyond that. Readers looking
+for a fuller philosophical treatment should start with
+Floridi~\autocite{floridi2010} and Zins~\autocite{zins2007}.

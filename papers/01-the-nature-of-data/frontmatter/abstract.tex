@@ -1,31 +1,34 @@
 \begin{abstract}
-The word \emph{data} is among the most heavily used and least precisely defined
-terms in computing. Standard references converge on an informal characterization
-of data as ``raw facts,'' but none specifies what structural properties a
-collection of facts must possess before it can be addressed, compared, or
-processed by a machine. This ambiguity is not merely philosophical: it
-propagates into system design as schema drift, type-confusion vulnerabilities,
-unsound equality checks, and serialization defects, each traceable to an
-unstated assumption about what index or value set a piece of data inhabits.
-This paper offers a unified account of data, representation, and interpretation
-across three registers. First, we ground the concept etymologically and
-lexically, tracing the word \emph{datum} from its Latin root through
-contemporary technical usage to expose a consistent structural implication that
-informal definitions leave tacit. Second, we formalize data as a \emph{function
-from an index set to a value set}, with explicit totality, functionality, and
-codomain-consistency conditions, and show how this framing subsumes sequences,
-tuples, and multisets as special cases. Third, we introduce the
+The word \emph{data} is one of the most heavily used and least precisely
+defined terms in computing. Standard references settle on an informal
+characterization of data as ``raw facts,'' but none of them says what
+structural properties a collection of facts actually needs before it can be
+addressed, compared, or processed by a machine. This is not just a
+philosophical loose end. It propagates directly into system design as schema
+drift, type-confusion vulnerabilities, unsound equality checks, and
+serialization defects, and each of these traces back to an unstated assumption
+about what index set or value set a piece of data is supposed to inhabit. This
+paper works through data, representation, and interpretation across three
+registers. First, we ground the concept etymologically and lexically, tracing
+the word \emph{datum} from its Latin root through to contemporary technical
+usage, in order to expose a structural implication that the informal
+definitions all share but never state outright. Second, we formalize data as a
+\emph{function from an index set to a value set}, with explicit totality,
+functionality, and codomain-consistency conditions, and we show how this
+framing subsumes sequences, tuples, and multisets as special cases rather than
+treating them as separate notions. Third, we introduce the
 data--information--knowledge hierarchy as the interpretive scaffolding through
-which machines, which operate at the data level alone, are made to produce
-outcomes meaningful to human beings, and argue that the engineering of this
-transition is the central problem of data representation. We derive four
-corollaries connecting violations of the formal definition's conditions to
-recurring engineering failure modes---schema drift, type confusion, unsound
-equality, and serialization ambiguity---and illustrate each with a worked
-example. The paper concludes by distinguishing data from representation,
-arguing that the choice of representation is always contingent and external to
-the data itself, and that understanding this distinction is a prerequisite for
-principled reasoning about encoding, type systems, and protocols.
+which machines, which operate at the data level and nothing more, are made to
+produce outcomes that mean something to human beings, and we argue that
+engineering this transition is really the central problem of data
+representation. From the formal definition we derive four corollaries linking
+specific violations of its conditions to recurring engineering failure modes,
+namely schema drift, type confusion, unsound equality, and serialization
+ambiguity, and we walk through a worked example for each. The paper closes by
+separating data from representation, arguing that the choice of representation
+is always contingent and sits outside the data itself, and that grasping this
+distinction is a prerequisite for reasoning clearly about encoding, type
+systems, and protocols.
 \end{abstract}
 
 \paragraph{Keywords.} data; representation; interpretation; formal definition;

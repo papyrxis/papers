@@ -3,117 +3,117 @@
 \section{What Is Data?}
 \label{sec:what-is-data}
 
-A simple example is the best place to start. Looking at the cross-section of a
-tree trunk reveals facts without anyone first explaining what a tree is. The
-number of growth rings gives a reasonable estimate of the tree's age; each ring
-corresponds to one year of growth, laid down during the annual cycle of dormancy
-and activity. The texture and color of the bark suggest the species; warped
-grain, discoloration, or insect tunnels indicate health. Look more closely, and
-the density of the wood, the direction of the grain, and the moisture content
-account for the piece's weight and volume. None of these facts were created the
-moment they were noticed; they existed in the tree, available to anyone who knew
-how to read them. The correspondence between a physical state and a fact about
-the world that can be read off from it is the simplest possible illustration of
+A simple example is probably the best place to start. Look at the
+cross-section of a tree trunk and you find facts there without anyone needing
+to explain what a tree even is. The number of growth rings gives a reasonable
+estimate of the tree's age, since each ring corresponds to one year of growth
+laid down during the annual cycle of dormancy and activity. The texture and
+color of the bark hint at the species, and warped grain, discoloration, or
+insect tunnels point to its health. Look closer still, and the density of the
+wood, the direction of the grain, and the moisture content explain the piece's
+weight and volume. None of these facts were created the moment someone noticed
+them. They were already there in the tree, available to anyone who knew how to
+read them. That correspondence, between a physical state and a fact about the
+world you can read off from it, is about the simplest illustration there is of
 what this paper means by \emph{data}.
 
 \subsection{Etymology and Lexical History}
 
 The word \emph{data} is the plural of the Latin \emph{datum}, the past
-participle of \emph{dare}, ``to give.'' A datum is, literally, a ``given'': a
-piece of information taken as a starting point for reasoning rather than derived
-from something else. In everyday speech, the plural form is often treated as a
-singular collective noun (``the data is clear''), but in technical writing the
-plural is preferred: data \emph{are} observations, measurements, or recorded
-facts, not a single undivided thing.
-
+participle of \emph{dare}, ``to give.'' A datum is, quite literally, a
+``given'': a piece of information taken as a starting point for reasoning
+rather than derived from something else. In everyday speech the plural form
+gets treated as a singular collective noun all the time (``the data is
+clear''), but in technical writing the plural is preferred: data \emph{are}
+observations, measurements, or recorded facts, not one undivided thing.\\
 The Latin origin carries real structural weight that survives into technical
-usage: a datum is something received from the world, not invented by the observer
-who records it. Standard references preserve this sense without formalizing it.
+usage. A datum is something received from the world, not something invented
+by the observer who happens to record it. Standard references preserve this
+sense, but they never quite formalize it.
 
 \subsection{Existing Definitions and Their Shared Structure}
 
-Different sources define the term in different, only partially overlapping,
-ways. Rob, Morris, and Coronel describe data as \emph{raw facts}: facts that
-have not yet been processed for their meaning to become
-apparent~\autocite{rob2013}. Ratzan defines the companion term instead:
+Different sources define the term in different, only partly overlapping ways.
+Rob, Morris, and Coronel describe data as \emph{raw facts}, facts that have not
+yet been processed enough for their meaning to become
+apparent~\autocite{rob2013}. Ratzan instead defines the companion term:
 \emph{information} is a coherent collection of data, organized in a particular
-way and meaningful as a result~\autocite{ratzan2004}. The two definitions agree
-on more than they disagree about: in both, data precede meaning rather than
-supply it directly.
-
-General dictionaries describe much the same shape from a different angle.
-Webster's \textit{New International Dictionary} treats data as something given or
-accepted: facts or principles granted, the basis from which an inference or a
-line of reasoning proceeds, or the material out of which an idealized system is
-built~\autocite{websters1934}. The \textit{Oxford English Dictionary} is more
-compact: data are facts or things known, used as the basis for inference or
-calculation~\autocite{oed2023}. The UNESCO definition adds a structural
-requirement absent from the others:
+way and meaningful as a result~\autocite{ratzan2004}. The two definitions
+agree on more than they disagree about. In both, data come before meaning
+rather than supplying it directly.\\
+General dictionaries describe roughly the same shape from a different angle.
+Webster's \textit{New International Dictionary} treats data as something given
+or accepted: facts or principles granted, the basis from which an inference or
+a line of reasoning proceeds, or the material an idealized system is built
+from~\autocite{websters1934}. The \textit{Oxford English Dictionary} is more
+compact about it: data are facts or things known, used as the basis for
+inference or calculation~\autocite{oed2023}. The UNESCO definition adds a
+structural requirement that the others leave out:
 
 \begin{quote}
 Facts, concepts, or instructions expressed in a standardized way, suitable for
-being communicated, interpreted, or processed, whether by people or by automated
-systems.~\autocite{unesco2008}
+being communicated, interpreted, or processed, whether by people or by
+automated systems.~\autocite{unesco2008}
 \end{quote}
 
-``Expressed in a standardized way'' is the key phrase. It gestures, without
-specifying, at the requirement that data have a \emph{structure} that makes
-indexing, comparison, and transmission possible. The informal definitions agree
-that data precede meaning, but they leave tacit what structural properties make
-data addressable.
+``Expressed in a standardized way'' is really the key phrase here. It gestures
+at, without actually specifying, the requirement that data have some
+\emph{structure} that makes indexing, comparison, and transmission possible in
+the first place. The informal definitions all agree that data precede meaning,
+but none of them says what structural properties make data addressable to
+begin with.
 
 \subsection{The Structural Implication}
 
-Taken together, these definitions point at something none of them states
+Put these definitions together and they point at something none of them states
 outright. Data have no shape that belongs to them independently of some
-particular point of view. A fact only counts as data if it sits within a
-framework---of meaning, of purpose, or of use---relative to which it is relevant,
-organized, coherent, and useful. A growth ring means nothing to a system with no
-concept of seasons; a voltage means nothing to a circuit built to ignore it.
-Data presuppose some prior agreement, however informal, about what is worth
-attending to in the first place.
-
-This structural implication is what the formal definition in
-Section~\ref{sec:formal-definition} makes precise. Before arriving there, two
-properties of data that are easily overlooked deserve explicit attention.
+particular point of view. A fact only counts as data once it sits inside a
+framework, whether of meaning, purpose, or use, relative to which it is
+relevant, organized, coherent, and useful. A growth ring means nothing to a
+system that has no concept of seasons; a voltage means nothing to a circuit
+built to ignore it. Data presuppose some prior agreement, however informal,
+about what is even worth attending to.\\
+This structural implication is exactly what the formal definition in
+Section~\ref{sec:formal-definition} pins down. Before getting there, two
+properties of data that are easy to overlook deserve a closer look.
 
 \subsection{The Context-Dependence of Data}
 
-The same physical signal can constitute different data depending on the framework
-applied to it. Consider five bytes with hexadecimal values
-\texttt{0x41 0x52 0x4C 0x49 0x5A}. Under one set of assumptions, this is the
-ASCII string \texttt{"ARLIZ"}; under another, it is five unsigned 8-bit integers:
-65, 82, 76, 73, and 90; under a third, it is the first five bytes of an
-arbitrary binary file format; under a fourth, a fragment of a network packet
-payload. The bytes themselves are identical in every case. What changes is not
-the underlying signal, but the interpretation imposed by context. Meaning is not
-contained in the bytes; it arises from the agreement between the system that
-produced them and the system that reads them.
-
-This example also illustrates the practical consequence of ignoring
-context-dependence: if the framework is not stated, different components will
-apply different frameworks to the same bytes, producing different and
-incompatible results. The defects described in Section~\ref{sec:introduction}
-are exactly this phenomenon at scale.
+The same physical signal can be different data depending on the framework
+applied to it. Take five bytes with hexadecimal values \texttt{0x41 0x52 0x4C
+0x49 0x5A}. Under one set of assumptions this is the ASCII string
+\texttt{"ARLIZ"}; under another it is five unsigned 8-bit integers, 65, 82, 76,
+73, and 90; under a third it is the first five bytes of some arbitrary binary
+file format; under a fourth, a fragment of a network packet payload. The bytes
+themselves are identical every time. What changes is not the underlying
+signal but the interpretation imposed on top of it. Meaning is not contained in
+the bytes. It arises from the agreement between whatever system produced them
+and whatever system reads them.\\
+This example also shows the practical cost of ignoring context-dependence: if
+the framework is never stated, different components will end up applying
+different frameworks to the same bytes, and they will produce different,
+incompatible results. The defects described in
+Section~\ref{sec:introduction} are exactly this phenomenon, just at scale.
 
 \subsection{The Perishability of Data}
 
-A common assumption early in one's technical career is that data are fixed and
-objective: you record a fact, and the fact is stored. This is only partially
-true, and the part that is not true matters. Walliman observes that data are not
-only imprecise but \emph{transient} and \emph{perishable}~\autocite{walliman2011}.
-A poll measuring voting intentions ahead of an election will not produce the same
-result as an otherwise identical poll conducted at a different time, even with
-the same sampling method and, in principle, the same respondents.
-
-``Perishable'' does not mean that data physically vanish. A measurement recorded
-yesterday is still there to be read today. What perishes is its
-\emph{currency}: its claim to describe the present state of whatever it measured.
-Data perish in a second sense as well. Secondhand reports and biased accounts are
-routinely presented as settled fact, because no method of recording information
-is perfectly reliable, and some distortion enters at almost every stage of
-transmission. This is not a rare edge case confined to opinion polling; it is a
-fundamental property of how facts move from the world into a recorded form. The
-implication for engineering is that reliable data require explicit attention to
-precision, integrity, provenance, and timestamp---properties that follow
-naturally from the formal definition in Section~\ref{sec:formal-definition}.
+A common assumption early in a technical career is that data are fixed and
+objective, that once you record a fact, the fact just sits there. This is only
+partly true, and the part that isn't true matters quite a lot. Walliman points
+out that data are not only imprecise but \emph{transient} and
+\emph{perishable}~\autocite{walliman2011}. A poll measuring voting intentions
+ahead of an election will not produce the same result as an otherwise
+identical poll run at a different time, even with the same sampling method
+and, in principle, the same respondents.\\
+``Perishable'' does not mean the data physically vanish. A measurement
+recorded yesterday is still sitting there to be read today. What perishes is
+its \emph{currency}, its claim to describe the present state of whatever it
+measured. Data perish in a second sense too. Secondhand reports and biased
+accounts get presented as settled fact all the time, because no method of
+recording information is perfectly reliable, and some distortion creeps in at
+almost every stage of transmission. This is not some rare edge case confined to
+opinion polling. It is a basic property of how facts move from the world into
+a recorded form. The engineering implication is that reliable data require
+explicit attention to precision, integrity, provenance, and timestamp, and
+these properties follow naturally once you adopt the formal definition in
+Section~\ref{sec:formal-definition}.

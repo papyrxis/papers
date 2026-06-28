@@ -3,9 +3,9 @@
 \label{sec:formal-definition}
 
 The informal definitions reviewed in Section~\ref{sec:what-is-data} are
-consistent with one another, but they are not formal: none specifies what
-structure a collection of facts must have before it can be indexed, compared
-for equality, or serialized. Mathematics offers a sharper handle on the same
+consistent with each other, but none of them is formal. None says what
+structure a collection of facts needs before it can be indexed, compared for
+equality, or serialized. Mathematics gives us a sharper handle on the same
 idea. In mathematics, data are most naturally thought of as a
 \emph{function}: a mapping from some index set to some value set.
 
@@ -18,10 +18,10 @@ addresses. A \emph{value set} $V$ is a set whose elements serve as the
 possible contents at a position.
 \end{definition}
 
-Neither $I$ nor $V$ is constrained further at this level of abstraction: $I$
-may be finite or infinite, ordered or unordered, and $V$ may contain
-elements of any kind. What matters is that both are fixed before a collection
-of data is constructed.
+Neither $I$ nor $V$ is constrained any further at this level of abstraction.
+$I$ may be finite or infinite, ordered or unordered, and $V$ can contain
+elements of any kind at all. What matters is just that both are fixed before a
+collection of data gets constructed.
 
 \begin{definition}[Datum]
 \label{def:datum}
@@ -41,19 +41,18 @@ total function
 assigning to every index $i \in I$ exactly one value $D(i) \in V$.
 \end{definition}
 
-This definition requires three conditions to hold for $D$ to be well-defined.
+For $D$ to be well-defined, three conditions need to hold.
 
 \paragraph{Condition 1 (Totality).}
 $D$ must be defined for every $i \in I$. A structure that leaves some indices
-unassigned is a \emph{partial function}, and any operation that assumes totality
-is unsound when applied to it without first checking the domain.
+unassigned is a \emph{partial function}, and any operation that assumes
+totality is unsound when applied to it without first checking the domain.
 
 \paragraph{Condition 2 (Functionality).}
-For every $i \in I$, $D(i)$ must denote a single, determinate value in $V$.
-A mapping that assigns multiple candidate values to the same index---for
-instance, two fields claiming the same byte offset under different schema
-versions---is not a function and therefore not a single well-defined collection
-of data.
+For every $i \in I$, $D(i)$ must denote a single, determinate value in $V$. A
+mapping that assigns multiple candidate values to the same index, two fields
+claiming the same byte offset under different schema versions, say, is not a
+function, and therefore not a single well-defined collection of data.
 
 \paragraph{Condition 3 (Codomain Consistency).}
 Every value $D(i)$ must belong to the \emph{same} value set $V$ for all $i \in
@@ -61,8 +60,8 @@ I$, where $V$ is fixed in advance of constructing $D$.
 
 \subsection{Equality}
 
-The function-theoretic definition yields a precise criterion for equality that
-differs importantly from mere representational identity.
+The function-theoretic definition gives us a precise criterion for equality
+that differs in an important way from mere representational identity.
 
 \begin{definition}[Functional Equality]
 \label{def:equality}
@@ -72,34 +71,34 @@ and $D_1(i) = D_2(i)$ for every $i \in I_1$.
 \end{definition}
 
 This is a stronger condition than byte-for-byte identity of an encoding. Two
-structures can share an identical encoding while differing in $V$---as the
-five-byte example in Section~\ref{sec:what-is-data} shows---and
-Definition~\ref{def:equality} correctly classifies them as distinct collections
-of data. Conversely, two collections may be equal under Definition~\ref{def:equality}
-while differing in their encodings, because the encoding is not part of the
-definition at all.
+structures can share an identical encoding while differing in $V$, exactly as
+the five-byte example in Section~\ref{sec:what-is-data} shows, and
+Definition~\ref{def:equality} correctly classifies them as distinct
+collections of data. The reverse also holds: two collections can be equal
+under Definition~\ref{def:equality} while differing in their encodings,
+because the encoding plays no part in the definition at all.
 
 \subsection{Relation to Standard Mathematical Structures}
 
 The function-theoretic definition deliberately generalizes several structures
-often used informally as synonyms for ``data.''
+that get used informally as synonyms for ``data.''
 
 \begin{description}
   \item[Sequence / Array.] The special case $I = \{0, 1, \dots, n-1\}$: a
-        function from a finite, contiguous, totally ordered index set into $V$.
-        This is the canonical definition of a sequence in the mathematical
-        literature~\autocite{knuth1997}, and it is the formal starting point for
-        arrays. Arrays are data over the specific index set that integer
-        addressing supplies.
+        function from a finite, contiguous, totally ordered index set into
+        $V$. This is the canonical definition of a sequence in the
+        mathematical literature~\autocite{knuth1997}, and it is the formal
+        starting point for arrays. Arrays are just data over the particular
+        index set that integer addressing supplies.
   \item[Tuple.] The special case where $I$ is small and fixed, and $V$ is
-        permitted to vary per index ($D(i) \in V_i$). Tuples relax Condition~3
-        deliberately and explicitly---a structurally different move from the
-        \emph{implicit} relaxation that produces type-confusion defects
+        allowed to vary per index ($D(i) \in V_i$). Tuples relax Condition~3
+        deliberately and openly, which is a structurally different move from
+        the \emph{implicit} relaxation that produces type-confusion defects
         (Section~\ref{sec:implications}).
-  \item[Multiset.] Corresponds to the case where $I$ is considered only up to a
-        permutation. A multiset is a quotient of the function-theoretic
-        structure, not an alternative to it: the underlying function still
-        exists; the multiset view simply ignores the ordering of $I$.
+  \item[Multiset.] Corresponds to the case where $I$ is considered only up to
+        a permutation. A multiset is a quotient of the function-theoretic
+        structure, not some alternative to it: the underlying function still
+        exists, and the multiset view simply ignores the ordering of $I$.
   \item[Relation / Table.] A relation with $k$ attributes over domains
         $V_1, \dots, V_k$ is, under this definition, a set of functions from
         $\{1,\dots,k\}$ into $V_1 \times \cdots \times V_k$. The relational
@@ -107,26 +106,25 @@ often used informally as synonyms for ``data.''
         space.
 \end{description}
 
-The unifying observation is that each of these structures is a special case of
-Definition~\ref{def:collection}, distinguished by the properties imposed on $I$,
-$V$, or both. Moving between them is a matter of specifying or relaxing
-constraints on those two sets.
+The unifying point is that each of these structures is just a special case of
+Definition~\ref{def:collection}, distinguished by the properties imposed on
+$I$, $V$, or both. Moving between them is a matter of specifying or relaxing
+constraints on those two sets, nothing more exotic than that.
 
 \subsection{A Worked Example}
 
-A weather station records temperature once per hour. Formally, this is a
-function $D : \mathbb{N} \to \mathbb{R}$, where the index set is hour number
-and the value set is temperature in degrees Celsius. The station's log for one
-day is the restriction of $D$ to $I = \{0, 1, \dots, 23\}$, which is an
-array. The highest temperature recorded is $\max_{i \in I} D(i)$, a computation
-that is defined precisely because $I$ is finite and $D$ is total on it. If a
-sensor fails and no reading is recorded at hour 14, the structure is no longer
-total on $I$---it is a partial function---and any operation that assumes totality,
-such as computing the daily average, is unsound unless the missing value is
-explicitly handled.
-
-This example illustrates why the three conditions matter in practice:
-engineering decisions about how to handle missing values, what type a field
-carries, and whether two records are the same all reduce to questions about
-$I$, $V$, and the conditions in Definitions~\ref{def:collection}
+A weather station records temperature once per hour. Formally this is a
+function $D : \mathbb{N} \to \mathbb{R}$, where the index set is the hour
+number and the value set is temperature in degrees Celsius. The station's log
+for one day is the restriction of $D$ to $I = \{0, 1, \dots, 23\}$, which is
+an array. The highest temperature recorded is $\max_{i \in I} D(i)$, a
+computation that is well-defined precisely because $I$ is finite and $D$ is
+total on it. If a sensor fails and no reading gets recorded at hour 14, the
+structure is no longer total on $I$, it has become a partial function, and any
+operation that assumes totality, computing the daily average, for instance, is
+unsound unless the missing value is handled explicitly.\\
+This example shows why the three conditions matter in practice. Engineering
+decisions about how to handle missing values, what type a field carries, and
+whether two records actually count as the same record, all of these reduce to
+questions about $I$, $V$, and the conditions in Definitions~\ref{def:collection}
 and~\ref{def:equality}.

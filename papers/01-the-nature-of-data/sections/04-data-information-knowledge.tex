@@ -2,36 +2,37 @@
 \section{Data, Information, and Knowledge}
 \label{sec:data-information-knowledge}
 
-The words \emph{data}, \emph{information}, and \emph{knowledge} are used
-interchangeably in casual conversation, but they describe three distinct things.
-The distinction matters in practice: confusing them leads to building systems
-that produce numbers when people need answers. This section examines the
-relationship between the three concepts, then argues that computing systems
-operate exclusively at the data level and that the transition from data to
-information is something engineers design deliberately.
+The words \emph{data}, \emph{information}, and \emph{knowledge} get used
+interchangeably in casual conversation, but they describe three distinct
+things. The distinction matters in practice. Confusing them leads to systems
+that produce numbers when people actually need answers. This section looks at
+the relationship between the three concepts, then argues that computing
+systems operate exclusively at the data level, and that the transition from
+data to information is something engineers have to design deliberately rather
+than get for free.
 
 \subsection{The Hierarchy}
 
 The relationship between data, information, and knowledge is standardly
-described as a hierarchy~\autocite{ackoff1989,rowley2007}. The first two
-transitions are the ones this paper depends on.
-
-Return to the tree cross-section from Section~\ref{sec:what-is-data}. A raw
-count of growth rings is data: fifty-three concentric lines, nothing more. Data
-are \emph{syntactic}: they have structure, but not yet meaning. Noticing that
-fifty-three rings means the tree is roughly fifty-three years old, and that the
-unusually narrow rings around year thirty correspond to a known regional drought,
-turns that count into \emph{information}: data organized and placed in context,
-in keeping with Ratzan's definition~\autocite{ratzan2004}. Information answers
-questions like ``what happened?'' and ``how much?'' It is still factual and
-objective, but it is now interpretable by a human being. Knowing how to read ring
-width as a record of annual rainfall, reliably enough to apply the same method
-to a tree no one has studied before, is \emph{knowledge}: information understood
-thoroughly enough to be put to new use.
+described as a hierarchy~\autocite{ackoff1989,rowley2007}. This paper only
+really depends on the first two transitions in that hierarchy.\\
+Go back to the tree cross-section from Section~\ref{sec:what-is-data}. A raw
+count of growth rings is data: fifty-three concentric lines, nothing more.
+Data are \emph{syntactic}, they have structure but not yet meaning. Noticing
+that fifty-three rings means the tree is roughly fifty-three years old, and
+that the unusually narrow rings around year thirty line up with a known
+regional drought, turns that count into \emph{information}: data organized and
+placed in context, in keeping with Ratzan's definition~\autocite{ratzan2004}.
+Information answers questions like ``what happened?'' and ``how much?'' It is
+still factual and objective, but now it is interpretable by a human being.
+Knowing how to read ring width as a record of annual rainfall, reliably enough
+to apply the same method to a tree nobody has studied before, is
+\emph{knowledge}: information understood thoroughly enough to be put to new
+use.
 
 \begin{example}
 \label{ex:fever}
-The progression from data to knowledge can be illustrated concisely:
+The progression from data to knowledge can be put concisely:
 \begin{itemize}
   \item \textbf{Data:} \texttt{39.5}
   \item \textbf{Information:} Patient temperature is 39.5\textdegree C, recorded
@@ -40,61 +41,64 @@ The progression from data to knowledge can be illustrated concisely:
         readings from the past six hours showing a rising trend, the attending
         physician should be notified immediately.
 \end{itemize}
-The number \texttt{39.5} is a datum drawn from $\mathbb{R}$. The interpretive
-layer that attaches unit, timestamp, and patient identity constitutes
-information. The clinical judgment that combines this information with prior
-cases and medical guidelines constitutes knowledge.
+The number \texttt{39.5} is just a datum drawn from $\mathbb{R}$. The
+interpretive layer that attaches a unit, timestamp, and patient identity is
+what constitutes information. The clinical judgment that combines this
+information with prior cases and medical guidelines is what constitutes
+knowledge.
 \end{example}
 
 \subsection{What Computing Systems Do}
 
 Computers operate almost entirely at the level of \emph{data} as defined in
-Section~\ref{sec:formal-definition}. A CPU does not understand information; it
-manipulates bits. A memory array does not know what its contents mean; it stores
-and retrieves bytes at addresses. Shannon's foundational account of communication
-is explicit on this point: the engineering problem is the reliable transmission
-of \emph{symbols}, regardless of meaning~\autocite{shannon1948}. Meaning is the
-problem of the sender and receiver, not the channel.
-
-The transition from data to information is something that software engineers
-design into their systems deliberately, through type systems, schemas, protocols,
-and documentation. When a programmer writes \texttt{int temperature = 39;}, they
-are asserting that this particular sequence of bits represents a temperature,
-measured in some unit, with some precision. The meaning is in the programmer's
-head and in the documentation, not in the machine. The machine stores
-\texttt{0x00000027} and nothing else.
-
-This is not a criticism of computers. It is a description of how they work, and
-understanding it is the first step toward understanding why encoding schemes,
-type systems, and representation formats exist: each one is an answer to the
-question of how to encode information, which has meaning, as data, which does
-not, in a way that preserves the meaning reliably.
+Section~\ref{sec:formal-definition}. A CPU does not understand information,
+it manipulates bits. A memory array does not know what its contents mean, it
+just stores and retrieves bytes at addresses. Shannon's foundational account
+of communication is explicit about this: the engineering problem is the
+reliable transmission of \emph{symbols}, regardless of what they
+mean~\autocite{shannon1948}. Meaning is the problem of the sender and the
+receiver, not the channel.\\
+The transition from data to information is something software engineers build
+into their systems on purpose, through type systems, schemas, protocols, and
+documentation. When a programmer writes \texttt{int temperature = 39;}, what
+they are really asserting is that this particular sequence of bits represents
+a temperature, measured in some unit, at some precision. The meaning lives in
+the programmer's head and in the documentation, not in the machine. The
+machine just stores \texttt{0x00000027} and nothing else.\\
+This is not a criticism of computers, it is just a description of how they
+work, and understanding it is the first step toward seeing why encoding
+schemes, type systems, and representation formats exist in the first place:
+each one is an answer to the question of how to encode information, which has
+meaning, as data, which does not, in a way that preserves the meaning
+reliably.
 
 \subsection{The Gap Easy Access Does Not Close}
 
-Access to information does not supply the understanding required to know whether
-that information is relevant, reliable, or correctly applied. A search engine can
-return information in milliseconds; it cannot, by itself, supply the judgment
-required to evaluate it. The gap between having information and having knowledge
-is not closed by retrieval speed. This is an old observation, but it is worth
-restating in a technical context: systems that expose data as if it were
-information, or information as if it were knowledge, mislead their users in
-predictable ways.
-
+Having access to information does not give you the understanding needed to
+tell whether that information is relevant, reliable, or correctly applied. A
+search engine can return information in milliseconds, but it cannot, on its
+own, supply the judgment needed to evaluate it. The gap between having
+information and having knowledge is not something retrieval speed closes.
+This is an old observation, but it is still worth restating in a technical
+context: systems that expose data as if it were information, or information
+as if it were knowledge, end up misleading their users in predictable ways.
+\newpage
 \subsection{Relationship to the DIKW Hierarchy}
 
 Ackoff's data--information--knowledge--wisdom hierarchy~\autocite{ackoff1989}
 and its many descendants in the information-science
 literature~\autocite{rowley2007,zins2007} consistently treat the data tier as
-their foundation without defining it formally. The function-theoretic definition
-in Section~\ref{sec:formal-definition} is intended as a precise characterization
-of exactly that tier, compatible with and presupposed by every DIKW-style
-account. It does not compete with the hierarchy; it fills the structural gap the
-hierarchy leaves open at the bottom.
+their foundation without ever defining it formally. The function-theoretic
+definition in Section~\ref{sec:formal-definition} is meant as a precise
+characterization of exactly that tier, one that is compatible with, and
+presupposed by, every DIKW-style account. It does not compete with the
+hierarchy. It fills the structural gap the hierarchy leaves open at the
+bottom.
 
-Similarly, Floridi's General Definition of Information (GDI)~\autocite{floridi2010}
-characterizes information as data that are well-formed, meaningful, and (in some
-variants) truthful, treating data themselves as a primitive that GDI deliberately
-leaves unspecified. The function-theoretic definition supplies the structural
-detail that GDI leaves open, without disturbing the relationship between data and
-information that GDI describes.
+Similarly, Floridi's General Definition of Information
+(GDI)~\autocite{floridi2010} characterizes information as data that are
+well-formed, meaningful, and (in some variants) truthful, while treating data
+themselves as a primitive that GDI deliberately leaves unspecified. The
+function-theoretic definition supplies the structural detail that GDI leaves
+open, without disturbing the relationship between data and information that
+GDI describes.
