@@ -84,31 +84,3 @@ format Zotero/Mendeley use). Currently bundled:
 Drop in any other `.csl` file from the
 [official style repository](https://github.com/citation-style-language/styles)
 and reference it from a target's `CSL_FILE`.
-
-## What gets cleaned up
-
-The previous exporter (`pandoc --wrap=preserve`) kept LaTeX's ~80-column
-hard line breaks as literal newlines inside Markdown paragraphs, so a
-single sentence could be split across 5–6 lines in the output. It also
-only used pandoc's default citation style (author-date,
-`(Ackoff 1989)`-style) and leaked raw HTML (`<span class="csl-...">`,
-`<a class="uri">`) into bibliography entries.
-
-`export.sh` + `scripts/lib/clean-export.lua` now:
-
-- Join every hard-wrapped paragraph back into a single line
-  (`--wrap=none` + a whitespace-normalizing pass), while leaving
-  headings, lists, block quotes, code fences, and tables untouched.
-- Squeeze stray runs of spaces/tabs down to one, and collapse 3+ blank
-  lines down to one.
-- Render citations in whichever style the target config asks for
-  (numeric `[1]` or author-date), driven by a CSL file passed to
-  `pandoc --citeproc`.
-- Fully strip citeproc's internal HTML wrapper spans, rebuilding numeric
-  bibliographies as a clean Markdown ordered list (`1. ...`) so the
-  numbers in the reference list match the in-text `[1]` markers exactly.
-- Retarget the bibliography heading text per platform ("References" vs.
-  "Bibliography") instead of inheriting whatever `backmatter/bibliography.tex`
-  hardcodes.
-- Fix citeproc's raw-HTML fallback for bare URLs (`<a class="uri">`),
-  rendering them as plain Markdown links instead.
