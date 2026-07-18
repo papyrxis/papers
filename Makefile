@@ -128,3 +128,45 @@ help:
 	@echo ""
 
 .DEFAULT_GOAL := help
+
+LANG ?=
+NAME ?=
+
+.PHONY: resume resume-all resume-watch resume-clean resume-rename resume-list resume-help
+
+resume:
+ifndef LANG
+	$(error LANG is not set. Usage: make resume LANG=<lang|#>)
+endif
+	@bash scripts/resume.sh build "$(LANG)"
+
+resume-all:
+	@bash scripts/resume.sh build all
+
+resume-watch:
+ifndef LANG
+	$(error LANG is not set. Usage: make resume-watch LANG=<lang|#>)
+endif
+	@bash scripts/resume.sh watch "$(LANG)"
+
+resume-clean:
+ifdef LANG
+	@bash scripts/resume.sh clean "$(LANG)"
+else
+	@bash scripts/resume.sh clean
+endif
+
+resume-rename:
+ifndef LANG
+	$(error LANG is not set. Usage: make resume-rename LANG=<lang|#> NAME=<new-name>)
+endif
+ifndef NAME
+	$(error NAME is not set. Usage: make resume-rename LANG=<lang|#> NAME=<new-name>)
+endif
+	@bash scripts/resume.sh rename "$(LANG)" "$(NAME)"
+
+resume-list:
+	@bash scripts/resume.sh list
+
+resume-help:
+	@bash scripts/resume.sh help
