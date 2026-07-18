@@ -1,0 +1,127 @@
+# .github/workflows/build.yml
+#
+# Reusable workflow — compile all papers + resumes to PDF.
+# Called by pre-release.yml and release.yml; never triggered directly.
+#
+# Outputs
+#   build-papers  — all paper PDFs (build/YYYY_Genix_*.pdf)
+#   build-resumes — all resume PDFs (build/Mahdi-Mamashli-Resume*.pdf)
+
+name: Build
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        description: "Version string embedded in the build (e.g. v0.3.1-pre)"
+        required: false
+        type: string
+        default: "dev"
+    outputs:
+      papers-artifact:
+        description: "Name of the uploaded papers artifact"
+        value: ${{ jobs.papers.outputs.artifact-name }}
+      resumes-artifact:
+        description: "Name of the uploaded resumes artifact"
+        value: ${{ jobs.resumes.outputs.artifact-name }}
+
+jobs:
+  # ─────────────────────────────────────────────────────────────────────────
+  # Job 1 — Papers (pdflatex + biber)
+  # ─────────────────────────────────────────────────────────────────────────
+  papers:
+    name: Build Papers
+    runs-on: ubuntu-latest
+
+    outputs:
+      artifact-name: ${{ steps.set-name.outputs.name }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0           # needed for git describe inside build.sh
+
+      - name: Install TeX Live (pdflatex + biber)
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends \
+            texlive-latex-base \
+            texlive-latex-recommended \
+            texlive-latex-extra \
+            texlive-fonts-recommended \
+            texlive-fonts-extra \
+            texlive-bibtex-extra \
+            texlive-science \
+            biber \
+            latexmk
+          echo "pdflatex: $(pdflatex --version | head -1)"
+          echo "biber:    $(biber --version)"
+
+      - name: Build all papers
+        env:
+          PROJECT_VERSION: ${{ inputs.version }}
+          BUILD_DATE: ${{ github.run_started_at }}
+        run: bash scripts/build.sh all
+
+      - name: Set artifact name
+        id: set-name
+        run: echo "name=papers-${{ inputs.version }}" >> "$GITHUB_OUTPUT"
+
+      - name: Upload paper PDFs
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.set-name.outputs.name }}
+          path: build/*.pdf
+          retention-days: 30
+          if-no-files-found: error
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # Job 2 — Resumes (xelatex, English + Farsi)
+  # ─────────────────────────────────────────────────────────────────────────
+  resumes:
+    name: Build Resumes
+    runs-on: ubuntu-latest
+
+    outputs:
+      artifact-name: ${{ steps.set-name.outputs.name }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Install TeX Live (xelatex + fonts)
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends \
+            texlive-xetex \
+            texlive-latex-recommended \
+            texlive-latex-extra \
+            texlive-fonts-recommended \
+            texlive-fonts-extra \
+            texlive-lang-arabic \
+            fonts-liberation \
+            fonts-noto \
+            fonts-noto-cjk \
+            fontconfig
+          fc-cache -fv >/dev/null 2>&1 || true
+          echo "xelatex: $(xelatex --version | head -1)"
+
+      - name: Build all resumes (EN + FA)
+        run: bash scripts/build-resume.sh all
+
+      - name: Set artifact name
+        id: set-name
+        run: echo "name=resumes-${{ inputs.version }}" >> "$GITHUB_OUTPUT"
+
+      - name: Upload resume PDFs
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.set-name.outputs.name }}
+          path: build/Mahdi-Mamashli-Resume*.pdf
+          retention-days: 30
+          if-no-files-found: error

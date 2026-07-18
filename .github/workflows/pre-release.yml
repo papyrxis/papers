@@ -1,147 +1,147 @@
-name: Pre-Release (Latest Draft)
+# .github/workflows/pre-release.yml
+#
+# Pre-release — runs on every push to main.
+# 1. Calls the reusable build.yml to compile all papers + resumes.
+# 2. Force-moves the `latest-pre-release` tag to HEAD.
+# 3. Upserts the GitHub pre-release attached to that tag,
+#    replacing all assets with the freshly-built PDFs.
+#
+# The release that always lives at `latest-pre-release` is the
+# rolling "nightly" build — not a stable version.
+
+name: Pre-release
 
 on:
   push:
     branches:
       - main
-    paths:
-      - '**.tex'
-      - '**.bib'
-      - 'configs/**'
-      - '.pxis/**'
-      - 'workspace.yml'
-      - '.github/workflows/pre-release.yml'
-  workflow_dispatch: {}
+      - master
+    # Ignore pure doc changes so trivial README edits don't trigger a build
+    paths-ignore:
+      - "**.md"
+      - ".editorconfig"
+      - ".gitignore"
+
+  # Allow manual trigger from the Actions tab
+  workflow_dispatch:
 
 permissions:
-  contents: write
-
-concurrency:
-  group: pre-release-${{ github.ref }}
-  cancel-in-progress: true
+  contents: write   # create/update releases and push tags
 
 jobs:
-  # ────────────────────────────────────────────────────────────────────────────
-  # Job 1: Build all papers to PDF (parallel matrix)
-  # ────────────────────────────────────────────────────────────────────────────
+  # ─────────────────────────────────────────────────────────────────────────
+  # Step 1 — compile everything (delegated to reusable workflow)
+  # ─────────────────────────────────────────────────────────────────────────
   build:
-    name: Build PDFs
-    runs-on: ubuntu-latest
-    container:
-      image: texlive/texlive:latest
+    name: Build (reusable)
+    uses: ./.github/workflows/build.yml
+    with:
+      version: "latest-pre-release"
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
-
-      - name: Install prerequisites
-        run: |
-          apt-get update
-          apt-get install -y --no-install-recommends make git bash python3 python3-yaml
-
-      - name: Sync workspace (.pxis/)
-        run: |
-          if [[ ! -f .pxis/preset.tex ]]; then
-            echo "::notice::.pxis/preset.tex missing — running workspace sync"
-            bash workspace/src/sync.sh
-          fi
-
-      - name: Build all papers
-        run: make build
-
-      - name: Collect PDFs
-        id: collect
-        run: |
-          mkdir -p release/
-          find build/ -maxdepth 1 -name "*.pdf" -exec cp {} release/ \;
-          count=$(find release/ -name "*.pdf" | wc -l)
-          echo "count=$count" >> "$GITHUB_OUTPUT"
-          echo "Built $count PDF(s):"
-          ls -lh release/*.pdf 2>/dev/null || echo "  (none)"
-
-      - name: Fail if no PDFs built
-        if: steps.collect.outputs.count == '0'
-        run: |
-          echo "::error::No PDFs were produced. Check LaTeX logs above."
-          exit 1
-
-      - name: Upload PDFs artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: latest-pdfs
-          path: release/*.pdf
-          retention-days: 14
-
-  # ────────────────────────────────────────────────────────────────────────────
-  # Job 2: Publish / update the stable "latest" pre-release tag
-  # ────────────────────────────────────────────────────────────────────────────
+  # ─────────────────────────────────────────────────────────────────────────
+  # Step 2 — publish pre-release
+  # ─────────────────────────────────────────────────────────────────────────
   publish:
-    name: Publish Latest Draft
+    name: Publish Pre-release
     needs: build
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout (for tag push)
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Download PDFs
+      # ── Download both artifact bundles ───────────────────────────────────
+      - name: Download paper PDFs
         uses: actions/download-artifact@v4
         with:
-          name: latest-pdfs
-          path: release/
+          name: ${{ needs.build.outputs.papers-artifact }}
+          path: dist/papers
 
-      - name: Build date
-        id: meta
+      - name: Download resume PDFs
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ needs.build.outputs.resumes-artifact }}
+          path: dist/resumes
+
+      - name: List files to be released
         run: |
-          echo "date=$(date -u '+%Y-%m-%d')" >> "$GITHUB_OUTPUT"
-          echo "time=$(date -u '+%H:%M UTC')" >> "$GITHUB_OUTPUT"
+          echo "=== Papers ===" && ls -lh dist/papers/
+          echo "=== Resumes ===" && ls -lh dist/resumes/
 
-      - name: Remove existing latest-pre-release
+      # ── Force-move the rolling tag ────────────────────────────────────────
+      - name: Move latest-pre-release tag to HEAD
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -f latest-pre-release HEAD
+          git push origin -f latest-pre-release
+
+      # ── Build release body ────────────────────────────────────────────────
+      - name: Generate release notes
+        id: notes
+        run: |
+          SHORT_SHA="${{ github.sha }}"
+          SHORT_SHA="${SHORT_SHA:0:7}"
+          BUILD_TIME="$(date -u '+%Y-%m-%d %H:%M UTC')"
+
+          PAPERS_LIST=""
+          for f in dist/papers/*.pdf; do
+            PAPERS_LIST="${PAPERS_LIST}- $(basename "$f")\n"
+          done
+
+          RESUMES_LIST=""
+          for f in dist/resumes/*.pdf; do
+            RESUMES_LIST="${RESUMES_LIST}- $(basename "$f")\n"
+          done
+
+          cat > release_body.md << EOF
+          ## 📄 Latest Pre-release Build
+
+          > **این یک نسخه پیش‌انتشار است.** آخرین build از شاخه اصلی — پایدار نیست.
+          > *This is a rolling pre-release — the latest build from \`main\`, not a stable version.*
+
+          | | |
+          |---|---|
+          | **Commit** | [\`${SHORT_SHA}\`](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}) |
+          | **Built** | ${BUILD_TIME} |
+          | **Triggered by** | ${{ github.actor }} |
+
+          ---
+
+          ### 📚 مقالات / Papers
+
+          $(echo -e "$PAPERS_LIST")
+
+          ### 📋 رزومه / Resumes
+
+          $(echo -e "$RESUMES_LIST")
+
+          ---
+
+          > برای نسخه پایدار منتظر تگ \`vX.Y.Z\` باشید.
+          > For a stable version, wait for a \`vX.Y.Z\` tag release.
+          EOF
+
+          echo "Generated release body:"
+          cat release_body.md
+
+      # ── Upsert the pre-release (delete old → create new) ─────────────────
+      - name: Delete existing latest-pre-release (if any)
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release view latest-pre-release >/dev/null 2>&1 \
-            && gh release delete latest-pre-release --yes --cleanup-tag \
-            || true
+          gh release delete latest-pre-release --yes 2>/dev/null || true
 
-      - name: Collect paper list for release body
-        id: papers
-        run: |
-          LIST=""
-          for pdf in release/*.pdf; do
-            [[ -f "$pdf" ]] || continue
-            name="$(basename "$pdf")"
-            LIST="${LIST}- \`${name}\`"$'\n'
-          done
-          echo "list<<EOF" >> "$GITHUB_OUTPUT"
-          echo "$LIST" >> "$GITHUB_OUTPUT"
-          echo "EOF" >> "$GITHUB_OUTPUT"
-
-      - name: Publish pre-release
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: latest-pre-release
-          name: "Latest Draft — ${{ steps.meta.outputs.date }}"
-          body: |
-            Automated draft build from `main`. PDFs are rebuilt on every push.
-
-            | Field  | Value |
-            |--------|-------|
-            | Date   | `${{ steps.meta.outputs.date }}` |
-            | Time   | `${{ steps.meta.outputs.time }}` |
-            | Commit | [`${{ github.sha }}`](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}) |
-
-            **Papers in this build:**
-
-            ${{ steps.papers.outputs.list }}
-
-            > This is a rolling draft snapshot, not a stable release.
-            > For stable releases, see the [releases page](${{ github.server_url }}/${{ github.repository }}/releases?q=v*).
-          files: release/*.pdf
-          prerelease: true
-          draft: false
-          make_latest: false
+      - name: Create pre-release
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create latest-pre-release \
+            --title "Latest Pre-release Build" \
+            --notes-file release_body.md \
+            --prerelease \
+            --target "${{ github.sha }}" \
+            dist/papers/*.pdf \
+            dist/resumes/*.pdf

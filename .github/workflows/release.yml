@@ -1,75 +1,38 @@
+# .github/workflows/release.yml
+#
+# Stable release — triggered when a vX.Y.Z tag is pushed.
+# 1. Calls the reusable build.yml to compile all papers + resumes.
+# 2. Creates a proper GitHub release (not a pre-release) with all PDFs.
+#
+# How to trigger:
+#   git tag v1.0.0
+#   git push origin v1.0.0
+
 name: Release
 
 on:
   push:
     tags:
-      - 'v*.*.*'
-  workflow_dispatch: {}
+      - "v[0-9]+.[0-9]+.[0-9]+"        # v1.0.0
+      - "v[0-9]+.[0-9]+.[0-9]+-*"      # v1.0.0-hotfix (still stable, just suffixed)
 
 permissions:
   contents: write
 
-concurrency:
-  group: release-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
-  # ────────────────────────────────────────────────────────────────────────────
-  # Job 1: Build all papers
-  # ────────────────────────────────────────────────────────────────────────────
+  # ─────────────────────────────────────────────────────────────────────────
+  # Step 1 — compile everything (delegated to reusable workflow)
+  # ─────────────────────────────────────────────────────────────────────────
   build:
-    name: Build All Papers
-    runs-on: ubuntu-latest
-    container:
-      image: texlive/texlive:latest
+    name: Build (reusable)
+    uses: ./.github/workflows/build.yml
+    with:
+      version: ${{ github.ref_name }}   # e.g. "v1.0.0"
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
-          fetch-depth: 0
-
-      - name: Install prerequisites
-        run: |
-          apt-get update
-          apt-get install -y --no-install-recommends make git bash python3 python3-yaml
-
-      - name: Sync workspace (.pxis/)
-        run: |
-          if [[ ! -f .pxis/preset.tex ]]; then
-            echo "::notice::Running workspace sync (no committed .pxis/preset.tex found)"
-            bash workspace/src/sync.sh
-          fi
-
-      - name: Build all papers
-        run: make build
-
-      - name: Collect and verify PDFs
-        id: collect
-        run: |
-          mkdir -p release/
-          find build/ -maxdepth 1 -name "*.pdf" -exec cp {} release/ \;
-          count=$(find release/ -name "*.pdf" | wc -l)
-          echo "count=$count" >> "$GITHUB_OUTPUT"
-          echo "Built $count PDF(s):"
-          ls -lh release/ || echo "  (none)"
-          if [[ "$count" -eq 0 ]]; then
-            echo "::error::No PDFs produced — check LaTeX build logs above."
-            exit 1
-          fi
-
-      - name: Upload PDFs artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: release-pdfs
-          path: release/*.pdf
-          retention-days: 7
-
-  # ────────────────────────────────────────────────────────────────────────────
-  # Job 2: Create the GitHub Release
-  # ────────────────────────────────────────────────────────────────────────────
-  release:
+  # ─────────────────────────────────────────────────────────────────────────
+  # Step 2 — publish stable release
+  # ─────────────────────────────────────────────────────────────────────────
+  publish:
     name: Publish Release
     needs: build
     runs-on: ubuntu-latest
@@ -80,112 +43,99 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Download PDFs
+      # ── Download artifacts ────────────────────────────────────────────────
+      - name: Download paper PDFs
         uses: actions/download-artifact@v4
         with:
-          name: release-pdfs
-          path: release/
+          name: ${{ needs.build.outputs.papers-artifact }}
+          path: dist/papers
 
-      - name: Extract version
-        id: ver
-        run: |
-          echo "version=${GITHUB_REF#refs/tags/v}" >> "$GITHUB_OUTPUT"
-          echo "tag=${GITHUB_REF#refs/tags/}" >> "$GITHUB_OUTPUT"
-
-      - name: Determine pre-release flag
-        id: pre
-        run: |
-          [[ "${{ steps.ver.outputs.version }}" == *-* ]] \
-            && echo "flag=true" >> "$GITHUB_OUTPUT" \
-            || echo "flag=false" >> "$GITHUB_OUTPUT"
-
-      - name: Build paper list
-        id: papers
-        run: |
-          LIST=""
-          for pdf in release/*.pdf; do
-            [[ -f "$pdf" ]] || continue
-            name="$(basename "$pdf")"
-            size="$(du -sh "$pdf" | cut -f1)"
-            LIST="${LIST}- \`${name}\` (${size})"$'\n'
-          done
-          echo "list<<EOF" >> "$GITHUB_OUTPUT"
-          echo "$LIST" >> "$GITHUB_OUTPUT"
-          echo "EOF" >> "$GITHUB_OUTPUT"
-
-      - name: Build release notes
-        run: |
-          VERSION="${{ steps.ver.outputs.version }}"
-          TAG="${{ steps.ver.outputs.tag }}"
-          DATE="$(date -u '+%Y-%m-%d')"
-
-          if [[ -f CHANGELOG.md ]] && grep -q "## \[$VERSION\]" CHANGELOG.md; then
-            sed -n "/## \[$VERSION\]/,/^## \[/p" CHANGELOG.md | sed '$d' > body.md
-          else
-            cat > body.md <<EOF
-          ## Release ${TAG}
-
-          See [CHANGELOG](CHANGELOG.md) for full history.
-          EOF
-          fi
-
-          # Append paper list
-          {
-            echo ""
-            echo "---"
-            echo ""
-            echo "**Papers in this release:**"
-            echo ""
-            echo "${{ steps.papers.outputs.list }}"
-            echo ""
-            echo "---"
-            echo ""
-            echo "_Built on ${DATE} from tag \`${TAG}\`._"
-          } >> body.md
-
-          echo "--- body.md ---"
-          cat body.md
-
-      - name: Delete existing release for this tag (if any)
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh release view "${{ steps.ver.outputs.tag }}" >/dev/null 2>&1 \
-            && gh release delete "${{ steps.ver.outputs.tag }}" --yes \
-            || true
-
-      - name: Create release
-        uses: softprops/action-gh-release@v2
+      - name: Download resume PDFs
+        uses: actions/download-artifact@v4
         with:
-          name: "${{ steps.ver.outputs.tag }}"
-          body_path: body.md
-          files: release/*.pdf
-          draft: false
-          prerelease: ${{ steps.pre.outputs.flag }}
-          make_latest: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          name: ${{ needs.build.outputs.resumes-artifact }}
+          path: dist/resumes
 
-      - name: Update latest-release pointer
+      - name: List files to be released
+        run: |
+          echo "=== Papers ===" && ls -lh dist/papers/
+          echo "=== Resumes ===" && ls -lh dist/resumes/
+
+      # ── Changelog from git log since last stable tag ──────────────────────
+      - name: Extract changelog
+        id: changelog
+        run: |
+          VERSION="${{ github.ref_name }}"
+
+          # Find the previous vX.Y.Z tag (skip pre-release tags)
+          PREV_TAG="$(git tag --list 'v*' \
+            | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' \
+            | sort -V \
+            | grep -v "$VERSION" \
+            | tail -1 || true)"
+
+          if [[ -n "$PREV_TAG" ]]; then
+            RANGE="${PREV_TAG}..HEAD"
+            SINCE_MSG="Changes since \`${PREV_TAG}\`"
+          else
+            RANGE="HEAD"
+            SINCE_MSG="Initial release"
+          fi
+
+          COMMITS="$(git log "$RANGE" --oneline --no-merges | head -30 || true)"
+
+          BUILD_TIME="$(date -u '+%Y-%m-%d %H:%M UTC')"
+
+          PAPERS_LIST=""
+          for f in dist/papers/*.pdf; do
+            PAPERS_LIST="${PAPERS_LIST}- \`$(basename "$f")\`\n"
+          done
+
+          RESUMES_LIST=""
+          for f in dist/resumes/*.pdf; do
+            RESUMES_LIST="${RESUMES_LIST}- \`$(basename "$f")\`\n"
+          done
+
+          cat > release_body.md << EOF
+          ## 🚀 ${VERSION}
+
+          **${SINCE_MSG}** — built on ${BUILD_TIME}
+
+          ---
+
+          ### 📚 مقالات / Papers
+
+          $(echo -e "$PAPERS_LIST")
+
+          ### 📋 رزومه / Resumes
+
+          $(echo -e "$RESUMES_LIST")
+
+          ---
+
+          ### 📝 تغییرات / Changelog
+
+          \`\`\`
+          ${COMMITS:-No commits found}
+          \`\`\`
+
+          ---
+
+          > **نسخه پایدار** — برای آخرین build غیررسمی به \`latest-pre-release\` مراجعه کنید.
+          > *Stable release — for the latest unofficial build see \`latest-pre-release\`.*
+          EOF
+
+          echo "Generated release body:"
+          cat release_body.md
+
+      # ── Create the stable GitHub release ─────────────────────────────────
+      - name: Create stable release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Only update the latest pointer for stable (non-pre) releases
-          if [[ "${{ steps.pre.outputs.flag }}" == "false" ]]; then
-            echo "Stable release — updating 'latest' pointer"
-            gh release view latest-release >/dev/null 2>&1 \
-              && gh release delete latest-release --yes --cleanup-tag \
-              || true
-
-            # Copy PDFs to a release tagged "latest-release"
-            cp release release-latest -r 2>/dev/null || cp -r release release-latest
-
-            gh release create latest-release \
-              --title "Latest Stable — ${{ steps.ver.outputs.tag }}" \
-              --notes "Points to the latest stable release: \`${{ steps.ver.outputs.tag }}\`
-
-          > This tag is always updated to match the most recent stable release.
-          > See [${{ steps.ver.outputs.tag }}](${{ github.server_url }}/${{ github.repository }}/releases/tag/${{ steps.ver.outputs.tag }}) for the full release notes." \
-              --latest=false \
-              release-latest/*.pdf || true
-          fi
+          gh release create "${{ github.ref_name }}" \
+            --title "Release ${{ github.ref_name }}" \
+            --notes-file release_body.md \
+            --verify-tag \
+            dist/papers/*.pdf \
+            dist/resumes/*.pdf
