@@ -1,0 +1,221 @@
+\usepackage{etoolbox}
+
+\def\addtocatlist#1#2{%
+  \ifcsdef{Skill#1}{%
+    \expandafter\appto\csname Skill#1\endcsname{, #2}%
+  }{%
+    \expandafter\gdef\csname Skill#1\endcsname{#2}%
+  }%
+}
+
+% \newskill{Category}{DisplayLabel}{on|off}
+\newcommand{\newskill}[3]{%
+  \ifstrequal{#3}{on}{%
+    \addtocatlist{#1}{#2}%
+  }{}%
+}
+
+% ── Category display order ────────────────────
+
+% =================================================================
+%  PROGRAMMING LANGUAGES
+% =================================================================
+\newskill{Languages}{TypeScript}{on}
+\newskill{Languages}{JavaScript}{on}
+\newskill{Languages}{Go}{of}
+\newskill{Languages}{Python}{on}
+\newskill{Languages}{Bash}{on}
+\newskill{Languages}{Lua}{of}
+\newskill{Languages}{Vim Script}{of}
+\newskill{Languages}{C}{off}
+\newskill{Languages}{C++}{off}
+\newskill{Languages}{Rust}{off}
+\newskill{Languages}{Zig}{off}
+\newskill{Languages}{Ruby}{off}
+\newskill{Languages}{PHP}{off}
+\newskill{Languages}{Java}{off}
+\newskill{Languages}{Kotlin}{off}
+\newskill{Languages}{Swift}{off}
+\newskill{Languages}{Dart}{off}
+\newskill{Languages}{Elixir}{off}
+\newskill{Languages}{Haskell}{off}
+\newskill{Languages}{OCaml}{off}
+\newskill{Languages}{R}{off}
+\newskill{Languages}{MATLAB}{off}
+\newskill{Languages}{SQL}{off}
+\newskill{Languages}{Assembly}{off}
+
+% =================================================================
+%  BACKEND FRAMEWORKS & RUNTIMES
+% =================================================================
+\newskill{Backend}{Node.js}{on}
+\newskill{Backend}{Bun}{on}
+\newskill{Backend}{NestJS}{on}
+\newskill{Backend}{Express}{on}
+\newskill{Backend}{WebSocket}{on}
+\newskill{Backend}{Pub/Sub}{on}
+\newskill{Backend}{Event-Driven Architecture}{on}
+\newskill{Backend}{Fastify}{on}
+\newskill{Backend}{Hono}{on}
+\newskill{Backend}{Koa}{off}
+\newskill{Backend}{Deno}{off}
+\newskill{Backend}{Django}{off}
+\newskill{Backend}{FastAPI}{off}
+\newskill{Backend}{Flask}{off}
+\newskill{Backend}{Gin}{off}
+\newskill{Backend}{Echo}{off}
+\newskill{Backend}{Fiber}{off}
+\newskill{Backend}{Laravel}{off}
+\newskill{Backend}{Spring Boot}{off}
+\newskill{Backend}{Actix}{off}
+\newskill{Backend}{Phoenix}{off}
+\newskill{Backend}{Rails}{off}
+\newskill{Backend}{gRPC}{off}
+\newskill{Backend}{GraphQL}{off}
+\newskill{Backend}{REST API}{on}
+\newskill{Backend}{tRPC}{off}
+\newskill{Backend}{WebRTC}{off}
+
+% =================================================================
+%  FRONTEND
+% =================================================================
+\newskill{Frontend}{React}{off}
+\newskill{Frontend}{Next.js}{off}
+\newskill{Frontend}{Vue.js}{off}
+\newskill{Frontend}{Nuxt}{off}
+\newskill{Frontend}{SvelteKit}{off}
+\newskill{Frontend}{Astro}{off}
+\newskill{Frontend}{Angular}{off}
+\newskill{Frontend}{Tailwind CSS}{off}
+\newskill{Frontend}{Vite}{off}
+\newskill{Frontend}{Webpack}{off}
+\newskill{Frontend}{HTML/CSS}{off}
+\newskill{Frontend}{HTMX}{off}
+\newskill{Frontend}{Alpine.js}{off}
+
+% =================================================================
+%  SYSTEMS & LOW-LEVEL
+% =================================================================
+\newskill{Systems}{SDL3}{off}
+\newskill{Systems}{software rendering}{off}
+\newskill{Systems}{Lua embedding}{off}
+\newskill{Systems}{GNU Make}{off}
+\newskill{Systems}{stb\_truetype}{off}
+\newskill{Systems}{OpenGL}{off}
+\newskill{Systems}{Vulkan}{off}
+\newskill{Systems}{WASM}{off}
+\newskill{Systems}{libcurl}{off}
+\newskill{Systems}{libuv}{off}
+\newskill{Systems}{pthreads}{off}
+\newskill{Systems}{POSIX}{off}
+\newskill{Systems}{epoll}{off}
+\newskill{Systems}{io\_uring}{off}
+\newskill{Systems}{LLVM}{off}
+\newskill{Systems}{eBPF}{off}
+
+% =================================================================
+%  ARCHITECTURE & DESIGN
+% =================================================================
+\newskill{Architecture}{Object-Oriented Programming (OOP)}{on}
+\newskill{Architecture}{Dependency Injection}{off}
+\newskill{Architecture}{SOLID}{on}
+\newskill{Architecture}{Design Patterns}{on}
+\newskill{Architecture}{Modular Systems}{off}
+\newskill{Architecture}{Hexagonal Architecture}{off}
+\newskill{Architecture}{Domain-Driven Design}{on}
+\newskill{Architecture}{CQRS}{off}
+\newskill{Architecture}{Event Sourcing}{off}
+\newskill{Architecture}{Microservices}{off}
+\newskill{Architecture}{Monorepo}{on}
+\newskill{Architecture}{Clean Architecture}{off}
+\newskill{Architecture}{TDD}{off}
+
+% =================================================================
+%  DEVOPS & INFRASTRUCTURE
+% =================================================================
+\newskill{DevOps}{Docker}{on}
+\newskill{DevOps}{GitHub Actions}{on}
+\newskill{DevOps}{CI/CD}{on}
+\newskill{DevOps}{Unit / Integration / E2E Testing}{on}
+\newskill{DevOps}{Kubernetes}{off}
+\newskill{DevOps}{Terraform}{off}
+\newskill{DevOps}{Ansible}{off}
+\newskill{DevOps}{Helm}{off}
+\newskill{DevOps}{AWS}{off}
+\newskill{DevOps}{GCP}{off}
+\newskill{DevOps}{Azure}{off}
+\newskill{DevOps}{Vercel}{off}
+\newskill{DevOps}{Cloudflare}{off}
+\newskill{DevOps}{Nginx}{off}
+\newskill{DevOps}{Traefik}{off}
+\newskill{DevOps}{Prometheus}{off}
+\newskill{DevOps}{Grafana}{off}
+\newskill{DevOps}{ArgoCD}{off}
+
+% =================================================================
+%  DATABASES & STORAGE
+% =================================================================
+\newskill{Databases}{PostgreSQL}{on}
+\newskill{Databases}{MySQL}{on}
+\newskill{Databases}{SQLite}{on}
+\newskill{Databases}{MongoDB}{on}
+\newskill{Databases}{Redis}{on}
+\newskill{Databases}{Elasticsearch}{off}
+\newskill{Databases}{ClickHouse}{off}
+\newskill{Databases}{Cassandra}{off}
+\newskill{Databases}{Prisma}{on}
+\newskill{Databases}{Drizzle}{off}
+\newskill{Databases}{TypeORM}{off}
+\newskill{Databases}{S3}{off}
+
+% =================================================================
+%  MESSAGING & STREAMING
+% =================================================================
+\newskill{Messaging}{RabbitMQ}{off}
+\newskill{Messaging}{Apache Kafka}{off}
+\newskill{Messaging}{NATS}{off}
+\newskill{Messaging}{MQTT}{off}
+\newskill{Messaging}{Redis Streams}{on}
+\newskill{Messaging}{Socket.IO}{on}
+
+% =================================================================
+%  DEVELOPER ENVIRONMENT & TOOLING
+% =================================================================
+\newskill{Environment}{Git}{on}
+\newskill{Environment}{Vim/Neovim}{on}
+\newskill{Environment}{Linux}{on}
+\newskill{Environment}{Shell Scripting}{on}
+\newskill{Environment}{LSP ecosystem}{on}
+\newskill{Environment}{tmux}{on}
+\newskill{Environment}{Nix}{off}
+\newskill{Environment}{VS Code}{off}
+\newskill{Environment}{JetBrains}{off}
+\newskill{Environment}{Emacs}{off}
+
+% =================================================================
+%  AI / ML (off by default — enable if relevant)
+% =================================================================
+\newskill{AI}{PyTorch}{off}
+\newskill{AI}{TensorFlow}{off}
+\newskill{AI}{scikit-learn}{off}
+\newskill{AI}{Langchain}{off}
+\newskill{AI}{OpenAI API}{off}
+\newskill{AI}{Hugging Face}{off}
+\newskill{AI}{ONNX}{off}
+
+% =================================================================
+%  MOBILE (off by default)
+% =================================================================
+\newskill{Mobile}{Flutter}{off}
+\newskill{Mobile}{React Native}{off}
+\newskill{Mobile}{iOS / Swift}{off}
+\newskill{Mobile}{Android / Kotlin}{off}
+
+% =================================================================
+%  SECURITY (off by default)
+% =================================================================
+\newskill{Security}{OAuth2 / JWT}{off}
+\newskill{Security}{TLS / mTLS}{off}
+\newskill{Security}{OWASP}{off}
+\newskill{Security}{Penetration Testing}{off}
+\newskill{Security}{Cryptography}{off}

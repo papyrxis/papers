@@ -1,0 +1,54 @@
+% ── cdin ─────────────────────────────────────
+\newcommand{\projcdin}{%
+  \proj{cdin}{C $\cdot$ Lua $\cdot$ SDL3 $\cdot$ Text Editor}{%
+    \item Open-source text editor with a C runtime (SDL3, stb\_truetype) and a fully
+    Lua-based editor layer (documents, keymaps, plugins) loaded at runtime without
+    recompilation. Supports Normal/Insert/Visual modes, Ex command line, project tree
+    with Git markers, cell-based render cache, and cross-platform builds (Linux, macOS, Windows).%
+  }{\ProjCdinShort}%
+}
+
+% ── Gland ────────────────────────────────────
+\newcommand{\projgland}{%
+  \proj{Gland}{TypeScript $\cdot$ Event-Driven $\cdot$ DI Container}{%
+    \item Event-driven backend framework with radix tree routing, a lightweight DI container,
+    and adapter-based protocol support for HTTP and WebSocket; 80\%+ test coverage.%
+  }{\ProjGlandShort}%
+}
+
+% ── PSX ──────────────────────────────────────
+\newcommand{\projpsx}{%
+  \proj{PSX}{Go $\cdot$ CLI $\cdot$ Concurrent Validation}{%
+    \item Command-line project structure validator with 47 built-in rules, parallel rule
+    execution, auto-fix mode, YAML-based configuration, and cross-platform binary
+    releases via GitHub Actions.%
+  }{\ProjPSXShort}%
+}
+
+% ── FTX ──────────────────────────────────────
+\newcommand{\projftx}{%
+  \proj{FTX}{Vim Script $\cdot$ Async $\cdot$ Editor Tooling}{%
+    \item Asynchronous file tree plugin for Vim/Neovim with timer-based background
+    updates, content-hash directory cache, per-file Git status display, and zero
+    runtime dependencies.%
+  }{\ProjFTXShort}%
+}
+
+% ── Agas ─────────────────────────────────────
+\newcommand{\projagas}{%
+  \proj{Agas}{TypeScript $\cdot$ Bun $\cdot$ HTTP Client}{%
+    \item HTTP client with an event-driven lifecycle, extensible interceptor chain,
+    streaming support, retry logic, and a CLI with persistent request history;
+    800+ Docker Hub pulls.%
+  }{\ProjAgasShort}%
+}
+
+% ── Section renderer ─────────────────────────
+% Respects per-project toggles from shared/projects.tex.
+\newcommand{\ResumeProjectsEN}{%
+  \ifcdin  \projcdin  \fi
+  \ifgland \projgland \fi
+  \ifpsx   \projpsx   \fi
+  \ifftx   \projftx   \fi
+  \ifagas  \projagas  \fi
+}

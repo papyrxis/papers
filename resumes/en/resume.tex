@@ -1,0 +1,68 @@
+\documentclass[9.5pt,a4paper]{article}
+
+% ── Load order: tokens → packages → meta → colors → theme ────
+\input{../shared/style/tokens.tex}
+\input{../shared/packages/ltr.tex}
+
+\input{../shared/meta.tex}
+\input{../en/meta}
+
+\input{../shared/colors.tex}
+\input{../shared/links.tex}
+\input{../shared/skills-data.tex}
+\input{../shared/projects.tex}
+
+\input{../shared/style/commands.tex}
+\input{../shared/theme.tex}
+
+% ── Geometry ──────────────────────────────────
+\usepackage[a4paper,
+  top=\TokenENMarginTop,
+  bottom=\TokenENMarginBottom,
+  left=\TokenENMarginSide,
+  right=\TokenENMarginSide]{geometry}
+
+% ── Wire up theme ─────────────────────────────
+\colorlet{accent}{ResumeAccent}
+\colorlet{subtle}{ResumeSubtle}
+
+\ThemeApplyHyperref{\ResumePDFTitle}{\ResumePDFAuthor}{\ResumePDFKeywords}
+\ThemeApplySectionFormat
+\ThemeApplyListStyle
+
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{\ThemeParaSkip}
+
+% ── Shared section renderers ──────────────────
+\input{../shared/sections/common/header.tex}
+\input{../shared/sections/common/skills.tex}
+
+% ── EN-specific section renderers ────────────
+\input{../en/sections/projects.tex}
+
+% ─────────────────────────────────────────────
+\begin{document}
+
+\ResumeHeader
+
+\section{Summary}
+\input{../en/sections/summary.tex}
+
+\section{Technical Skills}
+\ResumeSkillsTable
+
+\section{Experience}
+\input{../en/sections/experience.tex}
+
+\section{Key Projects}
+\ResumeProjectsEN
+
+\section{Education}
+\input{../en/sections/education.tex}
+
+\section{Open Source \& Writing}
+\input{../en/sections/oss-writing.tex}
+\ENOSSWritingBlock
+
+\end{document}

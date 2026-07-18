@@ -1,0 +1,81 @@
+% ── cdin ─────────────────────────────────────
+\newcommand{\projcdinFA}{%
+  \cventry
+    {\lr{C · Lua · SDL3}}%
+    {\lr{cdin} — ویرایشگر متن}%
+    {\href{\ProjCdin}{\lr{\ProjCdinShort}}}%
+    {}%
+    {%
+      \begin{cvitems}
+        \item {ویرایشگر متن متن‌باز با هسته \lr{C} و لایه توسعه‌پذیر \lr{Lua}، مجهز به سیستم پلاگین، مدیریت اسناد و پشتیبانی از \lr{Linux}، \lr{macOS} و \lr{Windows}.}
+      \end{cvitems}%
+    }%
+}
+
+% ── Gland ────────────────────────────────────
+\newcommand{\projglandFA}{%
+  \cventry
+    {\lr{TypeScript · Event-Driven · DI Container}}%
+    {\lr{Gland} — فریم‌ورک بک‌اند}%
+    {\href{\ProjGland}{\lr{\ProjGlandShort}}}%
+    {}%
+    {%
+      \begin{cvitems}
+        \item {فریم‌ورک بک‌اند مبتنی بر معماری رویداد‌محور با مسیریابی \lr{Radix Tree}، کانتینر \lr{DI} و آداپتورهای قابل تعویض \lr{HTTP/WebSocket}؛ دارای بیش از ۸۰٪ پوشش تست.}
+      \end{cvitems}%
+    }%
+}
+
+% ── PSX ──────────────────────────────────────
+\newcommand{\projpsxFA}{%
+  \cventry
+    {\lr{Go · CLI · Concurrent Validation}}%
+    {\lr{PSX} — اعتبارسنج ساختار پروژه}%
+    {\href{\ProjPSX}{\lr{\ProjPSXShort}}}%
+    {}%
+    {%
+      \begin{cvitems}
+        \item {ابزار خط فرمان برای اعتبارسنجی ساختار پروژه با اجرای موازی قوانین، اصلاح خودکار خطاها و انتشار باینری چندسکویی از طریق \lr{GitHub Actions}.}
+      \end{cvitems}%
+    }%
+}
+
+% ── FTX ──────────────────────────────────────
+\newcommand{\projftxFA}{%
+  \cventry
+    {\lr{Vim Script · Async · Editor Tooling}}%
+    {\lr{FTX} — پلاگین درخت فایل}%
+    {\href{\ProjFTX}{\lr{\ProjFTXShort}}}%
+    {}%
+    {%
+      \begin{cvitems}
+        \item {پلاگین درخت فایل برای \lr{Vim/Neovim} با به‌روزرسانی غیرهمزمان، نمایش وضعیت \lr{Git} و معماری سبک بدون وابستگی خارجی.}
+      \end{cvitems}%
+    }%
+}
+
+% ── Agas ─────────────────────────────────────
+\newcommand{\projagasFA}{%
+  \cventry
+    {\lr{TypeScript · Bun · HTTP Client}}%
+    {\lr{Agas} — کلاینت \lr{HTTP}}%
+    {\href{\ProjAgas}{\lr{\ProjAgasShort}}}%
+    {}%
+    {%
+      \begin{cvitems}
+        \item {کلاینت \lr{HTTP} با معماری رویداد‌محور، اینترسپتورهای قابل توسعه، پشتیبانی از استریمینگ و ابزار \lr{CLI}؛ بیش از ۸۰۰ بارگیری از \lr{Docker Hub}.}
+      \end{cvitems}%
+    }%
+}
+
+% ── Section renderer ─────────────────────────
+% Respects per-project toggles from shared/projects.tex.
+\newcommand{\ResumeProjectsFA}{%
+  \begin{cventries}
+    \ifcdin  \projcdinFA  \fi
+    \ifgland \projglandFA \fi
+    \ifpsx   \projpsxFA   \fi
+    \ifftx   \projftxFA   \fi
+    \ifagas  \projagasFA  \fi
+  \end{cventries}%
+}

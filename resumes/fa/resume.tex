@@ -1,0 +1,93 @@
+%!TEX TS-program = xelatex
+%!TEX encoding = UTF-8 Unicode
+\documentclass[10pt,a4paper]{article}
+% ── Load order matters — follow exactly ──────────────────────
+% 1. Dimension tokens (no \usepackage calls)
+\input{../shared/style/tokens.tex}
+
+% 2. Shared metadata (language-neutral: email, github, IDs)
+\input{../shared/meta.tex}
+% 3. Persian locale (name, position, location, PDF vars)
+\input{../fa/meta.tex}
+
+% 4. RTL layout primitives — provides \cvsection, \cventry, etc.
+%    Also sets \linespread from TokenRTLLineSpread.
+\input{../shared/style/rtl-layout.tex}
+
+% 5. Color palette
+\input{../shared/colors.tex}
+
+% 6. Theme spacing constants and apply-commands
+\input{../shared/theme.tex}
+
+% 7. Shared data (URLs, skills, project toggles)
+\input{../shared/links.tex}
+\input{../shared/skills-data.tex}
+\input{../shared/projects.tex}
+
+% 8. Shared layout commands (\proj, \resumeEducation, \skillrow)
+\input{../shared/style/commands.tex}
+
+% 9. Section macros — ALL defined here in preamble, called in body
+\input{../fa/sections/summary.tex}
+\input{../fa/sections/experience.tex}
+\input{../fa/sections/education.tex}
+\input{../fa/sections/projects.tex}
+\input{../fa/sections/oss-writing.tex}
+
+% 10. PDF metadata
+\hypersetup{
+  colorlinks=true,
+  urlcolor=ResumeAccent,
+  pdftitle={\ResumePDFTitle},
+  pdfauthor={\ResumePDFAuthor},
+  pdfsubject={\ResumePDFSubject},
+  pdfkeywords={\ResumePDFKeywords}
+}
+
+% 11. xepersian MUST be the very last package loaded
+\input{../shared/packages/rtl.tex}
+
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{2pt}
+
+% ─────────────────────────────────────────────────────────────
+\begin{document}
+
+\makecvheader
+
+\cvsection{خلاصه}
+\begin{cvparagraph}
+\FASummaryText
+\end{cvparagraph}
+
+\cvsection{مهارت‌ها}
+\begin{cvskills}
+  \ifcsdef{SkillLanguages}    {\cvskill{زبان‌ها}      {\lr{\SkillLanguages}}}    {}
+  \ifcsdef{SkillBackend}      {\cvskill{بک‌اند}        {\lr{\SkillBackend}}}      {}
+  \ifcsdef{SkillFrontend}     {\cvskill{فرانت‌اند}     {\lr{\SkillFrontend}}}     {}
+  \ifcsdef{SkillSystems}      {\cvskill{سیستم‌ها}      {\lr{\SkillSystems}}}      {}
+  \ifcsdef{SkillArchitecture} {\cvskill{معماری}        {\lr{\SkillArchitecture}}} {}
+  \ifcsdef{SkillDevOps}       {\cvskill{دواپس}         {\lr{\SkillDevOps}}}       {}
+  \ifcsdef{SkillDatabases}    {\cvskill{پایگاه داده}   {\lr{\SkillDatabases}}}    {}
+  \ifcsdef{SkillMessaging}    {\cvskill{پیام‌رسانی}    {\lr{\SkillMessaging}}}    {}
+  \ifcsdef{SkillEnvironment}  {\cvskill{محیط کار}      {\lr{\SkillEnvironment}}}  {}
+  \ifcsdef{SkillAI}           {\cvskill{هوش مصنوعی}    {\lr{\SkillAI}}}           {}
+  \ifcsdef{SkillMobile}       {\cvskill{موبایل}        {\lr{\SkillMobile}}}       {}
+  \ifcsdef{SkillSecurity}     {\cvskill{امنیت}         {\lr{\SkillSecurity}}}     {}
+\end{cvskills}
+
+\cvsection{تجربه کاری}
+\FAExperienceBlock
+
+\cvsection{پروژه‌ها}
+\ResumeProjectsFA
+
+\cvsection{تحصیلات}
+\FAEducationBlock
+
+\cvsection{آثار و فعالیت‌ها}
+\FAOSSWritingBlock
+
+\end{document}

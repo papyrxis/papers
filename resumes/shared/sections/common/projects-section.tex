@@ -1,0 +1,19 @@
+% LTR version — uses \proj command from en/resume.tex
+\newcommand{\ResumeProjectsEN}{%
+  \ifcdin  \projcdin  \fi
+  \ifgland \projgland \fi
+  \ifpsx   \projpsx   \fi
+  \ifftx   \projftx   \fi
+  \ifagas  \projagas  \fi
+}
+
+% RTL version — uses \projXXXFA commands (awesome-cv \cventry)
+\newcommand{\ResumeProjectsFA}{%
+  \begin{cventries}
+    \ifcdin  \projcdinFA  \fi
+    \ifgland \projglandFA \fi
+    \ifpsx   \projpsxFA   \fi
+    \ifftx   \projftxFA   \fi
+    \ifagas  \projagasFA  \fi
+  \end{cventries}%
+}

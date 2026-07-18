@@ -1,0 +1,30 @@
+% Default English labels (override per language before calling)
+\providecommand{\SkillLabelLanguages}{Languages}
+\providecommand{\SkillLabelBackend}{Backend}
+\providecommand{\SkillLabelFrontend}{Frontend}
+\providecommand{\SkillLabelSystems}{Systems}
+\providecommand{\SkillLabelArchitecture}{Architecture}
+\providecommand{\SkillLabelDevOps}{DevOps}
+\providecommand{\SkillLabelDatabases}{Databases}
+\providecommand{\SkillLabelMessaging}{Messaging}
+\providecommand{\SkillLabelEnvironment}{Environment}
+\providecommand{\SkillLabelAI}{AI / ML}
+\providecommand{\SkillLabelMobile}{Mobile}
+\providecommand{\SkillLabelSecurity}{Security}
+
+\newcommand{\ResumeSkillsTable}{%
+  \begin{tabular}{@{}ll}
+    \skillrow{SkillLanguages}{\SkillLabelLanguages}
+    \skillrow{SkillBackend}{\SkillLabelBackend}
+    \skillrow{SkillFrontend}{\SkillLabelFrontend}
+    \skillrow{SkillSystems}{\SkillLabelSystems}
+    \skillrow{SkillArchitecture}{\SkillLabelArchitecture}
+    \skillrow{SkillDevOps}{\SkillLabelDevOps}
+    \skillrow{SkillDatabases}{\SkillLabelDatabases}
+    \skillrow{SkillMessaging}{\SkillLabelMessaging}
+    \skillrow{SkillEnvironment}{\SkillLabelEnvironment}
+    \skillrow{SkillAI}{\SkillLabelAI}
+    \skillrow{SkillMobile}{\SkillLabelMobile}
+    \skillrow{SkillSecurity}{\SkillLabelSecurity}
+  \end{tabular}%
+}

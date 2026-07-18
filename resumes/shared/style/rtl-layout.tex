@@ -1,0 +1,130 @@
+\usepackage{geometry}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{etoolbox}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{array}
+
+% ── Apply geometry from tokens ─────────────────────────────
+\geometry{
+  a4paper,
+  left=\TokenFAMarginLeft,
+  right=\TokenFAMarginRight,
+  top=\TokenFAMarginTop,
+  bottom=\TokenFAMarginBottom,
+  footskip=\TokenFAFootSkip
+}
+
+% ── Persian line spread ─────────────────────────────────────
+% Must be set in preamble; takes effect at \begin{document}.
+% Persian needs ~30% more line height than Latin for readability.
+\linespread{\TokenRTLLineSpread}
+
+% ── \cvsection{Title} ──────────────────────────────────────
+% Section heading: bold, accent underline rule.
+\newcommand{\cvsection}[1]{%
+  \vspace{\TokenRTLSectionSpaceAbove}%
+  {\large\bfseries #1}%
+  \par\vspace{2pt}%
+  {\color{ResumeAccent}\rule{\linewidth}{\TokenSectionRuleThickness}}%
+  \par\vspace{\TokenRTLSectionSpaceBelow}%
+}
+
+% ── cventries environment ──────────────────────────────────
+% Groups job/project entries with comfortable vertical gaps.
+\newenvironment{cventries}{%
+  \begin{list}{}{%
+    \setlength{\topsep}{0pt}%
+    \setlength{\partopsep}{0pt}%
+    \setlength{\itemsep}{\TokenRTLEntryItemSep}%
+    \setlength{\parsep}{0pt}%
+    \setlength{\leftmargin}{0pt}%
+  }%
+}{%
+  \end{list}%
+}
+
+% ── \cventry{role}{org}{location}{date}{body} ─────────────
+% role     — small, e.g. job title or project tech stack
+% org      — bold, e.g. company name or project name
+% location — city/remote or short URL  (omit → nothing shown)
+% date     — date range (omit → no separator shown)
+% body     — free content, usually a cvitems list
+%
+% Separator "|" between location and date is only printed when
+% BOTH are non-empty, so projects can pass {} for date cleanly.
+\newcommand{\cventry}[5]{%
+  \item%
+  \begin{tabular*}{\linewidth}{@{}l@{\extracolsep{\fill}}r@{}}%
+    \textbf{#2}{\small\color{ResumeSubtle}\enspace#1} &
+    {\small\color{ResumeSubtle}%
+      #3%
+      \ifstrempty{#4}{}{\ifstrempty{#3}{}{\enspace\textbar\enspace}#4}%
+    }%
+  \end{tabular*}%
+  \par\vspace{2pt}%
+  #5%
+  \vspace{\TokenRTLEntryBodyVSpace}%
+}
+
+% ── cvitems environment ────────────────────────────────────
+% Bullet list inside a cventry.  RTL-tuned spacing.
+\newenvironment{cvitems}{%
+  \begin{itemize}[%
+    nosep,%
+    leftmargin=\TokenRTLItemLeftMargin,%
+    itemsep=\TokenRTLItemSep,%
+    topsep=\TokenRTLItemTopSep,%
+    parsep=\TokenRTLItemParsep%
+  ]%
+}{%
+  \end{itemize}%
+}
+
+% ── cvparagraph environment ────────────────────────────────
+% Free-form paragraph block (e.g. summary).
+% Sets local paragraph skip so multi-sentence summaries breathe.
+\newenvironment{cvparagraph}{%
+  \setlength{\parskip}{3pt}%
+}{%
+  \par\vspace{\TokenRTLParaAfterSkip}%
+}
+
+% ── cvskills environment and \cvskill{label}{value} ────────
+% Two-column table: bold RTL label on right, value on left.
+\newenvironment{cvskills}{%
+\vspace{\TokenRTLSectionSpaceBelow}
+  \begin{center}
+    \renewcommand{\arraystretch}{0.95} % کاهش فاصله عمودی پیش‌فرض جدول
+    \begin{tabular*}{\linewidth}{@{\extracolsep{\fill}} r l @{}}
+}{%
+    \end{tabular*}
+  \end{center}
+}
+\newcommand{\cvskill}[2]{%
+  #1 & #2 \\[\TokenRTLSkillRowSep]
+}
+
+% ── \makecvheader ──────────────────────────────────────────
+% Reads: \ResumeAuthorName, \ResumePosition, \ResumeLocation,
+%        \ResumeEmail, \ResumeGithub, \ResumeHomepage,
+%        \ResumeSOUserID, \ResumeSOHandle (via shared/links.tex)
+\newcommand{\makecvheader}{%
+  \begin{center}%
+    {\fontsize{18pt}{24pt}\bfseries\selectfont \ResumeAuthorName}\\[5pt]%
+    {\small\color{ResumeSubtle}\ResumePosition}\\[4pt]%
+    {\small\color{ResumeSubtle}%
+      \href{\LinkEmail}{\ResumeEmail}%
+      \quad\textbar\quad%
+      \href{\LinkGithub}{\lr{github.com/\ResumeGithub}}%
+      \quad\textbar\quad%
+      \href{\LinkHomepage}{\lr{\ResumeHomepage}}%
+      \quad\textbar\quad%
+      \href{\LinkStackOverflow}{\lr{Stack Overflow}}%
+      \quad\textbar\quad%
+      \ResumeLocation%
+    }%
+  \end{center}%
+  \vspace{4pt}%
+}

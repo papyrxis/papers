@@ -1,0 +1,60 @@
+% ── 1. TYPOGRAPHY ──────────────────────────────────────────────
+\newcommand{\ThemeFontSizeBody}{9.5pt}
+\newcommand{\ThemeFontSizeSmall}{8.5pt}
+\newcommand{\ThemeFontSizeHeader}{16pt}
+\newcommand{\ThemeFontSizeSection}{10pt}
+
+% ── 2. SPACING ─────────────────────────────────────────────────
+\newcommand{\ThemeSectionSpaceAbove}{5pt}
+\newcommand{\ThemeSectionSpaceBelow}{3pt}
+\newcommand{\ThemeHeaderGap}{-3pt}
+\newcommand{\ThemeItemSep}{1pt}
+\newcommand{\ThemeItemTopSep}{0.8pt}
+\newcommand{\ThemeItemParsep}{0pt}
+\newcommand{\ThemeItemLeftMargin}{1.2em}
+\newcommand{\ThemeEntryGap}{0.5pt}
+\newcommand{\ThemeParaSkip}{0pt}
+
+% RTL paragraph spacing
+\newcommand{\ThemeFAParaAfterSkip}{3mm}
+
+% ── 3. SECTION HEADER STYLE ────────────────────────────────────
+\newcommand{\ThemeSectionRuleThickness}{0.6pt}
+
+% ── 4. HYPERLINK STYLE ─────────────────────────────────────────
+\newcommand{\ThemeHyperlinkColor}{ResumeAccent}
+\newcommand{\ThemeLinkBorderWidth}{0}
+
+% ── 5. APPLY-COMMANDS ──────────────────────────────────────────
+% Called once in each resume.tex preamble to wire up the theme.
+
+% LTR: applies \titleformat{\section}
+\newcommand{\ThemeApplySectionFormat}{%
+  \titleformat{\section}%
+    {\normalsize\bfseries}{}{0pt}{}%
+    [\vspace{-5pt}\color{ResumeAccent}\rule{\linewidth}{\ThemeSectionRuleThickness}]%
+  \titlespacing*{\section}{0pt}{\ThemeSectionSpaceAbove}{\ThemeSectionSpaceBelow}%
+}
+
+% LTR: applies global itemize defaults
+\newcommand{\ThemeApplyListStyle}{%
+  \setlist[itemize]{%
+    nosep,%
+    leftmargin=\ThemeItemLeftMargin,%
+    itemsep=\ThemeItemSep,%
+    topsep=\ThemeItemTopSep,%
+    parsep=\ThemeItemParsep%
+  }%
+}
+
+% All: hyperref setup — \ThemeApplyHyperref{title}{author}{keywords}
+\newcommand{\ThemeApplyHyperref}[3]{%
+  \hypersetup{%
+    colorlinks=true,%
+    urlcolor=\ThemeHyperlinkColor,%
+    pdfborder={0 0 \ThemeLinkBorderWidth},%
+    pdftitle={#1},%
+    pdfauthor={#2},%
+    pdfkeywords={#3}%
+  }%
+}

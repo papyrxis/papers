@@ -1,0 +1,39 @@
+% ── \proj{Name}{Stack}{items}{url-short} ─────────────────────
+% LTR project entry — used by \ResumeProjectsEN.
+%
+\newcommand{\proj}[4]{%
+  \vspace{\TokenProjVSpace}%
+  \textbf{#1}\enspace{\small\color{ResumeSubtle}#2}%
+  \hfill{\small\href{https://#4}{#4}}%
+  \begin{itemize}#3\end{itemize}%
+}
+
+
+% ── \resumeEducation{Degree}{Institution}{Location}{Date} ─────
+% Single layout for both LTR and RTL education sections.
+% Called by shared/sections/common/education.tex.
+%
+\newcommand{\resumeEducation}[4]{%
+  \textbf{#1}\hfill\textit{#4}\\[0.5pt]%
+  \textit{#2}\hfill\textit{#3}%
+}
+
+
+% ── \skillrow{MacroName}{Display Label} ──────────────────────
+% Skip row silently when skill category has no enabled skills.
+% Used inside \ResumeSkillsTable (shared/sections/common/skills.tex).
+%
+\newcommand{\skillrow}[2]{%
+  \ifcsdef{#1}{\textbf{#2} & \csname #1\endcsname \\[\TokenItemSep]}{}%
+}
+
+
+% ── \lrtext{} ────────────────────────────────────────────────
+% Safe alias for \lr{} in xepersian documents.
+% Falls back to identity in LTR documents (no xepersian loaded).
+%
+\ifdefined\lr
+  \newcommand{\lrtext}[1]{\lr{#1}}
+\else
+  \newcommand{\lrtext}[1]{#1}
+\fi
