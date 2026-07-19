@@ -1,21 +1,3 @@
--- clean-export.lua
---
--- Pandoc Lua filter shared by every export target. Strips LaTeX-only
--- residue (raw \ref/\autoref, layout markers, theorem-environment Divs)
--- and normalizes whatever citeproc produces (author-date or numeric)
--- into plain Markdown with no leftover HTML.
---
--- Target-specific behavior is controlled by two environment variables,
--- set by export.sh before invoking pandoc:
---   EXPORT_REFERENCES_HEADING  — text for the bibliography heading
---                                 (e.g. "References", "Bibliography",
---                                 "Works Cited"). Defaults to "References".
---   EXPORT_REFERENCES_NUMBERED — "1" to render the bibliography as a
---                                 numbered Markdown list (clean for
---                                 numeric-citation targets); unset/"0"
---                                 to keep it as plain paragraphs
---                                 (the right shape for author-date styles).
-
 local function env_or(name, default)
   local v = os.getenv(name)
   if v == nil or v == "" then return default end
