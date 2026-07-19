@@ -106,15 +106,19 @@ def _build_one(slug: str) -> bool:
         "BUILD_DATE":      datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
     })
 
-    result = subprocess.run(
-        [engine, "-interaction=nonstopmode",
-         f"-output-directory={out_dir}", "main.tex"],
-        cwd=roadmap_dir,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT,
-        text=True,
-        env=env,
-    )
+    def _run_engine() -> subprocess.CompletedProcess:
+        return subprocess.run(
+            [engine, "-interaction=nonstopmode",
+             f"-output-directory={out_dir}", "main.tex"],
+            cwd=roadmap_dir,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True,
+            env=env,
+        )
+
+    _run_engine()          # pass 1 — builds .toc / .aux / TikZ externals
+    result = _run_engine() # pass 2 — resolves TOC entries, LastPage, overlays
     for line in result.stdout.splitlines():
         if any(x in line for x in ("! ", "l.", "Error", "Warning")):
             print(f"  {line}")
