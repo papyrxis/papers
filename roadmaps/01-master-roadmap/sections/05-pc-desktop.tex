@@ -1,0 +1,46 @@
+\roadmapSection{3}{PC / DESKTOP / MONITOR / MOUSE / KEYBOARD}{3--4 Weeks}
+
+{\small\itshape\color{arligray} Simpler hardware, accessible. Good for volume repairs and OS work. Fast income early on.}
+
+% ── 3.1 PC Hardware and Repair ────────────────────────────────────────────────
+\roadmapSubSection{3.1}{PC Hardware and Repair}{}
+
+\checkitem{Motherboard form factors: ATX, Micro-ATX, Mini-ITX --- know which fits which case}{}
+\checkitem{CPU socket types: Intel LGA 1700/1851, AMD AM4/AM5 --- not cross-compatible}{}
+\checkitem{RAM types: DDR4 vs DDR5, dual-channel configuration, XMP/EXPO profiles in BIOS}{}
+\checkitem{RAM upgrade: insert in correct slots for dual-channel, enable XMP in BIOS}{}
+\checkitem{SSD installation: NVMe into M.2 slot, clone old drive or fresh install}{}
+\checkitem{GPU replacement: remove old, install new, connect power, install drivers}{}
+\checkitem{CPU thermal paste replacement: remove cooler, clean, apply new thermal compound}{}
+\checkitem{Dead CMOS battery: replace CR2032, re-enter BIOS settings}{}
+\checkitem{Motherboard diagnosis: no POST --- test with minimum hardware (CPU + 1 RAM + PSU)}{}
+\checkitem{Capacitor replacement on motherboard: identify bulging/leaking caps, replace same spec}{}
+\checkitem{Monitor backlight failure: replace inverter (CCFL) or LED driver board (modern)}{}
+\checkitem{Mouse: replace micro-switch (Omron D2FC-F-7N), fix encoder wheel, clean sensor}{}
+\checkitem{Keyboard: identify switch type (Cherry MX, Gateron, membrane), replace individual switch}{}
+
+% ── 3.2 OS Installation ───────────────────────────────────────────────────────
+\roadmapSubSection{3.2}{OS Installation --- Windows / Linux / macOS}{}
+
+\roadmapHead{Windows}
+\checkitem{Create bootable USB: Rufus or Media Creation Tool --- NTFS for BIOS, FAT32 for UEFI}{}
+\checkitem{Understand BIOS vs UEFI, MBR vs GPT --- always use UEFI+GPT on modern hardware}{}
+\checkitem{Clean install Windows 11: boot from USB, delete all partitions, install fresh}{}
+\checkitem{Driver installation sequence: chipset first, then GPU, audio, network}{}
+\checkitem{Repair Windows without reinstall: \texttt{sfc /scannow}, \texttt{DISM /RestoreHealth}, \texttt{bootrec /fixmbr}}{}
+
+\roadmapHead{Linux}
+\checkitem{Create bootable USB with Balena Etcher or \texttt{dd} command}{}
+\checkitem{Understand Linux partition layout: / (root), /home, /boot, swap}{}
+\checkitem{Install Ubuntu or Fedora: guided install, manual partitioning for dual-boot}{}
+\checkitem{Dual-boot setup: install Windows first, then Linux --- GRUB detects Windows automatically}{}
+\checkitem{Fix GRUB after Windows update: boot from USB, chroot, \texttt{grub-install}}{}
+\checkitem{Package management: \texttt{apt} (Debian/Ubuntu), \texttt{dnf} (Fedora), \texttt{pacman} (Arch)}{}
+\checkitem{Diagnose Linux boot failures: read \texttt{journalctl -b}, \texttt{dmesg} output}{}
+
+\roadmapHead{macOS}
+\checkitem{Create bootable macOS USB via \texttt{createinstallmedia} command}{}
+\checkitem{Reinstall macOS via Recovery Mode: Cmd+R on Intel, hold power button on Apple Silicon}{}
+\checkitem{Understand SIP (System Integrity Protection): why some operations require SIP disabled}{}
+\checkitem{Understand T2 and Apple Silicon security: Activation Lock, Secure Boot policy}{}
+\checkitem{MacBook charging issue: reset SMC on Intel, hold power 10s on Apple Silicon}{}

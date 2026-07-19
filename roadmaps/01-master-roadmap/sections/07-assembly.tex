@@ -1,0 +1,65 @@
+\roadmapSection{5}{ASSEMBLY LANGUAGE AND LOW-LEVEL HARDWARE}{8--12 Weeks}
+
+{\small\itshape\color{arligray} Required for reverse engineering and deep firmware work. This is where most people stop --- don't.}
+
+% ── 5.1 ARM Assembly ──────────────────────────────────────────────────────────
+\roadmapSubSection{5.1}{ARM Assembly --- Mobile, Embedded, Apple Silicon}{}
+
+\roadmapHead{ARM Instruction Set Fundamentals}
+\checkitem{ARM instructions operate on registers, not directly on memory (load-store architecture)}{}
+\checkitem{Core instructions: MOV, LDR (load from memory), STR (store to memory), ADD, SUB, MUL}{}
+\checkitem{Comparison: CMP (subtract and set flags), TST (AND and set flags) --- set CPSR flags}{}
+\checkitem{Branching: B (jump), BL (jump + save return address to LR), BX (jump to register)}{}
+\checkitem{Conditional execution: every ARM instruction can be conditional --- MOVEQ, BNEQ, ADDGT}{}
+\checkitem{Register file: R0--R3 args/return, R4--R11 callee-saved, R12 scratch, SP, LR, PC}{}
+\checkitem{CPSR (Current Program Status Register): N, Z, C, V flags}{}
+\checkitem{Thumb and Thumb-2: 16-bit and mixed encoding for code density --- all mobile uses this}{}
+
+\roadmapHead{Function Calls in ARM}
+\checkitem{Prologue: \texttt{PUSH \{R4-R11, LR\}} --- save callee-saved registers and return address}{}
+\checkitem{Epilogue: \texttt{POP \{R4-R11, PC\}} --- restore registers and return by loading PC}{}
+\checkitem{Arguments passed in R0--R3, additional arguments on stack. Return value in R0}{}
+\checkitem{Disassemble a known C function and match every line to the C source}{}
+\checkitem{Identify a loop in assembly: counter in register, CMP + branch back to loop start}{}
+\checkitem{Identify a switch statement: computed branch via table lookup}{}
+
+\roadmapHead{Memory Access Patterns}
+\checkitem{\texttt{LDR R0, [R1]} --- load word from address in R1 into R0}{}
+\checkitem{\texttt{STR R0, [R1, \#4]} --- store word R0 to address R1+4}{}
+\checkitem{LDM / STM --- load/store multiple registers in one instruction (used in memcpy)}{}
+\checkitem{Understand stack frame layout: return address, saved registers, local variables}{}
+
+% ── 5.2 x86/x64 Assembly ──────────────────────────────────────────────────────
+\roadmapSubSection{5.2}{x86/x64 Assembly --- PC, Laptop, BIOS}{}
+
+\checkitem{CISC vs RISC: x86 has variable-length instructions, complex addressing modes}{}
+\checkitem{Core registers: RAX, RBX, RCX, RDX, RSI, RDI, RSP, RBP, R8--R15}{}
+\checkitem{System V AMD64 ABI (Linux): args in RDI, RSI, RDX, RCX, R8, R9 --- return in RAX}{}
+\checkitem{Windows x64 ABI: args in RCX, RDX, R8, R9 --- different from Linux}{}
+\checkitem{Common instructions: MOV, PUSH, POP, CALL, RET, ADD, SUB, CMP, JMP, Jcc}{}
+\checkitem{PUSH/POP and how the stack grows downward}{}
+\checkitem{CALL = PUSH next\_instruction\_address + JMP. RET = POP address + JMP}{}
+\checkitem{Disassemble a simple C program on x64 and trace the call stack manually}{}
+
+% ── 5.3 CPU and GPU Hardware Internals ────────────────────────────────────────
+\roadmapSubSection{5.3}{CPU and GPU Hardware Internals}{}
+
+{\small\itshape\color{arligray} Maps directly to ARLIZ Vol II --- CPU Pipeline and GPU Architecture chapters. Write as you learn.}
+
+\roadmapHead{CPU Hardware Internals}
+\checkitem{Pipeline stages: Fetch $\to$ Decode $\to$ Execute $\to$ Memory $\to$ Writeback}{}
+\checkitem{Pipeline hazards: data hazard (RAW), control hazard (branch), structural hazard}{}
+\checkitem{Branch prediction: why misprediction is expensive (pipeline flush)}{}
+\checkitem{Out-of-order execution: CPU reorders instructions to hide latency}{}
+\checkitem{Speculative execution: CPU executes code before knowing if branch is taken}{}
+\checkitem{Cache hierarchy: L1 ($<$1ns, 32KB), L2 (3ns, 512KB), L3 (10ns, 8--32MB), RAM (100ns)}{}
+\checkitem{Cache coherence: MESI protocol for multi-core consistency}{}
+\checkitem{SIMD: SSE, AVX2, AVX-512 --- process multiple data in one instruction}{}
+
+\roadmapHead{GPU Hardware Internals}
+\checkitem{GPU architecture: thousands of small cores for parallel computation}{}
+\checkitem{CUDA/OpenCL execution model: grid of blocks of threads}{}
+\checkitem{GPU memory hierarchy: registers, shared memory (SRAM), global memory (GDDR/HBM)}{}
+\checkitem{Shader pipeline: vertex shader $\to$ rasterization $\to$ fragment shader}{}
+\checkitem{Tensor cores: specialized units for matrix multiply-accumulate (AI workloads)}{}
+\checkitem{GPU vs CPU: GPU wins at parallel identical operations; CPU wins at branchy sequential}{}

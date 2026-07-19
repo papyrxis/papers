@@ -1,0 +1,112 @@
+% ── Section header (level 1 — navy band) ──────────────────────────────────────
+\newcommand{\roadmapSection}[3]{%
+  % #1 = number/badge  #2 = title  #3 = duration (optional)
+  \vspace{0.4cm}
+  \noindent
+  \begin{tcolorbox}[
+    colback=arliznavy, colframe=arliznavy,
+    leftrule=6pt, colbacktitle=arlizblue,
+    sharp corners, boxrule=0pt,
+    left=8pt, right=8pt, top=5pt, bottom=5pt,
+    title={\textbf{\textcolor{white}{\textsc{#2}}}},
+    after title={\hfill\textcolor{white!60!arliznavy}{\small #3}},
+    attach boxed title to top left={yshift=-\tcboxedtitleheight/2, xshift=10pt},
+    boxed title style={colback=arlizblue, sharp corners, boxrule=0pt, left=4pt, right=4pt},
+  ]
+  \end{tcolorbox}
+  \vspace{0.15cm}
+}
+
+% ── Subsection header (level 2 — light band) ──────────────────────────────────
+\newcommand{\roadmapSubSection}[3]{%
+  \vspace{0.2cm}
+  \noindent
+  \colorbox{bgsubtle}{%
+    \parbox{\dimexpr\linewidth-2\fboxsep}{%
+      \vspace{3pt}
+      {\color{arlizblue}\rule{3pt}{\baselineskip}}\hspace{6pt}%
+      \textbf{\color{arliznavy}#1\enspace #2}%
+      \hfill{\small\color{arligray}#3}%
+      \vspace{3pt}
+    }%
+  }
+  \vspace{0.1cm}
+}
+
+% ── Sub-heading (bold label inside a section) ─────────────────────────────────
+\newcommand{\roadmapHead}[1]{%
+  \vspace{0.15cm}
+  {\noindent\textbf{\color{arliznavy}#1}}
+  \vspace{0.05cm}
+}
+
+% ── Check item ────────────────────────────────────────────────────────────────
+% Usage: \checkitem{Main text}{Optional italic note}
+\newcommand{\checkitem}[2]{%
+  \noindent\hspace{6pt}%
+  {\color{arlizblue}$\square$}\hspace{6pt}%
+  \parbox[t]{\dimexpr\linewidth-24pt}{%
+    {\small #1}%
+    \ifx&#2&\else\\\hspace{12pt}{\footnotesize\itshape\color{arligray}#2}\fi
+  }\\[2pt]
+}
+
+% ── North Star box ────────────────────────────────────────────────────────────
+\newenvironment{northstarbox}{%
+  \begin{tcolorbox}[
+    colback=arliznavy, colframe=arlizblue,
+    leftrule=5pt, sharp corners,
+    left=10pt, right=10pt, top=8pt, bottom=8pt
+  ]
+  \color{white}\small
+}{%
+  \end{tcolorbox}
+}
+
+% ── Tool badge list (inline pills) ────────────────────────────────────────────
+% Usage: \toolbadge{Name}
+\newcommand{\toolbadge}[1]{%
+  \tcbox[
+    on line, colback=bgsubtle, colframe=arlizblue!40,
+    boxrule=0.4pt, sharp corners, left=4pt, right=4pt,
+    top=1pt, bottom=1pt, arc=2pt
+  ]{\footnotesize\color{arliznavy}#1}%
+}
+
+% ── Timeline item ─────────────────────────────────────────────────────────────
+\newcommand{\timelineitem}[3]{%
+  % #1 = month label  #2 = sublabel  #3 = body text
+  \noindent
+  \begin{tikzpicture}[baseline=(base)]
+    \node[circle, fill=arlizblue, inner sep=3pt] (dot) {};
+    \node[right=8pt of dot, text width=\dimexpr\linewidth-32pt, anchor=base west] (base)
+      {\textbf{\color{arliznavy}#1}%
+       \ifx&#2&\else\\\hspace{4pt}{\small\itshape\color{arlizblue}#2}\fi
+       \ifx&#3&\else\\\hspace{4pt}{\small\color{textprimary}#3}\fi
+      };
+    \draw[arlizblue!30, line width=1.5pt] (dot) -- ++(0,-1.4);
+  \end{tikzpicture}\\[4pt]
+}
+
+% ── Milestone item ────────────────────────────────────────────────────────────
+\newcommand{\milestoneitem}[3]{%
+  \noindent
+  \begin{tikzpicture}[baseline=(base)]
+    \node[circle, fill=arlizgold, inner sep=4pt] (dot) {};
+    \node[right=8pt of dot, text width=\dimexpr\linewidth-32pt, anchor=base west] (base)
+      {\textbf{\color{arlizgold}#1}%
+       \ifx&#2&\else\\\hspace{4pt}{\small\itshape\color{arlizblue}#2}\fi
+       \ifx&#3&\else\\\hspace{4pt}{\small\color{textprimary}#3}\fi
+      };
+    \draw[arlizgold!30, line width=1.5pt] (dot) -- ++(0,-1.4);
+  \end{tikzpicture}\\[4pt]
+}
+
+% ── Pricing table helper ──────────────────────────────────────────────────────
+\newcommand{\pricingrow}[2]{#1 & \textbf{\color{arlizblue}#2} \\}
+% ── Tool badge list environment (wrapping row of pills) ───────────────────────
+\newenvironment{toolbadges}{%
+  \vspace{4pt}\noindent\begin{minipage}{\linewidth}\raggedright
+}{%
+  \end{minipage}\vspace{6pt}
+}

@@ -1,0 +1,54 @@
+\roadmapSection{6}{REVERSE ENGINEERING}{8--12 Weeks}
+
+{\small\itshape\color{arligray} Requires all previous sections. The most advanced skill on this roadmap. Start only after Month 11.}
+
+% ── 6.1 Tools and Setup ───────────────────────────────────────────────────────
+\roadmapSubSection{6.1}{Tools and Setup}{}
+
+\begin{toolbadges}
+\toolbadge{Ghidra (ghidra.sre.cia.gov)}
+\toolbadge{Binary Ninja / IDA Free}
+\toolbadge{Logic Analyzer Kingst LA1010}
+\toolbadge{Oscilloscope Rigol DS1054Z}
+\toolbadge{USB-UART CP2102 (1.8V)}
+\toolbadge{binwalk (pip install binwalk)}
+\end{toolbadges}
+
+% ── 6.2 Firmware Analysis with Ghidra ────────────────────────────────────────
+\roadmapSubSection{6.2}{Firmware Analysis with Ghidra}{}
+
+\checkitem{Import firmware binary: set architecture (ARM Cortex-M or ARM64), endianness (little)}{}
+\checkitem{Set base address: find load address in linker map or boot log --- wrong base = wrong analysis}{}
+\checkitem{Run Ghidra auto-analysis: let it run fully before manual work}{}
+\checkitem{Identify entry point: reset vector at interrupt vector table offset 4}{}
+\checkitem{Rename functions based on behavior: prefix with module name (\texttt{uart\_}, \texttt{pmic\_}, \texttt{storage\_})}{}
+\checkitem{Find string references: search for error strings, then trace back to calling function}{}
+\checkitem{Identify protocol parser: look for length field extraction, CRC check, state machine}{}
+\checkitem{Reconstruct struct definitions from repeated field offsets in member access}{}
+\checkitem{Identify cryptographic primitives: recognize AES, SHA, RSA patterns in loops}{}
+\checkitem{Understand decompiler output: pseudo-C is approximate --- always verify against disassembly}{}
+
+% ── 6.3 Firmware Extraction ───────────────────────────────────────────────────
+\roadmapSubSection{6.3}{Firmware Extraction}{}
+
+\checkitem{Via UART shell: find active shell (login prompt), \texttt{cat /dev/mtd0} or \texttt{/proc/mtd} info}{}
+\checkitem{Via ADB on Android: \texttt{adb pull /dev/block/bootdevice/by-name/boot boot.img}}{}
+\checkitem{Via EDL (Qualcomm): dump all partitions using QFIL backup function}{}
+\checkitem{Via eMMC direct: UFI Box ISP mode, read full eMMC to file}{}
+\checkitem{Via BIOS chip: CH341A + SOIC-8 clip for PC/laptop BIOS}{}
+\checkitem{Analyze firmware format: \texttt{binwalk -e firmware.bin} --- extract compressed filesystems}{}
+\checkitem{Identify filesystem type: SquashFS, CRAMFS, YAFFS2, UBIFS, ext4}{}
+\checkitem{Explore extracted filesystem: find \texttt{/etc/init.d} scripts, \texttt{/usr/bin} binaries, config files}{}
+\checkitem{Find hardcoded credentials: \texttt{strings binary | grep -i key}}{}
+
+% ── 6.4 Hardware Reverse Engineering ─────────────────────────────────────────
+\roadmapSubSection{6.4}{Hardware Reverse Engineering}{}
+
+\checkitem{Use logic analyzer to decode unknown protocol: attach probes, record, identify framing}{}
+\checkitem{Identify I2C device address by observing first byte after START condition}{}
+\checkitem{Decode SPI transaction: identify CS assertion, clock polarity, data bit order}{}
+\checkitem{Locate JTAG test points: identify TCK, TMS, TDI, TDO nets using boundary scan tool}{}
+\checkitem{Use JTAG to halt CPU execution and read register state}{}
+\checkitem{Use JTAG to dump memory contents for offline analysis}{}
+\checkitem{Understand Android Trustzone: Normal World vs Secure World, monitor calls}{}
+\checkitem{Understand RPMB: hardware-enforced replay protection, used for secure key storage}{}

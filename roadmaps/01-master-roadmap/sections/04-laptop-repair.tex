@@ -1,0 +1,60 @@
+\roadmapSection{2}{LAPTOP REPAIR}{4--6 Weeks}
+
+{\small\itshape\color{arligray} Same diagnostic logic as phones, larger scale, more accessible hardware. Excellent second income stream.}
+
+% ── 2.1 Laptop Hardware Fundamentals ─────────────────────────────────────────
+\roadmapSubSection{2.1}{Laptop Hardware Fundamentals}{}
+
+\roadmapHead{Laptop Architecture}
+\checkitem{Identify motherboard blocks: CPU socket/BGA, RAM slots, chipset, VRM, PCIe lanes, BIOS chip}{}
+\checkitem{Understand VRM (Voltage Regulator Module): converts 12V or 19V to CPU core voltage (1.0--1.3V)}{}
+\checkitem{Understand multi-phase buck in VRM: more phases = less ripple, better efficiency}{}
+\checkitem{Understand POST (Power-On Self-Test): CPU tests RAM and core peripherals before loading OS}{}
+\checkitem{Read POST beep codes: 1 beep = OK, patterns indicate RAM, GPU, or BIOS faults}{}
+\checkitem{Identify display interface: eDP (Embedded DisplayPort) on modern, LVDS on older}{}
+\checkitem{Identify storage interface: M.2 NVMe (key M), M.2 SATA (key B+M), 2.5-inch SATA}{}
+\checkitem{Identify RAM type: DDR4 SO-DIMM vs LPDDR4X soldered --- soldered cannot be upgraded}{}
+
+\roadmapHead{Types of Laptops}
+\checkitem{Consumer thin-and-light: glued chassis, soldered RAM and SSD --- limited repairability}{}
+\checkitem{Business class (ThinkPad, EliteBook, Latitude): replaceable RAM, SSD, keyboard, battery}{}
+\checkitem{Gaming laptops: discrete GPU (MXM or BGA), extra thermal solution, dual power rail}{}
+\checkitem{Chromebook: ARM or Intel, Chrome OS, often soldered everything --- mainly software repair}{}
+\checkitem{MacBook Air/Pro: Apple Silicon (M1--M4), proprietary connectors, keyboard + SSD soldered}{}
+
+\roadmapHead{Additional Tools}
+\begin{toolbadges}
+\toolbadge{CH341A Programmer + SOIC-8 Clip}
+\toolbadge{USB-C Multimeter / Power Meter}
+\end{toolbadges}
+
+% ── 2.2 Laptop Common Repairs ─────────────────────────────────────────────────
+\roadmapSubSection{2.2}{Laptop Common Repairs}{}
+
+\roadmapHead{Mechanical Repairs}
+\checkitem{DC jack replacement: identify broken solder joints under microscope, rework or replace}{}
+\checkitem{USB-C charging port replacement --- test PD negotiation after install}{}
+\checkitem{Keyboard replacement: remove screws from bottom, disconnect ribbon, swap}{}
+\checkitem{Trackpad replacement: disconnect flex cable, remove screws, install new}{}
+\checkitem{Screen replacement: remove bezel, disconnect eDP cable, transfer hinges}{}
+\checkitem{Thermal paste replacement: clean old paste with IPA, apply MX-4 or Kryonaut}{}
+\checkitem{Thermal pad replacement on GPU, VRM, chipset --- use correct thickness (0.5/1.0/1.5mm)}{}
+\checkitem{Fan replacement: disconnect fan header, remove screws, replace}{}
+\checkitem{RAM upgrade (where not soldered): identify DDR version and slot}{}
+\checkitem{SSD upgrade: identify key type, clone old drive or fresh OS install}{}
+\checkitem{Battery replacement: match cell voltage and connector type}{}
+
+\roadmapHead{Board-Level Laptop Diagnosis}
+\checkitem{No power: test DC input jack output, check main power IC (ISL, RT8205, UP6178)}{}
+\checkitem{No display: test eDP connector pins, panel power rail (3.3V), backlight LED rail (15--30V)}{}
+\checkitem{Overheating shutdown: clean fan + heatsink, replace thermal paste, check fan sensor}{}
+\checkitem{No charge: test adapter brick output, USB-C PD negotiation, charge IC, battery connector}{}
+\checkitem{RAM not detected: check RAM slot contacts, test with one stick, verify SPD via software}{}
+\checkitem{Liquid damage: disassemble immediately, clean with IPA, identify corroded components}{}
+
+\roadmapHead{BIOS Chip Operations}
+\checkitem{Locate BIOS SPI flash chip: 8-pin SOIC package near chipset, labeled 25Q128 or similar}{}
+\checkitem{Read BIOS in-circuit with CH341A + SOIC-8 clip --- do not remove chip}{}
+\checkitem{Save backup of original BIOS dump before any modification}{}
+\checkitem{Flash clean BIOS image to recover from corruption or password lock}{}
+\checkitem{BIOS password clear via chip re-flash (not jumper on modern laptops)}{}

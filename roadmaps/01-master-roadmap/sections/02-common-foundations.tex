@@ -1,0 +1,136 @@
+\roadmapSection{0}{COMMON FOUNDATIONS}{5--8 Weeks}
+
+{\small\itshape\color{arligray} This section feeds every other section. Do it first, completely. Shared by all hardware tracks.}
+
+% ── 0.1 Safety and Workspace ──────────────────────────────────────────────────
+\roadmapSubSection{0.1}{Safety and Workspace}{1 Week}
+
+\roadmapHead{Tools --- Buy Before Touching Any Board}
+
+\begin{toolbadges}
+\toolbadge{Multimeter UT61E / UT33D}
+\toolbadge{Soldering Iron 936A+}
+\toolbadge{Hot Air Station 858D/850}
+\toolbadge{Anti-Static Mat (grounded)}
+\toolbadge{Anti-Static Wrist Strap}
+\toolbadge{ESD Tweezers SS-SA}
+\toolbadge{Desoldering Pump + Wick}
+\toolbadge{IPA 99\% Isopropyl}
+\toolbadge{No-Clean Flux Syringe}
+\toolbadge{Fume Extractor}
+\end{toolbadges}
+
+\roadmapHead{ESD and Battery Safety}
+\checkitem{Static from your body kills chips with no visible sign --- they fail later, not immediately}{}
+\checkitem{Anti-static mat + wrist strap must both be grounded. Test continuity to ground with multimeter}{}
+\checkitem{Li-ion battery puncture = fire. Never crush, puncture, or charge a swollen battery}{}
+\checkitem{Discharge battery below 20\% before opening a device}{}
+\checkitem{Always disconnect battery before any probe or soldering --- except current draw test}{}
+\checkitem{Keep IPA and flux away from all heat sources}{}
+
+\roadmapHead{Workspace Setup Checklist}
+\checkitem{Anti-static mat laid flat on work surface, grounding wire connected}{}
+\checkitem{Wrist strap clipped to mat or grounding point}{}
+\checkitem{Verify both are grounded --- multimeter continuity between wrist strap and known ground}{}
+\checkitem{Fume extractor positioned to pull air away from face}{}
+\checkitem{Separate zones: disassembly / soldering / testing}{}
+\checkitem{Bright lighting --- natural light or 5000K LED above workspace}{}
+\checkitem{Fire-safe surface or silicone mat for battery work}{}
+
+% ── 0.2 Electronics Fundamentals ──────────────────────────────────────────────
+\roadmapSubSection{0.2}{Electronics Fundamentals}{4--5 Weeks}
+
+{\small\itshape\color{arligray} This is the language every schematic and datasheet is written in. No shortcut here.}
+
+\roadmapHead{Core Electrical Quantities}
+\checkitem{Define voltage (V): electrical pressure, measured in Volts}{}
+\checkitem{Define current (I): flow of charge, measured in Amperes}{}
+\checkitem{Define resistance (R): opposition to flow, measured in Ohms}{}
+\checkitem{Memorize and apply Ohm's Law: V = I $\times$ R}{}
+\checkitem{Apply Kirchhoff's Voltage Law: sum of voltages around any closed loop = 0}{}
+\checkitem{Apply Kirchhoff's Current Law: current into node = current out}{}
+\checkitem{Calculate voltage drop across series resistors on a real circuit}{}
+\checkitem{Calculate current through parallel resistors on a real circuit}{}
+\checkitem{Understand power: P = V $\times$ I. Understand what it means for component ratings}{}
+
+\roadmapHead{Passive Components --- Test Each Physically}
+\checkitem{Resistor --- read color bands, measure with multimeter, understand current limiting role}{}
+\checkitem{Capacitor --- understand charge/discharge, measure ESR, identify shorted cap (most common fault)}{}
+\checkitem{Inductor --- understand energy storage in magnetic field, role in buck/boost converters}{}
+\checkitem{Diode --- measure forward voltage drop ($\approx$0.6V silicon), understand one-directional flow}{}
+\checkitem{Zener diode --- understand overvoltage clamping and ESD protection}{}
+\checkitem{NTC thermistor --- resistance drops as temperature rises. PMICs use these for thermal protection}{}
+\checkitem{Varistor (VDR) --- absorbs transient voltage spikes to protect downstream ICs}{}
+
+\roadmapHead{Active Components}
+\checkitem{BJT transistor --- base-controlled current switch, understand NPN/PNP operation}{}
+\checkitem{MOSFET --- gate-controlled switch, lower loss than BJT, used everywhere in power circuits}{}
+\checkitem{Integrated Circuit (IC) --- complex active circuit packaged as single component}{}
+
+\roadmapHead{Power Architecture --- Shared Across Phone, Laptop, PC}
+\checkitem{VDD = positive supply rail. VSS = ground reference}{}
+\checkitem{Understand PMIC role: converts battery voltage to multiple system voltages}{}
+\checkitem{Understand Buck converter: steps voltage DOWN efficiently (CPU core, display)}{}
+\checkitem{Understand Boost converter: steps voltage UP (backlight, USB output)}{}
+\checkitem{Understand LDO linear regulator: low-noise output for sensitive circuits}{}
+\checkitem{Understand power sequencing: why rails must come up in specific order during boot}{}
+
+\roadmapHead{Communication Protocols --- Used Everywhere}
+\checkitem{I2C: two wires SDA + SCL. Master/slave. Address-based. Sensors, charge ICs, cameras}{Shorted SDA or missing pull-up resistor = boot halts. Very common fault}
+\checkitem{SPI: four wires MOSI + MISO + SCK + CS. Faster than I2C. Flash storage, displays}{}
+\checkitem{UART: two wires TX + RX. Asynchronous serial. Boot logs, debug shells, GPS modules}{}
+\checkitem{USB: understand D+/D- differential pair, VBUS power line, device enumeration}{}
+\checkitem{PCIe: high-speed serial bus for NVMe SSDs, GPU, WiFi cards in laptops and PCs}{}
+
+\roadmapHead{Schematic Reading --- Common Skill}
+\checkitem{Recognize all standard component symbols: R, C, L, D, ZD, Q, U, connector, test point}{}
+\checkitem{Understand net names: same name = same copper trace, anywhere on the schematic}{}
+\checkitem{Trace a power rail from source to consumer across multiple schematic sheets}{}
+\checkitem{Identify test points and locate them physically on a board}{}
+\checkitem{Open MaAnt Shock Line / S-Finder / JCID: navigate a complete phone boardview}{}
+\checkitem{Open a laptop/PC datasheet chipset block diagram and identify all buses}{}
+
+% ── 0.3 Soldering and PCB Reading ─────────────────────────────────────────────
+\roadmapSubSection{0.3}{Soldering and PCB Reading}{3--4 Weeks}
+
+{\small\itshape\color{arligray} Muscle memory. Daily practice on scrap boards. You cannot read your way to competence here.}
+
+\roadmapHead{Additional Tools --- Buy at This Phase}
+\begin{toolbadges}
+\toolbadge{USB Microscope 45x / Yaxun AK12}
+\toolbadge{DC Power Supply RF4 RF-3005PRO}
+\toolbadge{Vacuum Separator Sunshine S-918K}
+\toolbadge{Jumper Wire 0.02mm (Kaisi)}
+\toolbadge{Flux Paste Amtech / NC-559}
+\toolbadge{Solder Paste (Mechanic)}
+\toolbadge{Precision Screwdrivers (Pentalobe/Torx)}
+\toolbadge{5--10 Dead Practice Boards}
+\end{toolbadges}
+
+\roadmapHead{Soldering Iron Control}
+\checkitem{Set correct temperature: 320--350°C lead-free, 280--300°C leaded}{}
+\checkitem{Tin the tip before and after every use}{}
+\checkitem{Practice dragging solder on through-hole pads --- achieve smooth, shiny joints}{}
+\checkitem{Practice removing and replacing 0805 SMD resistors under microscope}{}
+\checkitem{Practice removing and replacing 0402 SMD components --- requires steady hand}{}
+\checkitem{Achieve consistently clean joints: no bridges, no cold joints, no lifted pads}{}
+
+\roadmapHead{Hot Air Station Control}
+\checkitem{Understand temperature and airflow for different jobs: adhesive removal vs IC rework}{}
+\checkitem{Practice removing an SMD IC without damaging adjacent components}{}
+\checkitem{Practice reballing a BGA: desolder, clean pads, stencil, paste, reflow, align}{}
+\checkitem{Understand thermal mass: ground planes need preheat from below before hot air from above}{}
+
+\roadmapHead{PCB Reading}
+\checkitem{Identify PCB layers: top copper, inner layers, bottom copper, solder mask, silkscreen}{}
+\checkitem{Trace a power rail visually across both sides of a real board}{}
+\checkitem{Identify component packages: QFN, BGA, LGA, SOT-23, TO-252, SOP, TSSOP}{}
+\checkitem{Use multimeter diode mode (board unpowered): red to ground, black to rails}{}
+\checkitem{Use continuity mode to verify a jumper wire restore}{}
+
+\roadmapHead{Jumper Wire Routing}
+\checkitem{Locate a broken trace under microscope: hairline cracks near pads after drop damage}{}
+\checkitem{Scrape solder mask with blade to expose copper on both endpoints}{}
+\checkitem{Tin both exposed copper points}{}
+\checkitem{Route 0.02mm wire and solder both ends under microscope}{}
+\checkitem{Verify continuity with multimeter before applying power}{}

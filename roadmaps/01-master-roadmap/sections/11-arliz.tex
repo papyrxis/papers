@@ -1,0 +1,117 @@
+\roadmapSection{9}{ARLIZ --- Arrays $\cdot$ Reasoning $\cdot$ Logic $\cdot$ Identity $\cdot$ Zero}{}
+
+{\small\itshape\color{arligray} Write the same day. Not the weekend. Three volumes. One continuous work. Context fades in 48 hours.}
+
+\textbf{Repository:} \texttt{github.com/papyrxis/Arliz}
+
+\roadmapHead{Writing Discipline --- Applies to All Three Volumes}
+\checkitem{After every relevant study session: write one paragraph minimum, same evening}{}
+\checkitem{Every two weeks: re-read and revise previous two weeks of drafts}{}
+\checkitem{Every month: run \texttt{make vol1} (or vol2, vol3) and fix all \LaTeX{} compilation errors}{}
+\checkitem{After every revision: add one real example from your hardware bench work}{}
+\checkitem{Use \texttt{scripts/volumes/build.sh} for building, \texttt{generate.sh} for new chapter scaffolding}{}
+
+\vspace{0.3cm}
+
+% ── Volume I ──────────────────────────────────────────────────────────────────
+\roadmapSubSection{9.1}{Volume I: Zero to Bit}{Write During Sections 0, 4, 5}
+
+{\small\itshape\color{arligray} 78 chapters across 17 stages. Output: 2026\_ARLIZ\_Zero\_to\_Bit\_Volume\_1.pdf}
+
+\vspace{0.2cm}
+
+\textbf{Stage 1: What Data Is and What It Means to Represent It}\\
+\checkitem{Ch.01: What data is and what it means to represent it}{}\checkitem{Ch.02: Information theory fundamentals}{}
+
+\textbf{Stage 2: Electricity --- The Physical Foundation}\\
+\checkitem{Ch.03--10: Electric Charge, Current, Voltage, Resistance, Ohm's Law, KVL/KCL, Capacitors, Inductors, Analog Signals}{}
+
+\textbf{Stage 3: Electronic Components and Circuit Boards}\\
+\checkitem{Ch.11--18: Components, PCBs, ICs, Power Supply, Signal Integrity}{}
+
+\textbf{Stage 4: Semiconductors and Transistors}\\
+\checkitem{Ch.19--26: P-N Junction, BJT, MOSFET, CMOS, Moore's Law}{}
+
+\textbf{Stage 5: From Switch to Bit --- The Digital Abstraction}\\
+\checkitem{Ch.27--32: Logic levels, Clock signals, SR latch}{}
+
+\textbf{Stages 6--9: Representation --- Boolean, Numbers, Integers, Floats}\\
+\checkitem{Ch.33--44: Binary, Hex, Two's complement, IEEE 754}{}
+
+\textbf{Stages 10--11: Characters, Text, Byte Ordering}\\
+\checkitem{Ch.45--50: ASCII, Unicode, UTF-8, Endianness}{}
+
+\textbf{Stages 12--15: Bit Ops, Alignment, Pointers, Error Correction}\\
+\checkitem{Ch.51--64: Bitwise ops, Struct padding, Pointers, CRC}{}
+
+\textbf{Stages 16--17: Media Encodings, Serialization, Compression}\\
+\checkitem{Ch.65--78: Images, Audio, Video, Protocol Buffers, DEFLATE}{}
+
+\vspace{0.3cm}
+
+% ── Volume II ─────────────────────────────────────────────────────────────────
+\roadmapSubSection{9.2}{Volume II: Silicon Horizon}{Write During Sections 5, 7, 6}
+
+{\small\itshape\color{arligray} 129 chapters across 12 stages. Output: 2026\_ARLIZ\_Silicon\_Horizon\_Volume\_2.pdf}
+
+\vspace{0.2cm}
+
+\textbf{Stages 1--3: Logic Gates, Arithmetic, Sequential Logic}\\
+\checkitem{Gates $\to$ Adders $\to$ Multipliers $\to$ Registers $\to$ FSMs}{}
+
+\textbf{Stage 4: Memory Cells and Array Organization}\\
+\checkitem{SRAM, DRAM, NOR/NAND Flash, NVMe, Emerging Memory (MRAM, PCM)}{}
+
+\textbf{Stage 5: Memory Hierarchy and Caches}\\
+\checkitem{Cache mapping, MESI protocol, AMAT, NUMA architecture}{}
+
+\textbf{Stage 6: Instruction Set Architectures}\\
+\checkitem{x86, ARM, RISC-V --- design principles, calling conventions}{}
+
+\textbf{Stage 7: Pipelining and Instruction-Level Parallelism}\\
+\checkitem{Hazards, Branch prediction, OoO execution, Spectre/Meltdown}{}
+
+\textbf{Stage 8: Virtual Memory and Protection}\\
+\checkitem{Page tables, TLB, MMU, Memory protection rings}{}
+
+\textbf{Stage 9: I/O, Interrupts, and Buses}\\
+\checkitem{DMA, APIC, PCIe, NVMe, UFS, eMMC protocols}{}
+
+\textbf{Stage 10: Multicore, Vector Units, SIMD}\\
+\checkitem{AVX-512, ARM NEON/SVE, Autovectorization}{}
+
+\textbf{Stage 11: GPU Architecture}\\
+\checkitem{SM internals, CUDA, Warp divergence, HBM, Tensor cores}{}
+
+\textbf{Stage 12: Power, Thermal, and Security}\\
+\checkitem{DVFS, TrustZone, SGX, Secure Boot, Side-channel attacks}{}
+
+\vspace{0.3cm}
+
+% ── Volume III ────────────────────────────────────────────────────────────────
+\roadmapSubSection{9.3}{Volume III: Array Odyssey}{Write During Section 4 Advanced, Algorithms}
+
+{\small\itshape\color{arligray} 184 chapters across 7 stages. Output: 2026\_ARLIZ\_Array\_Odyssey\_Volume\_3.pdf}
+
+\vspace{0.2cm}
+
+\textbf{Stage 1 (23 ch): Array Theory, Memory Layout, and Lifecycle}\\
+\checkitem{Mathematical foundations, 1D/2D/ND layout, Ring buffers, Sparse arrays, Bit arrays}{}
+
+\textbf{Stage 2 (15 ch): Searching and Sorting}\\
+\checkitem{Binary search, Merge/Quick/Heap/Radix/Tim/pdqsort, Sorting networks}{}
+
+\textbf{Stage 3 (14 ch): In-Place Manipulation, Two Pointers, Prefix Sums}\\
+\checkitem{Rotation, Fisher-Yates shuffle, Dutch flag, Kadane's algorithm}{}
+
+\textbf{Stage 4 (15 ch): Alignment, Views, and Vectorized Operations}\\
+\checkitem{SIMD on arrays, Broadcasting, Scatter/Gather, Roofline model}{}
+
+\textbf{Stage 5 (38 ch): Foundational Structures Built on Arrays}\\
+\checkitem{Stack/Queue/Heap, Hash tables, Strings/KMP/Aho-Corasick, Graphs, DP, Segment trees}{}
+
+\textbf{Stage 6 (34 ch): Parallel and Distributed Array Processing}\\
+\checkitem{OpenMP, Lock-free, GPU sorting, MPI, MapReduce, Spark}{}
+
+\textbf{Stage 7 (36 ch): Arrays in Science, ML, and Beyond}\\
+\checkitem{Tensors, Transformers, FFT, NumPy internals, TinyML, FPGA accelerators}{}

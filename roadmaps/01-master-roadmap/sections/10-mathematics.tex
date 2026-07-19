@@ -1,0 +1,58 @@
+\roadmapSection{8}{MATHEMATICS}{30 Min/Day, Every Day}
+
+{\small\itshape\color{arligray} 30 minutes every day. Use `Mastering the Fundamentals of Mathematics' as base book. No exceptions, even if tired.}
+
+% ── 8.1 Common Mathematics ───────────────────────────────────────────────────
+\roadmapSubSection{8.1}{Common Mathematics}{}
+
+\checkitem{Algebra: rearrange equations, solve for unknown --- Ohm's Law, voltage dividers}{}
+\checkitem{Scientific notation: 4.7$\mu$F = 4.7 $\times$ 10$^{-6}$ F --- essential for reading component values}{}
+\checkitem{Unit conversions: mV/V/kV, mA/A, nF/$\mu$F/mF, kHz/MHz/GHz}{}
+\checkitem{Ratios and percentages: efficiency = Pout/Pin $\times$ 100, duty cycle = ton/T $\times$ 100}{}
+\checkitem{Basic statistics: mean, standard deviation --- for analyzing measurement data}{}
+
+% ── 8.2 Mathematics for Electronics and Repair ───────────────────────────────
+\roadmapSubSection{8.2}{Mathematics for Electronics and Repair}{}
+
+\checkitem{Ohm's Law: V = I $\times$ R --- apply to every circuit you measure}{}
+\checkitem{Power: P = V $\times$ I = V$^{2}$/R = I$^{2}$ $\times$ R --- understand what each form is useful for}{}
+\checkitem{KVL and KCL: set up and solve simple loop equations for voltage dividers}{}
+\checkitem{RC time constant: $\tau$ = R $\times$ C --- understand for capacitor charge/discharge}{}
+\checkitem{Decibels (dB): gain in dB = 20 $\times$ log$_{10}$(Vout/Vin) --- used for signal attenuation}{}
+\checkitem{Frequency: f = 1/T --- relate period to frequency for oscilloscope readings}{}
+
+% ── 8.3 Mathematics for Digital Logic and CS ─────────────────────────────────
+\roadmapSubSection{8.3}{Mathematics for Digital Logic and CS}{}
+
+\checkitem{Binary: convert decimal $\leftrightarrow$ binary fluently without calculator}{}
+\checkitem{Hexadecimal: convert binary $\leftrightarrow$ hex fluently --- 4 bits = 1 hex digit}{}
+\checkitem{Two's complement: how negative integers are stored in binary}{}
+\checkitem{Boolean algebra: AND, OR, NOT, NAND, NOR, XOR --- truth tables, De Morgan's theorem}{}
+\checkitem{Bitwise operations: AND for masking, OR for setting, XOR for toggling, shifts for multiply/divide by 2}{}
+
+% ── 8.4 Mathematics for Programming and Algorithms ───────────────────────────
+\roadmapSubSection{8.4}{Mathematics for Programming and Algorithms}{}
+
+\checkitem{Integer overflow: understand wrapping behavior in C --- important for security}{}
+\checkitem{Modular arithmetic: x mod n --- used in ring buffers, hash functions}{}
+\checkitem{Logarithms: understand O(log n) complexity --- binary search, balanced trees}{}
+\checkitem{Big-O notation: O(1), O(n), O(n log n), O(n$^{2}$) --- analyze algorithm cost}{}
+\checkitem{Amortized analysis: why dynamic array doubling is O(1) amortized}{}
+
+% ── 8.5 Mathematics for PCB Design and Signals ───────────────────────────────
+\roadmapSubSection{8.5}{Mathematics for PCB Design and Signals}{}
+
+\checkitem{Trigonometry: sin and cos represent AC signal shape --- no derivation needed}{}
+\checkitem{RC filter cutoff: $f_c$ = 1/(2$\pi$RC) --- plug in values, understand what changes}{}
+\checkitem{LC resonance: $f$ = 1/(2$\pi\sqrt{LC}$) --- understand for RF filter design}{}
+\checkitem{Impedance: Z = $\sqrt{R^2 + X^2}$ --- understand for 50$\Omega$ trace impedance control}{}
+\checkitem{dB scale for antenna gain and signal path loss}{}
+
+% ── 8.6 Mathematics for Reverse Engineering and Security ─────────────────────
+\roadmapSubSection{8.6}{Mathematics for Reverse Engineering and Security}{}
+
+\checkitem{Modular exponentiation: $a^b \bmod n$ --- the core of RSA encryption}{}
+\checkitem{XOR properties: A XOR A = 0, A XOR 0 = A --- why XOR is used in encryption}{}
+\checkitem{Hash function properties: one-way, collision resistance --- used in firmware signing}{}
+\checkitem{Finite fields GF($2^8$): used in AES --- concept only, not derivation}{}
+\checkitem{CRC calculation: polynomial division in GF(2) --- how to verify firmware integrity}{}

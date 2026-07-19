@@ -1,0 +1,55 @@
+\roadmapSection{7}{PCB DESIGN AND TALKEN BUILD}{8--10 Weeks}
+
+{\small\itshape\color{arligray} Talken goes from breadboard to real hardware. This is where everything converges.}
+
+% ── 7.1 KiCad Schematic and Layout ───────────────────────────────────────────
+\roadmapSubSection{7.1}{KiCad Schematic and Layout}{}
+
+\begin{toolbadges}
+\toolbadge{KiCad 8 (kicad.org)}
+\toolbadge{LTspice (analog.com)}
+\toolbadge{JLCPCB / PCBWay}
+\end{toolbadges}
+
+\roadmapHead{Schematic Entry}
+\checkitem{Place component symbols from KiCad libraries}{}
+\checkitem{Add power symbols: VCC, GND, +3.3V --- use net names consistently}{}
+\checkitem{Connect components with wires and net labels}{}
+\checkitem{Add decoupling capacitors to every IC power pin: 100nF ceramic close to pin}{}
+\checkitem{Run ERC (Electrical Rules Check): fix all errors and warnings before layout}{}
+\checkitem{Assign footprints: match symbol to physical land pattern (0402, QFN-32, etc.)}{}
+
+\roadmapHead{PCB Layout}
+\checkitem{Import netlist from schematic into PCB editor}{}
+\checkitem{Define board outline: File $\to$ Board Setup $\to$ Board Edge}{}
+\checkitem{Place components: keep decoupling caps within 2mm of IC power pins}{}
+\checkitem{Route power rails first: 0.5mm minimum for power, 0.25mm for signal}{}
+\checkitem{Add ground plane on bottom copper layer: Cover Zone $\to$ GND net}{}
+\checkitem{Route signal traces: avoid 90-degree corners, use 45-degree bends}{}
+\checkitem{Check clearances: minimum 0.2mm between traces for standard PCB}{}
+\checkitem{Run DRC (Design Rules Check): fix every violation}{}
+\checkitem{Generate Gerber files: File $\to$ Fabrication Outputs $\to$ Gerbers}{}
+\checkitem{Preview Gerbers in Gerber viewer before ordering}{}
+
+\roadmapHead{Talken PCB --- First Real Build}
+{\small\itshape\color{arligray} This is the North Star in hardware form. A real phone you built from schematic to firmware.}
+
+\checkitem{Draw schematic: ESP32, AMS1117-3.3 LDO, USB-C + TP4056 charging, Nokia 5110 display}{}
+\checkitem{Add AT24C256 EEPROM via I2C, reset button, user button, status LED}{}
+\checkitem{Target board size: 60mm $\times$ 40mm --- phone-like form factor}{}
+\checkitem{Order 5 copies from JLCPCB or PCBWay --- 5--7 days delivery}{}
+\checkitem{Solder all components using hot air and iron under microscope}{}
+\checkitem{Flash firmware via USB-UART adapter}{}
+\checkitem{Verify every peripheral: display, buttons, charging, WiFi, EEPROM read/write}{}
+
+% ── 7.2 Advanced PCB Design ───────────────────────────────────────────────────
+\roadmapSubSection{7.2}{Advanced PCB Design}{}
+
+\checkitem{LTspice: draw buck converter schematic, run transient analysis, verify output ripple}{}
+\checkitem{LTspice: simulate RC low-pass filter: AC sweep, verify -3dB frequency}{}
+\checkitem{Design 4-layer PCB stackup: Signal / Ground / Power / Signal}{}
+\checkitem{Understand controlled impedance: 50$\Omega$ trace for RF, 90$\Omega$ differential for USB}{}
+\checkitem{Design antenna keepout zone: no copper under antenna area, no vias}{}
+\checkitem{Understand EMI basics: minimize loop area, use ground stitching vias}{}
+\checkitem{Replace Talken LDO with buck converter design --- measure efficiency improvement}{}
+\checkitem{Order v2 Talken PCB with buck converter, verify improved battery life}{}

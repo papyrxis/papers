@@ -1,0 +1,93 @@
+\roadmapSection{4}{PROGRAMMING FOR HARDWARE AND SOFTWARE}{15--17 Weeks Total}
+
+{\small\itshape\color{arligray} C is the foundation. Every other language builds on understanding C first. Learn C deeply, then branch.}
+
+% ── 4.1 C Programming ─────────────────────────────────────────────────────────
+\roadmapSubSection{4.1}{C Programming --- Foundation for Everything}{8 Weeks}
+
+\roadmapHead{Language Fundamentals}
+\checkitem{Variables and types: \texttt{char}, \texttt{int}, \texttt{unsigned int}, \texttt{long}, \texttt{float}, \texttt{double} --- understand sizes}{}
+\checkitem{Understand that \texttt{sizeof(int)} varies by platform --- always check}{}
+\checkitem{Operators: arithmetic, bitwise (\texttt{\& | \^{} \~{} << >>}), logical, comparison}{}
+\checkitem{Control flow: if/else, for, while, do-while, switch --- and why \texttt{goto} exists in kernel code}{}
+\checkitem{Functions: declaration, definition, calling convention, return values}{}
+\checkitem{Understand stack vs heap: local variables on stack, \texttt{malloc} on heap}{}
+
+\roadmapHead{Pointers --- Master Completely}
+{\small\itshape\color{arligray} Maps directly to ARLIZ Vol I --- Chapter on Pointers. Write the same day you learn this.}
+
+\checkitem{A pointer is an integer that holds a memory address. \texttt{int *p = \&x} means p holds address of x}{}
+\checkitem{Dereferencing: \texttt{*p} reads or writes the value at the address stored in p}{}
+\checkitem{Pointer arithmetic: \texttt{p + 1} advances by \texttt{sizeof(*p)} bytes, not 1 byte}{}
+\checkitem{Pointer to pointer: \texttt{int **pp} --- used for output parameters and dynamic 2D arrays}{}
+\checkitem{Function pointers: \texttt{void (*fn)(int)} --- used for callbacks and vtables}{}
+\checkitem{void pointer: \texttt{void *} --- generic pointer, cast before use}{}
+\checkitem{const correctness: \texttt{const int *p} vs \texttt{int * const p} --- know the difference}{}
+
+\roadmapHead{Arrays and Memory}
+{\small\itshape\color{arligray} Maps to ARLIZ Vol III --- Arrays chapter. Write while learning.}
+
+\checkitem{Array name decays to pointer to first element in most contexts}{}
+\checkitem{Array indexing: \texttt{a[i]} is exactly \texttt{*(a + i)} --- equivalent expressions}{}
+\checkitem{Multidimensional arrays: row-major layout, how 2D maps to 1D memory}{}
+\checkitem{String: array of \texttt{char} terminated by null byte --- understand \texttt{strlen} vs \texttt{sizeof}}{}
+\checkitem{Stack allocation: \texttt{char buf[256]} is on stack --- know the risks of stack overflow}{}
+
+\roadmapHead{Structs, Dynamic Memory, Build System}
+\checkitem{Struct definition and member access via \texttt{.} and \texttt{->}}{}
+\checkitem{Memory layout of struct: sequential, with alignment padding inserted by compiler}{}
+\checkitem{\texttt{malloc(n)} allocates n bytes on heap, returns \texttt{void*} --- always check for NULL}{}
+\checkitem{\texttt{free(p)} releases memory --- freeing NULL is safe, freeing twice is undefined behavior}{}
+\checkitem{\texttt{calloc(n, size)} allocates and zeroes --- use for arrays}{}
+\checkitem{Common bugs: use after free, double free, buffer overflow, memory leak}{}
+\checkitem{Compilation stages: preprocessing $\to$ compilation $\to$ assembly $\to$ linking}{}
+\checkitem{GCC basic usage: \texttt{gcc -o output source.c -Wall -Wextra}}{}
+\checkitem{Write a basic Makefile: targets, prerequisites, recipes}{}
+
+\roadmapHead{Advanced C for Hardware Work}
+\checkitem{\texttt{volatile} keyword: prevents compiler from caching hardware register reads --- required for MMIO}{}
+\checkitem{Inline assembly \texttt{\_\_asm\_\_}: understand syntax, register constraints, clobber list}{}
+\checkitem{Read an ELF binary: \texttt{.text} (code), \texttt{.data} (init globals), \texttt{.bss} (zero-init)}{}
+\checkitem{Use \texttt{objdump -d} to disassemble compiled C and read the output}{}
+\checkitem{Understand undefined behavior: signed overflow, null pointer deref, strict aliasing}{}
+\checkitem{Implement ring buffer: head/tail pointer arithmetic, wrap-around, empty vs full}{}
+\checkitem{Implement simple memory allocator: free list, split and coalesce blocks}{}
+
+% ── 4.2 Arduino and Microcontrollers ──────────────────────────────────────────
+\roadmapSubSection{4.2}{Arduino and Microcontrollers (Talken Platform)}{3--4 Weeks}
+
+\roadmapHead{Arduino Fundamentals}
+\checkitem{Understand what Arduino is: AVR or ARM microcontroller + bootloader + USB interface + IDE}{}
+\checkitem{Install Arduino IDE and understand its structure: \texttt{setup()} and \texttt{loop()}}{}
+\checkitem{Digital pins: \texttt{INPUT}, \texttt{OUTPUT}, \texttt{INPUT\_PULLUP} modes}{}
+\checkitem{\texttt{analogRead()}: 10-bit ADC, reads 0--5V as 0--1023}{}
+\checkitem{\texttt{analogWrite()}: PWM output, 8-bit, $\approx$490Hz frequency}{}
+\checkitem{\texttt{millis()} and \texttt{micros()} for non-blocking timing (never use \texttt{delay()} in real code)}{}
+\checkitem{Serial: \texttt{begin(9600)}, \texttt{print()}, \texttt{println()}, \texttt{read()} --- UART under the hood}{}
+
+\roadmapHead{Arduino Hardware Projects --- Build Each One}
+\checkitem{Blink LED with resistor calculation: V=5V, LED Vf=2V, I=20mA $\to$ R = (5-2)/0.020 = 150$\Omega$}{}
+\checkitem{Button input with debounce: read state, compare to previous, trigger on edge only}{}
+\checkitem{PWM LED brightness control via potentiometer: \texttt{analogRead} $\to$ \texttt{map} $\to$ \texttt{analogWrite}}{}
+\checkitem{Servo control: Servo library, understand 50Hz PWM and pulse width encoding}{}
+\checkitem{Temperature sensor (DHT22 or DS18B20): read via library, understand protocol}{}
+\checkitem{I2C LCD display: Wire library, understand I2C addressing}{}
+\checkitem{Ultrasonic distance sensor (HC-SR04): measure pulse width for distance}{}
+\checkitem{Serial communication between two Arduinos: TX of one to RX of other}{}
+
+\roadmapHead{ESP32 Microcontroller --- Talken Platform}
+\checkitem{ESP32 vs Arduino: dual-core ARM Cortex-M, built-in WiFi + BT, 240MHz}{}
+\checkitem{Set up ESP-IDF development environment (professional toolchain, not Arduino IDE)}{}
+\checkitem{ESP32 memory: IRAM, DRAM, external PSRAM, SPI Flash regions}{}
+\checkitem{Write GPIO driver using ESP-IDF registers, not Arduino abstractions}{}
+\checkitem{Write UART driver: configure clock divider, baud rate, TX/RX pins via GPIO matrix}{}
+\checkitem{Write I2C driver: configure SCL/SDA, understand clock stretching}{}
+\checkitem{Write SPI driver: configure MOSI/MISO/CLK/CS, understand DMA transfers}{}
+\checkitem{Implement FreeRTOS tasks: create task, set priority, communicate via queue}{}
+\checkitem{Implement ESP32 deep sleep: configure wakeup source, measure current in sleep mode}{}
+
+\roadmapHead{Other Languages --- Learn After C Is Solid}
+\checkitem{Python: \texttt{pyserial} for UART, \texttt{RPi.GPIO} for Raspberry Pi, \texttt{matplotlib} for data analysis}{}
+\checkitem{Rust: ownership model eliminates use-after-free, \texttt{embedded-hal} traits, \texttt{no\_std}}{}
+\checkitem{Bash: build automation, pipes/grep/awk/sed for log parsing, Makefile targets}{}
+\checkitem{JavaScript/TypeScript: Node.js for serial port automation, ARLIZ documentation tools}{}
