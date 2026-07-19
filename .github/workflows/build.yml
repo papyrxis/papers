@@ -110,9 +110,11 @@ jobs:
             fonts-liberation \
             fonts-noto \
             fonts-noto-cjk \
+            fonts-vazirmatn \
             fontconfig
           fc-cache -fv >/dev/null 2>&1 || true
           echo "xelatex: $(xelatex --version | head -1)"
+          fc-list | grep -i vazir || echo "WARNING: Vazirmatn font not found!"
 
       - name: Build all resumes (EN + FA)
         run: bash scripts/build-resume.sh all
