@@ -1,14 +1,3 @@
-# .github/workflows/pre-release.yml
-#
-# Pre-release — runs on every push to main.
-# 1. Calls the reusable build.yml to compile all papers + resumes.
-# 2. Force-moves the `latest-pre-release` tag to HEAD.
-# 3. Upserts the GitHub pre-release attached to that tag,
-#    replacing all assets with the freshly-built PDFs.
-#
-# The release that always lives at `latest-pre-release` is the
-# rolling "nightly" build — not a stable version.
-
 name: Pre-release
 
 on:
@@ -16,17 +5,15 @@ on:
     branches:
       - main
       - master
-    # Ignore pure doc changes so trivial README edits don't trigger a build
     paths-ignore:
       - "**.md"
       - ".editorconfig"
       - ".gitignore"
 
-  # Allow manual trigger from the Actions tab
   workflow_dispatch:
 
 permissions:
-  contents: write   # create/update releases and push tags
+  contents: write 
 
 jobs:
   # ─────────────────────────────────────────────────────────────────────────
@@ -52,7 +39,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      # ── Download both artifact bundles ───────────────────────────────────
       - name: Download paper PDFs
         uses: actions/download-artifact@v4
         with:
@@ -70,7 +56,6 @@ jobs:
           echo "=== Papers ===" && ls -lh dist/papers/
           echo "=== Resumes ===" && ls -lh dist/resumes/
 
-      # ── Force-move the rolling tag ────────────────────────────────────────
       - name: Move latest-pre-release tag to HEAD
         run: |
           git config user.name  "github-actions[bot]"
@@ -78,7 +63,6 @@ jobs:
           git tag -f latest-pre-release HEAD
           git push origin -f latest-pre-release
 
-      # ── Build release body ────────────────────────────────────────────────
       - name: Generate release notes
         id: notes
         run: |
@@ -127,7 +111,6 @@ jobs:
           echo "Generated release body:"
           cat release_body.md
 
-      # ── Upsert the pre-release (delete old → create new) ─────────────────
       - name: Delete existing latest-pre-release (if any)
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

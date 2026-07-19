@@ -1,13 +1,3 @@
-# .github/workflows/release.yml
-#
-# Stable release — triggered when a vX.Y.Z tag is pushed.
-# 1. Calls the reusable build.yml to compile all papers + resumes.
-# 2. Creates a proper GitHub release (not a pre-release) with all PDFs.
-#
-# How to trigger:
-#   git tag v1.0.0
-#   git push origin v1.0.0
-
 name: Release
 
 on:
