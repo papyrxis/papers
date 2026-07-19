@@ -1,59 +1,81 @@
+% ══════════════════════════════════════════════════════════════════════════════
+% ARLIZ Roadmap — Command Library
+% ══════════════════════════════════════════════════════════════════════════════
+\usepackage{enumitem}
+
 % ── Section header (level 1 — navy band) ──────────────────────────────────────
+% #1 = badge  #2 = title  #3 = duration
 \newcommand{\roadmapSection}[3]{%
-  % #1 = number/badge  #2 = title  #3 = duration (optional)
-  \vspace{0.4cm}
+  \vspace{0.4cm}%
+  \phantomsection%
+  \addcontentsline{toc}{section}{\texorpdfstring{#1\enskip #2}{#1 #2}}%
   \noindent
   \begin{tcolorbox}[
+    enhanced,
     colback=arliznavy, colframe=arliznavy,
-    leftrule=6pt, colbacktitle=arlizblue,
     sharp corners, boxrule=0pt,
     left=8pt, right=8pt, top=5pt, bottom=5pt,
     title={\textbf{\textcolor{white}{\textsc{#2}}}},
-    after title={\hfill\textcolor{white!60!arliznavy}{\small #3}},
     attach boxed title to top left={yshift=-\tcboxedtitleheight/2, xshift=10pt},
     boxed title style={colback=arlizblue, sharp corners, boxrule=0pt, left=4pt, right=4pt},
+    after title={\hfill\textcolor{white!55!arliznavy}{\small#3}},
   ]
-  \end{tcolorbox}
-  \vspace{0.15cm}
+  \end{tcolorbox}%
+  \vspace{0.05cm}%
 }
 
 % ── Subsection header (level 2 — light band) ──────────────────────────────────
+% #1 = number  #2 = title  #3 = duration
 \newcommand{\roadmapSubSection}[3]{%
-  \vspace{0.2cm}
+  \vspace{0.25cm}%
+  \phantomsection%
+  \addcontentsline{toc}{subsection}{\texorpdfstring{#1\enskip #2}{#1 #2}}%
   \noindent
   \colorbox{bgsubtle}{%
-    \parbox{\dimexpr\linewidth-2\fboxsep}{%
-      \vspace{3pt}
+    \parbox{\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax}{%
+      \vspace{3pt}%
       {\color{arlizblue}\rule{3pt}{\baselineskip}}\hspace{6pt}%
       \textbf{\color{arliznavy}#1\enspace #2}%
       \hfill{\small\color{arligray}#3}%
-      \vspace{3pt}
+      \vspace{3pt}%
     }%
-  }
-  \vspace{0.1cm}
+  }%
+  \vspace{0.1cm}%
 }
 
 % ── Sub-heading (bold label inside a section) ─────────────────────────────────
 \newcommand{\roadmapHead}[1]{%
-  \vspace{0.15cm}
-  {\noindent\textbf{\color{arliznavy}#1}}
-  \vspace{0.05cm}
+  \vspace{0.2cm}%
+  {\noindent\textbf{\color{arliznavy}#1}}%
+  \par\vspace{0.05cm}%
 }
 
-% ── Check item ────────────────────────────────────────────────────────────────
-% Usage: \checkitem{Main text}{Optional italic note}
+% ── Check item — uses list environment for robust line-breaking ───────────────
+% #1 = main text  #2 = italic note (optional, leave empty {})
+%
+% Implemented as a fake-list so LaTeX's paragraph engine handles wrapping:
+% each \checkitem emits one \item inside an ad-hoc list that is opened/closed
+% around every invocation.  We achieve this by defining a list environment
+% and wrapping single items ourselves.
+%
 \newcommand{\checkitem}[2]{%
-  \noindent\hspace{6pt}%
-  {\color{arlizblue}$\square$}\hspace{6pt}%
-  \parbox[t]{\dimexpr\linewidth-24pt}{%
-    {\small #1}%
-    \ifx&#2&\else\\\hspace{12pt}{\footnotesize\itshape\color{arligray}#2}\fi
-  }\\[2pt]
+  \begin{list}{{\color{arlizblue}$\square$}}{%
+    \setlength{\leftmargin}{18pt}%
+    \setlength{\labelsep}{6pt}%
+    \setlength{\labelwidth}{10pt}%
+    \setlength{\itemsep}{1pt}%
+    \setlength{\parsep}{0pt}%
+    \setlength{\topsep}{1pt}%
+  }%
+  \item {\small\sloppy #1}%
+        \ifx&#2&\else\\[1pt]\hspace{10pt}{\footnotesize\itshape\color{arligray}#2}\fi
+  \end{list}%
 }
 
 % ── North Star box ────────────────────────────────────────────────────────────
 \newenvironment{northstarbox}{%
   \begin{tcolorbox}[
+    enhanced,
     colback=arliznavy, colframe=arlizblue,
     leftrule=5pt, sharp corners,
     left=10pt, right=10pt, top=8pt, bottom=8pt
@@ -63,50 +85,74 @@
   \end{tcolorbox}
 }
 
-% ── Tool badge list (inline pills) ────────────────────────────────────────────
-% Usage: \toolbadge{Name}
+% ── Tool badge (inline pill, fcolorbox for line-break compatibility) ───────────
 \newcommand{\toolbadge}[1]{%
-  \tcbox[
-    on line, colback=bgsubtle, colframe=arlizblue!40,
-    boxrule=0.4pt, sharp corners, left=4pt, right=4pt,
-    top=1pt, bottom=1pt, arc=2pt
-  ]{\footnotesize\color{arliznavy}#1}%
+  \mbox{%
+    \setlength{\fboxsep}{3.5pt}\setlength{\fboxrule}{0.4pt}%
+    \fcolorbox{arlizblue!40}{bgsubtle}{%
+      \footnotesize\color{arliznavy}#1%
+    }%
+  }\hspace{3pt}%
 }
 
-% ── Timeline item ─────────────────────────────────────────────────────────────
+% ── Tool badge block (wrapping row, no minipage so badges break naturally) ─────
+\newenvironment{toolbadges}{%
+  \vspace{4pt}\noindent\raggedright
+  \setlength{\parskip}{4pt}%
+}{%
+  \par\vspace{6pt}%
+}
+
+% ── Timeline item (blue dot) ──────────────────────────────────────────────────
+% #1 = month  #2 = sublabel  #3 = body
 \newcommand{\timelineitem}[3]{%
-  % #1 = month label  #2 = sublabel  #3 = body text
   \noindent
-  \begin{tikzpicture}[baseline=(base)]
+  \begin{tikzpicture}[baseline=(content.base)]
     \node[circle, fill=arlizblue, inner sep=3pt] (dot) {};
-    \node[right=8pt of dot, text width=\dimexpr\linewidth-32pt, anchor=base west] (base)
+    \node[right=8pt of dot, text width=\dimexpr\linewidth-32pt\relax,
+          anchor=base west] (content)
       {\textbf{\color{arliznavy}#1}%
        \ifx&#2&\else\\\hspace{4pt}{\small\itshape\color{arlizblue}#2}\fi
-       \ifx&#3&\else\\\hspace{4pt}{\small\color{textprimary}#3}\fi
+       \ifx&#3&\else\\\hspace{4pt}{\small\sloppy\color{textprimary}#3}\fi
       };
-    \draw[arlizblue!30, line width=1.5pt] (dot) -- ++(0,-1.4);
-  \end{tikzpicture}\\[4pt]
+    \draw[arlizblue!30, line width=1.5pt] (dot) -- ++(0,-1.35);
+  \end{tikzpicture}\\[4pt]%
 }
 
-% ── Milestone item ────────────────────────────────────────────────────────────
+% ── Milestone item (gold dot) ─────────────────────────────────────────────────
 \newcommand{\milestoneitem}[3]{%
   \noindent
-  \begin{tikzpicture}[baseline=(base)]
+  \begin{tikzpicture}[baseline=(content.base)]
     \node[circle, fill=arlizgold, inner sep=4pt] (dot) {};
-    \node[right=8pt of dot, text width=\dimexpr\linewidth-32pt, anchor=base west] (base)
+    \node[right=8pt of dot, text width=\dimexpr\linewidth-32pt\relax,
+          anchor=base west] (content)
       {\textbf{\color{arlizgold}#1}%
        \ifx&#2&\else\\\hspace{4pt}{\small\itshape\color{arlizblue}#2}\fi
-       \ifx&#3&\else\\\hspace{4pt}{\small\color{textprimary}#3}\fi
+       \ifx&#3&\else\\\hspace{4pt}{\small\sloppy\color{textprimary}#3}\fi
       };
-    \draw[arlizgold!30, line width=1.5pt] (dot) -- ++(0,-1.4);
-  \end{tikzpicture}\\[4pt]
+    \draw[arlizgold!30, line width=1.5pt] (dot) -- ++(0,-1.35);
+  \end{tikzpicture}\\[4pt]%
 }
 
-% ── Pricing table helper ──────────────────────────────────────────────────────
+% ── Pricing table row ─────────────────────────────────────────────────────────
 \newcommand{\pricingrow}[2]{#1 & \textbf{\color{arlizblue}#2} \\}
-% ── Tool badge list environment (wrapping row of pills) ───────────────────────
-\newenvironment{toolbadges}{%
-  \vspace{4pt}\noindent\begin{minipage}{\linewidth}\raggedright
-}{%
-  \end{minipage}\vspace{6pt}
+
+% ── Content-list entry (TOC row) ──────────────────────────────────────────────
+% #1 = badge/number  #2 = title  #3 = right detail
+\newcommand{\contententry}[3]{%
+  \noindent
+  \begin{tabular}{@{}p{1.1cm} p{\dimexpr\linewidth-3.9cm\relax} @{\,}r@{}}
+    {\footnotesize\bfseries\color{arlizblue}#1} &
+    {\small\color{textprimary}#2} &
+    {\footnotesize\color{arligray}#3}
+  \end{tabular}\\[2pt]%
+}
+
+% ── Content-list group header ─────────────────────────────────────────────────
+\newcommand{\contentgroup}[1]{%
+  \vspace{6pt}%
+  {\footnotesize\bfseries\color{arliznavy}\MakeUppercase{#1}}%
+  \par\vspace{2pt}%
+  {\color{arlizblue!40}\hrule height 0.4pt}%
+  \vspace{4pt}%
 }

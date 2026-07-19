@@ -9,59 +9,89 @@
   pdfkeywords={ARLIZ, roadmap, repair, electronics, programming, embedded, assembly, PCB, RE, Estonia},
 }
 
+% ── Bookmarks ─────────────────────────────────────────────────────────────────
+\pdfbookmark[0]{Cover}{bookmark.cover}
+
 % ─── Document ─────────────────────────────────────────────────────────────────
 \begin{document}
 
-% Cover page — full navy, drawn manually
+% ── Cover page (full navy, TikZ overlay) ──────────────────────────────────────
 \thispagestyle{empty}
 \input{sections/00-cover}
 \newpage
 
-% North Star + Rules on page 2
+% ── Content List ──────────────────────────────────────────────────────────────
+\thispagestyle{fancy}
+\pdfbookmark[0]{Content List}{bookmark.toc}
+\tableofcontents
+\newpage
+
+% ── North Star + Rules ────────────────────────────────────────────────────────
+\pdfbookmark[0]{North Star}{bookmark.northstar}
 \input{sections/00-north-star}
+\pdfbookmark[0]{Non-Negotiable Rules}{bookmark.rules}
 \input{sections/01-non-negotiable-rules}
 \newpage
 
-% Main content
+% ── Track 0: Common Foundations ───────────────────────────────────────────────
+\pdfbookmark[0]{0 Common Foundations}{bookmark.s0}
 \input{sections/02-common-foundations}
 \newpage
 
+% ── Track 1: Hardware Repair ──────────────────────────────────────────────────
+\pdfbookmark[0]{1 Mobile Repair}{bookmark.s1}
 \input{sections/03-mobile-repair}
 \newpage
 
+\pdfbookmark[0]{2 Laptop Repair}{bookmark.s2}
 \input{sections/04-laptop-repair}
 \newpage
 
+\pdfbookmark[0]{3 PC and Desktop}{bookmark.s3}
 \input{sections/05-pc-desktop}
 \newpage
 
+% ── Track 2: Software and Firmware ────────────────────────────────────────────
+\pdfbookmark[0]{4 Programming}{bookmark.s4}
 \input{sections/06-programming}
 \newpage
 
+\pdfbookmark[0]{5 Assembly}{bookmark.s5}
 \input{sections/07-assembly}
 \newpage
 
+\pdfbookmark[0]{6 Reverse Engineering}{bookmark.s6}
 \input{sections/08-reverse-engineering}
 \newpage
 
+% ── Track 3: Hardware Design ──────────────────────────────────────────────────
+\pdfbookmark[0]{7 PCB Design and Talken}{bookmark.s7}
 \input{sections/09-pcb-and-talken}
 \newpage
 
+% ── Track 4: Knowledge and Career ─────────────────────────────────────────────
+\pdfbookmark[0]{8 Mathematics}{bookmark.s8}
 \input{sections/10-mathematics}
 \newpage
 
+\pdfbookmark[0]{9 ARLIZ Book Series}{bookmark.s9}
 \input{sections/11-arliz}
 \newpage
 
+\pdfbookmark[0]{10 English and TOEFL}{bookmark.s10}
 \input{sections/12-english-toefl}
 \newpage
 
+\pdfbookmark[0]{11 Income and Business}{bookmark.s11}
 \input{sections/13-income-business}
 \newpage
 
+\pdfbookmark[0]{12 Estonia}{bookmark.s12}
 \input{sections/14-estonia}
 \newpage
 
+% ── Schedule and Timeline ─────────────────────────────────────────────────────
+\pdfbookmark[0]{13 Daily Schedule and Timeline}{bookmark.s13}
 \input{sections/15-daily-schedule}
 
 \end{document}

@@ -1,94 +1,53 @@
 \begin{tikzpicture}[remember picture, overlay]
 
-  % Background
-  \fill[arliznavy] (current page.south west) rectangle (current page.north east);
+  % ── Background ────────────────────────────────────────────────────────────────
+  \fill[arliznavy]
+    (current page.south west) rectangle (current page.north east);
 
-  % Subtle grid dots
-  \foreach \x in {0,2,...,22}{
-    \foreach \y in {0,2,...,30}{
-      \fill[white, opacity=0.04] (\x cm, \y cm) circle (1.5pt);
-    }
-  }
+  % ── Left accent bar ───────────────────────────────────────────────────────────
+  \fill[arlizblue]
+    (current page.south west) rectangle
+    ($(current page.north west) + (0.45cm, 0)$);
 
-  % Corner brackets
-  \draw[arlizblue, line width=3pt, opacity=0.7]
-    (1.5cm, \paperheight-1.5cm) -- (4.5cm, \paperheight-1.5cm);
-  \draw[arlizblue, line width=3pt, opacity=0.7]
-    (1.5cm, \paperheight-1.5cm) -- (1.5cm, \paperheight-4.5cm);
-  \draw[arlizblue, line width=3pt, opacity=0.7]
-    (\paperwidth-1.5cm, 1.5cm) -- (\paperwidth-4.5cm, 1.5cm);
-  \draw[arlizblue, line width=3pt, opacity=0.7]
-    (\paperwidth-1.5cm, 1.5cm) -- (\paperwidth-1.5cm, 4.5cm);
+  % ── ARLIZ wordmark ────────────────────────────────────────────────────────────
+  \node[anchor=center,
+        font=\fontsize{80}{80}\bfseries\sffamily,
+        text=white, opacity=0.05]
+    at (current page.center) {ARLIZ};
 
-  % Accent circles
-  \fill[arlizblue, opacity=0.25]
-    (\paperwidth-2cm, \paperheight-3cm) circle (35pt);
-  \fill[arlizblue, opacity=0.12]
-    (2cm, 3cm) circle (50pt);
-  \fill[arlizblue!60, opacity=0.15]
-    (\paperwidth/2+8cm, \paperheight/2) circle (80pt);
+  \node[anchor=center,
+        font=\fontsize{80}{80}\bfseries\sffamily,
+        text=white]
+    at (current page.center) {ARLIZ};
 
-  % Giant ARLIZ brand name — shadow layers
-  \node[anchor=center, opacity=0.08, font=\fontsize{100}{100}\bfseries\sffamily, text=white]
-    at (\paperwidth/2+4pt, \paperheight/2+3cm-4pt) {ARLIZ};
-  \node[anchor=center, opacity=0.18, font=\fontsize{100}{100}\bfseries\sffamily, text=arlizblue]
-    at (\paperwidth/2+2pt, \paperheight/2+3cm-2pt) {ARLIZ};
-  \node[anchor=center, font=\fontsize{100}{100}\bfseries\sffamily, text=arlizblue]
-    at (\paperwidth/2, \paperheight/2+3cm) {ARLIZ};
+  % ── Title block ───────────────────────────────────────────────────────────────
+  \node[anchor=center,
+        text=white,
+        font=\large\bfseries\sffamily]
+    at ($(current page.center) + (0, -2.4cm)$) {MASTER ROADMAP};
 
-  % Subtitle beneath brand name
-  \node[anchor=center, text=white!70!arliznavy, font=\normalsize\sffamily]
-    at (\paperwidth/2, \paperheight/2+3cm-2.0cm)
-    {A r r a y s\ \ \textbullet\ \ R e a s o n i n g\ \ \textbullet\ \ L o g i c\ \ \textbullet\ \ I d e n t i t y\ \ \textbullet\ \ Z e r o};
-  \draw[arlizblue, opacity=0.5, line width=1pt]
-    (\paperwidth/2-7cm, \paperheight/2+3cm-2.7cm) --
-    (\paperwidth/2+7cm, \paperheight/2+3cm-2.7cm);
+  \node[anchor=center,
+        text=white!45!arliznavy,
+        font=\small\sffamily]
+    at ($(current page.center) + (0, -3.2cm)$) {From Zero to North Star};
 
-  % Main document title
-  \node[anchor=center, text=white, font=\Huge\bfseries\sffamily]
-    at (\paperwidth/2, \paperheight/2-1.5cm) {MASTER ROADMAP};
-  \node[anchor=center, text=white!70!arliznavy, font=\large\sffamily]
-    at (\paperwidth/2, \paperheight/2-2.3cm) {Complete Checklist\ \ --\ \ From Zero to North Star};
+  % ── Divider ───────────────────────────────────────────────────────────────────
+  \draw[arlizblue!60, line width=0.5pt]
+    ($(current page.center) + (-5cm, -1.6cm)$) --
+    ($(current page.center) + (+5cm, -1.6cm)$);
 
-  % Domain tag pills
-  \node[anchor=center] at (\paperwidth/2, \paperheight/2-4.0cm) {%
-    \foreach \tag in {Repair, Electronics, Programming, Embedded, Assembly, PCB, {Rev. Eng.}, ARLIZ, Business, Estonia}{%
-      \colorbox{arlizblue!45}{\footnotesize\color{white}\,\tag\,}\hspace{3pt}%
-    }%
-  };
+  % ── Author / year ─────────────────────────────────────────────────────────────
+  \node[anchor=center,
+        text=white!35!arliznavy,
+        font=\footnotesize\sffamily]
+    at ($(current page.center) + (0, -5.8cm)$)
+    {Mahdi Mamashli (Genix)\enspace\textbullet\enspace 2026};
 
-  % Quote
-  \node[anchor=center, text=white!60!arliznavy, font=\small\itshape\sffamily,
-        text width=14cm, align=center]
-    at (\paperwidth/2, \paperheight/2-5.8cm)
-    {``From ancient counting stones to quantum algorithms -- every skill tells the story of human ingenuity.''};
-
-  % Timeline bar
-  \draw[arlizblue, opacity=0.4, line width=2pt]
-    (3.5cm, \paperheight/2-7.5cm) -- (\paperwidth-3.5cm, \paperheight/2-7.5cm);
-
-  \foreach \pos/\month/\label in {
-    0/{Month 6}/{First Income},
-    1/{Month 12}/{Talken v0},
-    2/{Month 18}/{ARLIZ Vol I + TOEFL},
-    3/{Month 24}/{Estonia}
-  }{
-    \pgfmathsetmacro{\xpos}{3.5+(\paperwidth/28.35-7)*\pos/3}
-    \fill[arlizblue]
-      (\xpos cm, \paperheight/2-7.5cm) circle (4pt);
-    \node[above=4pt, anchor=south, text=white!70!arliznavy, font=\tiny\bfseries\sffamily]
-      at (\xpos cm, \paperheight/2-7.5cm) {\month};
-    \node[below=5pt, anchor=north, text=white!50!arliznavy, font=\tiny\sffamily,
-          text width=2.5cm, align=center]
-      at (\xpos cm, \paperheight/2-7.5cm) {\label};
-  }
-
-  % Footer band
-  \fill[white, opacity=0.15]
-    (0, 0) rectangle (\paperwidth, 2.0cm);
-  \node[anchor=west, text=white!70!arliznavy, font=\footnotesize\sffamily]
-    at (2.2cm, 0.9cm) {github.com/papyrxis/Arliz};
-  \node[anchor=east, text=white!70!arliznavy, font=\footnotesize\sffamily]
-    at (\paperwidth-2.2cm, 0.9cm) {2026 ARLIZ\ \ \textbullet\ \ Creative Commons\ \ \textbullet\ \ Open Source};
+  % ── Footer ────────────────────────────────────────────────────────────────────
+  \node[anchor=south,
+        text=white!25!arliznavy,
+        font=\scriptsize\sffamily]
+    at ($(current page.south) + (0, 0.9cm)$)
+    {github.com/papyrxis/Arliz\enspace\textbullet\enspace Creative Commons\enspace\textbullet\enspace Open Source};
 
 \end{tikzpicture}

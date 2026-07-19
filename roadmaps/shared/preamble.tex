@@ -1,12 +1,17 @@
+% ══════════════════════════════════════════════════════════════════════════════
+% ARLIZ Roadmap — Shared Preamble
+% ══════════════════════════════════════════════════════════════════════════════
+
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{helvet}
 \renewcommand{\familydefault}{\sfdefault}
+\usepackage{ragged2e}   % \RaggedRight for checkitem text wrapping
 
 \usepackage[a4paper,
-  top=2.8cm, bottom=2.4cm,
+  top=2.8cm, bottom=2.6cm,
   left=2.2cm, right=2.2cm,
   headheight=1.4cm, headsep=0.3cm,
   footskip=1.6cm
@@ -15,20 +20,25 @@
 \usepackage{xcolor}
 \usepackage{graphicx}
 \usepackage{tikz}
-\usetikzlibrary{positioning, shapes.geometric}
+\usetikzlibrary{positioning, shapes.geometric, calc}
 \usepackage{fancyhdr}
 \usepackage{lastpage}
 \usepackage{array}
 \usepackage{tabularx}
 \usepackage{booktabs}
 \usepackage{colortbl}
+\usepackage{tocloft}
 \usepackage{parskip}
 \usepackage{enumitem}
 \usepackage{microtype}
 \usepackage{mdframed}
-\usepackage[hidelinks]{hyperref}
 
-% Framed / boxed content
+\usepackage[hidelinks,
+  bookmarks=true,
+  bookmarksopen=true,
+  bookmarksnumbered=false,
+  pdfpagelabels=true,
+]{hyperref}
 \usepackage{tcolorbox}
 \tcbuselibrary{skins, breakable}
 
@@ -46,11 +56,11 @@
 % Header — navy bar with roadmap title + domains
 \fancyhead[L]{%
   \colorbox{arliznavy}{%
-    \parbox{\dimexpr\textwidth+2\fboxsep}{%
+    \parbox{\dimexpr\headwidth-6pt\relax}{%
       \vspace{2pt}%
       \hspace{6pt}{\small\textbf{\color{white}MASTER ROADMAP\enspace\textbullet\enspace From Zero to North Star}}%
       \hfill%
-      {\tiny\color{white!70!arliznavy}%
+      {\tiny\color{white!65!arliznavy}%
         Repair \textbullet\ Electronics \textbullet\ Programming \textbullet\ Embedded%
         \textbullet\ Assembly \textbullet\ PCB \textbullet\ RE \textbullet\ ARLIZ \textbullet\ Estonia%
       }%
@@ -59,12 +69,28 @@
   }%
 }
 
-% Footer — thin rule + page number + dots
-\fancyfoot[C]{\small\color{arligray}--\ \thepage\ --}
+% Footer — thin rule + page number + accent dots
 \renewcommand{\footrulewidth}{0.4pt}
+\fancyfoot[C]{\small\color{arligray}--\ \thepage\ of \pageref{LastPage}\ --}
 \fancyfoot[L]{\tiny\color{arligray}\itshape github.com/papyrxis/Arliz}
 \fancyfoot[R]{\tiny\color{arligray}2026 ARLIZ \textbullet\ Creative Commons \textbullet\ Open Source}
+
+% ── TOC appearance ────────────────────────────────────────────────────────────
+\renewcommand{\cfttoctitlefont}{\large\bfseries\color{arliznavy}}
+\renewcommand{\cftaftertoctitle}{\par\vspace{2pt}{\color{arlizblue!40}\hrule height 0.6pt}\vspace{6pt}}
+\setlength{\cftbeforesecskip}{6pt}
+\setlength{\cftbeforesubsecskip}{2pt}
+\renewcommand{\cftsecfont}{\small\bfseries\color{arliznavy}}
+\renewcommand{\cftsecpagefont}{\small\color{arligray}}
+\renewcommand{\cftsubsecfont}{\footnotesize\color{textprimary}}
+\renewcommand{\cftsubsecpagefont}{\footnotesize\color{arligray}}
+\setlength{\cftsecindent}{0pt}
+\setlength{\cftsubsecindent}{14pt}
 
 % ── Paragraph spacing ─────────────────────────────────────────────────────────
 \setlength{\parskip}{3pt}
 \setlength{\parindent}{0pt}
+
+% ── Micro-adjustments ─────────────────────────────────────────────────────────
+\setlength{\emergencystretch}{1.5em}   % stops most Overfull \hbox warnings
+\tolerance=800
