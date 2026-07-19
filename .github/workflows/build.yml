@@ -32,6 +32,8 @@ jobs:
   papers:
     name: Build Papers
     runs-on: ubuntu-latest
+    container:
+      image: texlive/texlive:latest
 
     outputs:
       artifact-name: ${{ steps.set-name.outputs.name }}
@@ -43,21 +45,10 @@ jobs:
           submodules: recursive
           fetch-depth: 0           # needed for git describe inside build.sh
 
-      - name: Install TeX Live (pdflatex + biber)
+      - name: Install prerequisites
         run: |
-          sudo apt-get update -qq
-          sudo apt-get install -y --no-install-recommends \
-            texlive-latex-base \
-            texlive-latex-recommended \
-            texlive-latex-extra \
-            texlive-fonts-recommended \
-            texlive-fonts-extra \
-            texlive-bibtex-extra \
-            texlive-science \
-            texlive-plain-generic \
-            lmodern \
-            biber \
-            latexmk
+          apt-get update -qq
+          apt-get install -y --no-install-recommends git make bash
           echo "pdflatex: $(pdflatex --version | head -1)"
           echo "biber:    $(biber --version)"
 
