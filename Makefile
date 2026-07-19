@@ -9,36 +9,56 @@ else
     WORKSPACE_SRC := $(WORKSPACE_ROOT)/src
 endif
 
-PAPER  ?=
-TARGET ?=
-AVAILABLE_TARGETS := $(notdir $(basename $(wildcard scripts/lib/targets/*.target.sh)))
-AVAILABLE_TARGETS := $(AVAILABLE_TARGETS:.target=)
+PAPER    ?=
+TARGET   ?=
+ROADMAP  ?=
+LANG     ?=
+NAME     ?=
+SLUG     ?=
+STYLE    ?= personal
 
-.PHONY: all build sync clean watch version new-paper generate list help \
-        export targets delete-paper
+AVAILABLE_TARGETS := $(patsubst scripts/lib/targets/%.target.sh,%,\
+                       $(wildcard scripts/lib/targets/*.target.sh))
+
+PX := python scripts/px.py
+
+.PHONY: all help version sync \
+        paper build watch generate export targets list new-paper delete-paper \
+        roadmap roadmap-all roadmap-watch roadmap-list roadmap-new roadmap-clean roadmap-delete \
+        resume resume-all resume-watch resume-clean resume-rename resume-list \
+        clean
+
+# ── default ───────────────────────────────────────────────────────────────────
 
 all: help
 
+# ── sync ──────────────────────────────────────────────────────────────────────
+
+sync:
+	@bash $(WORKSPACE_SRC)/sync.sh
+
+# ── papers ────────────────────────────────────────────────────────────────────
+
 generate:
 ifndef PAPER
-	$(error PAPER is not set. Usage: make generate PAPER=01-function-theoretic-definition-of-data)
+	$(error PAPER is not set. Usage: make generate PAPER=<slug|#>)
 endif
-	@bash scripts/generate.sh "$(PAPER)"
+	@$(PX) papers build $(PAPER)
 
 paper:
 ifndef PAPER
 	$(error PAPER is not set. Usage: make paper PAPER=<slug|#>)
 endif
-	@bash scripts/build.sh "$(PAPER)"
+	@$(PX) papers build $(PAPER)
 
 build:
-	@bash scripts/build.sh all
+	@$(PX) papers build all
 
 export:
 ifndef PAPER
-	$(error PAPER is not set. Usage: make export PAPER=<slug|#|all> [TARGET=<target ...>])
+	$(error PAPER is not set. Usage: make export PAPER=<slug|#|all> [TARGET="<tgt ...>"])
 endif
-	@bash scripts/export.sh "$(PAPER)" $(TARGET)
+	@$(PX) papers export $(PAPER) $(TARGET)
 
 targets:
 	@echo ""
@@ -46,114 +66,94 @@ targets:
 	@echo "  ──────────────────────────────────────────────────────────"
 	@for t in $(AVAILABLE_TARGETS); do echo "    $$t"; done
 	@echo ""
-	@echo "  Usage: make export PAPER=<slug|#|all> TARGET=\"<target ...>\""
+	@echo "  Usage: make export PAPER=<slug|#|all> TARGET=\"<tgt ...>\""
 	@echo ""
-
-sync:
-	@bash $(WORKSPACE_SRC)/sync.sh
 
 watch:
 ifndef PAPER
 	$(error PAPER is not set. Usage: make watch PAPER=<slug|#>)
 endif
-	@bash scripts/build.sh "$(PAPER)" --watch
+	@$(PX) papers watch $(PAPER)
 
 new-paper:
 ifndef SLUG
-	$(error SLUG is not set. Usage: make new-paper SLUG=02-my-paper-title STYLE=personal)
+	$(error SLUG is not set. Usage: make new-paper SLUG=<slug> STYLE=<style>)
 endif
-	@bash scripts/new-paper.sh "$(SLUG)" "$(or $(STYLE),personal)"
+	@$(PX) papers new $(SLUG) $(STYLE)
 
 delete-paper:
 ifndef PAPER
 	$(error PAPER is not set. Usage: make delete-paper PAPER=<slug|#>)
 endif
-	@bash scripts/delete-paper.sh "$(PAPER)"
+	@$(PX) papers delete $(PAPER)
 
 list:
-	@bash scripts/list-papers.sh
+	@$(PX) papers list
 
-clean:
-	@bash scripts/clean.sh
-	@find . -type f \( \
-		-name "*.aux" -o -name "*.log" -o -name "*.out" \
-		-o -name "*.toc" -o -name "*.bbl" -o -name "*.blg" \
-		-o -name "*.synctex.gz" -o -name "*.fdb_latexmk" \
-		-o -name "*.fls" -o -name "*.idx" -o -name "*.ilg" \
-		-o -name "*.ind" -o -name "*.run.xml" -o -name "*.bcf" \
-		\) -delete 2>/dev/null || true
-	@echo "✓ Clean"
+styles:
+	@$(PX) papers styles
 
-version:
-	@echo "Version:    $(VERSION)"
-	@echo "Build date: $(BUILD_DATE)"
+# ── roadmaps ──────────────────────────────────────────────────────────────────
 
-help:
-	@echo ""
-	@echo "  Papers — Genix"
-	@echo "  ──────────────────────────────────────────────────────────"
-	@echo ""
-	@echo "  Most commands accept PAPER=<slug> or PAPER=<#> — the number"
-	@echo "  shown by 'make list' (1, 2, 3, ...)."
-	@echo ""
-	@echo "  make sync                              Sync .pxis/ from workspace.yml"
-	@echo "  make new-paper SLUG=<slug> STYLE=<s>  Scaffold a new paper"
-	@echo "    Styles: personal | academic | ieee | two-column | single-column | journal"
-	@echo ""
-	@echo "  make generate PAPER=<slug|#>           Regenerate main.tex only"
-	@echo "  make paper    PAPER=<slug|#>           Generate + build one paper to PDF"
-	@echo "  make build                              Generate + build every paper to PDF"
-	@echo "  make watch    PAPER=<slug|#>           Auto-rebuild on save"
-	@echo ""
-	@echo "  make export   PAPER=<slug|#|all> [TARGET=<t ...>]"
-	@echo "                                           Export to Markdown, customized per platform"
-	@echo "                                           (omit TARGET for every platform at once)"
-	@echo "  make targets                            List available export platforms"
-	@echo ""
-	@echo "  make list                               List all papers (also syncs the README index)"
-	@echo "  make delete-paper PAPER=<slug|#>       Delete a paper completely"
-	@echo "  make clean                              Remove all build artifacts"
-	@echo "  make version                            Show version info"
-	@echo ""
-	@echo "  Examples:"
-	@echo "    make new-paper SLUG=02-type-confusion-taxonomy STYLE=academic"
-	@echo "    make paper PAPER=01-function-theoretic-definition-of-data"
-	@echo "    make paper PAPER=1"
-	@echo "    make export PAPER=1"
-	@echo "    make export PAPER=1 TARGET=devto"
-	@echo "    make export PAPER=1 TARGET=\"devto medium\""
-	@echo "    make export PAPER=all"
-	@echo "    make targets"
-	@echo "    make delete-paper PAPER=2"
-	@echo ""
+roadmap:
+ifndef ROADMAP
+	$(error ROADMAP is not set. Usage: make roadmap ROADMAP=<slug|#>)
+endif
+	@$(PX) roadmaps build $(ROADMAP)
 
-.DEFAULT_GOAL := help
+roadmap-all:
+	@$(PX) roadmaps build all
 
-LANG ?=
-NAME ?=
+roadmap-watch:
+ifndef ROADMAP
+	$(error ROADMAP is not set. Usage: make roadmap-watch ROADMAP=<slug|#>)
+endif
+	@$(PX) roadmaps watch $(ROADMAP)
 
-.PHONY: resume resume-all resume-watch resume-clean resume-rename resume-list resume-help
+roadmap-list:
+	@$(PX) roadmaps list
+
+roadmap-new:
+ifndef SLUG
+	$(error SLUG is not set. Usage: make roadmap-new SLUG=<slug>)
+endif
+	@$(PX) roadmaps new $(SLUG)
+
+roadmap-clean:
+ifdef ROADMAP
+	@$(PX) roadmaps clean $(ROADMAP)
+else
+	@$(PX) roadmaps clean
+endif
+
+roadmap-delete:
+ifndef ROADMAP
+	$(error ROADMAP is not set. Usage: make roadmap-delete ROADMAP=<slug|#>)
+endif
+	@$(PX) roadmaps delete $(ROADMAP)
+
+# ── resumes ───────────────────────────────────────────────────────────────────
 
 resume:
 ifndef LANG
 	$(error LANG is not set. Usage: make resume LANG=<lang|#>)
 endif
-	@bash scripts/resume.sh build "$(LANG)"
+	@$(PX) resumes build $(LANG)
 
 resume-all:
-	@bash scripts/resume.sh build all
+	@$(PX) resumes build all
 
 resume-watch:
 ifndef LANG
 	$(error LANG is not set. Usage: make resume-watch LANG=<lang|#>)
 endif
-	@bash scripts/resume.sh watch "$(LANG)"
+	@$(PX) resumes watch $(LANG)
 
 resume-clean:
 ifdef LANG
-	@bash scripts/resume.sh clean "$(LANG)"
+	@$(PX) resumes clean $(LANG)
 else
-	@bash scripts/resume.sh clean
+	@$(PX) resumes clean
 endif
 
 resume-rename:
@@ -163,10 +163,87 @@ endif
 ifndef NAME
 	$(error NAME is not set. Usage: make resume-rename LANG=<lang|#> NAME=<new-name>)
 endif
-	@bash scripts/resume.sh rename "$(LANG)" "$(NAME)"
+	@$(PX) resumes rename $(LANG) $(NAME)
 
 resume-list:
-	@bash scripts/resume.sh list
+	@$(PX) resumes list
 
-resume-help:
-	@bash scripts/resume.sh help
+# ── clean (global) ────────────────────────────────────────────────────────────
+
+clean:
+	@$(PX) papers clean
+	@$(PX) roadmaps clean
+	@$(PX) resumes clean
+	@find . -type f \( \
+		-name "*.aux" -o -name "*.log" -o -name "*.out" \
+		-o -name "*.toc" -o -name "*.bbl" -o -name "*.blg" \
+		-o -name "*.synctex.gz" -o -name "*.fdb_latexmk" \
+		-o -name "*.fls" -o -name "*.idx" -o -name "*.ilg" \
+		-o -name "*.ind" -o -name "*.run.xml" -o -name "*.bcf" \
+		\) -delete 2>/dev/null || true
+
+# ── version ───────────────────────────────────────────────────────────────────
+
+version:
+	@echo "Version:    $(VERSION)"
+	@echo "Build date: $(BUILD_DATE)"
+
+# ── help ──────────────────────────────────────────────────────────────────────
+
+help:
+	@echo ""
+	@echo "  Papers — Genix"
+	@echo "  ──────────────────────────────────────────────────────────"
+	@echo ""
+	@echo "  Interactive:"
+	@echo "    python scripts/px.py                      Full interactive UI"
+	@echo "    python scripts/papers.py                  Papers UI"
+	@echo "    python scripts/resumes.py                 Resumes UI"
+	@echo "    python scripts/roadmaps.py                Roadmaps UI"
+	@echo ""
+	@echo "  Papers:"
+	@echo "    make sync                                 Sync .pxis/ from workspace.yml"
+	@echo "    make new-paper  SLUG=<slug> STYLE=<s>     Scaffold a new paper"
+	@echo "      Styles: personal | academic | ieee | two-column | single-column | journal"
+	@echo "    make paper      PAPER=<slug|#>            Build one paper to PDF"
+	@echo "    make build                                Build every paper to PDF"
+	@echo "    make watch      PAPER=<slug|#>            Auto-rebuild on save"
+	@echo "    make export     PAPER=<slug|#|all>        Export to Markdown (all targets)"
+	@echo "    make export     PAPER=<slug|#|all> TARGET=\"<t ...>\""
+	@echo "                                              Export to specific target(s)"
+	@echo "    make targets                              List available export platforms"
+	@echo "    make list                                 List all papers"
+	@echo "    make styles                               Show available paper styles"
+	@echo "    make delete-paper PAPER=<slug|#>          Delete a paper completely"
+	@echo ""
+	@echo "  Roadmaps:"
+	@echo "    make roadmap        ROADMAP=<slug|#>      Build one roadmap"
+	@echo "    make roadmap-all                          Build all roadmaps"
+	@echo "    make roadmap-watch  ROADMAP=<slug|#>      Watch mode"
+	@echo "    make roadmap-new    SLUG=<slug>           Scaffold a new roadmap"
+	@echo "    make roadmap-list                         List roadmaps"
+	@echo "    make roadmap-clean  [ROADMAP=<slug|#>]    Clean roadmap artifacts"
+	@echo "    make roadmap-delete ROADMAP=<slug|#>      Delete a roadmap"
+	@echo ""
+	@echo "  Resumes:"
+	@echo "    make resume        LANG=<lang|#>          Build one resume"
+	@echo "    make resume-all                           Build all resumes"
+	@echo "    make resume-watch  LANG=<lang|#>          Watch mode"
+	@echo "    make resume-clean  [LANG=<lang|#>]        Clean resume artifacts"
+	@echo "    make resume-rename LANG=<lang|#> NAME=<n> Rename output PDF"
+	@echo "    make resume-list                          List resumes"
+	@echo ""
+	@echo "  Global:"
+	@echo "    make clean                                Remove all build artifacts"
+	@echo "    make version                              Show version info"
+	@echo ""
+	@echo "  Examples:"
+	@echo "    make new-paper SLUG=02-type-theory STYLE=academic"
+	@echo "    make paper PAPER=1"
+	@echo "    make export PAPER=1 TARGET=\"devto medium\""
+	@echo "    make roadmap ROADMAP=01-master-roadmap"
+	@echo "    make resume LANG=en"
+	@echo "    make resume-rename LANG=en NAME=Mahdi-Mamashli-Resume-2026"
+	@echo ""
+
+.DEFAULT_GOAL := help
