@@ -70,10 +70,7 @@ build_one() {
     cd "$paper_dir"
     "$engine" -interaction=nonstopmode -output-directory="$BUILD_DIR/$slug" main.tex >/dev/null || true
     if grep -q '\\addbibresource\|\\printbibliography' main.tex; then
-      # Run from paper_dir (cwd) so the relative \addbibresource path
-      # (references/paper.bib) resolves; --output-directory points
-      # biber at the .bcf/.bbl produced alongside the PDF in build/.
-      "$bibtex" --output-directory="$BUILD_DIR/$slug" main
+      "$bibtex" "$BUILD_DIR/$slug/main"
       "$engine" -interaction=nonstopmode -output-directory="$BUILD_DIR/$slug" main.tex >/dev/null || true
     fi
     "$engine" -interaction=nonstopmode -output-directory="$BUILD_DIR/$slug" main.tex >/dev/null || true
