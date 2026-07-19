@@ -68,12 +68,21 @@ build_one() {
 
   (
     cd "$paper_dir"
-    "$engine" -interaction=nonstopmode -output-directory="$BUILD_DIR/$slug" main.tex >/dev/null || true
+
+    "$engine" -interaction=nonstopmode -output-directory="$BUILD_DIR/$slug" main.tex >/dev/null 2>&1 || {
+      echo ""
+      die "[$slug] pdflatex pass 1 failed — see $BUILD_DIR/$slug/main.log"
+    }
+
     if grep -q '\\addbibresource\|\\printbibliography' main.tex; then
+      if [[ ! -f "$BUILD_DIR/$slug/main.bcf" ]]; then
+        die "[$slug] main.bcf not found after pdflatex pass 1 — see $BUILD_DIR/$slug/main.log"
+      fi
       "$bibtex" "$BUILD_DIR/$slug/main"
-      "$engine" -interaction=nonstopmode -output-directory="$BUILD_DIR/$slug" main.tex >/dev/null || true
+      "$engine" -interaction=nonstopmode -output-directory="$BUILD_DIR/$slug" main.tex >/dev/null 2>&1 || true
     fi
-    "$engine" -interaction=nonstopmode -output-directory="$BUILD_DIR/$slug" main.tex >/dev/null || true
+
+    "$engine" -interaction=nonstopmode -output-directory="$BUILD_DIR/$slug" main.tex >/dev/null 2>&1 || true
   )
 
   local year; year="$(date -u '+%Y')"
