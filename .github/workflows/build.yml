@@ -54,6 +54,8 @@ jobs:
             texlive-fonts-extra \
             texlive-bibtex-extra \
             texlive-science \
+            texlive-plain-generic \
+            lmodern \
             biber \
             latexmk
           echo "pdflatex: $(pdflatex --version | head -1)"
@@ -64,6 +66,16 @@ jobs:
           PROJECT_VERSION: ${{ inputs.version }}
           BUILD_DATE: ${{ github.run_started_at }}
         run: bash scripts/build.sh all
+
+      - name: Show pdflatex logs on failure
+        if: failure()
+        run: |
+          for log in build/*/main.log; do
+            if [ -f "$log" ]; then
+              echo "\n========== $log =========="
+              grep -A 5 "^!" "$log" || true
+            fi
+          done
 
       - name: Set artifact name
         id: set-name
