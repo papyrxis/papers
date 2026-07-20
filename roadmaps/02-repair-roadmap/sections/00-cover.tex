@@ -1,0 +1,69 @@
+\begin{tikzpicture}[remember picture, overlay]
+
+  \fill[arliznavy]
+    (current page.south west) rectangle (current page.north east);
+
+  \fill[arlizblue]
+    (current page.south west) rectangle
+    ($(current page.north west) + (0.45cm, 0)$);
+
+  \fill[arlizgold]
+    (current page.south west) rectangle
+    ($(current page.south east) + (0, 0.35cm)$);
+
+  % Watermark
+  \node[anchor=center,
+        font=\fontsize{58}{58}\bfseries\sffamily,
+        text=white, opacity=0.04]
+    at (current page.center) {REPAIR};
+  \node[anchor=center,
+        font=\fontsize{58}{58}\bfseries\sffamily,
+        text=white]
+    at (current page.center) {REPAIR};
+
+  % Domain strip
+  \node[anchor=center,
+        text=arlizblue!60!white,
+        font=\normalsize\sffamily\bfseries]
+    at ($(current page.center) + (0, 2.2cm)$)
+    {MOBILE \enspace\textbullet\enspace LAPTOP \enspace\textbullet\enspace PC \& DESKTOP};
+
+  \node[anchor=center,
+        text=white!30!arliznavy,
+        font=\small\sffamily]
+    at ($(current page.center) + (0, 1.5cm)$)
+    {Micro-Soldering \textbullet\ BGA \textbullet\ Signal Tracing \textbullet\ Power Sequencing \textbullet\ Thermal Imaging};
+
+  \draw[arlizblue!50, line width=0.5pt]
+    ($(current page.center) + (-5.5cm, 0.9cm)$) --
+    ($(current page.center) + (+5.5cm, 0.9cm)$);
+
+  \node[anchor=center,
+        text=white,
+        font=\large\bfseries\sffamily]
+    at ($(current page.center) + (0, -1.8cm)$) {REPAIR ROADMAP};
+
+  \node[anchor=center,
+        text=white!45!arliznavy,
+        font=\small\sffamily]
+    at ($(current page.center) + (0, -2.6cm)$) {Board-Level Expert Track};
+
+  \node[anchor=center,
+        text=arlizgold,
+        font=\footnotesize\sffamily\itshape]
+    at ($(current page.center) + (0, -3.8cm)$)
+    {Part of the ARLIZ Master Roadmap \textbullet\ Roadmap \#02};
+
+  \node[anchor=center,
+        text=white!35!arliznavy,
+        font=\footnotesize\sffamily]
+    at ($(current page.center) + (0, -5.2cm)$)
+    {Mahdi Mamashli (Genix)\enspace\textbullet\enspace 2026};
+
+  \node[anchor=south,
+        text=white!25!arliznavy,
+        font=\scriptsize\sffamily]
+    at ($(current page.south) + (0, 0.9cm)$)
+    {github.com/papyrxis/Arliz\enspace\textbullet\enspace Creative Commons\enspace\textbullet\enspace Open Source};
+
+\end{tikzpicture}

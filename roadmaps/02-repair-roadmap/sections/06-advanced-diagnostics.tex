@@ -1,0 +1,190 @@
+\roadmapSection{4}{ADVANCED DIAGNOSTICS}{Ongoing --- Build Parallel to Repair Work}
+
+{\small\itshape\color{arligray} These skills multiply your diagnostic speed and accuracy. Start building them from Week 8 onward.}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\roadmapSubSection{4.1}{Oscilloscope Fundamentals for Repair}{3--4 Weeks}
+
+\roadmapHead{Recommended Oscilloscope}
+\begin{toolbadges}
+\toolbadge{Rigol DS1054Z (50MHz, 4-channel, budget)}
+\toolbadge{Rigol DS1104Z Plus (100MHz recommended)}
+\toolbadge{Siglent SDS1202X-E (200MHz, better FFT)}
+\toolbadge{Probe 10:1 passive (included)}
+\toolbadge{Current probe (Hantek CC-65, optional)}
+\end{toolbadges}
+
+\roadmapHead{Oscilloscope Basics --- Learn Before First Probe Touch}
+\checkitem{Bandwidth: signal frequency must be < scope bandwidth / 3 for accurate amplitude. 50MHz scope: accurate to ~17MHz.}{}
+\checkitem{Sampling rate: must be > 2x signal frequency (Nyquist). 1GSa/s scope: accurate digital signals to 500MHz.}{}
+\checkitem{Probe compensation: always adjust probe trimmer cap until square wave edges are sharp before measuring.}{}
+\checkitem{10:1 probe: 10x attenuation, 10x higher input impedance (10M$\Omega$). Use for all voltage measurements. 1:1 only for < 1V signals.}{}
+\checkitem{Trigger: edge trigger on rising/falling edge. Level must intersect signal. Use auto trigger to find any signal first.}{}
+\checkitem{Time/div: set to show 2--5 complete cycles for periodic signals. Use SINGLE trigger for one-shot events.}{}
+\checkitem{Volt/div: signal should occupy 50--70\% of screen height. Too small = noisy reading.}{}
+\checkitem{Ground clip: connect scope ground to board ground. Not to chassis. Keeps measurement reference consistent.}{}
+\checkitem{Math channel: subtract CH1 from CH2 to see differential signal (useful for I2C, SPI bus analysis).}{}
+
+\roadmapHead{Power Rail Verification with Scope}
+\checkitem{DC level + ripple: set to DC coupling. Adjust V/div to see rail DC level. Zoom in: switch to AC coupling to see ripple.}{}
+\checkitem{Acceptable ripple: 1--5\% of DC voltage. Example: 1.8V rail, ripple < 90mV. High ripple = failing filter cap.}{}
+\checkitem{Switching frequency: buck converter switching transients appear as spikes. Frequency = 500kHz--2MHz on phones.}{}
+\checkitem{Power sequencing trace: 4-channel scope. CH1=VSYS, CH2=PP1V8, CH3=PP3V3, CH4=CPU\_PWR\_OK. One trace, all rising edges.}{}
+\checkitem{Rail dropout: monitor VCORE under CPU load (stress test). Drops > 50mV = VRM insufficient or dying.}{}
+\checkitem{Inrush current spike: current probe on VSYS. Large inrush = failing input capacitor or charge IC.}{}
+
+\roadmapHead{Digital Bus Analysis}
+\checkitem{I2C capture: CH1 on SDA, CH2 on SCL. Trigger on SDA falling edge. Look for 9-clock-cycle groups (8 data + 1 ACK).}{}
+\checkitem{Missing ACK bit (clock 9 stays high): addressed device not responding. Fault in that device or its power rail.}{}
+\checkitem{SPI capture: CH1=SCK, CH2=MOSI, CH3=MISO, CH4=CS. CS must toggle for each transaction.}{}
+\checkitem{UART decode: oscilloscope UART decode function. Set baud rate. Reads ASCII characters directly on screen.}{}
+\checkitem{eDP signal integrity: probe LANE0P/N at panel connector. Eye diagram function: open eye = good signal. Closed = cable fault.}{}
+\checkitem{USB 2.0 differential: probe D+/D-. Differential amplitude: 400mV for LS, 800mV for HS. Missing = USB driver/PHY fault.}{}
+
+\roadmapHead{Phase Node Measurement (VRM Diagnostics)}
+\checkitem{Probe the switching node (junction of high-side FET drain and low-side FET source, before inductor).}{}
+\checkitem{Should see square wave: high = VIN (19V), low = GND. Duty cycle = Vout/Vin.}{}
+\checkitem{Flat line at VIN: high-side FET stuck on = no switching = overheating + wrong Vcore.}{}
+\checkitem{Flat line at GND: high-side FET dead or gate drive missing.}{}
+\checkitem{All phases switching at same duty cycle confirms VRM is healthy. One phase different = phase fault.}{}
+
+\newpage
+% ══════════════════════════════════════════════════════════════════════════════
+\roadmapSubSection{4.2}{Thermal Imaging and Thermal Analysis}{2 Weeks}
+
+\roadmapHead{Recommended Thermal Camera}
+\begin{toolbadges}
+\toolbadge{InfiRay P2 Pro (256x192, phone attachment)}
+\toolbadge{FLIR One Gen 3 (160x120, phone attachment)}
+\toolbadge{Topdon TC001 (256x192, USB-C)}
+\toolbadge{FLIR E5-XT (160x120, standalone, expensive)}
+\end{toolbadges}
+
+\roadmapHead{Thermal Imaging Basics}
+\checkitem{Emissivity: shiny metal has low emissivity (0.05--0.3). Black IC packages: 0.95. Apply matte black paint or kapton tape for accurate reading.}{}
+\checkitem{NETD (Noise Equivalent Temperature Difference): lower = better sensitivity. 50mK or better for repair work.}{}
+\checkitem{Resolution: 160x120 sufficient for phone ICs. 256x192 or higher for fine-pitch fault isolation.}{}
+\checkitem{Distance: thermal cameras have fixed focus. Read manual for minimum/optimal distance for clear image.}{}
+\checkitem{Temperature range: board-level repair needs 0--150°C range. Most cameras cover this well.}{}
+
+\roadmapHead{Finding Short Circuits with Thermal Camera}
+\checkitem{Connect current-limited supply (0.5--1A) to shorted rail. Power on briefly (3--5 seconds maximum).}{}
+\checkitem{Immediately photograph board with thermal camera. Shorted component or trace glows warm first.}{}
+\checkitem{Compare thermal image to boardview: identify component at hot spot.}{}
+\checkitem{Capacitor short: pinpoint location, confirm with diode mode after disabling supply.}{}
+\checkitem{IC internal short: whole IC package heats uniformly vs one pin. IC replacement required.}{}
+\checkitem{PCB trace short: trace between two pads shows as a line of warmth. Scrape and inspect.}{}
+\checkitem{Partial short (high resistance): harder to find. Increase supply current to 1--2A. Use thermal camera at higher sensitivity setting.}{}
+
+\roadmapHead{Thermal Profiling During Operation}
+\checkitem{Power on device fully. Run stress test (CPU + GPU load). Capture thermal image after 60 seconds.}{}
+\checkitem{Normal thermal map: CPU/GPU hottest (~60--80°C under load), VRM warm (~50--60°C), rest of board cool.}{}
+\checkitem{Cold component during operation: component not receiving power or not functioning. Suspect fault.}{}
+\checkitem{Unexpected hot spot: current flowing through a path that shouldn't be. Indicates short or wrong routing.}{}
+\checkitem{Heatsink contact verification: thermal camera shows uneven contact as cool patches on heatsink.}{}
+\checkitem{Reflow quality check: after BGA reflow, power on, look for uniform heat distribution across IC package.}{}
+
+\roadmapHead{Thermal Imaging for Solder Joint Verification}
+\checkitem{After BGA reflow: power on, apply small load, thermal image. IC should heat uniformly. Cold corner = open joint.}{}
+\checkitem{Cold solder joint on PMIC: PMIC heats on only one side. Indicates missing solder balls on cold side.}{}
+\checkitem{After jumper wire repair: verify jumper wire heats slightly (resistance) confirming current flow.}{}
+
+\newpage
+% ══════════════════════════════════════════════════════════════════════════════
+\roadmapSubSection{4.3}{Logic Analyzer and Protocol Debugging}{2 Weeks}
+
+\roadmapHead{Recommended Logic Analyzer}
+\begin{toolbadges}
+\toolbadge{Saleae Logic 8 (8-channel, 100MHz, software excellent)}
+\toolbadge{DreamSourceLab DSLogic Plus (16-channel, budget)}
+\toolbadge{USBee AX-Pro clone (basic, 8-channel)}
+\end{toolbadges}
+
+\roadmapHead{Logic Analyzer vs Oscilloscope}
+\checkitem{Logic analyzer: digital (0 or 1), high channel count (8--16+), long capture, protocol decode built-in.}{}
+\checkitem{Oscilloscope: analog waveform, 2--4 channels, shows signal integrity, timing detail, voltage levels.}{}
+\checkitem{Use together: scope first to verify signal quality (voltage levels, noise), then LA for protocol content.}{}
+
+\roadmapHead{Capturing I2C with Logic Analyzer}
+\checkitem{Clip CH0 to SDA, CH1 to SCL. Trigger on SDA falling edge (START condition).}{}
+\checkitem{In PulseView / Saleae Logic: add I2C decoder. Set SDA=CH0, SCL=CH1.}{}
+\checkitem{Read decoded output: ``0x36 W: ACK, 0x03, ACK, 0x55, ACK'' = write to address 0x36, register 0x03, value 0x55.}{}
+\checkitem{No ACK: device at that address missing or unpowered. First byte after START is the address + R/W bit.}{}
+\checkitem{Identify all I2C devices at boot from capture: compare addresses to datasheet device map.}{}
+\checkitem{Fuel gauge (BQ27520, MAX17048): I2C address 0x36 or 0x6B. If absent from capture = fuel gauge dead.}{}
+
+\roadmapHead{Capturing SPI with Logic Analyzer}
+\checkitem{Clip CH0=CLK, CH1=MOSI, CH2=MISO, CH3=CS. Add SPI decoder. Set mode (CPOL/CPHA) from datasheet.}{}
+\checkitem{CS never toggling = SPI master not initiating communication. Check enable signal to CS line.}{}
+\checkitem{CLK present but MISO empty = SPI device not responding. Check device power and CS polarity.}{}
+\checkitem{BIOS SPI traffic: capture during boot to verify CPU is reading BIOS flash. No SPI activity = CPU not executing.}{}
+
+\roadmapHead{UART Capture and Analysis}
+\checkitem{Single wire: clip CH0 to UART TX testpoint. Add UART decoder. Set baud rate (try 115200 first).}{}
+\checkitem{Wrong baud rate: garbled output. Measure bit time on scope: $T_{bit}$ = 1/baud. Adjust.}{}
+\checkitem{Full boot log: capture from power-on to userspace (can be thousands of lines). Save to file.}{}
+\checkitem{Search log for: ``error'', ``fail'', ``panic'', ``timeout'', ``reset'', ``assert''. These are fault indicators.}{}
+
+\newpage
+% ══════════════════════════════════════════════════════════════════════════════
+\roadmapSubSection{4.4}{Power Sequencing --- Advanced Analysis}{2 Weeks}
+
+{\small\itshape\color{arligray} Every device has a power-up order defined by the chip designer. Violating it causes latch-up or no-boot.}
+
+\roadmapHead{Why Power Sequencing Matters}
+\checkitem{ICs have absolute maximum ratings: $V_{IO}$ must not exceed $V_{CC}$ + 0.3V at any time. Early IO rail = gate oxide stress.}{}
+\checkitem{Latch-up: parasitic SCR (silicon controlled rectifier) latches if CMOS input sees voltage before power. Can destroy IC.}{}
+\checkitem{PMIC enforces sequencing via enable pins: each converter has an EN pin tied to prior converter's PGOOD output.}{}
+\checkitem{PGOOD (Power Good): open-drain output that asserts high once output rail is in regulation. Next rail waits for PGOOD.}{}
+
+\roadmapHead{Reading a Power Sequence Diagram}
+\checkitem{Find power sequence table in SoC datasheet or PMIC datasheet. Shows: rail name, enable condition, timing delay.}{}
+\checkitem{Example Qualcomm SDM845: VDD\_MX must be on before VDD\_CX. VDD\_CX on before VDDAPC (CPU core).}{}
+\checkitem{Example Intel laptop: VCC\_CORE waits for VCCST\_PWRGD and DRAM\_PWR\_OK to both be high.}{}
+\checkitem{Timing diagram: horizontal axis = time (ms). Vertical = voltage. Arrows show dependencies.}{}
+
+\roadmapHead{Tracing a Sequence Fault with Oscilloscope}
+\checkitem{4-channel scope: capture power button press to first display light. Time entire boot sequence.}{}
+\checkitem{Identify which rail stops the sequence: the last rail to rise before stall = the fault domain.}{}
+\checkitem{Check EN pin of stalled rail: should go high to enable it. If not: previous stage PGOOD not asserting.}{}
+\checkitem{Trace PGOOD back: find which rail's PGOOD is stuck low. That rail is failing to reach regulation.}{}
+\checkitem{Common cause: shorted output cap of the failed rail pulls it below regulation threshold $\to$ PGOOD never asserts.}{}
+\checkitem{Inject rail manually: some engineers inject the voltage on a stalled rail to test if downstream sequence proceeds.}{WARNING: only with current limiting and full understanding of dependencies. Wrong voltage kills SoC.}
+
+\roadmapHead{PMIC Register Access}
+\checkitem{PMIC config stored in OTP (one-time-programmable) or NVM internal registers. Accessible via I2C in test mode.}{}
+\checkitem{PMIC fault register: read after unexpected shutdown. Contains: overcurrent event, thermal event, watchdog event.}{}
+\checkitem{Qualcomm PMIC (PMxxxx): SPMI bus (2-wire, similar to I2C). Accessible via Qualcomm debug tools.}{}
+\checkitem{Apple PMIC (Tigris/Mavericks): I2C bus. Address and register map in internal Apple schematics only.}{}
+\checkitem{Without official tools: UART boot log prints PMIC fault register on fault reset. Capture it.}{}
+
+\newpage
+% ══════════════════════════════════════════════════════════════════════════════
+\roadmapSubSection{4.5}{Ultrasonic Cleaning and Advanced Liquid Damage Recovery}{1 Week}
+
+\roadmapHead{Ultrasonic Cleaner}
+\begin{toolbadges}
+\toolbadge{GT Sonic P3 / P6 (600ml, 40kHz)}
+\toolbadge{Crest CP360D (professional)}
+\toolbadge{Branson (industrial, high-end)}
+\toolbadge{Cleaning solution: diluted IPA or VIGON EFM}
+\end{toolbadges}
+
+\roadmapHead{Liquid Damage Protocol}
+\checkitem{Step 1: do not power on. Liquid + power = corrosion in seconds. Pull battery immediately.}{}
+\checkitem{Step 2: disassemble completely. Remove all shields, FPC connectors, battery connector.}{}
+\checkitem{Step 3: rinse with 99\% IPA to displace water. Soak 5 minutes, agitate gently.}{}
+\checkitem{Step 4: ultrasonic clean at 40kHz with diluted IPA or VIGON EFM solution. 40°C, 5--10 minutes.}{}
+\checkitem{Step 5: rinse with clean IPA after ultrasonic to remove cleaning solution residue.}{}
+\checkitem{Step 6: dry completely. Hot air at 60°C for 5 minutes. Then 30 minutes in rice/silica or drying cabinet.}{}
+\checkitem{Step 7: visual inspection under microscope. Identify any corroded vias, damaged pads, lifted components.}{}
+\checkitem{Step 8: diode mode map all rails. Then power on with current-limited supply.}{}
+\checkitem{Corrosion on via: scrape, tin, jumper if via is open. Corrosion = green residue = copper oxide/hydroxide.}{}
+\checkitem{Saltwater damage: much more aggressive than fresh water. Extended ultrasonic + multiple IPA rinses required.}{}
+
+\roadmapHead{Corrosion Component Identification}
+\checkitem{Green residue on capacitor: cap likely shorted or high ESR. Remove and measure.}{}
+\checkitem{White residue on connector pins: oxidized contacts. Polish with fiberglass pen, re-tin.}{}
+\checkitem{Black residue near charge IC: flash arcing from USB-C. Inspect all surrounding passives.}{}
+\checkitem{Crystal oscillator corrosion: crystals are sealed but corrosion on leads changes frequency. Replace if boot fails.}{}
+\end{document}

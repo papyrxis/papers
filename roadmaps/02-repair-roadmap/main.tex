@@ -1,0 +1,68 @@
+\documentclass[10pt,a4paper]{article}
+
+\input{../../roadmaps/shared/preamble}
+
+% ── Override header for Repair Roadmap ────────────────────────────────────────
+\fancyhead[L]{%
+  \colorbox{arliznavy}{%
+    \parbox{\dimexpr\headwidth-6pt\relax}{%
+      \vspace{2pt}%
+      \hspace{6pt}{\small\textbf{\color{white}REPAIR ROADMAP\enspace\textbullet\enspace Board-Level Expert Track}}%
+      \hfill%
+      {\tiny\color{white!65!arliznavy}%
+        Mobile \textbullet\ Laptop \textbullet\ PC \textbullet\
+        Micro-Soldering \textbullet\ Signal Tracing \textbullet\ Power Sequencing%
+      }%
+      \hspace{6pt}\vspace{2pt}%
+    }%
+  }%
+}
+
+\hypersetup{
+  pdftitle={ARLIZ Repair Roadmap},
+  pdfauthor={Mahdi Mamashli (Genix)},
+  pdfsubject={Mobile, Laptop, PC Board-Level Repair — Expert Track},
+  pdfkeywords={ARLIZ, repair, board-level, micro-soldering, BGA, signal tracing, oscilloscope},
+}
+
+\pdfbookmark[0]{Cover}{bookmark.cover}
+
+\begin{document}
+
+\thispagestyle{empty}
+\input{sections/00-cover}
+\newpage
+
+\thispagestyle{fancy}
+\pdfbookmark[0]{Content List}{bookmark.toc}
+\tableofcontents
+\newpage
+
+\pdfbookmark[0]{North Star}{bookmark.northstar}
+\input{sections/01-north-star}
+\newpage
+
+\pdfbookmark[0]{0 Common Foundations}{bookmark.s0}
+\input{sections/02-common-foundations}
+\newpage
+
+\pdfbookmark[0]{1 Mobile Repair}{bookmark.s1}
+\input{sections/03-mobile-repair}
+\newpage
+
+\pdfbookmark[0]{2 Laptop Repair}{bookmark.s2}
+\input{sections/04-laptop-repair}
+\newpage
+
+\pdfbookmark[0]{3 PC and Desktop}{bookmark.s3}
+\input{sections/05-pc-desktop}
+\newpage
+
+\pdfbookmark[0]{4 Advanced Diagnostics}{bookmark.s4}
+\input{sections/06-advanced-diagnostics}
+\newpage
+
+\pdfbookmark[0]{5 Timeline and Income}{bookmark.s5}
+\input{sections/07-timeline}
+
+\end{document}

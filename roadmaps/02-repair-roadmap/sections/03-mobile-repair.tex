@@ -1,0 +1,141 @@
+% ── Reference box ─────────────────────────────────────────────────────────────
+\roadmapSection{1}{MOBILE REPAIR}{12--14 Weeks Total}
+
+% ── 1.1 Common Mobile Diagnostics ─────────────────────────────────────────────
+\roadmapSubSection{1.1}{Common Mobile Diagnostics}{4 Weeks}
+
+{\small\itshape\color{arligray} Learn this once. Applies to Android and iPhone equally. The diagnostic method never changes.}
+
+\roadmapHead{Diagnostic Methodology --- Always Follow This Exact Sequence}
+\checkitem{Step 1 --- Visual inspection under microscope: corrosion, liquid residue, charred ICs, cracked joints}{}
+\checkitem{Step 2 --- Diode mode test (board unpowered): red probe to ground, black to power rails}{Normal: 0.4--0.7V | Short: near 0V | Open: OL | Compare to known-good board}
+\checkitem{Step 3 --- DC power supply, current limit 0.5A, observe at power button press}{0mA after button: open fuse/dead PMIC | 1--5A instant: direct short on VBAT | 50--150mA stuck: RAM init fail}
+
+\roadmapHead{Short Circuit Diagnosis}
+\checkitem{Confirm shorted rail via diode mode (reads near 0 ohms)}{}
+\checkitem{Use freeze spray or thermal camera to find shorted component (gets warm first)}{}
+\checkitem{Identify and remove the shorted component (usually a capacitor or IC)}{}
+\checkitem{Verify short cleared by retesting diode mode --- must read normal before proceeding}{}
+\checkitem{Replace removed component and retest}{}
+
+\roadmapHead{Common Repairs --- 30+ Completions Before iPhone Board-Level}
+\checkitem{Screen replacement --- disconnect battery first, every time, no exceptions}{Warm adhesive with separator plate at 80°C for 2--3 min before lifting display}
+\checkitem{Battery replacement --- discharge below 20\%, never puncture, dispose swollen cells safely}{}
+\checkitem{Charging port replacement --- identify port type, clean pads, rework or replace}{}
+\checkitem{Power button and volume flex cable replacement}{}
+\checkitem{Front and rear camera module replacement}{}
+\checkitem{Earpiece and loudspeaker replacement}{}
+\checkitem{Microphone replacement or jumper bypass when traces broken}{}
+\checkitem{Back glass removal and adhesive re-application}{}
+
+\roadmapHead{Reading Mobile Datasheets and Schematics}
+\checkitem{Locate and download schematic via MaAnt or S-Finder}{}
+\checkitem{Identify all main ICs: PMIC, charge IC, CPU/AP, baseband, WiFi, audio, display}{}
+\checkitem{Trace charging path: USB connector $\to$ charge IC $\to$ battery --- know every node}{}
+\checkitem{Trace display path: AP $\to$ display IC $\to$ panel connector}{}
+\checkitem{Trace audio path: AP $\to$ audio codec $\to$ speaker and microphone}{}
+\checkitem{Trace RF path: AP $\to$ baseband $\to$ antenna switches $\to$ antennas}{}
+\checkitem{For every IC you repair around: read its datasheet --- first 10 pages minimum}{}
+
+\newpage
+% ── 1.2 Android Repair ────────────────────────────────────────────────────────
+\roadmapSubSection{1.2}{Android Repair (Samsung / Xiaomi / Huawei / MTK / Qualcomm)}{4--5 Weeks}
+
+{\small\itshape\color{arligray} This is where first real income comes from. Focus hard. Buy originals only --- never clones.}
+
+\roadmapHead{Tools --- Originals Only}
+\begin{toolbadges}
+\toolbadge{Octopus Box (original)}
+\toolbadge{EFT Pro Dongle (original)}
+\toolbadge{UFI Box (original)}
+\toolbadge{MaAnt / S-Finder}
+\toolbadge{QFIL (Qualcomm)}
+\toolbadge{SP Flash Tool (MTK)}
+\end{toolbadges}
+
+\roadmapHead{Android Boot and Partition Understanding}
+\checkitem{Android boot chain: Bootloader $\to$ Kernel $\to$ init $\to$ Zygote $\to$ System Server $\to$ Apps}{}
+\checkitem{Partition structure: boot, recovery, system, vendor, data, modem, cache, userdata}{}
+\checkitem{Fastboot mode: pre-OS interface for flashing partitions via USB}{}
+\checkitem{ADB: Android Debug Bridge --- shell access, log reading, file transfer}{}
+
+\roadmapHead{Qualcomm Platform}
+\checkitem{EDL mode (9008): hardcoded in boot ROM, survives all software states}{}
+\checkitem{Trigger EDL via ADB: \texttt{adb reboot edl}}{}
+\checkitem{Trigger EDL via Deep Flash Cable: shorts D+ and GND to force boot ROM into EDL}{}
+\checkitem{Trigger EDL via test point: locate pads near storage chip, short on power-up}{}
+\checkitem{Flash factory firmware via QFIL: full partition flash}{}
+\checkitem{Flash individual partitions: aboot, sbl1, boot, system --- know what each contains}{}
+\checkitem{Repair corrupt partition table via EDL + QFIL}{}
+\checkitem{Repair baseband via flashing modem partition}{}
+
+\roadmapHead{Samsung Platform}
+\checkitem{Master Samsung Odin: download mode trigger (Vol Down + Vol Up + USB)}{}
+\checkitem{Flash full firmware via Odin: AP, BL, CP, CSC --- understand what each contains}{}
+\checkitem{Recover from bootloop via Odin full firmware flash}{}
+\checkitem{Repair charging fault: trace VBUS path, test charge IC output rails}{}
+\checkitem{Repair baseband no-service: identify RF IC, test antenna switch rails, reflow or reball}{}
+\checkitem{Repair dead after drop: locate lifted pads under CPU or PMIC, reball}{}
+\checkitem{IMEI repair via Octopus Box after successful hardware repair}{}
+
+\roadmapHead{Xiaomi and MTK Platform}
+\checkitem{Flash MTK firmware via SP Flash Tool: understand scatter file and partition map}{}
+\checkitem{Recover bricked MTK via BROM mode: short test points on board to force}{}
+\checkitem{Use EFT Pro for Xiaomi unlock, account remove, and IMEI repair}{}
+\checkitem{Understand MediaTek chip architecture differences from Qualcomm}{}
+
+\roadmapHead{eMMC and UFS Repair with UFI Box}
+\checkitem{Identify eMMC chip on boardview using MaAnt or S-Finder}{}
+\checkitem{Connect UFI Box via ISP test points: CLK, CMD, DAT0 lines}{}
+\checkitem{Read full eMMC dump and save backup before any write operation --- always}{}
+\checkitem{Write bootloader partitions to recover deep brick}{}
+\checkitem{Repartition storage to fix partition table corruption}{}
+\checkitem{Understand RPMB (Replay Protected Memory Block): what can and cannot be safely written}{}
+
+\roadmapHead{UART Boot Log Reading on Android}
+\checkitem{Locate UART TX test point on board via schematic}{}
+\checkitem{Connect USB-to-UART adapter (CP2102, 1.8V logic level)}{}
+\checkitem{Open serial terminal at 115200 baud}{}
+\checkitem{Power device and capture full boot log}{}
+\checkitem{Identify error: kernel panic, missing init, PMIC failure, sensor timeout}{}
+
+\newpage
+% ── 1.3 iPhone Repair ─────────────────────────────────────────────────────────
+\roadmapSubSection{1.3}{iPhone Repair --- iOS Board-Level}{4--5 Weeks}
+
+{\small\itshape\color{arligray} Higher margins. Only start after 30+ successful Android board-level repairs.}
+
+\roadmapHead{Tools --- Buy at This Phase}
+\begin{toolbadges}
+\toolbadge{JCID V1S Pro}
+\toolbadge{i2C / JC Sonic}
+\toolbadge{3uTools}
+\toolbadge{iMazing}
+\toolbadge{ZXW Tool / MaAnt}
+\toolbadge{USB-C Meter}
+\end{toolbadges}
+
+\roadmapHead{iPhone Architecture --- Understand Before Touching}
+\checkitem{Apple Silicon A-series: CPU + GPU + Neural Engine + Secure Enclave in one die}{}
+\checkitem{NAND pairing: iPhone NAND and CPU are cryptographically paired --- NAND swap = dead device}{}
+\checkitem{Baseband certificate: IMEI tied to baseband at factory level, cannot be software-changed}{}
+\checkitem{Face ID pairing: dot projector paired to logic board --- not field-replaceable}{}
+\checkitem{True Tone pairing: display calibration tied to logic board --- use JCID to transfer}{}
+\checkitem{Chain of trust: SecureROM $\to$ LLB $\to$ iBoot $\to$ kernel $\to$ SpringBoard --- each stage verified}{}
+
+\roadmapHead{iOS Boot Modes}
+\checkitem{Understand normal boot vs recovery mode vs DFU mode --- know how to trigger each}{}
+\checkitem{DFU mode: bypasses iBoot, used for deep restore}{}
+\checkitem{Recovery mode: iBoot waits for iTunes/Finder restore --- shows iTunes logo}{}
+\checkitem{SHSH blobs: version-specific signing tickets --- why iOS downgrades are blocked}{}
+
+\roadmapHead{iPhone Board-Level Repairs}
+\checkitem{Charging fault: trace TRISTAR/HYDRA/ACE3 IC, test PP5V0\_USB rail}{}
+\checkitem{No power: test PP\_BATT\_VCC rail, locate main power button IC (Hazel/Sage)}{}
+\checkitem{Bootloop: check NAND communication bus, AP-to-NAND SPI lines, confirm boot log via UART}{}
+\checkitem{Audio fault: locate audio IC (338S), check AVDD rail, reball if needed}{}
+\checkitem{Baseband no service: check baseband PMU rails, RF ICs, antenna switch control lines}{}
+\checkitem{WiFi fault: locate WiFi/BT combo IC, check WLAN\_VCC rail and antenna connection}{}
+\checkitem{Face ID repair: check dot projector flex connector, verify pairing via JCID scanner}{}
+\checkitem{Screen replacement with True Tone calibration transfer via JCID}{}
+\checkitem{Battery swap with health percentage reset via JCID}{}

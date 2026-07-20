@@ -1,0 +1,93 @@
+\roadmapSection{3}{PC / DESKTOP / MONITOR / PERIPHERALS}{4--5 Weeks}
+
+{\small\itshape\color{arligray} Largest geometry, most accessible. Volume repairs and OS work. Fast income, low barrier.}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\roadmapSubSection{3.1}{PC Hardware Architecture}{1 Week}
+
+\roadmapHead{Motherboard and CPU}
+\checkitem{Form factors: ATX (305x244mm), Micro-ATX (244x244mm), Mini-ITX (170x170mm). Case compatibility is critical.}{}
+\checkitem{CPU sockets: Intel LGA1700 (12th--14th gen), LGA1851 (Core Ultra 200). AMD AM4 (Ryzen 3000--5000), AM5 (Ryzen 7000+).}{}
+\checkitem{CPU power: ATX 2x4 (12V CPU power). Missing this connector = no POST, fan spins, no display.}{}
+\checkitem{VRM phases on desktop: 6--20 phases for high-end CPUs. Phase count visible from inductor count near CPU socket.}{}
+\checkitem{PCIe x16 slot (GPU), x4 slot (fast SSD), x1 slot (expansion cards). Electrically x1 cards work in x16 slots.}{}
+\checkitem{ATX 24-pin: all main voltages (+12V, +5V, +3.3V, -12V, +5VSB). PS\_ON\# pin: short to GND = PSU starts without board.}{}
+
+\roadmapHead{RAM}
+\checkitem{DDR4 vs DDR5: different socket (not compatible). DDR5 has on-die ECC and power management.}{}
+\checkitem{Dual-channel: populate A2+B2 slots (check motherboard manual). Wrong slots = single-channel = half bandwidth.}{}
+\checkitem{XMP (Intel) / EXPO (AMD): overclocking profiles stored in SPD on RAM. Enable in BIOS for rated speed.}{}
+\checkitem{RAM compatibility: check motherboard QVL list. Some brands/kits not stable even at rated speed.}{}
+\checkitem{Diagnose: MemTest86+ for 2 full passes. Single pass misses intermittent faults.}{}
+
+\roadmapHead{Storage}
+\checkitem{NVMe Gen 3 x4: PCIe slot or M.2 Key-M. Identify interface from spec sheet before buying.}{}
+\checkitem{SATA: 6Gbps. M.2 Key-B+M or 2.5-inch drive bay. Much slower than NVMe but cheaper.}{}
+\checkitem{SSD health: CrystalDiskInfo (Windows), smartmontools (Linux). TBW (total bytes written) shows remaining lifespan.}{}
+\checkitem{Clone old drive before any SSD upgrade: Clonezilla, Macrium Reflect (free), \texttt{dd} on Linux.}{}
+
+\roadmapHead{GPU}
+\checkitem{PCIe x16 power: 6-pin (75W), 8-pin (150W), 16-pin (600W for RTX 4090). All must be connected.}{}
+\checkitem{Reseat GPU: oxidized slot contacts cause no display, artifacting, or crashes. Clean with IPA.}{}
+\checkitem{GPU fan replacement: most fans use 4-pin JST connector. Match blade count and size.}{}
+\checkitem{GPU reball: BGA chip (GPU die). Requires industrial reflow oven for reliable results. Not for beginners.}{}
+\checkitem{Thermal pad on VRAM and VRM: use silicone pads, match original thickness. Compressed = shorting risk.}{}
+
+\roadmapHead{PSU (Power Supply Unit)}
+\checkitem{80+ rating: efficiency at 20/50/100\% load. 80+ Gold = 87\% efficient at 50\% load.}{}
+\checkitem{Test PSU without motherboard: short PS\_ON\# to GND on 24-pin, measure all rails with DMM.}{+12V: 11.4--12.6V. +5V: 4.75--5.25V. +3.3V: 3.135--3.465V. Out of range = faulty PSU.}
+\checkitem{Failing PSU symptoms: random shutdowns under load, won't power on (OCP tripped), voltage sag.}{}
+\checkitem{Capacitor plague PSUs (2003--2007 era): bulging caps on primary/secondary. Recap with quality caps.}{}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\roadmapSubSection{3.2}{PC Diagnosis and Repair}{2 Weeks}
+
+\roadmapHead{No-POST Diagnosis}
+\checkitem{Minimum hardware test: CPU + 1 RAM stick + PSU only. No GPU (use integrated). No drives, no USB.}{}
+\checkitem{No power at all: verify PSU switch on, wall power OK, 24-pin and 8-pin CPU power seated.}{}
+\checkitem{Fans spin, no display: GPU not seated, RAM not seated, CPU power 8-pin missing, dead BIOS.}{}
+\checkitem{1 beep then nothing: POST OK but OS boot failed (not hardware fault). Check storage.}{}
+\checkitem{POST debug card: 2-digit hex code display on PCIe x1 card. Code table in motherboard manual.}{}
+\checkitem{Clear CMOS: remove CR2032 for 30 seconds, or use CLRTC jumper. Resets all BIOS settings.}{}
+
+\roadmapHead{Component-Level PC Repair}
+\checkitem{Motherboard capacitor replacement: identify bulging/leaking electrolytics near CPU socket or power section.}{}
+\checkitem{Identify failed cap: measure ESR in-circuit with LCR meter. High ESR confirms fault without desoldering.}{}
+\checkitem{Replacement caps: same voltage rating or higher, same or better ESR (low-ESR series: Nichicon HZ, Panasonic FR).}{}
+\checkitem{BIOS chip replacement: same procedure as laptop. CH341A + SOIC-8 clip. Program before soldering.}{}
+\checkitem{IO shield corrosion on back panel: clean with IPA. Corrosion causes intermittent Ethernet/USB faults.}{}
+
+\roadmapHead{Monitor Repair}
+\checkitem{Backlight failure (CCFL, older): inverter board drives CCFL tubes. Replace inverter or CCFL tubes.}{}
+\checkitem{Backlight failure (LED, modern): LED driver board boosts 12V to 35--80V for LED string.}{}
+\checkitem{Measure LED driver output: should be 35--80V DC. Low voltage = driver fault. No voltage = enable signal missing.}{}
+\checkitem{Capacitor failure on PSU board inside monitor: very common fault. Replace with 105°C rated caps.}{}
+\checkitem{Vertical/horizontal lines on panel: FPC cable fault or panel fault. Reseat FPC first. Flex damage = panel replacement.}{}
+\checkitem{No signal: verify cable, try different GPU output, test with different cable type (DP vs HDMI).}{}
+
+\roadmapHead{Peripheral Repair}
+\checkitem{Mouse: identify switch brand (Omron D2FC-F-7N for double-click fix). Desolder, replace same spec.}{}
+\checkitem{Mouse encoder (scroll wheel): clean with IPA if erratic. Replace encoder if physically worn.}{}
+\checkitem{Mechanical keyboard switch: identify type (Cherry MX, Gateron, Kailh, Alps). Replace individual switch.}{}
+\checkitem{Keyboard PCB trace repair: common after liquid damage. Same technique as phone jumper wire.}{}
+
+\roadmapSubSection{3.3}{OS Installation --- Windows / Linux / macOS}{1 Week}
+
+\roadmapHead{Windows Advanced}
+\checkitem{UEFI + GPT: mandatory for Windows 11. TPM 2.0 required. Enable fTPM in AMD BIOS or PTT in Intel BIOS.}{}
+\checkitem{Unattended install: autounattend.xml in USB root. Skips all prompts. Useful for volume deployments.}{}
+\checkitem{Driver management: Device Manager $\to$ Unknown Device $\to$ Hardware IDs $\to$ search DriverPack or vendor site.}{}
+\checkitem{Windows activation: OEM license tied to motherboard BIOS (SLIC). Board swap needs new license or transfer call.}{}
+\checkitem{DISM image capture: \texttt{DISM /Capture-Image} for sysprep-based cloning for multiple identical machines.}{}
+
+\roadmapHead{Linux Advanced}
+\checkitem{LVM (Logical Volume Manager): flexible partition resizing. Use for desktops where storage needs may change.}{}
+\checkitem{LUKS encryption: full-disk encryption. Set up during install. AES-256 default. Performance hit: 5--10\%.}{}
+\checkitem{Timeshift: system snapshot tool. Equivalent to Windows restore points. Set up immediately after install.}{}
+\checkitem{chroot repair: boot from live USB, mount broken system, \texttt{chroot /mnt}, fix issues, \texttt{grub-install}.}{}
+\checkitem{Kernel issues: boot to older kernel from GRUB menu. Identify bad driver with \texttt{dmesg | grep -i fail}.}{}
+
+\roadmapHead{macOS on Non-Apple Hardware (Hackintosh)}
+\checkitem{OpenCore bootloader: most maintained Hackintosh method. Requires ACPI patches and kexts for each platform.}{}
+\checkitem{Compatible hardware: Intel 8th--13th gen + AMD GPU (most RX 500/5000/6000 series). No NVIDIA post-Pascal.}{}
+\checkitem{Only as a skill exercise. Never for client machines --- unsupported, legally gray, breaks after macOS updates.}{}

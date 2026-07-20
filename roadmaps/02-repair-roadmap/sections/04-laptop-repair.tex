@@ -1,0 +1,147 @@
+\roadmapSection{2}{LAPTOP REPAIR}{6--8 Weeks}
+
+{\small\itshape\color{arligray} Same diagnostic logic as phones, larger geometry, more accessible hardware. Excellent second income stream.}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\roadmapSubSection{2.1}{Laptop Architecture --- Deep Understanding}{1 Week}
+
+\roadmapHead{Additional Tools --- Buy at This Phase}
+\begin{toolbadges}
+\toolbadge{CH341A Programmer + SOIC-8 Clip}
+\toolbadge{USB-C Power Delivery Tester (FNIRSI FNB48)}
+\toolbadge{USB-C Multimeter / Current Logger}
+\toolbadge{LCR Meter (BSIDE ESR02 Pro)}
+\end{toolbadges}
+
+\roadmapHead{Laptop Motherboard Blocks}
+\checkitem{CPU (BGA on modern): Intel Core / AMD Ryzen. Socket on desktop-replacement laptops only.}{}
+\checkitem{PCH (Platform Controller Hub) / Fusion Controller Hub: manages PCIe lanes to SSD, USB, audio, Ethernet.}{}
+\checkitem{VRM (Voltage Regulator Module): multi-phase buck converts 19V adapter to CPU Vcore (0.8--1.4V adjustable).}{More phases = lower ripple. 4-phase VRM for i7: each phase handles 25\% of max TDP. Phase failure = instability.}
+\checkitem{BIOS SPI Flash: 8MB--32MB SOIC-8 or WSON-8. Contains firmware, EC firmware, ME firmware.}{}
+\checkitem{EC (Embedded Controller): microcontroller (e.g. ITE IT8987E) that manages keyboard, fan, power button, lid sensor.}{}
+\checkitem{ME (Intel Management Engine) / PSP (AMD Platform Security Processor): subsystem that runs before CPU boots.}{}
+\checkitem{DRAM: DDR4/DDR5 SO-DIMM or LPDDR4X/5 soldered. Soldered cannot be upgraded.}{}
+\checkitem{NVMe SSD: M.2 Key-M socket. Gen 3 x4 = 3.5GB/s. Gen 4 x4 = 7GB/s. SATA M.2 = 600MB/s.}{}
+\checkitem{eDP (Embedded DisplayPort): display interface. 4 lanes, HBR2 = 17.28Gbps total. Separate backlight connector.}{}
+\checkitem{Thunderbolt 3/4: 40Gbps, PCIe 3.0 x4 + DP 1.4 + USB 3.2. Handled by Titan Ridge / Maple Ridge IC.}{}
+
+\roadmapHead{Power Input Architecture (19--20V Adapter)}
+\checkitem{DC barrel jack: 19--20V direct to charge IC and VIN. Test output voltage first on all no-power calls.}{}
+\checkitem{USB-C PD: charger negotiates 20V/3A (60W) or 20V/5A (100W) via CC lines. PD controller: FUSB302 or similar.}{}
+\checkitem{Charge IC: BQ24780S / ISL9238 / MP2731. Converts adapter voltage to system rail + charges battery.}{}
+\checkitem{System rail (VSYS / PP19V): feeds VRM for CPU and all other DC/DC converters.}{}
+\checkitem{Battery: 3S (three cells in series, ~11.4V) or 4S (~15.2V on newer ultra-thin models). Li-ion or Li-polymer.}{}
+\checkitem{Battery sense: coulomb counter IC on battery reads State of Charge (SoC) via I2C or SMBus to EC.}{}
+
+\roadmapHead{POST (Power-On Self-Test) Sequence}
+\checkitem{ME/PSP boot: management engine starts before CPU. ME can block CPU if it detects tampering.}{}
+\checkitem{CPU reset: PCH releases PLTRST\# signal when all required rails are stable. CPU begins executing from address 0xFFFFFFF0.}{}
+\checkitem{CPU executes BIOS code from SPI flash: initializes DDR training, sets up CPU topology.}{}
+\checkitem{Memory training: BIOS trains DDR timing (write leveling, read training). Fail = 3-beep pattern, no POST.}{}
+\checkitem{BIOS POST: tests CPU, RAM, GPU, PCH, storage. Outputs beep codes on speaker or LED blink codes.}{}
+\checkitem{Beep codes (Award/AMI): 1 short = OK. 1 long + 2 short = GPU. 3 short = memory. 1 long repeated = memory.}{}
+\checkitem{BIOS then loads bootloader from storage (GRUB or Windows Boot Manager) and passes control.}{}
+
+\roadmapHead{Laptop Types and Repairability}
+\checkitem{Business class (ThinkPad X/T/L, EliteBook, Latitude): replaceable RAM, SSD, keyboard, battery. Best to repair.}{}
+\checkitem{Consumer thin-and-light: glued chassis, soldered RAM + SSD. Screen replacement difficult. Limited board repair.}{}
+\checkitem{Gaming laptop: discrete GPU (MXM or BGA). Dual power rail (GPU + CPU). Thermal issues dominant.}{}
+\checkitem{MacBook Intel (2015--2019): T2 chip (Bridge OS). Activation Lock can brick after board swap.}{}
+\checkitem{MacBook Apple Silicon (M1--M4): unified memory soldered to SoC package. No component-level repair on SoC.}{}
+
+\newpage
+% ══════════════════════════════════════════════════════════════════════════════
+\roadmapSubSection{2.2}{Laptop Mechanical and Common Repairs}{2 Weeks}
+
+\roadmapHead{Disassembly Best Practices}
+\checkitem{Photograph every screw position before removal. Different lengths cause PCB damage if inserted wrong.}{}
+\checkitem{Plastic pry tools only near screen bezel. Metal spatulas near heatsink/chassis.}{}
+\checkitem{Identify hidden screws: under rubber feet, under stickers, under battery connector, behind hinges.}{}
+\checkitem{Ribbon cable connectors: ZIF (Zero Insertion Force) type. Lift latch first, never pull cable.}{}
+
+\roadmapHead{Common Mechanical Repairs}
+\checkitem{DC barrel jack: inspect under microscope for broken solder joints (barrel wobble after drop). Reflow or replace.}{}
+\checkitem{USB-C port: damaged pins (bent, broken) after repeated plug cycles. Replace port and test PD negotiation after.}{}
+\checkitem{Keyboard: remove screws from bottom, disconnect ribbon, swap. JIS screw type on Japanese-market models.}{}
+\checkitem{Trackpad: disconnect flex, remove adhesive tape carefully, install new and verify click force adjustment.}{}
+\checkitem{Screen (eDP): remove bezel clips (plastic snaps), disconnect eDP cable, transfer hinges + webcam cable.}{}
+\checkitem{Thermal paste: IPA to clean old TIM. Apply MX-4 or Kryonaut in pea or cross pattern. Not too much.}{}
+\checkitem{Thermal pad replacement: GPU, VRM, chipset. Measure original thickness with digital calipers. Match exactly.}{Wrong thickness = poor contact or mechanical stress on BGA solder balls.}
+\checkitem{Fan: disconnect header, unscrew, replace. Verify RPM response in BIOS fan test after install.}{}
+\checkitem{RAM (where socketed): identify DDR version and bus speed. Dual-channel: use matching pairs in correct slots.}{}
+\checkitem{SSD upgrade: identify M.2 key (Key-M for NVMe, Key-B+M for SATA). Clone old drive with Clonezilla or Macrium.}{}
+\checkitem{Battery: match cell count, connector pinout, and voltage. Never force a connector. Verify charge after install.}{}
+\checkitem{Hinge repair: broken plastic around hinge = structural. JB Weld or reinforcement plate + M2 inserts.}{}
+
+\roadmapHead{Board-Level Laptop Diagnosis}
+\checkitem{No power from adapter: test barrel jack output with DMM. Present? Check MOSFET gate drive on charge IC.}{}
+\checkitem{No power from USB-C: test CC1/CC2 voltage (should toggle with PD negotiation). Dead CC = PD controller fault.}{}
+\checkitem{Power IC faults (ISL9238, RT8205, UP6178): check EN pin, ACIN, VSYS output. No VSYS = VRM cannot start.}{}
+\checkitem{No display (backlight): probe backlight enable signal from EC. Measure backlight LED rail (15--35V typical).}{}
+\checkitem{No display (panel): probe eDP RX0 P/N at panel connector with oscilloscope. Signal present = panel fault.}{}
+\checkitem{Overheating shutdown: clean heatsink fins + fan blades. Replace thermal paste. Check fan tachometer signal.}{}
+\checkitem{No charge: measure adapter brick output. Check PD negotiation on scope. Test charge IC EN pin.}{}
+\checkitem{RAM not detected: check RAM slot contacts for corrosion. Test individual sticks. Re-seat. Check SPD ROM.}{}
+\checkitem{Liquid damage: disassemble immediately. Do not power on. Rinse with IPA, ultrasonic cleaner if available.}{}
+\checkitem{Capacitor faults on VRM: bulging or leaking electrolytic caps. Check ESR with LCR meter. Replace same spec.}{}
+
+\roadmapHead{VRM (Voltage Regulator Module) --- Advanced}
+\checkitem{Identify VRM controller IC (ISL95834, RT3681, MP2884A). Read datasheet for phase count and control signals.}{}
+\checkitem{Measure each phase output: all phases should contribute equally. Dead phase = coil runs cold, others run hot.}{}
+\checkitem{MOSFET gate drive signals: oscilloscope on gate of each phase MOSFET. Missing PWM = phase controller fault.}{}
+\checkitem{VCORE ripple: should be < 50mV peak-to-peak at full load. High ripple = failing output capacitor.}{}
+\checkitem{VID (Voltage Identification): CPU tells VRM its required voltage via VID bits. Wrong VID = wrong Vcore = instability.}{}
+\checkitem{Thermal throttling: CPU reduces VID under thermal pressure. Monitor with HWiNFO64 to distinguish thermal vs VRM fault.}{}
+
+\newpage
+% ══════════════════════════════════════════════════════════════════════════════
+\roadmapSubSection{2.3}{BIOS Chip Operations and EC Firmware}{2 Weeks}
+
+\roadmapHead{BIOS SPI Flash --- Read, Modify, Write}
+\checkitem{Locate BIOS chip: SOIC-8 package near PCH/chipset. Label: 25Q128JVSQ, W25Q256, MX25L12873F or similar.}{}
+\checkitem{Read in-circuit: CH341A + SOIC-8 clip. Software: flashrom (Linux/Windows). Do NOT remove chip.}{\texttt{flashrom -p ch341a\_spi -r bios\_backup.bin}}
+\checkitem{Always verify read: compare two sequential reads with SHA256. Identical hash = clean read.}{}
+\checkitem{Save original dump before any modification. Keep multiple backups. Losing original = bricked board.}{}
+\checkitem{Flash clean image: \texttt{flashrom -p ch341a\_spi -w clean\_bios.bin --verify}}{}
+\checkitem{BIOS password clear: locate password bytes in dump (pattern search). Zero them out. Reflash.}{}
+\checkitem{Corrupt BIOS recovery: find same-model BIOS online (manufacturer download). Flash directly.}{}
+\checkitem{ME region: BIOS dump has multiple regions (descriptor, ME, GbE, BIOS). Use \texttt{ifdtool} to split/examine.}{}
+\checkitem{Modify BIOS: UEFITool + IFRExtractor to unlock hidden settings. Only for advanced users. NEVER on client boards.}{}
+
+\roadmapHead{EC (Embedded Controller) Firmware}
+\checkitem{EC runs independently of BIOS: controls keyboard, fan, power button, lid switch, battery charging.}{}
+\checkitem{EC firmware stored in separate SPI flash or in combined BIOS chip (model-dependent).}{}
+\checkitem{Dead EC = no keyboard, no power button, no fan response. Diagnose by measuring EC power rails first.}{}
+\checkitem{Re-flash EC: requires EC-specific programmer or vendor tool. Some ECs accessible via ISP pins on board.}{}
+\checkitem{EC power sequence: EC powers on from RTC battery or adapter. It enables main power button detection.}{No RTC battery + depleted main battery = EC cannot power on even with adapter. Replace CMOS first.}
+\checkitem{Fan control: EC reads CPU/GPU temperature via ACPI thermal zones. Adjust curves in ThinkFan or NBFC on Linux.}{}
+
+\roadmapHead{macOS and T-Series Chip Considerations}
+\checkitem{T2 chip (Intel MacBook 2018--2020): manages SSD encryption, Touch ID, secure boot, Bridge OS.}{}
+\checkitem{T2 Activation Lock: if prior owner enabled ``Find My'', T2 will refuse to boot on board swap.}{Resolution: contact Apple for Activation Lock removal with proof of purchase.}
+\checkitem{M1--M4 (Apple Silicon): SoC + unified DRAM in one package. No board-level repair possible on compute complex.}{}
+\checkitem{SMC reset (Intel): hold Shift + Control + Option + Power for 10 seconds. Resets fan, display, battery behavior.}{}
+\checkitem{PRAM/NVRAM reset (Intel): hold Cmd + Option + P + R on boot for two chimes.}{}
+\checkitem{Apple Diagnostics: hold D on boot (Internet Diagnostics: Option+D). Reports fault codes (PPT001 = battery, PPN001 = NVMe).}{}
+
+\roadmapSubSection{2.4}{OS Installation and Recovery}{1 Week}
+
+\roadmapHead{Windows}
+\checkitem{Bootable USB: Rufus 3.x. MBR + BIOS for legacy; GPT + UEFI for modern (all 2015+ hardware). FAT32 for UEFI.}{}
+\checkitem{Disable Secure Boot in BIOS if installer not recognized. Re-enable after install.}{}
+\checkitem{Driver sequence: chipset $\to$ GPU $\to$ audio $\to$ network $\to$ everything else.}{}
+\checkitem{Repair without reinstall: \texttt{sfc /scannow} (file checker), \texttt{DISM /Online /Cleanup-Image /RestoreHealth}, \texttt{bootrec /fixmbr /fixboot /rebuildbcd}}{}
+\checkitem{Windows not activating after board swap: hardware-bound license. Use \texttt{slmgr /ato} or phone activation.}{}
+
+\roadmapHead{Linux}
+\checkitem{Bootable USB: \texttt{dd if=ubuntu.iso of=/dev/sdX bs=4M status=progress} or Balena Etcher.}{}
+\checkitem{Partition layout: / (root, 30GB min), /home (rest), swap (equal to RAM up to 16GB).}{}
+\checkitem{Dual-boot: install Windows first. GRUB auto-detects. Never install Linux first.}{}
+\checkitem{GRUB repair after Windows update: boot from USB, \texttt{mount /dev/sdaX /mnt}, \texttt{grub-install --root-directory=/mnt /dev/sda}.}{}
+\checkitem{Diagnose boot failures: \texttt{journalctl -b -1} (last boot), \texttt{dmesg | grep -i error}.}{}
+
+\roadmapHead{macOS}
+\checkitem{Bootable USB: \texttt{sudo /Applications/Install\textbackslash macOS\textbackslash Ventura.app/Contents/Resources/createinstallmedia --volume /Volumes/MyVolume}}{}
+\checkitem{Internet Recovery (Intel): hold Option + Cmd + R. Downloads latest macOS from Apple CDN.}{}
+\checkitem{Apple Silicon recovery: hold power button until ``Loading startup options''. Then ``Options''.}{}
+\checkitem{SIP disable (for advanced repair/diagnostics): boot to recovery, \texttt{csrutil disable}. Re-enable after.}{}
