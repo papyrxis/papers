@@ -1,6 +1,34 @@
-% ══════════════════════════════════════════════════════════════════════════════
-% ARLIZ Roadmap — Shared Preamble
-% ══════════════════════════════════════════════════════════════════════════════
+\usepackage{newunicodechar}
+% Greek lowercase
+\newunicodechar{ε}{\ensuremath{\varepsilon}}
+\newunicodechar{π}{\ensuremath{\pi}}
+\newunicodechar{φ}{\ensuremath{\varphi}}
+\newunicodechar{ω}{\ensuremath{\omega}}
+\newunicodechar{θ}{\ensuremath{\theta}}
+% Greek uppercase
+\newunicodechar{Δ}{\ensuremath{\Delta}}
+\newunicodechar{Ω}{\ensuremath{\Omega}}
+% Math operators and symbols
+\newunicodechar{−}{\ensuremath{-}}
+\newunicodechar{×}{\ensuremath{\times}}
+\newunicodechar{≈}{\ensuremath{\approx}}
+\newunicodechar{√}{\ensuremath{\surd}}
+\newunicodechar{∠}{\ensuremath{\angle}}
+\newunicodechar{∫}{\ensuremath{\int}}
+\newunicodechar{≤}{\ensuremath{\leq}}
+\newunicodechar{≥}{\ensuremath{\geq}}
+\newunicodechar{↔}{\ensuremath{\leftrightarrow}}
+\newunicodechar{→}{\ensuremath{\rightarrow}}
+\newunicodechar{←}{\ensuremath{\leftarrow}}
+\newunicodechar{±}{\ensuremath{\pm}}
+\newunicodechar{∞}{\ensuremath{\infty}}
+\newunicodechar{∑}{\ensuremath{\sum}}
+\newunicodechar{∏}{\ensuremath{\prod}}
+\newunicodechar{∂}{\ensuremath{\partial}}
+\newunicodechar{∇}{\ensuremath{\nabla}}
+\newunicodechar{≠}{\ensuremath{\neq}}
+\newunicodechar{≡}{\ensuremath{\equiv}}
+\newunicodechar{°}{\ensuremath{{}^{\circ}}}
 
 \usepackage{amsmath}
 \usepackage{amssymb}
@@ -38,7 +66,11 @@
   bookmarksopen=true,
   bookmarksnumbered=false,
   pdfpagelabels=true,
+  unicode=true,
 ]{hyperref}
+\pdfstringdefDisableCommands{%
+  \let\ensuremath\@firstofone
+}
 \usepackage{tcolorbox}
 \tcbuselibrary{skins, breakable}
 

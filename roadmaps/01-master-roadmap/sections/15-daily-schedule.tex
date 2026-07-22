@@ -3,23 +3,23 @@
 % ── 13.1 Daily Structure ─────────────────────────────────────────────────────
 \roadmapSubSection{13.1}{Daily Structure}{Peak Deep Work = 4--6 Hours}
 
-{\small\itshape\color{arligray} 15 hours of sustained deep work is impossible. Plan around peak cognitive hours.}
+{\small\itshape\color{arligray} 15 hours of sustained deep work is impossible. Plan around peak cognitive hours. Tracks below run in parallel — each day you touch multiple tracks.}
 
 \vspace{0.2cm}
 
 \begin{tabular}{>{\bfseries\color{arliznavy}}p{2.5cm} >{\bfseries\color{arlizblue}}p{1.8cm} p{10cm}}
 \rowcolor{arliznavy}
 \color{white}\textbf{Block} & \color{white}\textbf{Duration} & \color{white}\textbf{Activity} \\
-Morning     & 90 min   & English $\cdot$ 100 Anki cards $\cdot$ 1 technical article $\cdot$ 1 paragraph written \\
+Morning     & 90 min   & English: 100 Anki cards + 1 technical article + 1 paragraph written + 15 min shadowing \\
 \rowcolor{arlizlgray}
-Pre-noon    & 3 hours  & Main Work Block A --- deepest block. Phone off. No AI. No extra tabs \\
+Pre-noon    & 3 hours  & Main Work Block A --- deepest block. Phone off. No AI as first resort. No extra tabs \\
 Noon        & 30 min   & Real rest. Walk. No screen \\
 \rowcolor{arlizlgray}
 Afternoon   & 2 hours  & Main Work Block B --- continue current phase. Read AND do, not read only \\
-Evening     & 90 min   & ARLIZ --- write what you learned. One note + one chapter paragraph \\
+Evening     & 90 min   & ARLIZ --- write what you learned. One note + one chapter paragraph, in English \\
 \rowcolor{arlizlgray}
-Late evening & 30 min  & Mathematics. Mastering Fundamentals. No exceptions, even if tired \\
-Night       & 30 min   & Journal --- what I learned, what broke, why, what tomorrow holds \\
+Late evening & 30 min  & Mathematics. Mastering Fundamentals + Electronics math. No exceptions \\
+Night       & 30 min   & Journal in English: what I learned, what broke, why, what tomorrow holds \\
 \end{tabular}
 
 \vspace{0.3cm}
@@ -29,10 +29,19 @@ Night       & 30 min   & Journal --- what I learned, what broke, why, what tomor
 \hspace{4pt}$\to$ Block A first\quad$\to$ ARLIZ second\quad$\to$ English third\\
 \hspace{4pt}$\to$ Protect the morning block above all\\[6pt]
 \textbf{AI Rule:} use AI to check work you already did --- not to replace thinking.\\
-Asking AI what a datasheet says = building dependency, not skill.
+Asking AI what a datasheet says = building dependency, not skill.\\[6pt]
+\textbf{Parallel tracks: when two tasks compete, ask which is closer to the North Star.}\\
+Repair (income) $>$ Robotics/Embedded (skill) $>$ English (Estonia gate) $>$ ARLIZ $>$ Math
 \end{northstarbox}
 
 \vspace{0.5cm}
+
+\roadmapHead{Track Priority by Phase}
+\checkitem{Months 1--3 (Foundation): Electronics Deep + ESP32 basics + English every day + C programming}{}
+\checkitem{Months 4--6 (First income): Repair skills + Android board-level + Robotics Project 1--3}{}
+\checkitem{Months 7--9 (Build): PCB/Talken + iPhone repair + Robotics Project 4--6 + ARLIZ Vol I}{}
+\checkitem{Months 10--12 (Advance): Assembly + RE intro + Robotics Project 7--8 + TOEFL 95+}{}
+\checkitem{Months 13--18 (Master): Full RE + ARLIZ Vol II + Laptop repair + Estonia prep}{}
 
 \newpage
 % ── 13.2 Month-by-Month Timeline ──────────────────────────────────────────────
@@ -40,99 +49,140 @@ Asking AI what a datasheet says = building dependency, not skill.
 
 \vspace{0.2cm}
 
-\timelineitem{Month 1}{}{%
+\timelineitem{Month 1}{Foundation: Electronics + ESP32 + English}{%
   0.1: ESD-safe workspace complete \textbullet\
-  0.2: Start electronics fundamentals \textbullet\
-  4.2: Buy ESP32 kit, first LED + button breadboard \textbullet\
-  ARLIZ: Write first 3 paragraphs of Chapter 1 \textbullet\
-  English: Anki deck started, 100 words/day \textbullet\
+  0.2: Start electronics fundamentals (DC theory, KVL/KCL) \textbullet\
+  14.1: DC analysis: Thévenin, node voltage, capacitor deep \textbullet\
+  16.1: Install Arduino IDE + PlatformIO, first LED + button breadboard \textbullet\
+  18.2 (ESP32): Buy ESP32 DevKit, blink via register write (no Arduino functions) \textbullet\
+  15.1: Understand robot anatomy, buy L298N and MG90S servo \textbullet\
+  ARLIZ: Write first 3 paragraphs of Chapter 1 in English \textbullet\
+  English: Anki deck started, 100 words/day, 1 article/day \textbullet\
   Math: Mastering Fundamentals started, 30 min/day
 }
 
-\timelineitem{Month 2}{}{%
+\timelineitem{Month 2}{Passive Components + AVR Deep + Servo Control}{%
   0.2: Complete component knowledge --- test every passive type physically \textbullet\
+  14.1: Complete capacitor/inductor deep, build RC + RL circuits, measure on oscilloscope \textbullet\
+  14.2: Start AC theory: impedance, filters. Build RC low-pass, verify with oscilloscope \textbullet\
+  16.1: AVR register-level programming: GPIO, ADC, UART without Arduino functions \textbullet\
+  16.1: Interrupt-driven button read + rotary encoder \textbullet\
+  15.2: Servo PWM control on ESP32 (LEDC). Pan-tilt mount with 2 servos \textbullet\
   0.3: Start soldering --- practice SMD removal/placement daily \textbullet\
-  4.2: Power ESP32 from battery via LDO --- Talken first power circuit \textbullet\
   ARLIZ: Complete Chapter 1 first draft \textbullet\
-  Buy 5--10 dead practice boards
+  Buy 5--10 dead practice boards \textbullet\
+  English: First 300-word academic essay
 }
 
-\timelineitem{Month 3}{}{%
+\timelineitem{Month 3}{Power Electronics + Motor Control + C Deep}{%
   0.3: Complete soldering --- jumper wire routing, BGA reballing basics \textbullet\
-  4 (C): Start C programming --- pointers, arrays, structs \textbullet\
+  14.3: Power electronics: LDO design + Buck converter in LTspice. Build TP4056 charger circuit \textbullet\
+  14.4: Op-amp circuits: inverting amplifier, comparator. Measure with oscilloscope \textbullet\
+  4 (C): C programming deep --- pointers, arrays, structs, malloc \textbullet\
+  16.2: ESP32 architecture deep: memory regions, GPIO matrix, peripheral map \textbullet\
+  15.2: DC motor H-bridge (L298N) + PWM speed control + encoder feedback \textbullet\
+  Robot Project 1: obstacle avoider (HC-SR04 + L298N + ESP32) \textbullet\
   1.1: Start mobile diagnostics --- DCPS current analysis methodology \textbullet\
-  ARLIZ: Complete Chapters 2 and 3 (Electricity)
+  ARLIZ: Complete Chapters 2--3 (Electricity)
 }
 
-\timelineitem{Month 4}{}{%
+\timelineitem{Month 4}{Repair Income Prep + FreeRTOS + Line Follower}{%
   1.1: Complete common diagnostics --- 20+ successful basic repairs \textbullet\
   1.2: Start Android repair --- Qualcomm EDL, Samsung Odin \textbullet\
-  4 (C): Implement I2C and SPI drivers on ESP32 \textbullet\
+  4 (C): Implement ring buffer, CRC-16, state machine in C \textbullet\
+  16.3: FreeRTOS deep: tasks, queues, semaphores, mutexes on ESP32 \textbullet\
+  16.2: ESP32 GPIO matrix, ADC (avoid ADC2 with WiFi), LEDC PWM \textbullet\
+  15.3: Sensor study: MPU-6050 (I2C), HC-SR04, IR line array \textbullet\
+  Robot Project 2: line follower with 5× IR array. Tune PID \textbullet\
   ARLIZ: Complete Chapters 4--6 (Boolean, numbers, floating point) \textbullet\
-  TOEFL practice test --- target 70+
+  English: TOEFL practice test --- target 70+
 }
 
-\timelineitem{Month 5}{}{%
+\timelineitem{Month 5}{Android Board-Level + WiFi/BLE + Self-Balancing}{%
   1.2: 15+ successful Android board-level repairs \textbullet\
-  4 (C): Implement FreeRTOS tasks, deep sleep mode \textbullet\
+  4 (C): Embedded C: MMIO, volatile, bit fields, ISR patterns on ESP32-IDF \textbullet\
+  16.4: ESP32 WiFi: STA mode, TCP socket, WebSocket server. Phone controls car \textbullet\
+  16.4: BLE: GATT server, phone reads sensor characteristic \textbullet\
+  15.4: PID theory complete. Implement in C with timer ISR \textbullet\
+  Robot Project 3: self-balancing 2-wheel robot with MPU-6050 + PID \textbullet\
   Start searching for Miz-e Kar location --- visit 3+ repair hubs \textbullet\
   ARLIZ: Complete Chapters 7--9 (characters, endianness, pointers)
 }
 
-\milestoneitem{Month 6}{Rent Miz-e Kar --- First Paying Customers}{%
+\milestoneitem{Month 6}{First Paying Customers + Talken Schematic + ROS2 Intro}{%
   1.2: 30+ successful Android board-level repairs \textbullet\
   MILESTONE: Rent Miz-e Kar. Accept first paying board-level customers \textbullet\
-  4.2 (ESP32): Start T3 --- display and storage integration \textbullet\
+  7 (PCB): KiCad Talken schematic: ESP32 + TP4056 + LDO + Nokia 5110 + buttons \textbullet\
+  16.5: ESP32 storage: NVS, LittleFS, SD card. OTA update from URL \textbullet\
+  16.6: Deep sleep: weather station, wake every 10min, send MQTT, sleep \textbullet\
+  15.5: Install ROS2 Humble. First publisher/subscriber node. URDF robot model \textbullet\
+  Robot Project 4: WiFi-controlled car with WebSocket + camera stream \textbullet\
   ARLIZ: Complete Chapter 10 --- arrays as contiguous memory
 }
 
-\timelineitem{Month 7}{}{%
+\timelineitem{Month 7}{Data Recovery + Talken PCB Layout + Stepper CNC}{%
   1.2: Add data recovery (UFI Box) --- practice on dead boards first \textbullet\
-  7 (PCB): Start KiCad --- draw Talken schematic \textbullet\
-  ARLIZ: Revise Vol I Chapters 1--10 --- clarity pass
+  7 (PCB): Talken PCB layout in KiCad. Route power, signal, ground plane \textbullet\
+  14.5: Digital logic deep: K-maps, flip-flops, FSM, 74HC595 shift register \textbullet\
+  15.2: Stepper motor: NEMA17 + A4988. AccelStepper library, ramp profiles \textbullet\
+  Robot Project 5: XY plotter with 2× NEMA17. Draw simple shapes \textbullet\
+  ARLIZ: Revise Vol I Chapters 1--10 --- clarity pass \textbullet\
+  English: TOEFL practice test --- target 80+
 }
 
-\timelineitem{Month 8}{}{%
-  7 (PCB): Complete Talken PCB layout --- order from JLCPCB \textbullet\
-  1.3: Start iPhone repair --- screen, battery, charging only \textbullet\
+\milestoneitem{Month 8}{Talken Ordered + iPhone Repair + 3-DOF Arm}{%
+  7 (PCB): Generate Gerbers, verify in viewer, order 5× from JLCPCB \textbullet\
+  1.3: Start iPhone repair --- screen, battery, charging only (JCID V1S Pro) \textbullet\
+  14.3: Advanced power: boost converter design, USB-C PD circuit \textbullet\
+  15.5: ROS2 robot: nav2 costmap, path planning A*, slam\_toolbox \textbullet\
+  15.3: Vision: ESP32-CAM + OpenCV on laptop, color detection \textbullet\
+  Robot Project 6: 3-DOF servo arm with IK solver. Serial command interface \textbullet\
   ARLIZ: Complete Chapters 11--12 (ELF, error correction)
 }
 
-\milestoneitem{Month 9}{Talken v0 --- Real Hardware Built}{%
-  7: Receive PCB, solder, flash firmware \textbullet\
-  MILESTONE: Talken v0 --- you built a real electronic device \textbullet\
-  1.3: Add iPhone board-level (charging, no-power) \textbullet\
-  Apply for TVTO skill certificate
+\milestoneitem{Month 9}{Talken v0 --- Real Phone Built}{%
+  7: Receive PCB, solder all components, flash firmware, verify all peripherals \textbullet\
+  MILESTONE: Talken v0 --- you built a real electronic device from schematic to firmware \textbullet\
+  1.3: Add iPhone board-level (charging, no-power, audio fault) \textbullet\
+  Robot Project 7: camera robot --- OpenCV object tracking → motor commands \textbullet\
+  Apply for TVTO skill certificate \textbullet\
+  English: TOEFL practice test --- target 90+
 }
 
-\timelineitem{Month 10}{}{%
-  4 (Advanced C): Memory allocator, ring buffer, function pointers \textbullet\
-  3: Start laptop repair --- DC jack, screen, BIOS chip \textbullet\
-  8 (Math): Focus on algorithms math --- Big-O, amortized analysis \textbullet\
+\timelineitem{Month 10}{Advanced C + Laptop Repair + SLAM Robot}{%
+  4 (Advanced C): Memory allocator, ring buffer DMA-backed, function pointers \textbullet\
+  4.4: Python for hardware: pyserial, matplotlib real-time plot, scipy filter \textbullet\
+  3: Start laptop repair --- DC jack, screen, BIOS chip read/write \textbullet\
+  14.2: Oscilloscope mastery: I2C decode, FFT mode, power ripple measurement \textbullet\
+  Robot Project 8: ROS2 SLAM robot with RPLIDAR A1 + nav2 autonomous navigation \textbullet\
+  8 (Math): Focus on algorithms math --- Big-O, amortized analysis, control theory math \textbullet\
   ARLIZ: Compile Vol I full draft, fix \LaTeX{} errors
 }
 
-\timelineitem{Month 11}{}{%
+\timelineitem{Month 11}{ARM Assembly + RE Intro + Laptop Board-Level}{%
   5: Start ARM assembly --- read ARM Architecture Reference Manual basics \textbullet\
-  6: Install Ghidra, analyze first simple binary \textbullet\
-  3: Complete laptop board-level milestones \textbullet\
-  TOEFL practice test --- target 85+
+  6: Install Ghidra, analyze first simple binary (blink firmware) \textbullet\
+  3: Complete laptop board-level milestones (BIOS flash, VRM diagnosis) \textbullet\
+  14.4: Sensors deep: Wheatstone bridge, INA219 current sensing, IMU Kalman filter \textbullet\
+  English: TOEFL practice test --- target 95+
 }
 
-\milestoneitem{Month 12}{ARLIZ Vol I Complete $\cdot$ Income Stable}{%
-  6: Extract firmware from a real device and analyze in Ghidra \textbullet\
-  MILESTONE: ARLIZ Vol I --- complete revision, near-publication quality \textbullet\
+\milestoneitem{Month 12}{ARLIZ Vol I Complete $\cdot$ Income Stable $\cdot$ Robotics Mastered}{%
+  6: Extract firmware from real device, analyze in Ghidra, write findings \textbullet\
+  MILESTONE: ARLIZ Vol I --- complete revision, near-publication quality, PDF generated \textbullet\
   Business license application submitted \textbullet\
-  MILESTONE: 12 months in. Income stable. Talken built. ARLIZ Vol I done
+  MILESTONE: Income stable. Talken built. Robotics projects 1--8 complete \textbullet\
+  MILESTONE: ARLIZ Vol I done. ESP32 mastered at register level. 12 months in \textbullet\
+  English: Register official TOEFL iBT exam for Month 15
 }
 
-\milestoneitem{Months 13--18}{Prepare for Migration}{%
-  6: Complete all reverse engineering milestones \textbullet\
+\milestoneitem{Months 13--18}{Prepare for Migration $\cdot$ RE Mastery $\cdot$ ARLIZ Vol II}{%
+  6: Complete all reverse engineering milestones. Write public firmware RE writeup \textbullet\
   9 (ARLIZ): Vol II first draft --- 129 chapters alongside RE work \textbullet\
-  TOEFL practice $\to$ target 95+ $\to$ register official exam \textbullet\
-  Build Estonia portfolio: ARLIZ on GitHub, Talken documented \textbullet\
-  Research Estonia e-Residency and startup/study visa \textbullet\
-  MILESTONE: North Star in sight. Prepare for migration
+  TOEFL official exam --- target 100+. Score valid 2 years \textbullet\
+  Build Estonia portfolio: ARLIZ on GitHub, Talken documented, 100+ repairs logged \textbullet\
+  Research Estonia e-Residency, startup visa, TalTech application \textbullet\
+  MILESTONE: North Star in sight. Begin migration preparation
 }
 
 \vspace{0.5cm}
@@ -143,12 +193,13 @@ Asking AI what a datasheet says = building dependency, not skill.
 
 \vspace{6pt}
 You are building toward becoming a board-level specialist who has built a real phone,
-written three technical books, knows reverse engineering at firmware depth, speaks
-technical English fluently, and has migrated to Estonia.
+written three technical books, built autonomous robots, knows reverse engineering at
+firmware depth, speaks technical English fluently, and has migrated to Estonia.
 
 \vspace{6pt}
 Every repair teaches you circuit theory.\\
 Every circuit theory chapter becomes ARLIZ.\\
+Every robot you build teaches you control, sensing, and real-time code.\\
 Every ARLIZ chapter becomes your portfolio.\\
 Every portfolio entry gets you closer to Estonia.
 
@@ -156,6 +207,7 @@ Every portfolio entry gets you closer to Estonia.
 \begin{tabular}{@{\hspace{4pt}}ll}
   \textbf{\color{arlizblue}$\to$} & When two tasks compete: ask which is closer to the North Star. \\
   \textbf{\color{arlizblue}$\to$} & When you are lost: come back to this page. \\
+  \textbf{\color{arlizblue}$\to$} & When you feel behind: look at Month 1 and measure how far you came. \\
 \end{tabular}
 
 \vspace{6pt}
@@ -163,7 +215,8 @@ Every portfolio entry gets you closer to Estonia.
 \hspace{4pt}$\to$ Talken v0 shipped\qquad
 $\to$ ARLIZ Vol I published\qquad
 $\to$ ARLIZ Vol II in progress\\
-\hspace{4pt}$\to$ Real RE writeup public\qquad
+\hspace{4pt}$\to$ 8 robots built\qquad
+$\to$ Real RE writeup public\qquad
 $\to$ TOEFL 100+\qquad
 $\to$ Estonia visa applied
 \end{northstarbox}

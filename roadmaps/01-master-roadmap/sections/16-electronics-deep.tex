@@ -1,0 +1,178 @@
+\roadmapSection{14}{ELECTRONICS \& ELECTRICAL ENGINEERING --- DEEP DIVE}{16--20 Weeks}
+
+{\small\itshape\color{arligray} This is the backbone of everything: repair, PCB design, robotics, embedded systems. Never rush this section.}
+
+% ── 14.1 DC Circuit Theory ────────────────────────────────────────────────────
+\roadmapSubSection{14.1}{DC Circuit Analysis --- Master Level}{3--4 Weeks}
+
+\roadmapHead{Mesh and Nodal Analysis}
+\checkitem{Node voltage method: assign reference node (GND), write KCL at every non-reference node}{}
+\checkitem{Mesh current method: assign clockwise mesh currents, write KVL around every mesh loop}{}
+\checkitem{Superposition theorem: for circuits with multiple sources, solve one source at a time, sum results}{}
+\checkitem{Thévenin equivalent: any two-terminal linear network = Vth (open-circuit voltage) + Rth (series)}{Used daily in repair: find equivalent driving a load, test with multimeter}
+\checkitem{Norton equivalent: Thévenin dual --- In (short-circuit current) + Rn in parallel}{}
+\checkitem{Maximum power transfer: load receives maximum power when R\textsubscript{load} = R\textsubscript{th}}{}
+\checkitem{Voltage divider: Vout = Vin × R2/(R1+R2) --- derive and apply to every sensor circuit you build}{}
+\checkitem{Current divider: I1 = Itotal × R2/(R1+R2) --- parallel resistor current split}{}
+\checkitem{Solve a 3-mesh circuit by hand. Verify with multimeter on real breadboard}{}
+
+\roadmapHead{Capacitors --- Deep}
+\checkitem{Capacitance: C = εA/d --- how physical size and material determine capacitance}{}
+\checkitem{Charge stored: Q = C × V --- discharge curve: V(t) = V0 × e\textsuperscript{−t/RC}}{}
+\checkitem{Energy stored: E = ½CV² --- why large caps are dangerous even when power is off}{}
+\checkitem{Impedance of capacitor: Xc = 1/(2πfC) --- drops with frequency (short at high freq)}{}
+\checkitem{Capacitors in series and parallel: series → lower C, parallel → higher C}{}
+\checkitem{Types: ceramic (X5R/X7R), electrolytic (polarity), tantalum (fail-short), film (precision)}{}
+\checkitem{ESR (Equivalent Series Resistance): high ESR = bad cap, main cause of power supply instability}{}
+\checkitem{Measure ESR with ESR meter or LCR meter --- buy LCR-T4 or Peak Atlas ESR70}{}
+\checkitem{Decoupling: 100nF ceramic at IC power pin removes high-freq noise. 10µF electrolytic for bulk}{}
+
+\roadmapHead{Inductors and Transformers --- Deep}
+\checkitem{Inductance: L = µN²A/l --- how many turns, core material, cross-section determine L}{}
+\checkitem{Energy stored: E = ½LI² --- inductor fights current changes (cannot change instantaneously)}{}
+\checkitem{Impedance: XL = 2πfL --- rises with frequency (open at high freq)}{}
+\checkitem{Back-EMF: V = L × dI/dt --- why MOSFETs need freewheeling diodes in motor circuits}{}
+\checkitem{Transformer: V1/V2 = N1/N2, I1/I2 = N2/N1 --- turns ratio determines voltage step}{}
+\checkitem{Core saturation: too much current → core saturates → inductance collapses → failure}{}
+\checkitem{Coupled inductors in SEPIC and Ćuk converters: understand mutual inductance}{}
+\checkitem{Measure inductance with LCR meter --- compare to datasheet, spot counterfeit inductors}{}
+\newpage
+\roadmapHead{Diodes --- Deep}
+\checkitem{Shockley equation: I = Is(e\textsuperscript{V/nVt} − 1) --- understand leakage and forward drop}{}
+\checkitem{Rectifier diode: half-wave, full-wave bridge --- build each, measure output ripple}{}
+\checkitem{Schottky diode: low Vf ≈ 0.3V, fast recovery --- used in buck converters as freewheeling diode}{}
+\checkitem{Zener diode: operates in reverse breakdown at precise voltage --- voltage reference and clamp}{}
+\checkitem{TVS diode: transient voltage suppressor --- protects ICs from ESD and voltage spikes}{}
+\checkitem{LED: forward voltage by color: red 1.8V, green 2.2V, blue 3.2V --- calculate limiting resistor}{}
+\checkitem{Photodiode: reverse-biased, generates current proportional to light --- ambient light sensor}{}
+\checkitem{Identify diode failure: open (OL both ways) vs shorted (0V both ways in diode mode)}{}
+
+\roadmapHead{BJT and MOSFET --- Deep}
+\checkitem{BJT NPN in saturation: base-emitter junction forward, base-collector forward → full conduction}{}
+\checkitem{BJT current gain hFE: Ic = hFE × Ib --- small base current controls large collector current}{}
+\checkitem{BJT as switch: design base resistor for guaranteed saturation: Rb = (Vcc - 0.7) / (Ic/hFE × safety)}{}
+\checkitem{MOSFET gate threshold Vth: must exceed to turn on. Check datasheet for Vgs(th) at specific Ids}{}
+\checkitem{N-channel MOSFET: gate HIGH = on, LOW = off. Used for low-side switching (load between drain and Vcc)}{}
+\checkitem{P-channel MOSFET: gate LOW = on (relative to source). Used for high-side switching}{}
+\checkitem{MOSFET Rds(on): resistance when fully on. Low Rds(on) = less heat in power circuit}{}
+\checkitem{Gate driver IC: needed when driving MOSFET from microcontroller --- handles gate charge fast}{}
+\checkitem{Bootstrap circuit: used to drive high-side N-channel MOSFET above supply voltage}{}
+\checkitem{Build H-bridge from 4 MOSFETs: understand deadtime to prevent shoot-through}{}
+
+\newpage
+% ── 14.2 AC Circuit Theory ────────────────────────────────────────────────────
+\roadmapSubSection{14.2}{AC Circuit Theory and Signals}{2--3 Weeks}
+
+\roadmapHead{AC Fundamentals}
+\checkitem{AC voltage: V(t) = Vpeak × sin(2πft + φ) --- amplitude, frequency, phase angle}{}
+\checkitem{RMS voltage: Vrms = Vpeak / √2 --- what multimeter reads on AC, what delivers same power as DC}{}
+\checkitem{Frequency domain: same signal described by amplitude and phase at each frequency}{}
+\checkitem{Reactance: XC = 1/(2πfC), XL = 2πfL --- frequency-dependent resistance}{}
+\checkitem{Impedance: Z = R + jX = |Z|∠φ --- complex number representation of AC resistance}{}
+\checkitem{Phase angle φ: capacitor current leads voltage by 90°, inductor current lags by 90°}{}
+\checkitem{Power factor: PF = cos(φ) --- unity = pure resistive, 0 = pure reactive}{}
+\checkitem{Resonance: XL = XC → LC resonant frequency f0 = 1/(2π√LC)}{}
+
+\roadmapHead{Filters --- Design and Build Each}
+\checkitem{RC low-pass filter: fc = 1/(2πRC), passes DC and low freq, blocks high freq}{Used for noise filtering on ADC inputs}
+\checkitem{RC high-pass filter: passes high freq, blocks DC and low freq}{Used for AC coupling audio signals}
+\checkitem{LC low-pass filter: sharper rolloff than RC, used in power supply output filtering}{}
+\checkitem{Bandpass filter: resonant circuit, passes band around f0 --- used in RF circuits}{}
+\checkitem{Active filter with op-amp: Sallen-Key topology, Butterworth vs Chebyshev response}{}
+\checkitem{Simulate every filter in LTspice before building. Verify cutoff frequency}{}
+\checkitem{Build RC filter on breadboard, measure output with oscilloscope at different frequencies}{}
+
+\roadmapHead{Oscilloscope Mastery}
+\checkitem{Buy: Rigol DS1054Z or Fnirsi DPOX180H --- minimum for embedded and repair work}{}
+\checkitem{Vertical: voltage/div setting, probe attenuation (1x vs 10x), input coupling (DC/AC/GND)}{}
+\checkitem{Horizontal: time/div, trigger level, trigger slope and source}{}
+\checkitem{Trigger modes: auto (free-run), normal (waits for trigger), single (one capture)}{}
+\checkitem{Measure: frequency, period, amplitude, rise time, duty cycle with cursors}{}
+\checkitem{Probe calibration: square wave test, adjust trimmer cap on probe for flat response}{}
+\checkitem{Measure I2C waveform: zoom to see individual bits, verify start/stop conditions}{}
+\checkitem{Measure PWM: confirm duty cycle matches code value, check deadtime in H-bridge}{}
+\checkitem{FFT mode: convert time-domain signal to frequency domain, identify noise sources}{}
+\checkitem{Measure power supply ripple: AC coupling, 2mV/div, trigger on supply rail}{}
+\newpage
+% ── 14.3 Power Electronics ────────────────────────────────────────────────────
+\roadmapSubSection{14.3}{Power Electronics and Converters}{3--4 Weeks}
+
+\roadmapHead{Linear Regulators}
+\checkitem{LDO (Low Dropout): Vout = Vref × (1 + R2/R1). Output always lower than input}{}
+\checkitem{Dropout voltage: minimum Vin-Vout required to regulate. Below this = output follows input}{}
+\checkitem{Power dissipation: P = (Vin − Vout) × Iload. At high current = significant heat}{}
+\checkitem{Stability: output capacitor ESR affects stability. Check datasheet for recommended range}{}
+\checkitem{AMS1117-3.3: most common LDO in hobby boards. Max 1A, Vin up to 15V}{}
+\checkitem{Design LDO circuit: set output voltage, calculate resistors, choose bypass caps}{}
+\checkitem{Measure: input voltage, output voltage, dropout under load. Verify on oscilloscope}{}
+
+\roadmapHead{Buck Converter (Step-Down)}
+\checkitem{Operating principle: switch Q opens/closes at high frequency. Inductor averages voltage}{}
+\checkitem{Duty cycle D: Vout = D × Vin. D = 0.5 → Vout = Vin/2}{}
+\checkitem{Switching frequency: higher = smaller L and C needed, but more switching loss}{}
+\checkitem{Continuous conduction mode (CCM): inductor current never reaches zero}{}
+\checkitem{Discontinuous conduction mode (DCM): inductor current reaches zero each cycle}{}
+\checkitem{Output ripple: ΔVout = ΔIL / (8 × fsw × Cout). Minimize with larger L or C}{}
+\checkitem{Inductor selection: L = (Vin − Vout) × D / (fsw × ΔIL). ΔIL = 30\% of Iload}{}
+\checkitem{IC examples: MP2307, AP3429, TPS54331 --- read full datasheet, design complete circuit}{}
+\checkitem{Simulate in LTspice: transient analysis, verify Vout and ripple before ordering PCB}{}
+\checkitem{Build on breadboard or perfboard, measure efficiency at different loads}{}
+
+\roadmapHead{Boost Converter (Step-Up)}
+\checkitem{Operating principle: inductor stores energy when switch on, releases to output when off}{}
+\checkitem{Duty cycle: Vout = Vin / (1 − D). D = 0.5 → Vout = 2 × Vin}{}
+\checkitem{Used in: LED backlights, USB-C output from Li-ion battery (5V from 3.7V)}{}
+\checkitem{IC examples: SDB628, MT3608, TPS61023 --- design complete circuit from datasheet}{}
+\checkitem{Watch for: inductor saturation at high current, input inrush on startup}{}
+
+\roadmapHead{Battery Charging Circuits}
+\checkitem{Li-ion charging profile: CC (constant current) phase then CV (constant voltage at 4.2V)}{}
+\checkitem{TP4056: common single-cell Li-ion charge IC. Set charge current with Rprog resistor}{}
+\checkitem{BMS (Battery Management System): protects against overcharge, overdischarge, short circuit}{}
+\checkitem{Battery fuel gauge: MAX17043, measures SoC via voltage and coulomb counting}{}
+\checkitem{USB-C PD (Power Delivery): negotiates voltage 5/9/12/15/20V at up to 100W via CC pins}{}
+\checkitem{Design complete charging path: USB-C → PD IC → TP4056 → BMS → battery}{}
+\checkitem{Design power path: battery → boost converter → system 5V rail while charging}{}
+
+\newpage
+% ── 14.4 Analog and Mixed-Signal Circuits ────────────────────────────────────
+\roadmapSubSection{14.4}{Analog and Op-Amp Circuits}{2--3 Weeks}
+
+\roadmapHead{Op-Amp Fundamentals}
+\checkitem{Ideal op-amp: infinite gain, infinite input impedance, zero output impedance}{}
+\checkitem{Golden rules: input terminals are at same voltage, no current flows into inputs (virtual short)}{}
+\checkitem{Inverting amplifier: Vout = −(Rf/Rin) × Vin. Gain set by resistor ratio}{}
+\checkitem{Non-inverting amplifier: Vout = (1 + Rf/Rin) × Vin. Input at + terminal}{}
+\checkitem{Voltage follower (buffer): Vout = Vin. Gain = 1. Provides current drive}{}
+\checkitem{Summing amplifier: Vout = −Rf(V1/R1 + V2/R2 + ...). Audio mixing}{}
+\checkitem{Difference amplifier: Vout = (V2 − V1) × Rf/Rin. Reject common-mode noise}{}
+\checkitem{Integrator: Vout = −(1/RC) × ∫Vin dt. Capacitor in feedback}{}
+\checkitem{Comparator: op-amp without feedback. Vout = rail based on which input is higher}{}
+\checkitem{Rail-to-rail op-amp: output swings close to supply rails. Required for 3.3V systems}{}
+
+\roadmapHead{Sensors and Signal Conditioning}
+\checkitem{ADC (Analog to Digital Converter): resolution, reference voltage, conversion time}{}
+\checkitem{Voltage divider for resistive sensor: R-fixed and R-sensor form divider, Vadc changes}{}
+\checkitem{Wheatstone bridge: 4 resistors, sensitive to small R changes. Used with strain gauges}{}
+\checkitem{Instrumentation amplifier (INA128): high CMRR, amplifies small differential signals}{}
+\checkitem{Low-pass filter before ADC: anti-aliasing filter. fc ≤ fsample/2 (Nyquist)}{}
+\checkitem{Temperature sensor types: NTC thermistor (resistance↓ as T↑), PT100 (linear RTD), LM35 (voltage output), DS18B20 (digital 1-Wire)}{Know when to use each}
+\checkitem{Hall effect sensor: measures magnetic field. Current sensing in motor controllers}{}
+\checkitem{Current sensing: shunt resistor (0.01Ω) + INA219 I2C power monitor IC}{}
+\checkitem{Pressure sensor (BMP280): I2C/SPI, 0--65kPa. Altitude and weather sensing}{}
+\checkitem{IMU (MPU-6050 / ICM-42688): accelerometer + gyroscope via I2C. Essential for robotics}{}
+
+% ── 14.5 Digital Logic and Gate-Level Design ─────────────────────────────────
+\roadmapSubSection{14.5}{Digital Logic and Gate-Level Design}{2 Weeks}
+
+\checkitem{Truth table for AND, OR, NOT, NAND, NOR, XOR, XNOR --- draw and verify}{}
+\checkitem{NAND universal gate: build any logic function from NAND only}{}
+\checkitem{Karnaugh map (K-map): simplify Boolean expression to minimal SOP form}{}
+\checkitem{Combinational circuits: multiplexer (MUX), demultiplexer, encoder, decoder, priority encoder}{}
+\checkitem{Adder: half adder (sum and carry), full adder, ripple carry adder, carry-lookahead adder}{}
+\checkitem{Sequential circuits: SR latch, D flip-flop, JK flip-flop --- understand clocked vs async}{}
+\checkitem{Counter: 4-bit binary counter using D flip-flops. Mod-N counter design}{}
+\checkitem{Shift register: SIPO, PISO. 74HC595 (serial→8 outputs) used with microcontrollers}{}
+\checkitem{Finite State Machine (FSM): state diagram → next-state logic → flip-flop implementation}{}
+\checkitem{Tri-state buffer: output can be High, Low, or Hi-Z (disconnected). Used on shared buses}{}
+\checkitem{Logic level translation: 5V Arduino ↔ 3.3V ESP32. Level shifter or voltage divider method}{}

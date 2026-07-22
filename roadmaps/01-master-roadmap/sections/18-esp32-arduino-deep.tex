@@ -1,0 +1,214 @@
+\roadmapSection{16}{ESP32 \& ARDUINO --- DEEP EMBEDDED SYSTEMS}{10--14 Weeks}
+
+{\small\itshape\color{arligray} Go far beyond the tutorials. Master the hardware, the toolchain, the protocols, the RTOS. This is where Talken lives.}
+
+% ── 16.1 Arduino Ecosystem Deep ───────────────────────────────────────────────
+\roadmapSubSection{16.1}{Arduino Ecosystem --- From Basics to Bare Metal}{3--4 Weeks}
+
+\roadmapHead{Arduino Hardware Variants}
+\checkitem{Uno R3: ATmega328P, 16MHz, 32KB flash, 2KB SRAM, 5V logic. Learning platform}{}
+\checkitem{Nano: same MCU as Uno, smaller footprint. Pin-compatible with Uno for most projects}{}
+\checkitem{Mega 2560: ATmega2560, 256KB flash, 4 UART ports. For projects needing many pins}{}
+\checkitem{Leonardo: ATmega32U4, native USB HID. Can act as keyboard/mouse}{}
+\checkitem{Pro Mini: smallest form, no USB chip. Needs FTDI adapter. 3.3V or 5V version}{}
+\checkitem{Understand: Arduino is just a bootloader on a standard AVR chip. Can use raw AVR too}{}
+
+\roadmapHead{Arduino IDE and Toolchain}
+\checkitem{Arduino IDE 2.x: install, understand sketches (.ino), Serial Monitor, Serial Plotter}{}
+\checkitem{PlatformIO (VS Code): professional alternative. Handles libraries, environments, upload}{}
+\checkitem{Understand platformio.ini: board, framework, lib\_deps, upload\_port settings}{}
+\checkitem{AVR toolchain: avr-gcc compiles, avrdude flashes. Arduino IDE wraps these}{}
+\checkitem{Board Package: adds board definition to IDE. Install via Boards Manager for each board type}{}
+\checkitem{Libraries: install via Library Manager or zip. Location: \textasciitilde/Arduino/libraries/}{}
+
+\roadmapHead{Interrupt-Driven Programming}
+\checkitem{Polling vs interrupts: polling wastes CPU, interrupts allow sleep between events}{}
+\checkitem{attachInterrupt(digitalPinToInterrupt(pin), ISR, RISING): register interrupt on Arduino}{}
+\checkitem{ISR rules: must be fast, no delay(), no Serial.print(). Use volatile flag to communicate}{}
+\checkitem{Timer interrupts: AVR has Timer0/1/2. Use timer library or manual TCCR configuration}{}
+\checkitem{External interrupt vs pin change interrupt: external (only specific pins), pin change (any pin)}{}
+\checkitem{Build: rotary encoder read using interrupts, count pulses accurately at high speed}{}
+
+\roadmapHead{AVR Register-Level Programming}
+\checkitem{Every Arduino function wraps AVR register access. Learn the registers directly}{}
+\checkitem{DDRB, DDRC, DDRD: data direction registers (0=input, 1=output) for port B, C, D}{}
+\checkitem{PORTB, PORTC, PORTD: output state registers. Write 1 = HIGH, 0 = LOW}{}
+\checkitem{PINB, PINC, PIND: input state registers. Read to get pin state}{}
+\checkitem{Bit manipulation: PORTB |= (1 << PB5) sets pin 13 HIGH without affecting other pins}{}
+\checkitem{ADMUX, ADCSRA: ADC registers. Configure reference, prescaler, start conversion}{}
+\checkitem{TCCR0A, TCCR0B, OCR0A: Timer0 control. Set PWM mode, prescaler, compare value}{}
+\checkitem{UCSR0A, UCSR0B, UDR0: UART registers. Set baud rate, enable TX/RX, write/read data}{}
+\checkitem{Write: blink LED using only register writes, no Arduino functions}{}
+\checkitem{Write: read ADC using registers, no analogRead()}{}
+\newpage
+\roadmapHead{EEPROM and Flash on Arduino}
+\checkitem{AVR EEPROM: 1KB on Uno/Nano. Survives power loss. 100k write cycles limit}{}
+\checkitem{EEPROM.write(addr, val), EEPROM.read(addr): byte operations}{}
+\checkitem{EEPROM.put(addr, data), EEPROM.get(addr, data): for structs and floats}{}
+\checkitem{PROGMEM: store read-only data in flash to save SRAM. Use for large lookup tables}{}
+\checkitem{External EEPROM via I2C: AT24C256 (32KB), AT24C512 (64KB). Use Wire library}{}
+
+\newpage
+% ── 16.2 ESP32 Architecture Deep ──────────────────────────────────────────────
+\roadmapSubSection{16.2}{ESP32 Architecture and Hardware}{3--4 Weeks}
+
+\roadmapHead{ESP32 Chip Family}
+\checkitem{ESP32 (classic): Xtensa LX6 dual-core 240MHz, WiFi b/g/n + BT Classic + BLE 4.2}{}
+\checkitem{ESP32-S2: single-core, USB OTG, no BT. Better for USB HID projects}{}
+\checkitem{ESP32-S3: dual-core, BLE 5.0, AI acceleration (matrix operations), USB OTG}{}
+\checkitem{ESP32-C3: RISC-V single-core, BLE 5.0, WiFi 4. Ultra low cost}{}
+\checkitem{ESP32-C6: RISC-V, WiFi 6 (802.11ax), BLE 5.3, Thread/Zigbee support}{}
+\checkitem{ESP32-H2: RISC-V, BLE 5.3, Thread, Zigbee. No WiFi. Matter protocol support}{}
+\checkitem{Module vs chip: ESP32-WROOM-32 module includes chip + flash + antenna. Use module for ease}{}
+\checkitem{DevKit boards: add USB-UART, LDO, buttons. DOIT ESP32 DevKit V1, AZ-Delivery, Espressif official}{}
+
+\roadmapHead{ESP32 Memory Architecture}
+\checkitem{Internal SRAM: 520KB total = 200KB DRAM (data) + 128KB IRAM (instruction cache) + rest}{}
+\checkitem{Flash: external SPI flash via QSPI, typically 4MB. Code, OTA, SPIFFS/LittleFS live here}{}
+\checkitem{PSRAM: external pseudo-SRAM, some modules have 4--8MB. Accessed via ESP32 cache}{}
+\checkitem{RTC memory: 8KB RTC SLOW + 8KB RTC FAST. Survives deep sleep. Perfect for sleep state}{}
+\checkitem{Memory layout: code in flash (mapped to 4MB window), stack and heap in DRAM}{}
+\checkitem{Stack overflow: FreeRTOS task stack too small. Use uxTaskGetStackHighWaterMark() to measure}{}
+\checkitem{Heap fragmentation: allocate/free small blocks many times → OOM with free memory}{}
+\checkitem{Use heap\_caps\_get\_free\_size(MALLOC\_CAPS\_8BIT) to monitor heap at runtime}{}
+
+\roadmapHead{ESP32 Peripheral Map}
+\checkitem{GPIO matrix: most peripherals can be routed to almost any GPIO via GPIO matrix}{}
+\checkitem{Pin limitations: GPIO6--11 are connected to internal flash (SPI). Never use as GPIO}{}
+\checkitem{GPIOs 34--39: input only, no internal pull-up. Only use as inputs}{}
+\checkitem{ADC1: GPIO32--39. ADC2: GPIO0,2,4,12--15,25--27 (ADC2 unavailable when WiFi on)}{}
+\checkitem{DAC: GPIO25 and GPIO26. 8-bit, 0--3.3V output}{}
+\checkitem{Touch: GPIO 0,2,4,12--15,27,32--33. Capacitive touch sensing}{}
+\checkitem{UART0: GPIO1(TX), GPIO3(RX) --- shared with USB-UART. Use UART1 or UART2 for peripherals}{}
+\checkitem{SPI: VSPI (GPIO18=SCK, 23=MOSI, 19=MISO, 5=CS), HSPI (14,13,12,15)}{}
+\checkitem{I2C: any two GPIOs. Default SDA=21, SCL=22. Can reassign with Wire.begin(SDA, SCL)}{}
+\checkitem{PWM (LEDC): 16 independent channels, 1--40MHz, up to 16-bit resolution}{}
+\checkitem{RMT: remote control peripheral, accurate timing for WS2812 LEDs, IR signals, 1-Wire}{}
+\checkitem{PCNT: pulse counter hardware. Count encoder pulses without CPU intervention}{}
+
+\roadmapHead{ESP-IDF Development Environment}
+\checkitem{Install ESP-IDF v5.x: follow Espressif guide, install Python, CMake, Ninja}{}
+\checkitem{Build system: CMake + idf.py. \texttt{idf.py build}, \texttt{idf.py flash}, \texttt{idf.py monitor}}{}
+\checkitem{CMakeLists.txt: project structure, component dependencies, compile options}{}
+\checkitem{sdkconfig: Kconfig-generated config. \texttt{idf.py menuconfig} to configure everything}{}
+\checkitem{Components: ESP-IDF module system. Create custom component in components/ directory}{}
+\checkitem{Logging: ESP\_LOGI/W/E/D macros. View in \texttt{idf.py monitor} at 115200 baud}{}
+\checkitem{Partitions: custom partition table CSV. Define app, OTA, NVS, SPIFFS regions}{}
+
+\newpage
+% ── 16.3 FreeRTOS on ESP32 ────────────────────────────────────────────────────
+\roadmapSubSection{16.3}{FreeRTOS on ESP32 --- Real-Time Operating System}{2--3 Weeks}
+
+\roadmapHead{FreeRTOS Core Concepts}
+\checkitem{Task: independent thread with own stack. \texttt{xTaskCreate(fn, name, stackSize, param, prio, handle)}}{}
+\checkitem{Priority: 0 (lowest) to configMAX\_PRIORITIES-1 (highest). Idle task = 0. Keep tasks at 1--10}{}
+\checkitem{Scheduler: preemptive by default. Higher priority task immediately preempts lower}{}
+\checkitem{Task states: Ready, Running, Blocked, Suspended. Only one Running per core}{}
+\checkitem{vTaskDelay(pdMS\_TO\_TICKS(100)): yield CPU for 100ms. Never use bare delay()}{}
+\checkitem{vTaskDelayUntil(): periodic task with constant rate regardless of execution time}{}
+\checkitem{Pin task to core: \texttt{xTaskCreatePinnedToCore(..., 0)} for Core 0, 1 for Core 1}{}
+\checkitem{Core 0: WiFi/BT stack and PRO\_CPU events. Core 1: APP\_CPU, your tasks. Avoid Core 0 for timing-sensitive work}{}
+
+\roadmapHead{Inter-Task Communication}
+\checkitem{Queue: thread-safe FIFO. xQueueSend(), xQueueReceive(). Producer-consumer pattern}{}
+\checkitem{Queue from ISR: xQueueSendFromISR() --- must use ISR-safe variants, pass portYIELD\_FROM\_ISR}{}
+\checkitem{Semaphore (binary): signal between tasks. Give = release, Take = acquire}{}
+\checkitem{Counting semaphore: tracks resource count. Take decrements, Give increments}{}
+\checkitem{Mutex: mutual exclusion. Same as binary semaphore but supports priority inheritance}{}
+\checkitem{Priority inversion: low-priority task holds mutex needed by high-priority task. Mutex prevents deadlock}{}
+\checkitem{Event groups: 24 bits, each bit = one event. xEventGroupWaitBits() waits for combination}{}
+\checkitem{Notification (task notify): fastest IPC. xTaskNotify(), ulTaskNotifyTake()}{}
+\checkitem{Deadlock: Task A waits for B, B waits for A. Avoid with lock ordering or timeouts}{}
+
+\roadmapHead{Interrupts and ISR in ESP32}
+\checkitem{ISR allocation: esp\_intr\_alloc() attaches ISR to interrupt source with flags}{}
+\checkitem{GPIO ISR: gpio\_install\_isr\_service(), gpio\_isr\_handler\_add() per pin}{}
+\checkitem{Timer ISR: esp\_timer or hardware timer gptimer\_register\_event\_callbacks()}{}
+\checkitem{ISR-safe API: never use blocking calls. Use xQueueSendFromISR, portYIELD\_FROM\_ISR}{}
+\checkitem{IRAM\_ATTR: place ISR function in IRAM so it runs during flash cache miss}{}
+\checkitem{Disable interrupts for critical section: taskENTER\_CRITICAL() / taskEXIT\_CRITICAL()}{}
+\newpage
+% ── 16.4 Wireless Protocols on ESP32 ─────────────────────────────────────────
+\roadmapSubSection{16.4}{WiFi, BLE, and Wireless Protocols}{2--3 Weeks}
+
+\roadmapHead{WiFi}
+\checkitem{Station mode (STA): connect to existing access point. Most common for IoT}{}
+\checkitem{Access Point mode (AP): create own hotspot. Devices connect to ESP32 directly}{}
+\checkitem{AP+STA mode: simultaneously connected to router and hosting own AP}{}
+\checkitem{WiFi event loop: esp\_event\_loop + WIFI\_EVENT handler for connect/disconnect/IP}{}
+\checkitem{Static IP vs DHCP: set via esp\_netif\_set\_ip\_info() for stable address}{}
+\checkitem{TCP client: create socket(), connect(), send(), recv() --- posix API on ESP32}{}
+\checkitem{TCP server: socket(), bind(), listen(), accept() loop for multiple clients}{}
+\checkitem{HTTP client: esp\_http\_client or Arduino HTTPClient. GET/POST to REST API}{}
+\checkitem{WebSocket: async full-duplex. Use ESPAsyncWebServer for non-blocking server}{}
+\checkitem{MQTT: lightweight pub/sub for IoT. PubSubClient library or esp-mqtt component}{}
+\checkitem{WiFi power modes: WIFI\_PS\_NONE (max throughput), WIFI\_PS\_MIN\_MODEM, WIFI\_PS\_MAX\_MODEM}{}
+
+\roadmapHead{Bluetooth Low Energy (BLE)}
+\checkitem{BLE vs Classic BT: BLE is for low-power sensors (heart rate, temperature). Not audio}{}
+\checkitem{GATT (Generic Attribute Profile): services (UUID) contain characteristics (UUID + value)}{}
+\checkitem{Server vs Client: ESP32 as server = peripheral (advertises). Client = central (scans, connects)}{}
+\checkitem{Advertising: broadcast small payload (max 31 bytes) without connection}{}
+\checkitem{Notify vs Indicate: notify = no acknowledgment, indicate = acknowledged by client}{}
+\checkitem{NimBLE stack: lighter alternative to Bluedroid. Less RAM, faster connection}{}
+\checkitem{BLE5 extended advertising: longer range, higher data rate (2Mbps), direction finding}{}
+\checkitem{Build: BLE heart rate monitor simulator. Phone (nRF Connect) reads characteristic}{}
+\checkitem{Build: BLE UART bridge (Nordic UART Service). Phone terminal sends/receives text}{}
+
+\roadmapHead{ESP-NOW and Other Protocols}
+\checkitem{ESP-NOW: peer-to-peer WiFi without router. Up to 250 bytes per packet, 1km range}{}
+\checkitem{Register peer: esp\_now\_add\_peer() with MAC address. Send: esp\_now\_send()}{}
+\checkitem{Broadcast: send to FF:FF:FF:FF:FF:FF --- all listening ESP-NOW devices receive}{}
+\checkitem{ESP-NOW latency: <10ms. Better than MQTT for real-time sensor mesh}{}
+\checkitem{LoRa (SX1276/SX1278): long range (up to 15km LoS), low data rate (250bps--50kbps)}{}
+\checkitem{LoRaWAN: network protocol over LoRa. Requires gateway (TTN or private)}{}
+\checkitem{RF433MHz: simple amplitude-shift keying. Range 10--100m. Use RCSwitch library}{}
+\checkitem{NRF24L01+: 2.4GHz radio, SPI interface, auto-ack and auto-retry built in, 250kbps--2Mbps}{}
+
+\newpage
+% ── 16.5 Storage and File Systems ─────────────────────────────────────────────
+\roadmapSubSection{16.5}{Storage, File Systems, and OTA}{1--2 Weeks}
+
+\roadmapHead{Non-Volatile Storage (NVS)}
+\checkitem{NVS: ESP-IDF key-value store in flash. Survives reboot. For config, counters, calibration}{}
+\checkitem{nvs\_open(), nvs\_set\_i32(), nvs\_get\_i32(), nvs\_commit(), nvs\_close()}{}
+\checkitem{Namespace: group related keys. Multiple namespaces in one NVS partition}{}
+\checkitem{NVS wear leveling: writes distributed across flash pages automatically}{}
+\checkitem{Preferences library (Arduino): wrapper around NVS. Simpler API}{}
+
+\roadmapHead{SPIFFS and LittleFS}
+\checkitem{SPIFFS: SPI Flash File System. Stores files in flash. Max file name 32 chars}{}
+\checkitem{LittleFS: better than SPIFFS. Wear leveling, power-loss resilience, file system checks}{}
+\checkitem{Use for: HTML/CSS/JS web interface, config JSON, certificates, audio samples}{}
+\checkitem{Upload: Arduino ESP32 LittleFS upload tool or \texttt{idf.py} data partition}{}
+\checkitem{Access: LittleFS.open("/config.json", "r") returns File object. Read, write, seek}{}
+
+\roadmapHead{SD Card}
+\checkitem{SPI mode: 4 pins (MOSI, MISO, SCK, CS). Works at 25MHz. Uses SPI bus}{}
+\checkitem{SD\_MMC mode: faster (40MHz+), parallel data bus. ESP32 SDMMC peripheral}{}
+\checkitem{FAT32 file system: standard. Use SD.h (SPI) or SD\_MMC.h (SDMMC)}{}
+\checkitem{Log sensor data: open with FILE\_APPEND, write CSV rows, flush every N entries}{}
+\checkitem{Waveform recording: continuous ADC → ring buffer → flush to SD. Requires DMA}{}
+
+\roadmapHead{OTA (Over-the-Air Update)}
+\checkitem{OTA partitions: two app slots (OTA\_0, OTA\_1). Bootloader boots from valid slot}{}
+\checkitem{Update sequence: download new firmware, write to inactive slot, set as boot, reboot}{}
+\checkitem{esp\_https\_ota(): download from HTTPS URL. Needs server certificate for verification}{}
+\checkitem{ArduinoOTA: simple UDP-based OTA from Arduino IDE or PlatformIO}{}
+\checkitem{Rollback: if new firmware fails to mark itself valid, bootloader reverts to old slot}{}
+\checkitem{Build: ESP32 that updates firmware from your GitHub release asset URL}{}
+
+% ── 16.6 Power Management and Deep Sleep ─────────────────────────────────────
+\roadmapSubSection{16.6}{Power Management and Deep Sleep}{1--2 Weeks}
+
+\checkitem{Active mode: ESP32 draws 80--240mA when WiFi transmitting. Not for battery without optimization}{}
+\checkitem{Modem sleep: CPU on, WiFi off between DTIM intervals. 20mA. Use for intermittent WiFi}{}
+\checkitem{Light sleep: CPU suspended, RTC on. Wake via timer, GPIO, UART. ~0.8mA}{}
+\checkitem{Deep sleep: almost everything off. Only RTC slow memory + RTC peripherals. ~10µA}{}
+\checkitem{Wake sources: timer (esp\_sleep\_enable\_timer\_wakeup), GPIO (ext0/ext1), ULP program, touch}{}
+\checkitem{esp\_deep\_sleep\_start(): enters deep sleep immediately. Code restarts at setup()}{}
+\checkitem{esp\_sleep\_get\_wakeup\_cause(): check why device woke, take appropriate action}{}
+\checkitem{RTC variables: RTC\_DATA\_ATTR marks variable to survive deep sleep in RTC SLOW memory}{}
+\checkitem{ULP (Ultra Low Power coprocessor): small FSM runs during deep sleep for sensing}{}
+\checkitem{Battery life calculation: (battery\_mAh / avg\_current\_mA) × hours. Optimize for years}{}
+\checkitem{Build: weather station wakes every 10 min, reads BME280, sends via MQTT, sleeps}{}

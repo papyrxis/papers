@@ -95,7 +95,37 @@ def _build_one(slug: str) -> bool:
     engine = meta.get("ENGINE", "pdflatex")
     title  = meta.get("ROADMAP_TITLE", slug)
 
-    log(f"[{slug}] compiling with {engine}…")
+    import shutil as _shutil
+    import platform as _platform
+
+    def _find_engine(name: str) -> str:
+        """Return full path to *name* if found, else return *name* (let subprocess fail gracefully)."""
+        found = _shutil.which(name)
+        if found:
+            return found
+        if _platform.system() == "Windows":
+            candidates = [
+                rf"C:\texlive\2024\bin\windows\{name}.exe",
+                rf"C:\texlive\2023\bin\windows\{name}.exe",
+                rf"C:\texlive\2022\bin\win32\{name}.exe",
+                rf"C:\Program Files\MiKTeX\miktex\bin\x64\{name}.exe",
+                rf"C:\Program Files\MiKTeX 2.9\miktex\bin\x64\{name}.exe",
+            ]
+            for c in candidates:
+                if os.path.isfile(c):
+                    return c
+        return name  # fall back — subprocess will raise FileNotFoundError with a clear message
+
+    engine_path = _find_engine(engine)
+    if engine_path == engine and not _shutil.which(engine):
+        error(
+            f"Engine '{engine}' not found on PATH.\n"
+            f"  • On Windows: make sure TeX Live / MiKTeX bin folder is on your PATH.\n"
+            f"    e.g.  set PATH=C:\\texlive\\2024\\bin\\windows;%PATH%\n"
+            f"  • On WSL/Linux: run  sudo apt install texlive-full"
+        )
+
+    log(f"[{slug}] compiling with {engine_path}…")
     out_dir = BUILD_DIR / slug
     out_dir.mkdir(parents=True, exist_ok=True)
 
@@ -107,19 +137,27 @@ def _build_one(slug: str) -> bool:
     })
 
     def _run_engine() -> subprocess.CompletedProcess:
-        return subprocess.run(
-            [engine, "-interaction=nonstopmode",
+        proc = subprocess.run(
+            [engine_path, "-interaction=nonstopmode",
              f"-output-directory={out_dir}", "main.tex"],
             cwd=roadmap_dir,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
-            text=True,
             env=env,
         )
+        try:
+            stdout = proc.stdout.decode("utf-8")
+        except UnicodeDecodeError:
+            stdout = proc.stdout.decode("latin-1")
+        proc.__dict__["_stdout_text"] = stdout
+        return proc
+
+    def _stdout(proc: subprocess.CompletedProcess) -> str:
+        return proc.__dict__.get("_stdout_text", "")
 
     _run_engine()          # pass 1 — builds .toc / .aux / TikZ externals
     result = _run_engine() # pass 2 — resolves TOC entries, LastPage, overlays
-    for line in result.stdout.splitlines():
+    for line in _stdout(result).splitlines():
         if any(x in line for x in ("! ", "l.", "Error", "Warning")):
             print(f"  {line}")
 

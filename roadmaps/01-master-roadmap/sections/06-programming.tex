@@ -93,3 +93,58 @@
 \checkitem{Rust: ownership model eliminates use-after-free, \texttt{embedded-hal} traits, \texttt{no\_std}}{}
 \checkitem{Bash: build automation, pipes/grep/awk/sed for log parsing, Makefile targets}{}
 \checkitem{JavaScript/TypeScript: Node.js for serial port automation, ARLIZ documentation tools}{}
+
+\newpage
+% ── 4.3 Embedded C Patterns for Microcontrollers ─────────────────────────────
+\roadmapSubSection{4.3}{Embedded C Patterns for Microcontrollers}{2--3 Weeks}
+
+\roadmapHead{Memory-Mapped I/O (MMIO)}
+\checkitem{Peripheral registers are memory addresses. Write to address = write to hardware register}{}
+\checkitem{\texttt{volatile uint32\_t *GPIO\_OUT = (uint32\_t *)0x3FF44004;} then \texttt{*GPIO\_OUT |= (1<<pin)}}{}
+\checkitem{Why volatile: compiler must not cache register reads. Every access goes to hardware}{}
+\checkitem{Bit field structs: represent register layout as struct with bit fields. Read-modify-write}{}
+\checkitem{Atomic operations: single instruction read-modify-write. \texttt{GPIO.out\_w1ts.val} on ESP32}{}
+
+\roadmapHead{State Machine Patterns}
+\checkitem{Enum state type: defines all valid states. Switch on current state}{}
+\checkitem{Event-driven FSM: event struct passed to state handler, returns new state}{}
+\checkitem{Hierarchical FSM: states contain sub-states. Exit/enter actions on transition}{}
+\checkitem{Apply to: button debounce FSM, UART frame parser FSM, protocol state machine}{}
+\checkitem{Build: UART command parser as FSM. States: IDLE, RECEIVING, PROCESSING, RESPONDING}{}
+
+\roadmapHead{Bit Manipulation for Embedded}
+\checkitem{Set bit n: \texttt{reg |= (1U << n)}}{}
+\checkitem{Clear bit n: \texttt{reg \&= \~{}(1U << n)}}{}
+\checkitem{Toggle bit n: \texttt{reg \^{}= (1U << n)}}{}
+\checkitem{Test bit n: \texttt{(reg >> n) \& 1U}}{}
+\checkitem{Extract bitfield: \texttt{(reg >> START) \& ((1U << WIDTH) - 1)}}{}
+\checkitem{Insert bitfield: \texttt{reg = (reg \& mask) | (value << START)}}{}
+\checkitem{Practice: decode a CAN frame, extract PGN from J1939 identifier using bitfield ops}{}
+
+\roadmapHead{Circular Buffer Implementation}
+\checkitem{Ring buffer: fixed-size array, head/tail indices, wrap at size using modulo}{}
+\checkitem{Empty: head == tail. Full: (head + 1) \% size == tail. Never fill all slots (ambiguity)}{}
+\checkitem{Thread-safe ring buffer: disable interrupts or use atomic tail/head updates}{}
+\checkitem{DMA-backed ring buffer: DMA writes to buffer, CPU reads. Zero-copy UART receive}{}
+\checkitem{Implement: 256-byte ring buffer in C. Test corner cases: empty read, full write, wrap}{}
+
+\roadmapHead{Checksum and CRC}
+\checkitem{Parity: count 1-bits, check even or odd. Detects 1-bit error only}{}
+\checkitem{LRC (Longitudinal Redundancy Check): XOR all bytes. Simple but weak}{}
+\checkitem{CRC-8: 8-bit polynomial checksum. Used in 1-Wire, SMBus}{}
+\checkitem{CRC-16 CCITT: 16-bit. Used in XMODEM, X25, DNP3}{}
+\checkitem{CRC-32: used in Ethernet, ZIP, PNG. IEEE 802.3 polynomial}{}
+\checkitem{Implement CRC-16 in C: table lookup (fast) or bit-by-bit (small flash)}{}
+\newpage
+% ── 4.4 Python for Hardware Automation ───────────────────────────────────────
+\roadmapSubSection{4.4}{Python for Hardware Automation and Testing}{2 Weeks}
+
+\checkitem{pyserial: read and write UART. ser = serial.Serial('/dev/ttyUSB0', 115200, timeout=1)}{}
+\checkitem{Parse binary protocol: struct.unpack('<HBB', data) for little-endian uint16 + 2 bytes}{}
+\checkitem{Automated test: send command, read response, compare to expected. Log pass/fail}{}
+\checkitem{matplotlib: plot ADC samples over time. Real-time plot with animation.FuncAnimation}{}
+\checkitem{scipy.signal: apply Butterworth filter to recorded samples in Python}{}
+\checkitem{numpy: array operations on measurement data. FFT with numpy.fft.fft()}{}
+\checkitem{smbus2 (Linux): read I2C device directly from Raspberry Pi. No microcontroller needed}{}
+\checkitem{RPi.GPIO: control GPIO from Raspberry Pi. Bit-bang protocols, sensor reading}{}
+\checkitem{Build: Python script that reads ESP32 serial data, plots real-time sensor graph}{}

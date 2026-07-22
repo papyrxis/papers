@@ -1,136 +1,244 @@
-\roadmapSection{0}{COMMON FOUNDATIONS}{5--8 Weeks}
+\roadmapSection{0}{COMMON FOUNDATIONS}{6--9 Weeks}
 
-{\small\itshape\color{arligray} This section feeds every other section. Do it first, completely. Shared by all hardware tracks.}
+{\small\itshape\color{arligray} Do this first. Completely. Every advanced repair skill in this roadmap assumes fluency in everything below.}
 
-% ── 0.1 Safety and Workspace ──────────────────────────────────────────────────
-\roadmapSubSection{0.1}{Safety and Workspace}{1 Week}
+% ══════════════════════════════════════════════════════════════════════════════
+\roadmapSubSection{0.1}{Safety, ESD, and Workspace}{1 Week}
 
-\roadmapHead{Tools --- Buy Before Touching Any Board}
-
+\roadmapHead{Essential Tools --- Buy Before Touching Any Board}
 \begin{toolbadges}
-\toolbadge{Multimeter UT61E / UT33D}
-\toolbadge{Soldering Iron 936A+}
-\toolbadge{Hot Air Station 858D/850}
+\toolbadge{Multimeter UT61E+}
+\toolbadge{Soldering Iron 936A+ / T12}
+\toolbadge{Hot Air Station 858D / Quick 861DW}
+\toolbadge{DC Power Supply RF4 RF-3005PRO}
 \toolbadge{Anti-Static Mat (grounded)}
 \toolbadge{Anti-Static Wrist Strap}
-\toolbadge{ESD Tweezers SS-SA}
-\toolbadge{Desoldering Pump + Wick}
-\toolbadge{IPA 99\% Isopropyl}
-\toolbadge{No-Clean Flux Syringe}
-\toolbadge{Fume Extractor}
+\toolbadge{ESD Tweezers SS-SA / Vetus}
+\toolbadge{Desoldering Pump + Copper Wick}
+\toolbadge{IPA 99\% Isopropyl Alcohol}
+\toolbadge{No-Clean Flux Syringe (Amtech / NC-559)}
+\toolbadge{Fume Extractor with HEPA filter}
+\toolbadge{Fire-Safe Silicone Work Mat}
 \end{toolbadges}
 
-\roadmapHead{ESD and Battery Safety}
-\checkitem{Static from your body kills chips with no visible sign --- they fail later, not immediately}{}
-\checkitem{Anti-static mat + wrist strap must both be grounded. Test continuity to ground with multimeter}{}
-\checkitem{Li-ion battery puncture = fire. Never crush, puncture, or charge a swollen battery}{}
-\checkitem{Discharge battery below 20\% before opening a device}{}
-\checkitem{Always disconnect battery before any probe or soldering --- except current draw test}{}
-\checkitem{Keep IPA and flux away from all heat sources}{}
+\roadmapHead{ESD --- Understand the Physics, Not Just the Rules}
+\checkitem{Human body model (HBM): body capacitance ~150pF discharging through chip = instant gate oxide damage}{Chips fail silently under ESD --- intermittent faults weeks later, not immediate death. Hardest to diagnose.}
+\checkitem{Machine model (MM) and charged device model (CDM): even grounded tools can discharge via CDM}{Any ungrounded metal touching a pin is a CDM risk event}
+\checkitem{Anti-static mat + wrist strap: verify both connected to same ground point --- measure resistance mat-to-strap < 10M$\Omega$}{}
+\checkitem{Ground the mat to mains earth via 1M$\Omega$ safety resistor --- limits fault current to safe level}{}
+\checkitem{Never slide PCB across non-ESD surface --- friction tribocharges the board}{}
+\checkitem{Store bare boards and ICs in anti-static bags or foam --- not bubble wrap, not paper}{}
 
-\roadmapHead{Workspace Setup Checklist}
-\checkitem{Anti-static mat laid flat on work surface, grounding wire connected}{}
-\checkitem{Wrist strap clipped to mat or grounding point}{}
-\checkitem{Verify both are grounded --- multimeter continuity between wrist strap and known ground}{}
-\checkitem{Fume extractor positioned to pull air away from face}{}
-\checkitem{Separate zones: disassembly / soldering / testing}{}
-\checkitem{Bright lighting --- natural light or 5000K LED above workspace}{}
-\checkitem{Fire-safe surface or silicone mat for battery work}{}
+\roadmapHead{Battery Safety --- Li-ion Failure Modes}
+\checkitem{Thermal runaway: internal short $\to$ exothermic reaction $\to$ venting $\to$ fire. Irreversible once started}{Keep CO2 or dry sand nearby. Never use water on Li-ion fire.}
+\checkitem{Discharge to below 20\% before any mechanical work on a phone or laptop}{}
+\checkitem{Swollen battery = internal gas from electrolyte decomposition. Never compress, puncture, or charge}{Puncture in a sealed room = toxic gas (HF, CO). Work outdoors or with ventilation.}
+\checkitem{Never short battery terminals --- even momentary: fuse wire melts, connector burns, PMIC can die}{}
+\checkitem{Identify NTC thermistor on battery connector: 2-pin = bare cell (no protection), 3/4-pin = protected pack}{}
+\checkitem{Dispose of swollen cells: submerge in salt water for 24h to discharge completely before disposal}{}
+
+\roadmapHead{Workspace Setup}
+\checkitem{Three zones: disassembly (mechanical) / soldering (heat) / testing (power on). Never mix zones.}{}
+\checkitem{5000K LED lighting or natural light --- shadows hide lifted pads and hairline cracks}{}
+\checkitem{Fume extractor: position nozzle 10--15cm from iron tip, pulling flux vapor away from face}{}
+\checkitem{Label all screws and small parts with phone camera + sticky tape matrix before disassembly}{}
+
 \newpage
-% ── 0.2 Electronics Fundamentals ──────────────────────────────────────────────
-\roadmapSubSection{0.2}{Electronics Fundamentals}{4--5 Weeks}
+% ══════════════════════════════════════════════════════════════════════════════
+\roadmapSubSection{0.2}{Electronics Fundamentals --- Deep Level}{5--6 Weeks}
 
-{\small\itshape\color{arligray} This is the language every schematic and datasheet is written in. No shortcut here.}
+{\small\itshape\color{arligray} Every schematic, datasheet, and fault trace requires this. No shortcuts.}
 
-\roadmapHead{Core Electrical Quantities}
-\checkitem{Define voltage (V): electrical pressure, measured in Volts}{}
-\checkitem{Define current (I): flow of charge, measured in Amperes}{}
-\checkitem{Define resistance (R): opposition to flow, measured in Ohms}{}
-\checkitem{Memorize and apply Ohm's Law: V = I $\times$ R}{}
-\checkitem{Apply Kirchhoff's Voltage Law: sum of voltages around any closed loop = 0}{}
-\checkitem{Apply Kirchhoff's Current Law: current into node = current out}{}
-\checkitem{Calculate voltage drop across series resistors on a real circuit}{}
-\checkitem{Calculate current through parallel resistors on a real circuit}{}
-\checkitem{Understand power: P = V $\times$ I. Understand what it means for component ratings}{}
+\roadmapHead{Core Laws --- Apply, Not Just Memorize}
+\checkitem{Ohm's Law: $V = IR$. Use it: if PP\_VBAT = 3.8V and charge IC sense resistor = 0.01$\Omega$, $I = V/R$}{}
+\checkitem{KVL: sum of all voltages around any closed loop = 0. Use to find voltage drop across unknown element}{}
+\checkitem{KCL: sum of currents into a node = sum out. Use to find current through unprobeable branch}{}
+\checkitem{Power: $P = VI = I^2R = V^2/R$. A 0.01$\Omega$ sense resistor at 2A dissipates 0.04W --- safe. At 20A: 4W --- gets hot.}{}
+\checkitem{Thevenin equivalent: any linear network = one voltage source + one series resistor. Use to model output impedance of power rails.}{}
+\checkitem{Norton equivalent: same network = current source + parallel resistor. Use for current source analysis (charge IC output).}{}
 
-\roadmapHead{Passive Components --- Test Each Physically}
-\checkitem{Resistor --- read color bands, measure with multimeter, understand current limiting role}{}
-\checkitem{Capacitor --- understand charge/discharge, measure ESR, identify shorted cap (most common fault)}{}
-\checkitem{Inductor --- understand energy storage in magnetic field, role in buck/boost converters}{}
-\checkitem{Diode --- measure forward voltage drop ($\approx$0.6V silicon), understand one-directional flow}{}
-\checkitem{Zener diode --- understand overvoltage clamping and ESD protection}{}
-\checkitem{NTC thermistor --- resistance drops as temperature rises. PMICs use these for thermal protection}{}
-\checkitem{Varistor (VDR) --- absorbs transient voltage spikes to protect downstream ICs}{}
+\roadmapHead{Passive Components --- Test Each, Know Failure Modes}
+\checkitem{Resistor: color code + DMM. Failure modes: open (most common after surge), value drift, intermittent (cold solder).}{In diode mode (board powered off): a shorted resistor reads 0V across it --- impossible unless bridged}
+\checkitem{Capacitor: measure ESR with LCR meter (not just capacitance). High ESR = failing cap even if C value OK.}{Decoupling cap shorted to ground = rail pulled low. Most common cause of 0V on a power rail.}
+\checkitem{Inductor: DC resistance in m$\Omega$ range. Open inductor = no output from buck converter. Shorted = overheating.}{}
+\checkitem{Diode: forward voltage ~0.3V Schottky, ~0.6V silicon. Leaky diode = lower Vf than spec. Shorted = 0V both probes.}{}
+\checkitem{Zener: reverse breakdown voltage = datasheet $V_Z$. Used for ESD clamping on USB, headphone, RF lines.}{}
+\checkitem{Ferrite bead: acts as inductor at HF, resistor at RF. Shorted ferrite = fine at DC. Open ferrite = no power to downstream IC.}{}
+\checkitem{NTC thermistor: $R$ drops with temperature. PMIC uses it to halt charging if battery temp exceeds threshold.}{}
+\checkitem{Crystal oscillator: 32.768kHz RTC crystal, 19.2MHz / 38.4MHz system clock. Dead crystal = no boot, no time-keeping.}{}
 
-\roadmapHead{Active Components}
-\checkitem{BJT transistor --- base-controlled current switch, understand NPN/PNP operation}{}
-\checkitem{MOSFET --- gate-controlled switch, lower loss than BJT, used everywhere in power circuits}{}
-\checkitem{Integrated Circuit (IC) --- complex active circuit packaged as single component}{}
+\roadmapHead{Active Components --- Understand Operation Regions}
+\checkitem{BJT (NPN/PNP): cutoff / active / saturation. In repair: used as switches (saturation). Base resistor sizing matters.}{}
+\checkitem{MOSFET (N/P-channel): gate threshold $V_{GS(th)}$. Enhancement mode: off by default. Logic-level FETs: $V_{GS(th)}$ < 2V.}{Most common MOSFET fault: gate oxide punch-through = FET permanently on or off. Check $V_{GS}$ in circuit.}
+\checkitem{Understand $R_{DS(on)}$: lower = less heat. Power MOSFETs in charger path: $R_{DS(on)}$ = 10--50m$\Omega$.}{}
+\checkitem{Op-amp: understand virtual ground, inverting/non-inverting config. Used in charge IC current sense amplifiers.}{}
 
-\roadmapHead{Power Architecture --- Shared Across Phone, Laptop, PC}
-\checkitem{VDD = positive supply rail. VSS = ground reference}{}
-\checkitem{Understand PMIC role: converts battery voltage to multiple system voltages}{}
-\checkitem{Understand Buck converter: steps voltage DOWN efficiently (CPU core, display)}{}
-\checkitem{Understand Boost converter: steps voltage UP (backlight, USB output)}{}
-\checkitem{Understand LDO linear regulator: low-noise output for sensitive circuits}{}
-\checkitem{Understand power sequencing: why rails must come up in specific order during boot}{}
-
-\roadmapHead{Communication Protocols --- Used Everywhere}
-\checkitem{I2C: two wires SDA + SCL. Master/slave. Address-based. Sensors, charge ICs, cameras}{Shorted SDA or missing pull-up resistor = boot halts. Very common fault}
-\checkitem{SPI: four wires MOSI + MISO + SCK + CS. Faster than I2C. Flash storage, displays}{}
-\checkitem{UART: two wires TX + RX. Asynchronous serial. Boot logs, debug shells, GPS modules}{}
-\checkitem{USB: understand D+/D- differential pair, VBUS power line, device enumeration}{}
-\checkitem{PCIe: high-speed serial bus for NVMe SSDs, GPU, WiFi cards in laptops and PCs}{}
 \newpage
-\roadmapHead{Schematic Reading --- Common Skill}
-\checkitem{Recognize all standard component symbols: R, C, L, D, ZD, Q, U, connector, test point}{}
-\checkitem{Understand net names: same name = same copper trace, anywhere on the schematic}{}
-\checkitem{Trace a power rail from source to consumer across multiple schematic sheets}{}
-\checkitem{Identify test points and locate them physically on a board}{}
-\checkitem{Open MaAnt Shock Line / S-Finder / JCID: navigate a complete phone boardview}{}
-\checkitem{Open a laptop/PC datasheet chipset block diagram and identify all buses}{}
+\roadmapHead{Power Architecture --- Shared Across Every Platform}
+\checkitem{Buck (step-down) converter: $V_{out} = V_{in} \times D$ where $D$ = duty cycle. Switching freq = 500kHz--2MHz on phones.}{Inductor + capacitor form LC filter. Missing output = dead FET, missing gate drive, or open inductor.}
+\checkitem{Boost (step-up) converter: $V_{out} = V_{in} / (1-D)$. Used for: display backlight (20--30V), USB output 5V from 3.7V battery.}{}
+\checkitem{LDO (Low Dropout Regulator): linear, low noise. Dropout voltage = $V_{in} - V_{out(min)}$. Used for RF, audio, sensor rails.}{LDO gets hot if $V_{in} - V_{out}$ is large and current is high: $P = (V_{in}-V_{out}) \times I$}
+\checkitem{Charge pump: capacitor-based voltage doubler/inverter. Used for: negative rail on audio codec, small bias voltages.}{}
+\checkitem{PMIC (Power Management IC): integrates 5--15 buck/boost/LDO regulators + sequencer + fuel gauge + thermal protection}{On phone: one PMIC controls all major rails. Dead PMIC = completely dead device.}
+\checkitem{Power sequencing: rails must power up in specific order (datasheet ``power-up sequence'' table). Wrong order = latch-up.}{Example iPhone: VBAT $\to$ PP1V8\_ALWAYS $\to$ PP3V0\_NAND $\to$ NAND responds $\to$ CPU fetches boot code}
+\checkitem{Power rail naming convention: PP = power plane, voltage in name, function suffix. Example: PP1V8\_SDRAM, PP3V3\_USB}{}
+
+\roadmapHead{Communication Protocols --- Read with Tools, Not Just Theory}
+\checkitem{I2C: SDA + SCL, open-drain, pull-up to VDDIO. Probe with logic analyzer: verify ACK bit after each byte.}{Missing pull-up = SDA/SCL stuck low. Wrong pull-up value = signal too slow or too fast for IC.}
+\checkitem{SPI: MOSI, MISO, SCK, CS (active low). Full duplex. Up to 100MHz. NAND flash, display ICs, PMIC config.}{No CS toggle = SPI device never selected. Wrong polarity (CPOL/CPHA) = scrambled data.}
+\checkitem{UART: TX, RX, no clock. Match baud rate, 8N1 default. Boot logs always on UART TX at 115200.}{}
+\checkitem{USB 2.0: D+/D- differential pair, 90$\Omega$ impedance. DP/DM short = USB dead. Open = enumeration fails.}{}
+\checkitem{USB-C: CC1/CC2 lines negotiate role (host/device) and power delivery profile. Dead CC = no charging, no data.}{}
+\checkitem{PCIe (NVMe): PERST\# must deassert, REFCLK must be present, PWRGT\# must enable. All three before link training.}{}
+\checkitem{eMMC: CLK, CMD, DAT0--7. CLK stuck = storage dead. CMD high-Z = no command response. Use UFI Box to debug.}{}
+\checkitem{UFS (phone/laptop): M-PHY differential pairs, MIPI UniPro framing. Oscilloscope needed for signal integrity.}{}
+
+\roadmapHead{Schematic and Boardview Mastery}
+\checkitem{Net names: identical labels on different pages = same copper. Never assume proximity = connection.}{}
+\checkitem{Power flags: PWR\_FLAG in KiCad, circles in Altium. Means ``this net is a power plane''.}{}
+\checkitem{Trace a charging path end-to-end: USB-C connector $\to$ CC controller $\to$ charge IC $\to$ battery connector $\to$ cell}{}
+\checkitem{Identify all bypass caps on a rail: a shorted 100nF near the IC pulls the whole rail to ground}{}
+\checkitem{Cross-reference schematic net to boardview component: click net in MaAnt, find physical location on board}{}
+\checkitem{Identify test points (TP labels) and measure them first before probing IC pins directly}{}
+\checkitem{Read IC application circuit in datasheet: compare to board schematic to spot missing or wrong components}{}
+
 \newpage
-% ── 0.3 Soldering and PCB Reading ─────────────────────────────────────────────
-\roadmapSubSection{0.3}{Soldering and PCB Reading}{3--4 Weeks}
+% ══════════════════════════════════════════════════════════════════════════════
+\roadmapSubSection{0.3}{Soldering and Micro-Soldering Mastery}{4--5 Weeks}
 
-{\small\itshape\color{arligray} Muscle memory. Daily practice on scrap boards. You cannot read your way to competence here.}
+{\small\itshape\color{arligray} Daily practice on dead boards. 2 hours/day minimum. Cannot be read --- only built.}
 
-\roadmapHead{Additional Tools --- Buy at This Phase}
+\roadmapHead{Advanced Tools --- Buy at This Phase}
 \begin{toolbadges}
 \toolbadge{USB Microscope 45x / Yaxun AK12}
+\toolbadge{Trinocular Stereo Microscope 7--45x (long-term)}
 \toolbadge{DC Power Supply RF4 RF-3005PRO}
 \toolbadge{Vacuum Separator Sunshine S-918K}
 \toolbadge{Jumper Wire 0.02mm (Kaisi)}
-\toolbadge{Flux Paste Amtech / NC-559}
-\toolbadge{Solder Paste (Mechanic)}
-\toolbadge{Precision Screwdrivers (Pentalobe/Torx)}
-\toolbadge{5--10 Dead Practice Boards}
+\toolbadge{Flux Paste Amtech NC-559 / MF}
+\toolbadge{Solder Paste Mechanic XG-Z40}
+\toolbadge{BGA Reball Stencils (universal + platform-specific)}
+\toolbadge{Low-Melt Solder (Chip Quik / Bismuth-Tin)}
+\toolbadge{Preheat Platform (50--150°C bottom heat)}
+\toolbadge{Precision Screwdrivers (Pentalobe / Torx / JIS)}
+\toolbadge{10--15 Dead Practice Boards}
 \end{toolbadges}
 
-\roadmapHead{Soldering Iron Control}
-\checkitem{Set correct temperature: 320--350°C lead-free, 280--300°C leaded}{}
-\checkitem{Tin the tip before and after every use}{}
-\checkitem{Practice dragging solder on through-hole pads --- achieve smooth, shiny joints}{}
-\checkitem{Practice removing and replacing 0805 SMD resistors under microscope}{}
-\checkitem{Practice removing and replacing 0402 SMD components --- requires steady hand}{}
-\checkitem{Achieve consistently clean joints: no bridges, no cold joints, no lifted pads}{}
+\roadmapHead{Iron Temperature and Tip Selection}
+\checkitem{Lead-free (SAC305): 350--370°C. Leaded (Sn63Pb37): 300--320°C. Higher temp = faster oxidation of tip.}{}
+\checkitem{Tip shapes: chisel for through-hole and drag soldering; conical for 0402 and fine pitch; knife for IC legs.}{}
+\checkitem{Tin tip with fresh solder before and after every joint. Dull/oxidized tip = poor heat transfer = cold joints.}{}
+\checkitem{Dwell time: 1--2 seconds per joint. Longer = pad delamination. Shorter = cold joint. Judge by solder flow.}{}
+\checkitem{Flux before heat: always apply flux before touching iron to pad. Flux cleans oxide, improves wetting.}{}
 
-\roadmapHead{Hot Air Station Control}
-\checkitem{Understand temperature and airflow for different jobs: adhesive removal vs IC rework}{}
-\checkitem{Practice removing an SMD IC without damaging adjacent components}{}
-\checkitem{Practice reballing a BGA: desolder, clean pads, stencil, paste, reflow, align}{}
-\checkitem{Understand thermal mass: ground planes need preheat from below before hot air from above}{}
+\roadmapHead{SMD Component Work --- Build to These Standards}
+\checkitem{0805: practice until removal and replacement is consistent with zero lifted pads --- 50+ repetitions}{}
+\checkitem{0402: smallest common passive. Iron + hot air combo. Tweezers hold component while iron tacks one end.}{}
+\checkitem{0201: phone-scale. Hot air only or iron with ultra-fine tip. Verify under 45x after every placement.}{}
+\checkitem{SOT-23 (3-pin transistor / diode): hot air 350°C, 20--25L airflow. Rotate nozzle to avoid blowing off adjacents.}{}
+\checkitem{QFN/DFN: exposed pad underneath. Hot air + flux paste + stencil. Center pad must solder for thermal + electrical.}{Verify center pad continuity with resistance measurement after rework}
+\checkitem{TSSOP / SOP (IC legs): drag solder technique. Apply flux, load solder on tip, drag across all pins in one pass. Wick bridges.}{}
 
-\roadmapHead{PCB Reading}
-\checkitem{Identify PCB layers: top copper, inner layers, bottom copper, solder mask, silkscreen}{}
-\checkitem{Trace a power rail visually across both sides of a real board}{}
-\checkitem{Identify component packages: QFN, BGA, LGA, SOT-23, TO-252, SOP, TSSOP}{}
-\checkitem{Use multimeter diode mode (board unpowered): red to ground, black to rails}{}
-\checkitem{Use continuity mode to verify a jumper wire restore}{}
+\roadmapHead{BGA --- Reball and Reflow Sequence}
+\checkitem{Step 1: remove BGA using preheat platform (120°C) + hot air (380--400°C, 40--60L, circular motion)}{Never exceed 430°C --- PCB delaminates. Watch for slight movement before lifting.}
+\checkitem{Step 2: clean pads with wick + flux. Inspect under microscope: all pads must be flat, no lifted pads.}{}
+\checkitem{Step 3: apply flux to chip underside. Place stencil, apply solder paste, squeegee, remove stencil.}{}
+\checkitem{Step 4: reflow paste in reflow oven or hot air. SAC305 profile: 150°C preheat 60s, 217°C liquidus, 250°C peak 10s.}{}
+\checkitem{Step 5: clean flux residue with IPA + brush. Inspect all balls under microscope: uniform size, no bridges, no missing.}{}
+\checkitem{Step 6: reinstall BGA. Align to pads using boardview as reference. Preheat + hot air reflow. No pressure during cooling.}{}
+\checkitem{Step 7: verify electrically: power rail continuity, I2C/SPI bus ACK, or full boot depending on component.}{}
 
-\roadmapHead{Jumper Wire Routing}
-\checkitem{Locate a broken trace under microscope: hairline cracks near pads after drop damage}{}
-\checkitem{Scrape solder mask with blade to expose copper on both endpoints}{}
-\checkitem{Tin both exposed copper points}{}
-\checkitem{Route 0.02mm wire and solder both ends under microscope}{}
-\checkitem{Verify continuity with multimeter before applying power}{}
+\roadmapHead{Micro-Soldering --- Jumper Wires and Pad Repair}
+\checkitem{Lifted pad: scrape solder mask 3--5mm along the trace from the pad. Tin the exposed copper.}{}
+\checkitem{0.02mm jumper wire: solder one end to tinned trace, route under adjacent components, solder other end to destination.}{}
+\checkitem{Broken via: drill through from top with 0.3mm bit, insert wire, solder both ends.}{}
+\checkitem{Rebuild a destroyed pad: clean area, apply UV solder mask, expose copper with scalpel, tin, attach component.}{}
+\checkitem{Fine-pitch IC pin bridging: flux + solder wick to remove bridge. Never drag dry wick --- pre-tin it.}{}
+
+\roadmapHead{Hot Air Station --- Precision Airflow Control}
+\checkitem{Nozzle selection: 6mm round for small ICs; 10mm for medium; flat nozzle for connectors and flex cables.}{}
+\checkitem{Prevent collateral damage: kapton tape + aluminum foil shields on all adjacent components within 15mm.}{}
+\checkitem{Preheat from below: preheat platform at 100--130°C reduces thermal shock and time needed from hot air.}{}
+\checkitem{Observe solder fillet on nearby passives as indicator: when they reflow, BGA solder is also liquid --- lift now.}{}
+\checkitem{Cooling: allow board to cool naturally on heat-resistant mat. No forced air --- differential thermal contraction causes opens.}{}
+
+\roadmapHead{PCB Layer and Trace Understanding}
+\checkitem{Identify layer count from PCB edge cross-section or manufacturer spec. Phone PCBs: 8--12 layers typical.}{}
+\checkitem{Blind via: connects top layer to inner layer but not through the board. Cannot be probed from bottom.}{}
+\checkitem{Buried via: between two inner layers only. Invisible from outside. Identified from schematic only.}{}
+\checkitem{Power plane (inner layer): large copper fill for VDD or GND. Low impedance path. Damaged by drill damage or delamination.}{}
+\checkitem{Impedance-controlled traces: differential pairs (USB, PCIe, RF) have calculated width for 90/100$\Omega$. Do not add solder or flux.}{}
+\checkitem{Identify trace resistance: $R = \rho L / A$. A 0.1mm wide, 1mm long copper trace has ~5m$\Omega$ resistance. Useful for fault current calc.}{}
+
+\newpage
+% ══════════════════════════════════════════════════════════════════════════════
+\roadmapSubSection{0.4}{Advanced Diagnostics --- Oscilloscope, Thermal, Logic Analyzer}{Ongoing from Week 8}
+
+{\small\itshape\color{arligray} Start building these skills in parallel from Week 8. They multiply diagnostic speed and accuracy by 10x.}
+
+\roadmapHead{Oscilloscope --- Buy at Phase 4}
+\begin{toolbadges}
+\toolbadge{Rigol DS1054Z (50MHz, 4-channel, budget)}
+\toolbadge{Rigol DS1104Z Plus (100MHz recommended)}
+\toolbadge{Siglent SDS1202X-E (200MHz, better FFT)}
+\toolbadge{Current Probe Hantek CC-65 (optional)}
+\end{toolbadges}
+
+\roadmapHead{Oscilloscope Fundamentals}
+\checkitem{Bandwidth: signal frequency must be < scope bandwidth / 3 for accurate amplitude. 50MHz scope: accurate to ~17MHz.}{}
+\checkitem{10:1 probe: 10x attenuation, 10x higher input impedance (10M$\Omega$). Use for all voltage measurements.}{}
+\checkitem{Probe compensation: adjust probe trimmer cap until square wave edges are sharp before any measurement.}{}
+\checkitem{DC coupling: see rail voltage + ripple. AC coupling: zoom into ripple only. Use both together.}{}
+\checkitem{Acceptable ripple: 1--5\% of DC voltage. 1.8V rail: ripple < 90mV. High ripple = failing filter cap.}{}
+\checkitem{Power sequencing trace: 4-channel scope. CH1=VSYS, CH2=PP1V8, CH3=PP3V3, CH4=CPU\_PWR\_OK. One capture, all rising edges.}{}
+\checkitem{I2C capture: CH1 on SDA, CH2 on SCL. Trigger on SDA falling edge. Look for 9-clock-cycle groups (8 data + 1 ACK).}{}
+\checkitem{Missing ACK bit (clock 9 stays high): addressed device not responding. Fault in that device or its power rail.}{}
+\checkitem{Phase node measurement: probe junction of high-side FET drain and low-side FET source (before inductor). Should be a square wave.}{}
+
+\roadmapHead{Thermal Imaging --- Buy at Phase 4}
+\begin{toolbadges}
+\toolbadge{InfiRay P2 Pro (256x192, phone attachment)}
+\toolbadge{FLIR One Gen 3 (160x120, phone attachment)}
+\toolbadge{Topdon TC001 (256x192, USB-C)}
+\end{toolbadges}
+
+\roadmapHead{Thermal Camera Usage}
+\checkitem{Connect current-limited supply (0.5--1A) to shorted rail. Power briefly (3--5 seconds). Immediately photograph with thermal cam.}{Shorted component heats first. Capacitor short = pinpoint heat. IC internal short = whole package heats uniformly.}
+\checkitem{Emissivity: shiny metal reads low (0.05--0.3). Black IC packages: 0.95. Apply kapton tape for accurate temperature reading.}{}
+\checkitem{After BGA reflow: power on, apply load, thermal image. IC should heat uniformly. Cold corner = open joint.}{}
+\checkitem{Unexpected cold component during operation: not receiving power. Unexpected hot spot: current path that shouldn't exist.}{}
+
+\roadmapHead{Logic Analyzer --- Buy at Phase 4}
+\begin{toolbadges}
+\toolbadge{Saleae Logic 8 (8-channel, 100MHz)}
+\toolbadge{DreamSourceLab DSLogic Plus (16-channel, budget)}
+\end{toolbadges}
+
+\roadmapHead{Logic Analyzer Usage}
+\checkitem{I2C capture: CH0=SDA, CH1=SCL. Add decoder. Read: ``0x36 W: ACK, 0x03, ACK'' = write to device 0x36, register 0x03.}{}
+\checkitem{SPI capture: CH0=CLK, CH1=MOSI, CH2=MISO, CH3=CS. CS never toggling = SPI master not initiating.}{}
+\checkitem{UART capture: CH0 on TX test point. Set baud rate. Wrong baud = garbled output. Measure bit time on scope first.}{}
+\checkitem{BIOS SPI traffic: capture during boot. No SPI activity = CPU not executing --- dead BIOS chip or dead CPU.}{}
+\checkitem{Boot log search: grep for ``error'', ``fail'', ``panic'', ``timeout'', ``reset''. These are fault indicators.}{}
+
+\roadmapHead{Power Sequencing --- Advanced}
+\checkitem{PGOOD (Power Good): open-drain output asserts high once output rail is in regulation. Next rail waits for PGOOD.}{}
+\checkitem{Trace sequence fault: last rail to rise before stall = fault domain. Check EN pin of stalled rail.}{}
+\checkitem{Find failed PGOOD: trace back to which rail's PGOOD is stuck low. That rail is not reaching regulation.}{Common cause: shorted output cap pulls rail below threshold $\to$ PGOOD never asserts $\to$ entire sequence stalls.}
+\checkitem{Read PMIC fault register via I2C after unexpected shutdown: contains overcurrent, thermal, watchdog events.}{}
+
+\roadmapHead{Ultrasonic Cleaning --- Liquid Damage Protocol}
+\begin{toolbadges}
+\toolbadge{GT Sonic P3 / P6 (600ml, 40kHz)}
+\toolbadge{Cleaning solution: diluted IPA or VIGON EFM}
+\end{toolbadges}
+
+\checkitem{Step 1: do not power on. Pull battery immediately. Liquid + power = corrosion in seconds.}{}
+\checkitem{Step 2: disassemble completely. Remove all shields, FPC connectors, battery connector.}{}
+\checkitem{Step 3: rinse with 99\% IPA to displace water. Soak 5 minutes, agitate gently.}{}
+\checkitem{Step 4: ultrasonic clean at 40kHz with diluted IPA or VIGON EFM. 40°C, 5--10 minutes.}{}
+\checkitem{Step 5: rinse with clean IPA after ultrasonic to remove cleaning solution residue.}{}
+\checkitem{Step 6: dry with hot air at 60°C for 5 minutes. Then 30 minutes in silica drying cabinet.}{}
+\checkitem{Step 7: visual inspection under microscope. Identify corroded vias, damaged pads, lifted components.}{}
+\checkitem{Step 8: diode mode map all rails. Then power on with current-limited supply.}{}
+\checkitem{Saltwater damage: much more aggressive than fresh water. Extended ultrasonic + multiple IPA rinses required.}{}

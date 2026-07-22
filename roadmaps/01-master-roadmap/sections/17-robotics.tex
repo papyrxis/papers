@@ -1,0 +1,185 @@
+\roadmapSection{15}{ROBOTICS --- FROM ZERO TO AUTONOMOUS SYSTEMS}{12--16 Weeks}
+
+{\small\itshape\color{arligray} Robotics ties everything together: electronics, programming, mechanics, sensors, control theory. Build every project physically --- never simulation only.}
+
+% ── 15.1 Robotics Foundations ─────────────────────────────────────────────────
+\roadmapSubSection{15.1}{Robotics Foundations and Hardware}{2 Weeks}
+
+\roadmapHead{Core Concepts}
+\checkitem{Robot anatomy: actuators (output force), sensors (perceive world), controller (make decisions)}{}
+\checkitem{Degrees of freedom (DOF): number of independent motions. 2-wheel robot = 2 DOF}{}
+\checkitem{Open-loop control: command output without measuring result. Stepper motor position}{}
+\checkitem{Closed-loop control (feedback): measure output, compare to setpoint, correct error}{}
+\checkitem{PID controller: Proportional (react to error), Integral (correct accumulated error), Derivative (predict future error)}{Most important control algorithm in engineering}
+\checkitem{Kinematics: study of motion without forces. Forward (joint angles → position), inverse (position → joint angles)}{}
+\checkitem{Actuator types: DC motor, servo motor, stepper motor, linear actuator, solenoid}{}
+\checkitem{Understand torque: T = F × r. Select motor with enough torque for your robot's weight + friction}{}
+
+\roadmapHead{Required Tools and Components}
+\begin{toolbadges}
+\toolbadge{ESP32 DevKit (main controller)}
+\toolbadge{Arduino Nano / Uno (learning only)}
+\toolbadge{L298N Motor Driver}
+\toolbadge{DRV8833 / TB6612FNG}
+\toolbadge{MG90S / SG90 Servo}
+\toolbadge{NEMA17 Stepper + A4988}
+\toolbadge{HC-SR04 Ultrasonic}
+\toolbadge{MPU-6050 IMU}
+\toolbadge{IR Sensors (line following)}
+\toolbadge{LiDAR (RPLIDAR A1)}
+\toolbadge{Breadboard + Jumper Wires}
+\toolbadge{3D Printer / Chassis Kit}
+\end{toolbadges}
+\newpage
+% ── 15.2 DC Motors and Motor Control ─────────────────────────────────────────
+\roadmapSubSection{15.2}{DC Motors, Servo, and Stepper Control}{2--3 Weeks}
+
+\roadmapHead{DC Motor Control}
+\checkitem{DC motor: speed proportional to voltage, direction by polarity swap}{}
+\checkitem{PWM speed control: duty cycle determines average voltage → motor speed}{}
+\checkitem{H-bridge circuit: 4 transistors, allows forward and reverse. DO NOT enable both high and low on same side}{}
+\checkitem{L298N module: dual H-bridge, up to 2A per channel, 5--35V. Standard beginner motor driver}{}
+\checkitem{DRV8833: smaller, lower voltage (0--10V), more efficient. Better for lightweight robots}{}
+\checkitem{TB6612FNG: Toshiba, 1.2A/channel continuous, PWM up to 100kHz. Professional grade}{}
+\checkitem{Back-EMF: motor generates voltage when spinning. Must decouple from logic supply with 100µF cap}{}
+\checkitem{Stall current: motor draws maximum current when prevented from moving. Must not exceed driver rating}{}
+\checkitem{Motor encoder: reads position and speed via pulses. Quadrature encoder = direction too}{}
+\checkitem{Build: two-wheel robot with L298N + ESP32. Control speed and direction via serial command}{}
+\checkitem{Add encoder feedback: count pulses per revolution, calculate RPM, implement speed control}{}
+
+\roadmapHead{Servo Motors}
+\checkitem{Servo receives PWM: 50Hz, pulse 1ms = 0°, 1.5ms = 90°, 2ms = 180°}{}
+\checkitem{SG90: small plastic, 1.8kg·cm torque, 3.3--6V. Good for lightweight arms}{}
+\checkitem{MG90S: metal gear, 2.2kg·cm, more durable. Use for heavier loads}{}
+\checkitem{MG996R: high torque (9.4kg·cm), metal gear. Pan/tilt camera or robot arm joints}{}
+\checkitem{Control via ESP32: LEDC PWM channel, 50Hz, set duty for angle}{}
+\checkitem{Servo current: stall up to 600mA. Never power from ESP32 3.3V pin --- use separate 5V supply}{}
+\checkitem{Continuous rotation servo: modified for full rotation, used as motor with position control removed}{}
+\checkitem{Build: pan-tilt camera mount with 2 servos + ESP32 WiFi control from phone}{}
+
+\roadmapHead{Stepper Motors}
+\checkitem{Stepper motor: rotates fixed steps per pulse (1.8°/step = 200 steps/revolution for NEMA17)}{}
+\checkitem{Microstepping: A4988 supports 1/2, 1/4, 1/8, 1/16 step. Smoother motion, lower torque}{}
+\checkitem{Step and direction interface: STEP pin = pulse per step, DIR pin = direction}{}
+\checkitem{A4988 driver: current limiting via Vref pot. Set to motor rated current}{}
+\checkitem{DRV8825: similar to A4988, up to 1/32 microstepping, higher current (2.5A)}{}
+\checkitem{NEMA17 (17HS4401): standard for 3D printers and CNC. 40N·cm holding torque}{}
+\checkitem{Acceleration control: always ramp speed up/down. Instant full speed = skipped steps}{}
+\checkitem{AccelStepper library (Arduino) or custom step interrupt on ESP32 for smooth motion}{}
+\checkitem{Build: X-Y plotter with 2× NEMA17 + A4988. Draw simple shapes via UART commands}{}
+
+\newpage
+% ── 15.3 Sensors for Robotics ─────────────────────────────────────────────────
+\roadmapSubSection{15.3}{Sensors --- Perception Layer}{2--3 Weeks}
+
+\roadmapHead{Distance and Proximity}
+\checkitem{HC-SR04 ultrasonic: trigger 10µs pulse, measure echo pulse width. Distance = time × 340/2}{}
+\checkitem{HC-SR04 range: 2cm to 400cm, ±3mm accuracy. Fails on soft/angled surfaces}{}
+\checkitem{IR distance sensor (Sharp GP2Y0A21): analog voltage proportional to distance. 10--80cm}{}
+\checkitem{VL53L0X: ToF (Time of Flight) laser ranging. I2C, 2cm--200cm, fast update rate}{}
+\checkitem{RPLIDAR A1: 360° LiDAR, 6m range, 5--10 Hz scan. Standard for SLAM robots}{}
+\checkitem{Build: obstacle-avoiding robot using HC-SR04 + servo to scan left/right}{}
+
+\roadmapHead{Line and Color Sensing}
+\checkitem{IR line sensor (TCRT5000): emits IR, measures reflection. Dark surface absorbs, white reflects}{}
+\checkitem{Array of 5--8 line sensors: read positions, compute weighted center of line}{}
+\checkitem{TCS3200 / TCS34725: RGB color sensor via I2C. Returns R, G, B values as 16-bit integers}{}
+\checkitem{Build: line-following robot with 5× IR array + PID control for smooth tracking}{}
+
+\roadmapHead{IMU and Orientation}
+\checkitem{MPU-6050: 3-axis accelerometer + 3-axis gyroscope, I2C. Cheap, widely available}{}
+\checkitem{ICM-42688-P: better noise performance, SPI/I2C, used in modern drones}{}
+\checkitem{Accelerometer: measures linear acceleration in g. At rest: z = ±9.81 m/s²}{}
+\checkitem{Gyroscope: measures angular rate in °/s. Integrate to get angle (drifts over time)}{}
+\checkitem{Complementary filter: angle = 0.98 × (angle + gyro × dt) + 0.02 × accel\_angle}{}
+\checkitem{Kalman filter: optimal state estimator. Fuses gyro and accelerometer for stable angle}{}
+\checkitem{DMP (Digital Motion Processor) on MPU-6050: built-in quaternion output via FIFO}{}
+\checkitem{QMC5883L magnetometer: compass heading. Combine with IMU for full orientation}{}
+\checkitem{Build: self-balancing robot using MPU-6050 angle + PID + two DC motors}{}
+
+\roadmapHead{Vision}
+\checkitem{OV7670 camera module: 0.3MP, parallel interface, complex timing. Low cost}{}
+\checkitem{OV2640: 2MP, used in ESP32-CAM (AI-Thinker). JPEG compression in hardware}{}
+\checkitem{ESP32-CAM: ESP32 + OV2640 + SD slot in one module. Stream MJPEG over WiFi}{}
+\checkitem{OpenCV on Raspberry Pi: real-time image processing, color tracking, edge detection}{}
+\checkitem{Template matching: find known object in image. cv2.matchTemplate()}{}
+\checkitem{Hough transform: detect lines and circles. Used for lane following}{}
+\checkitem{YOLO (You Only Look Once): real-time object detection. Run on RPi4 or Jetson}{}
+\checkitem{Build: ESP32-CAM stream + OpenCV on laptop: detect object position and command robot}{}
+\newpage
+% ── 15.4 Control Theory and PID ───────────────────────────────────────────────
+\roadmapSubSection{15.4}{Control Theory --- PID and Beyond}{2 Weeks}
+
+\roadmapHead{PID Controller Implementation}
+\checkitem{Error: e(t) = setpoint − measured\_value}{}
+\checkitem{Proportional term: Kp × e(t). Large error → large correction. May oscillate}{}
+\checkitem{Integral term: Ki × ∫e dt. Eliminates steady-state error. Can cause windup}{}
+\checkitem{Derivative term: Kd × de/dt. Predicts future error. Reduces overshoot. Amplifies noise}{}
+\checkitem{PID output: u(t) = Kp×e + Ki×∫e dt + Kd×de/dt. Feed to actuator}{}
+\checkitem{Tuning: start Kp only until oscillation, halve Kp, add Kd to damp, add Ki for precision}{}
+\checkitem{Anti-windup: clamp integral term when output saturates}{}
+\checkitem{Derivative filter: low-pass filter on derivative term to reduce noise sensitivity}{}
+\checkitem{Implement in C on ESP32: use timer ISR at fixed rate (1ms--10ms interval)}{}
+\checkitem{Build: PID line follower --- tune Kp, Kd until smooth fast tracking without oscillation}{}
+\checkitem{Build: PID motor speed control --- use encoder feedback, tune for fast settling}{}
+
+\roadmapHead{Advanced Control Concepts}
+\checkitem{Bang-bang (on/off) control: simplest, but causes oscillation around setpoint}{}
+\checkitem{Cascaded PID: outer loop (position) outputs setpoint for inner loop (speed)}{}
+\checkitem{Feed-forward control: add expected output directly, use feedback only for correction}{}
+\checkitem{State space representation: x\' = Ax + Bu, y = Cx. Modern control theory foundation}{}
+\checkitem{LQR (Linear Quadratic Regulator): optimal state feedback. Used in drone stabilization}{}
+\checkitem{Model Predictive Control (MPC): optimize over prediction horizon. Computationally heavy}{}
+
+\newpage
+% ── 15.5 Robot Architectures ─────────────────────────────────────────────────
+\roadmapSubSection{15.5}{Robot Architectures and Communication}{2--3 Weeks}
+
+\roadmapHead{Mobile Robot Kinematics}
+\checkitem{Differential drive: two independently driven wheels + castor. Simplest mobile robot}{}
+\checkitem{Forward kinematics: from wheel speeds → robot linear velocity and angular velocity}{}
+\checkitem{Inverse kinematics: from desired v, ω → required left and right wheel speeds}{}
+\checkitem{Odometry: integrate wheel encoder pulses to estimate position (x, y, θ)}{}
+\checkitem{Odometry drift: errors accumulate. Correct with external reference (landmark, LiDAR)}{}
+\checkitem{Mecanum wheels: 4-wheel omnidirectional drive. Each wheel at 45° rollers}{}
+\checkitem{Ackermann steering: front-wheel steering geometry. Used in car-like robots}{}
+
+\roadmapHead{Robot Arm Kinematics}
+\checkitem{Degrees of freedom: 2 DOF arm (shoulder + elbow) can reach any point in a plane}{}
+\checkitem{Forward kinematics: joint angles → end effector position using DH parameters}{}
+\checkitem{Inverse kinematics (2DOF): geometric solution using law of cosines}{}
+\checkitem{Workspace: reachable envelope of end effector for given arm lengths and joint limits}{}
+\checkitem{Build: 2-DOF cardboard/3D printed arm + 2 servos. Control via serial (x, y target)}{}
+\checkitem{Gripper: servo-actuated. Measure grip force with FSR (Force Sensitive Resistor)}{}
+
+\roadmapHead{ROS2 (Robot Operating System 2)}
+\checkitem{Install ROS2 Humble on Ubuntu 22.04: follow official documentation exactly}{}
+\checkitem{ROS2 node: process that does one thing (sensor read, motor control, planning)}{}
+\checkitem{ROS2 topic: publish/subscribe channel. Publisher → message type → subscriber}{}
+\checkitem{ROS2 service: synchronous call. Client sends request, server returns response}{}
+\checkitem{ROS2 action: for long-running tasks with feedback (move to goal, navigate)}{}
+\checkitem{rviz2: 3D visualization. View sensor data, robot model, trajectories}{}
+\checkitem{rqt: GUI tools for node graph, topic monitor, parameter tuning}{}
+\checkitem{URDF (Unified Robot Description Format): XML description of robot geometry}{}
+\checkitem{ros2\_control: hardware abstraction layer. Write controller, hardware interface}{}
+\checkitem{Build: ROS2 node that reads MPU-6050 and publishes to /imu/data topic}{}
+
+\roadmapHead{Navigation and SLAM}
+\checkitem{SLAM (Simultaneous Localization And Mapping): build map while locating robot in it}{}
+\checkitem{slam\_toolbox: ROS2 package for 2D LiDAR SLAM. Works with RPLIDAR A1}{}
+\checkitem{nav2 stack: ROS2 navigation. Global planner (A*) + local planner (DWA) + costmap}{}
+\checkitem{Costmap: grid representing obstacles with inflation radius for safety clearance}{}
+\checkitem{Path planning: A* algorithm, Dijkstra, RRT (Rapidly-exploring Random Tree)}{}
+\checkitem{Build: autonomous robot with RPLIDAR A1 + slam\_toolbox + nav2 on Raspberry Pi 4}{}
+\newpage
+% ── 15.6 Robot Projects Build Sequence ───────────────────────────────────────
+\roadmapSubSection{15.6}{Projects Build Sequence --- In Order}{4--6 Weeks}
+
+\checkitem{Project 1: LED blink to motor spin --- L298N + ESP32, forward/reverse via serial}{Week 1}
+\checkitem{Project 2: Obstacle avoider --- HC-SR04 + servo scan + differential drive}{Week 2}
+\checkitem{Project 3: Line follower --- 5× IR array + PID controller. Tune for speed}{Week 3}
+\checkitem{Project 4: Self-balancing robot --- MPU-6050 + PID + two DC motors on 2-wheel chassis}{Week 4--5}
+\checkitem{Project 5: Arm controller --- 3-DOF servo arm, IK solver, serial command interface}{Week 5--6}
+\checkitem{Project 6: WiFi-controlled car --- ESP32 WebSocket server, phone/browser joystick}{Week 6}
+\checkitem{Project 7: Camera robot --- ESP32-CAM + OpenCV object tracking + motor control}{Week 7--8}
+\checkitem{Project 8: ROS2 robot --- Raspberry Pi 4 + RPLIDAR A1 + slam\_toolbox + nav2 autonomous}{Week 9--12}
