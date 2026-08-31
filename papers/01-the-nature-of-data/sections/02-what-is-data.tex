@@ -74,8 +74,89 @@ system that has no concept of seasons; a voltage means nothing to a circuit
 built to ignore it. Data presuppose some prior agreement, however informal,
 about what is even worth attending to.\\
 This structural implication is exactly what the formal definition in
-Section~\ref{sec:formal-definition} pins down. Before getting there, two
-properties of data that are easy to overlook deserve a closer look.
+Section~\ref{sec:formal-definition} pins down. Before getting there, it is
+worth seeing the same implication play out in a setting further removed from
+bytes and circuits, and then, closer to engineering, in one setting where the
+stakes are more familiar.
+
+\subsection{A Second Illustration: The Same Text, Different Data}
+\label{sub:second-illustration}
+
+The bytes example below is deliberately narrow. A single passage of ordinary
+prose makes the same point at a larger scale, and shows that
+framework-dependence is not an artifact of binary encodings, it is a property
+of data as such. Consider the opening of Marx's account of the 1851 coup:
+
+\begin{quote}
+Upon the overthrow of the first Napoleon came the restoration of the Bourbon
+throne (Louis XVIII, succeeded by Charles X). In July, 1830, an uprising of
+the upper tier of the bourgeoisie, or capitalist class, the aristocracy of
+finance, overthrew the Bourbon throne, or landed aristocracy, and set up the
+throne of Orleans, a younger branch of the house of Bourbon, with Louis
+Philippe as king. From the month in which this revolution occurred, Louis
+Philippe's monarchy is called the ``July Monarchy.'' In February, 1848, a
+revolt of a lower tier of the capitalist class, the industrial bourgeoisie,
+against the aristocracy of finance, in turn dethroned Louis Philippe. This
+affair, also named from the month in which it took place, is the ``February
+Revolution.''~\autocite{marx1852}
+\end{quote}
+
+Nothing about this passage changes as it is read. It is one fixed string of
+characters. What changes is what different readers, bringing different
+frameworks, are able to extract from it as data:
+
+\begin{description}
+  \item[A reader with no background in the subject] can recover only the
+        coarsest structure: that the passage is in English, that it names
+        people called Napoleon and Louis, and that a couple of four-digit
+        numbers, 1830 and 1848, appear in it.
+  \item[A reader competent in the language but not the subject] adds
+        linguistic structure on top of that: sentence patterns, a register of
+        vocabulary that reads as historical and political, without yet being
+        able to say what any of it refers to.
+  \item[A historian] recovers named events: the fall of the Bourbon
+        restoration, the July Monarchy, the February Revolution, and the
+        succession of political transitions in France between roughly 1815
+        and 1848.
+  \item[A political economist] recovers a different structure from the exact
+        same sentences: two distinct fractions of the bourgeoisie, financial
+        and industrial, in conflict over political power, with the landed
+        aristocracy displaced earlier in the sequence.
+  \item[A political philosopher] reads the passage as data about the state,
+        class, and the mechanics of revolutionary transformation, largely
+        independent of which specific individuals are named.
+  \item[A literary scholar] attends to none of the above directly, and
+        instead extracts data about diction, sentence construction, and how
+        the passage represents historical causation through its syntax.
+\end{description}
+
+Each reader is looking at the identical string of characters. None of them is
+wrong. What each one is able to treat as data is fixed entirely by the
+framework they bring to the text, exactly as the structural implication above
+predicts: no fact becomes data until it is read inside a framework relative
+to which it is relevant and organized.\\
+The passage also supports a distinction worth making explicit. Some of what a
+historian recovers is stated directly, for instance that Louis Philippe's
+monarchy took its name from the month of July. Some of it is not stated but
+follows from analysis, such as the relation between the earlier fall of the
+Bourbon throne and the later fall of the July Monarchy, a relation the
+sentences never announce but that a competent reader constructs from them.
+Both count as data under the definition adopted here; the second kind is
+simply data obtained by inference over the first, rather than read off the
+surface directly.\\
+One detail in the passage raises a question this paper does not resolve here.
+Nothing about the concept of July connects intrinsically to the monarchy that
+took its name from it, and nothing about February connects intrinsically to
+the revolution named after it. A name with no inherent tie to the thing it
+names was adopted, and every subsequent reader accepts that name without
+friction, using it to pick out the event unambiguously. The bytes example
+above shows that the same signal can carry different data depending on
+framework; this example shows the converse problem, that a token can come to
+stand reliably for something with which it shares no intrinsic connection at
+all. That is a question about \emph{representation} rather than about data as
+defined here, and it is a question this paper returns to once the formal
+apparatus of Section~\ref{sec:formal-definition} is available to state it
+precisely.
 
 \subsection{The Context-Dependence of Data}
 

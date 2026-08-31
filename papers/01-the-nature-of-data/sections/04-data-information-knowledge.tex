@@ -102,3 +102,26 @@ themselves as a primitive that GDI deliberately leaves unspecified. The
 function-theoretic definition supplies the structural detail that GDI leaves
 open, without disturbing the relationship between data and information that
 GDI describes.
+
+\subsection{Wisdom and the Limits of Faster Access}
+
+Ackoff's hierarchy has a fourth tier above knowledge, \emph{wisdom}, which
+this paper has set aside until now~\autocite{ackoff1989}. Wisdom is knowledge
+applied through sound judgment: not just understanding why the July Monarchy
+in Section~\ref{sub:second-illustration} fell, but being able to apply that
+understanding correctly to an unfamiliar case. It is worth being explicit
+about why this tier is easy to mistake for one of the lower ones, because the
+mistake has a direct systems-design consequence.\\
+Retrieval speed operates entirely at the data-to-information boundary. A
+faster index, a larger corpus, or a lower-latency query path can shorten the
+distance between asking a question and being handed data or information that
+answers it, but none of these interventions touch the distance between
+information and knowledge, let alone between knowledge and wisdom. A system
+that returns results in milliseconds is not thereby closer to supplying
+judgment; it has only gotten faster at the one tier it actually operates on.
+This is not a minor terminological point. Systems that present data or
+information as though it already carried the judgment of the knowledge or
+wisdom tiers, a search result rendered as though it were a settled answer, a
+raw metric rendered as though it were a recommendation, mislead their users in
+a predictable and recurring way, and the DIKW hierarchy is precisely the tool
+for naming which tier has actually been delivered.
