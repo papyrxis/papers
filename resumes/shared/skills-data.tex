@@ -22,12 +22,12 @@
 % =================================================================
 \newskill{Languages}{TypeScript}{on}
 \newskill{Languages}{JavaScript}{on}
-\newskill{Languages}{Go}{of}
+\newskill{Languages}{Go}{on}
+\newskill{Languages}{C}{on}
 \newskill{Languages}{Python}{on}
+\newskill{Languages}{Lua}{on}
 \newskill{Languages}{Bash}{on}
-\newskill{Languages}{Lua}{of}
-\newskill{Languages}{Vim Script}{of}
-\newskill{Languages}{C}{off}
+\newskill{Languages}{Vim Script}{off}
 \newskill{Languages}{C++}{off}
 \newskill{Languages}{Rust}{off}
 \newskill{Languages}{Zig}{off}
@@ -52,11 +52,12 @@
 \newskill{Backend}{Bun}{on}
 \newskill{Backend}{NestJS}{on}
 \newskill{Backend}{Express}{on}
-\newskill{Backend}{WebSocket}{on}
-\newskill{Backend}{Pub/Sub}{on}
-\newskill{Backend}{Event-Driven Architecture}{on}
 \newskill{Backend}{Fastify}{on}
-\newskill{Backend}{Hono}{on}
+\newskill{Backend}{WebSocket}{on}
+\newskill{Backend}{REST API}{on}
+\newskill{Backend}{Event-Driven Architecture}{on}
+\newskill{Backend}{Pub/Sub}{on}
+\newskill{Backend}{Hono}{off}
 \newskill{Backend}{Koa}{off}
 \newskill{Backend}{Deno}{off}
 \newskill{Backend}{Django}{off}
@@ -72,12 +73,11 @@
 \newskill{Backend}{Rails}{off}
 \newskill{Backend}{gRPC}{off}
 \newskill{Backend}{GraphQL}{off}
-\newskill{Backend}{REST API}{on}
 \newskill{Backend}{tRPC}{off}
 \newskill{Backend}{WebRTC}{off}
 
 % =================================================================
-%  FRONTEND
+%  FRONTEND (off by default — backend-focused resume)
 % =================================================================
 \newskill{Frontend}{React}{off}
 \newskill{Frontend}{Next.js}{off}
@@ -116,17 +116,17 @@
 % =================================================================
 %  ARCHITECTURE & DESIGN
 % =================================================================
-\newskill{Architecture}{Object-Oriented Programming (OOP)}{on}
-\newskill{Architecture}{Dependency Injection}{off}
+\newskill{Architecture}{OOP}{on}
 \newskill{Architecture}{SOLID}{on}
 \newskill{Architecture}{Design Patterns}{on}
+\newskill{Architecture}{Domain-Driven Design}{on}
+\newskill{Architecture}{Dependency Injection}{on}
+\newskill{Architecture}{Monorepo}{on}
 \newskill{Architecture}{Modular Systems}{off}
 \newskill{Architecture}{Hexagonal Architecture}{off}
-\newskill{Architecture}{Domain-Driven Design}{on}
 \newskill{Architecture}{CQRS}{off}
 \newskill{Architecture}{Event Sourcing}{off}
 \newskill{Architecture}{Microservices}{off}
-\newskill{Architecture}{Monorepo}{on}
 \newskill{Architecture}{Clean Architecture}{off}
 \newskill{Architecture}{TDD}{off}
 
@@ -136,7 +136,7 @@
 \newskill{DevOps}{Docker}{on}
 \newskill{DevOps}{GitHub Actions}{on}
 \newskill{DevOps}{CI/CD}{on}
-\newskill{DevOps}{Unit / Integration / E2E Testing}{on}
+\newskill{DevOps}{Unit / Integration Testing}{on}
 \newskill{DevOps}{Kubernetes}{off}
 \newskill{DevOps}{Terraform}{off}
 \newskill{DevOps}{Ansible}{off}
@@ -160,10 +160,10 @@
 \newskill{Databases}{SQLite}{on}
 \newskill{Databases}{MongoDB}{on}
 \newskill{Databases}{Redis}{on}
+\newskill{Databases}{Prisma}{on}
 \newskill{Databases}{Elasticsearch}{off}
 \newskill{Databases}{ClickHouse}{off}
 \newskill{Databases}{Cassandra}{off}
-\newskill{Databases}{Prisma}{on}
 \newskill{Databases}{Drizzle}{off}
 \newskill{Databases}{TypeORM}{off}
 \newskill{Databases}{S3}{off}
@@ -171,29 +171,29 @@
 % =================================================================
 %  MESSAGING & STREAMING
 % =================================================================
+\newskill{Messaging}{Redis Streams}{on}
+\newskill{Messaging}{Socket.IO}{on}
 \newskill{Messaging}{RabbitMQ}{off}
 \newskill{Messaging}{Apache Kafka}{off}
 \newskill{Messaging}{NATS}{off}
 \newskill{Messaging}{MQTT}{off}
-\newskill{Messaging}{Redis Streams}{on}
-\newskill{Messaging}{Socket.IO}{on}
 
 % =================================================================
 %  DEVELOPER ENVIRONMENT & TOOLING
 % =================================================================
 \newskill{Environment}{Git}{on}
-\newskill{Environment}{Vim/Neovim}{on}
 \newskill{Environment}{Linux}{on}
+\newskill{Environment}{Vim/Neovim}{on}
 \newskill{Environment}{Shell Scripting}{on}
-\newskill{Environment}{LSP ecosystem}{on}
 \newskill{Environment}{tmux}{on}
+\newskill{Environment}{LSP ecosystem}{on}
 \newskill{Environment}{Nix}{off}
 \newskill{Environment}{VS Code}{off}
 \newskill{Environment}{JetBrains}{off}
 \newskill{Environment}{Emacs}{off}
 
 % =================================================================
-%  AI / ML (off by default — enable if relevant)
+%  AI / ML (off by default)
 % =================================================================
 \newskill{AI}{PyTorch}{off}
 \newskill{AI}{TensorFlow}{off}

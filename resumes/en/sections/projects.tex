@@ -1,27 +1,27 @@
 % ── cdin ─────────────────────────────────────
 \newcommand{\projcdin}{%
-  \proj{cdin}{C $\cdot$ Lua $\cdot$ SDL3 $\cdot$ Text Editor}{%
+  \proj{cdin}{C $\cdot$ Lua $\cdot$ SDL3}{%
     \item Open-source text editor with a C runtime (SDL3, stb\_truetype) and a fully
-    Lua-based editor layer (documents, keymaps, plugins) loaded at runtime without
-    recompilation. Supports Normal/Insert/Visual modes, Ex command line, project tree
-    with Git markers, cell-based render cache, and cross-platform builds (Linux, macOS, Windows).%
+    Lua-based editor layer — documents, keymaps, and plugins load at runtime without
+    recompilation. Normal/Insert/Visual modes, Ex command line, Git-aware project tree,
+    and cross-platform builds (Linux, macOS, Windows).%
   }{\ProjCdinShort}%
 }
 
 % ── Gland ────────────────────────────────────
 \newcommand{\projgland}{%
   \proj{Gland}{TypeScript $\cdot$ Event-Driven $\cdot$ DI Container}{%
-    \item Event-driven backend framework with radix tree routing, a lightweight DI container,
-    and adapter-based protocol support for HTTP and WebSocket; 80\%+ test coverage.%
+    \item Event-driven backend framework with radix tree routing, a zero-dependency DI
+    container, and adapter-based protocol support for HTTP and WebSocket; 80\%+ test coverage
+    across unit and integration suites.%
   }{\ProjGlandShort}%
 }
 
 % ── PSX ──────────────────────────────────────
 \newcommand{\projpsx}{%
   \proj{PSX}{Go $\cdot$ CLI $\cdot$ Concurrent Validation}{%
-    \item Command-line project structure validator with 47 built-in rules, parallel rule
-    execution, auto-fix mode, YAML-based configuration, and cross-platform binary
-    releases via GitHub Actions.%
+    \item Project-structure validator with 47 built-in rules, parallel execution, auto-fix
+    mode, YAML-based configuration, and cross-platform binary releases via GitHub Actions.%
   }{\ProjPSXShort}%
 }
 
@@ -38,13 +38,11 @@
 \newcommand{\projagas}{%
   \proj{Agas}{TypeScript $\cdot$ Bun $\cdot$ HTTP Client}{%
     \item HTTP client with an event-driven lifecycle, extensible interceptor chain,
-    streaming support, retry logic, and a CLI with persistent request history;
-    800+ Docker Hub pulls.%
+    streaming support, retry logic, and a persistent-history CLI; 800+ Docker Hub pulls.%
   }{\ProjAgasShort}%
 }
 
-% ── Section renderer ─────────────────────────
-% Respects per-project toggles from shared/projects.tex.
+% ── Section renderer — top 3 for one-page fit ─
 \newcommand{\ResumeProjectsEN}{%
   \ifcdin  \projcdin  \fi
   \ifgland \projgland \fi
