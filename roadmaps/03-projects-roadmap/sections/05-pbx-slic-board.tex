@@ -1,0 +1,91 @@
+\roadmapSection{3}{PBX AND SLIC TELECOM BOARD}{3--4 Weeks}
+
+{\small\itshape\color{arligray} The green 6-line card is a real telephone exchange line card. This track teaches analog telephony from zero and gets at least one line ringing a real analog phone under your own control.}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\roadmapSubSection{3.1}{Analog Telephony From Absolute Zero}{3--4 Days}
+
+\roadmapHead{How an Old Phone Line Actually Works}
+\checkitem{On-hook (handset resting): the line sits at roughly $-$48V DC, no current flows, phone is idle}{}
+\checkitem{Off-hook (handset lifted): the phone closes a loop, current starts flowing (``loop current'', typically 20--40mA) --- this is how the exchange detects ``someone wants to make a call''}{}
+\checkitem{Dial tone: a continuous tone the exchange sends back once it detects off-hook, meaning ``go ahead and dial''}{}
+\checkitem{DTMF (Dual-Tone Multi-Frequency): each keypad digit is two simultaneous audio tones --- this is how a touch-tone phone signals which number was dialled}{Older rotary phones instead send pulses by briefly breaking the loop current --- a different, older signalling method}
+\checkitem{Ringing: the exchange sends roughly 90V AC (on top of the $-$48V DC) at about 20Hz to physically ring the bell/ringer inside the phone}{This is the exact ``ring voltage'' warning from Track 0.1 --- treat every wire on this board as potentially carrying it}
+\checkitem{Voice/audio: once a call is connected, actual speech rides on the same pair of wires as a small AC signal superimposed on the DC line voltage}{}
+
+\roadmapHead{What a SLIC Actually Does}
+\checkitem{SLIC = Subscriber Line Interface Circuit --- the chip that generates all of the above (battery feed, ring, tone) and reports line state (on/off-hook, dialled digits) back to a controller}{}
+\checkitem{Each of the 6 relay-and-IC clusters visible on your board is very likely one SLIC channel, repeated 6 times for 6 phone lines}{}
+\checkitem{The board's small microcontroller (the QFP chip near the connector edge) talks to each SLIC over a digital bus (commonly SPI) to set its mode and read its status}{}
+
+\newpage
+% ══════════════════════════════════════════════════════════════════════════════
+\roadmapSubSection{3.2}{Identifying Your Actual Chips}{3--5 Days}
+
+\roadmapHead{Tools}
+\begin{toolbadges}
+\toolbadge{Bright light + magnifier or phone macro lens}
+\toolbadge{Multimeter}
+\toolbadge{Notebook for pin mapping}
+\end{toolbadges}
+
+\checkitem{Photograph each distinct IC on the board close up; read and record every line of text printed on top (part number, date code, logo)}{}
+\checkitem{Search each part number directly --- common SLIC families on boards like this include Silicon Labs Si321x/Si323x, Zarlink/Microsemi Le9642/Le88xxx, and Cirrus/Legerity families; the exact match tells you the control protocol and voltage ranges}{}
+\checkitem{Identify the main microcontroller/QFP chip separately --- its datasheet (if findable) tells you whether it's a general-purpose MCU you might reprogram, or a fixed telecom-specific chip}{}
+\checkitem{Trace, with the board unpowered and in continuity mode, which physical connector pins correspond to each of the 6 line pairs (usually visible as a header or card-edge connector at the bottom of the board)}{}
+\checkitem{Write down a full pinout table for the board before doing anything else --- this table is the reference for every later step in this track}{}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\roadmapSubSection{3.3}{Probing the Control Bus}{4--5 Days}
+
+\roadmapHead{Tools}
+\begin{toolbadges}
+\toolbadge{Logic analyzer (8-channel, e.g. cheap DSLogic/Saleae clone)}
+\toolbadge{USB-to-UART adapter (CP2102/CH340)}
+\toolbadge{PulseView or Saleae Logic software}
+\end{toolbadges}
+
+\checkitem{Locate likely SPI lines between the main microcontroller and each SLIC: look for 4 traces per SLIC running toward the central chip (clock, data-in, data-out, chip-select) --- confirm visually and by continuity}{}
+\checkitem{Clip logic analyzer probes onto these candidate lines, power the board briefly, and capture activity during boot-up}{}
+\checkitem{In the capture software, decode as SPI and check whether the byte patterns look sane (repeating, structured) --- this confirms the protocol guess}{}
+\checkitem{Separately, check for a UART header (3--4 pin, often unpopulated) near the main chip --- many telecom boards expose a debug/boot UART; connect at 9600 or 115200 baud and power on to check for boot text}{}
+\checkitem{Document every confirmed signal (SPI lines per SLIC, any UART, any reset/enable lines) in the same pinout table from 3.2}{}
+
+\newpage
+% ══════════════════════════════════════════════════════════════════════════════
+\roadmapSubSection{3.4}{Choosing Your Path --- Revive vs. Bypass}{2 Days decision + variable build time}
+
+{\small\itshape\color{arligray} Two realistic paths forward once the bus is understood. Pick one before continuing.}
+
+\roadmapHead{Path A --- Revive the Original Firmware (if a UART/JTAG debug port and known MCU are found)}
+\checkitem{If the main microcontroller is a common, well-documented part with a debug port, you may be able to dump, inspect, or eventually replace its firmware}{This path is a genuine reverse-engineering project on its own and is not guaranteed to succeed --- treat it as a bonus, not a requirement}
+\checkitem{If successful, the original firmware may already expose a usable command interface (UART or otherwise) for controlling lines --- document any commands you find}{}
+
+\roadmapHead{Path B --- Bypass and Drive the SLICs Directly (recommended default)}
+\checkitem{Disable or remove the original microcontroller from the SPI bus for the one channel you're working with (may mean cutting a single trace or lifting one pin)}{}
+\checkitem{Wire an ESP32's hardware SPI pins (or a Raspberry Pi's SPI) directly to that one SLIC's SPI lines, using the datasheet from 3.2 to know the exact register map}{}
+\checkitem{Write firmware that initializes the SLIC into normal battery-feed mode, then polls its status register for on/off-hook state, and can command it to apply ring voltage}{}
+\checkitem{Prove out Path B on exactly one channel before ever considering scaling to all six --- this keeps the reverse-engineering risk small and the learning fast}{}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\roadmapSubSection{3.5}{Bench Test With a Real Analog Phone}{2--3 Days}
+
+\checkitem{Connect a simple analog corded phone (rotary or touch-tone) to your one working channel's line-out pair}{}
+\checkitem{With your controller code, command the SLIC to ring the line; confirm the phone physically rings}{}
+\checkitem{Lift the handset and confirm your status polling correctly detects off-hook}{}
+\checkitem{Feed a simple audio tone into the SLIC's audio path (if accessible) and confirm you hear it in the earpiece --- this proves the voice path works, and is the exact interface Track 4 will build on}{}
+\checkitem{Log every result and failure mode --- this bench-test log becomes the starting reference document for Track 4}{}
+
+\vspace{6pt}
+\noindent
+\begin{tcolorbox}[
+  enhanced, colback=bgsubtle, colframe=arlizblue!30,
+  leftrule=4pt, sharp corners, left=10pt, right=10pt, top=6pt, bottom=6pt
+]
+{\small\color{arligray}\itshape
+\textbf{\color{arliznavy}Milestone:} One channel of the salvaged PBX board rings a real analog phone and reports
+off-hook state back to your own microcontroller code. This is the hardest track in the roadmap --- if Path B
+proves too difficult on your specific chipset, a commercial FXS module (e.g. an OpenVox or Grandstream analog
+gateway) is a legitimate fallback that lets Track 4 proceed while this track continues as a background project.
+}
+\end{tcolorbox}

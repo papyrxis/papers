@@ -20,7 +20,7 @@ STYLE    ?= personal
 AVAILABLE_TARGETS := $(patsubst scripts/lib/targets/%.target.sh,%,\
                        $(wildcard scripts/lib/targets/*.target.sh))
 
-PX := python scripts/px.py
+PX := python3 scripts/px.py
 
 .PHONY: all help version sync \
         paper build watch generate export targets list new-paper delete-paper \

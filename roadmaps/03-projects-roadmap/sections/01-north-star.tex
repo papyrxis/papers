@@ -1,0 +1,46 @@
+\label{sec:projectsnorthstar}
+\vspace{0.4cm}
+\begin{northstarbox}
+\textbf{\color{arlizblue}\large $\bigstar$\enspace PROJECTS NORTH STAR}
+
+\vspace{6pt}
+Turn a pile of salvaged boards --- a CRT/TV power-and-tuner board, a 6-line telecom
+SLIC/PBX card, and three phone motherboards (Huawei + 2$\times$ Nokia) --- into a
+\textbf{working home telecom and automation lab}, built from absolute zero knowledge
+of electronics, soldering, or networking. Every track below assumes you know nothing
+at the start and ends with a physically working, testable device.
+
+\vspace{8pt}
+\begin{tabular}{@{\hspace{4pt}}ll}
+  \textbf{\color{arlizblue}$\to$} & Track 0\phantom{00} :\enspace Common foundations --- safety, tools, electronics, code, networking \\
+  \textbf{\color{arlizblue}$\to$} & Track 1\phantom{00} :\enspace Relay automation panel --- control real appliances from a phone \\
+  \textbf{\color{arlizblue}$\to$} & Track 2\phantom{00} :\enspace ESP32 WiFi intercom --- salvaged mic/speaker, real-time audio \\
+  \textbf{\color{arlizblue}$\to$} & Track 3\phantom{00} :\enspace PBX/SLIC board --- revive 6-line analog telephony hardware \\
+  \textbf{\color{arlizblue}$\to$} & Track 4\phantom{00} :\enspace Analog-to-VoIP gateway --- old rotary phones talk over the internet \\
+  \textbf{\color{arlizblue}$\to$} & Track 5\phantom{00} :\enspace Multi-house RF bridge --- connect two homes with antennas + LoRa backup \\
+\end{tabular}
+
+\vspace{8pt}
+\textbf{\color{arlizgold}First working build target: end of Track 1 (Week 5).}
+Each track produces a standalone, demonstrable device. Tracks are ordered by rising
+difficulty: mechanical/electrical $\to$ embedded audio $\to$ analog telephony $\to$
+VoIP/software $\to$ RF. Skipping ahead is possible, but each track leans on skills
+built in the one before it.
+\end{northstarbox}
+
+\vspace{0.5cm}
+\noindent
+\begin{tcolorbox}[
+  enhanced, colback=bgsubtle, colframe=arlizblue!30,
+  leftrule=4pt, sharp corners, left=10pt, right=10pt, top=6pt, bottom=6pt
+]
+{\small\color{arligray}\itshape
+\textbf{\color{arliznavy}How to use this roadmap:}
+Do Track 0 completely before touching any salvaged board --- it is the only track that
+is not optional. After that, each track is a self-contained checklist: read the whole
+subsection before starting, buy the tools listed in the tool badges, then work through
+the checkbox-marked steps in order. Do not skip the safety warnings marked
+\textbf{\color{arlizgold}$\bigtriangleup$ CAUTION} --- several of these boards carry
+lethal voltages even when unplugged.
+}
+\end{tcolorbox}

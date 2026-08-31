@@ -1,0 +1,95 @@
+\roadmapSection{1}{RELAY AUTOMATION PANEL}{2--3 Weeks}
+
+{\small\itshape\color{arligray} Uses the salvaged relay/telecom board's 12 relays to control real appliances from an ESP32 and your phone. This is your first complete, physically satisfying build.}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\roadmapSubSection{1.1}{Understanding What You Have}{2 Days}
+
+\roadmapHead{Inspect Before You Desolder Anything}
+\checkitem{Count and photograph the two rows of relays on the green board (typically 6 + 6 = 12 relays on this style of telecom card)}{}
+\checkitem{Read the part number printed on top of one relay with a magnifier or phone macro shot, and search it online to get its datasheet}{This tells you coil voltage (often 5V or 12V), coil resistance, and contact current rating (often 1--10A)}
+\checkitem{With the board unpowered, use continuity mode to find which two pins are the coil (should read the coil's rated resistance, e.g. 400$\Omega$) and which pins are the switched contacts (should read open/closed as you manually press the relay armature)}{}
+\checkitem{Decide: desolder individual relays for a fresh custom board, or keep them in place and reverse-engineer/re-drive the existing traces --- for a first project, desoldering 4--6 relays onto a new small board is far more reliable}{}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\roadmapSubSection{1.2}{Desoldering and Testing the Relays}{2--3 Days}
+
+\roadmapHead{Tools}
+\begin{toolbadges}
+\toolbadge{Soldering iron / hot air}
+\toolbadge{Desoldering pump}
+\toolbadge{Multimeter}
+\toolbadge{Small prototyping/perfboard}
+\end{toolbadges}
+
+\checkitem{Heat each of the relay's through-hole pins from the underside while gently pulling from the top --- do not force it, reheat instead of levering}{}
+\checkitem{After removal, re-test each relay's coil resistance and contact continuity exactly as in 1.1 --- discard any relay that doesn't click audibly when 12V/5V is briefly applied to the coil}{}
+\checkitem{Keep 4--6 confirmed-good relays for this build; save the rest as spares for future projects}{}
+
+\newpage
+% ══════════════════════════════════════════════════════════════════════════════
+\roadmapSubSection{1.3}{Driver Circuit --- Why You Can't Wire a Relay Straight to a GPIO}{2 Days}
+
+{\small\itshape\color{arligray} This is the single most important lesson of this track: a microcontroller pin cannot directly drive a relay coil.}
+
+\checkitem{An ESP32 GPIO can safely source only a few mA; a 5V/12V relay coil typically wants 30--80mA --- direct connection will not switch it and may damage the pin}{}
+\checkitem{Solution: use each GPIO to drive the base/gate of a transistor or MOSFET, which then switches the relay coil's own power supply}{}
+\checkitem{Simplest correct approach: a ULN2803A or ULN2003A Darlington-array IC --- 7--8 channels in one chip, built-in flyback diodes, directly accepts 3.3V logic}{}
+\checkitem{Wiring per channel: GPIO $\to$ ULN2803 input pin; ULN2803 output pin $\to$ relay coil $-$; relay coil $+$ $\to$ 5V/12V supply; ULN2803 GND $\to$ common ground with ESP32}{}
+\checkitem{If building discrete instead of using ULN2803: NPN transistor (e.g. 2N2222/BC547) base through a 1k$\Omega$ resistor from GPIO, collector to relay coil $-$, emitter to GND, and a flyback diode (1N4007) across the coil, cathode to the supply side}{The flyback diode is not optional --- switching off an inductive coil without one generates a voltage spike that can destroy the transistor or the GPIO}
+
+\roadmapHead{Tools to Add}
+\begin{toolbadges}
+\toolbadge{ULN2803A or ULN2003A IC}
+\toolbadge{1N4007 diodes (if going discrete)}
+\toolbadge{NPN transistors 2N2222/BC547 (if going discrete)}
+\toolbadge{1k$\Omega$ resistors}
+\toolbadge{5V/12V bench power supply or salvaged phone charger}
+\end{toolbadges}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\roadmapSubSection{1.4}{Microcontroller Integration}{2 Days}
+
+\checkitem{Assign one ESP32 GPIO per relay channel (e.g. GPIO 16, 17, 18, 19 for a 4-relay build) --- avoid boot-strapping pins (GPIO 0, 2, 15) for outputs that must stay LOW at boot}{}
+\checkitem{Confirm with the multimeter in voltage mode that each GPIO reads ~3.3V HIGH / 0V LOW before wiring to the ULN2803}{}
+\checkitem{Wire everything on a breadboard first, verify every channel switches correctly, then move to a soldered perfboard only once proven}{}
+\checkitem{Keep the ESP32/logic side and the mains-switched side of the final enclosure physically separated --- this matters even more once real 220V loads are involved (see 1.6)}{}
+
+\newpage
+% ══════════════════════════════════════════════════════════════════════════════
+\roadmapSubSection{1.5}{Firmware and Control Interface}{3--4 Days}
+
+\roadmapHead{Minimal Firmware --- Local Web Control Panel}
+\checkitem{Use the ESP32's built-in WiFi to host a small web server (Arduino \texttt{WebServer.h} or \texttt{ESPAsyncWebServer} library)}{}
+\checkitem{Serve a simple HTML page with one button per relay; each button hits a URL like \texttt{/relay1/on} and \texttt{/relay1/off}}{}
+\checkitem{In the handler for each route, call \texttt{digitalWrite()} on the matching GPIO and confirm the change back to the page}{}
+\checkitem{Reserve a static IP for the ESP32 (see Track 0.4) so the control page is always at the same address, e.g. \texttt{http://192.168.1.50}}{}
+\checkitem{Optional upgrade: add a simple password/token check in the web handler before any relay toggles, since this now controls real household devices}{}
+
+\roadmapHead{Optional: Physical Button Backup}
+\checkitem{Wire one physical push-button per relay in parallel with the software control, so the panel still works if WiFi is down}{Read the button with \texttt{digitalRead()} and a pull-up resistor (internal \texttt{INPUT\_PULLUP} works on ESP32), toggle the relay state on each press}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\roadmapSubSection{1.6}{Final Build --- Enclosure and Mains Safety}{2--3 Days}
+
+\roadmapHead{\textbf{\color{arlizgold}$\bigtriangleup$ CAUTION --- This Step Involves 220V AC}}
+\checkitem{Only proceed to switching a real 220V lamp/appliance once every relay has been fully tested at low voltage first}{}
+\checkitem{Use a fully enclosed, non-conductive plastic project box; mains wiring must be fully insulated with no exposed copper anywhere inside}{}
+\checkitem{Relay contact side wiring: appliance $\to$ relay common (COM) $\to$ relay normally-open (NO) $\to$ mains live, with mains neutral wired straight through --- never switch neutral only}{}
+\checkitem{Add an inline fuse sized to the relay's contact rating on the mains side}{}
+\checkitem{Keep at least 6--8mm physical separation (creepage distance) between the low-voltage logic section and any 220V wiring inside the enclosure}{}
+\checkitem{Before final closing, test with a lamp: toggle each relay from the web panel and the physical button, confirm correct channel mapping and clean on/off switching}{}
+\checkitem{Label every channel on the outside of the enclosure to avoid future mix-ups}{}
+
+\vspace{6pt}
+\noindent
+\begin{tcolorbox}[
+  enhanced, colback=bgsubtle, colframe=arlizblue!30,
+  leftrule=4pt, sharp corners, left=10pt, right=10pt, top=6pt, bottom=6pt
+]
+{\small\color{arligray}\itshape
+\textbf{\color{arliznavy}Milestone:} A working relay panel, controllable from your phone's browser on the home WiFi,
+switching at least one real lamp safely. This proves your solder joints, driver circuit, firmware, and network
+setup all work together --- every later track reuses this exact pattern (GPIO $\to$ driver $\to$ real-world load).
+}
+\end{tcolorbox}

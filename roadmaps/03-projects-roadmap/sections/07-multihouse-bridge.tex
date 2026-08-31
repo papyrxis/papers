@@ -1,0 +1,79 @@
+\roadmapSection{5}{MULTI-HOUSE RF BRIDGE}{2--3 Weeks}
+
+{\small\itshape\color{arligray} Connects two nearby homes' Asterisk systems over a self-owned WiFi radio link, with a LoRa backup channel for emergency signalling if the main link ever goes down. Scales to more houses by repeating the pattern.}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\roadmapSubSection{5.1}{RF and Antenna Basics From Zero}{2--3 Days}
+
+\checkitem{Radio waves are electromagnetic energy that travel through air; frequency (Hz) and wavelength are inversely related --- WiFi at 2.4GHz/5GHz has a wavelength of a few centimeters}{}
+\checkitem{Antenna gain (dBi): how strongly an antenna focuses energy in a particular direction compared to a theoretical ideal radiator --- higher gain means longer range but a narrower, more direction-sensitive beam}{}
+\checkitem{Directional antennas (Yagi, panel, dish/grid) concentrate signal toward one target, unlike the omnidirectional antenna built into your router}{This is exactly what a house-to-house link needs: all the gain pointed at the other house, not wasted in every direction}
+\checkitem{Line of sight and the Fresnel zone: even with no visible obstruction, a link needs a clear elliptical volume of space between the antennas, not just a straight visual line, or signal strength suffers}{}
+\checkitem{The 2.4GHz and 5GHz ISM bands used by WiFi are unlicensed for this kind of point-to-point link in most countries at normal power levels --- this is why this track is legally straightforward, unlike transmitting on a licensed radio band}{}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\roadmapSubSection{5.2}{WiFi Point-to-Point Bridge Hardware}{4--5 Days}
+
+\roadmapHead{Tools}
+\begin{toolbadges}
+\toolbadge{Outdoor CPE/bridge pair (e.g. TP-Link CPE210/510, Ubiquiti NanoStation)}
+\toolbadge{PoE injector or cable (usually included with CPE units)}
+\toolbadge{Weatherproof mounting hardware, mast or pole clamp}
+\toolbadge{Outdoor-rated Ethernet cable}
+\end{toolbadges}
+
+\checkitem{A matched pair of outdoor CPE bridge units is far more reliable than building your own antenna from salvaged parts --- this is the one place in the roadmap where buying purpose-built hardware is the right call}{}
+\checkitem{Mount each unit with a clear, obstruction-free path toward the other house --- rooftop or high wall, angled and aimed using the unit's built-in signal-strength indicator/app}{}
+\checkitem{Configure one unit as Access Point (bridge) mode and the other as Station (bridge) mode, both on the same SSID/channel, forming what looks like a single wired link between the two houses' networks}{}
+\checkitem{Choose a WiFi channel with the least congestion (Track 0.4's WiFi analyzer, checked from the rooftop) to minimize interference from neighboring networks}{}
+\checkitem{Once linked, confirm with \texttt{ping} that a device on House A's LAN can reach a device on House B's LAN across the bridge}{}
+
+\newpage
+% ══════════════════════════════════════════════════════════════════════════════
+\roadmapSubSection{5.3}{Connecting the Two Houses' PBX Systems}{3--4 Days}
+
+\checkitem{With the bridge in place, both houses' Asterisk boxes (Track 4) are now technically on reachable networks --- but still separate systems needing to be linked}{}
+\checkitem{Set up an Asterisk SIP trunk between the two servers: each Asterisk instance registers a trunk to the other's IP, authenticated with a shared secret}{}
+\checkitem{Extend each side's dialplan so a specific prefix (e.g. dialling \texttt{9} + extension) routes the call across the trunk to the other house's extensions}{}
+\checkitem{Test a full path end-to-end: analog phone in House A $\to$ Asterisk A $\to$ SIP trunk over the WiFi bridge $\to$ Asterisk B $\to$ analog phone or softphone in House B}{}
+\checkitem{If the bridge link ever drops, calls between houses will simply fail to connect --- this is exactly the gap the LoRa backup channel below is for}{}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\roadmapSubSection{5.4}{LoRa Backup Channel for Emergency Signalling}{4--5 Days}
+
+{\small\itshape\color{arligray} LoRa cannot carry real-time voice, but it can reliably send a short alert over long range on very little power --- exactly what you want when the main link is down.}
+
+\roadmapHead{Tools}
+\begin{toolbadges}
+\toolbadge{SX1278/RA-02 LoRa modules x2 (433MHz) or SX1276 (868/915MHz per local regulations)}
+\toolbadge{ESP32 (can reuse a spare from earlier tracks)}
+\toolbadge{Simple wire or small Yagi antenna for each LoRa module}
+\end{toolbadges}
+
+\checkitem{LoRa (Long Range) is a radio modulation technique trading data rate for range and power efficiency --- typical payloads are tiny (a few dozen bytes), sent every few seconds at most, not a continuous stream}{}
+\checkitem{Check your country's regulations for the correct license-free ISM sub-band for LoRa (commonly 433MHz or 868/915MHz depending on region) before choosing a module}{}
+\checkitem{Wire the LoRa module to an ESP32 over SPI, using a library such as \texttt{RadioHead} or \texttt{arduino-LoRa} to send and receive small packets}{}
+\checkitem{Design a minimal packet protocol: e.g. a single byte meaning ``ring the other house's alert buzzer/relay'' --- reuse the relay-driving pattern from Track 1 to trigger a physical bell or LED on receipt}{}
+\checkitem{Mount one LoRa station in each house, ideally near the same rooftop location as the WiFi bridge antennas for the best possible range}{}
+\checkitem{Test the LoRa link independently of the WiFi bridge --- physically disconnect or power down the CPE units and confirm the alert signal still gets through}{}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\roadmapSubSection{5.5}{Final Integration Test}{2 Days}
+
+\checkitem{Full scenario test: place a call from House A's analog phone all the way to House B's extension across the WiFi bridge and confirm clear two-way audio}{}
+\checkitem{Failure scenario test: power down the WiFi bridge, confirm the SIP trunk call fails as expected, then confirm the LoRa alert channel still successfully rings the backup buzzer in the other house}{}
+\checkitem{Document the whole system: a simple diagram showing both houses, both Asterisk boxes, the WiFi bridge, and the LoRa backup path --- this becomes the reference for any future third house added to the network}{}
+
+\vspace{6pt}
+\noindent
+\begin{tcolorbox}[
+  enhanced, colback=bgsubtle, colframe=arlizblue!30,
+  leftrule=4pt, sharp corners, left=10pt, right=10pt, top=6pt, bottom=6pt
+]
+{\small\color{arligray}\itshape
+\textbf{\color{arliznavy}Milestone:} Two houses linked by a self-owned RF connection, carrying real analog-to-VoIP
+phone calls end to end, with an independent LoRa alert path that survives a WiFi bridge outage. This is the
+final, most ambitious build in the roadmap and draws on every earlier track: relay driving, embedded audio,
+analog telephony, VoIP, and now RF.
+}
+\end{tcolorbox}

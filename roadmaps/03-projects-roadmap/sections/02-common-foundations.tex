@@ -1,0 +1,123 @@
+\roadmapSection{0}{COMMON FOUNDATIONS}{5--7 Weeks}
+
+{\small\itshape\color{arligray} You said you know nothing about repair, hardware electronics, or software. Start here and do not skip anything. Every project track assumes everything below.}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\roadmapSubSection{0.1}{Safety and Workspace}{3--4 Days}
+
+\roadmapHead{Tools to Buy Before Touching Any Board}
+\begin{toolbadges}
+\toolbadge{Digital Multimeter (any DT830/DT832 clone is fine to start)}
+\toolbadge{Soldering Iron 60W adjustable or T12 station}
+\toolbadge{Solder wire 0.8mm, rosin-core, 60/40 or lead-free}
+\toolbadge{Desoldering pump + copper braid wick}
+\toolbadge{Small Phillips + flathead screwdriver set}
+\toolbadge{Wire strippers / side cutters}
+\toolbadge{Breadboard + jumper wire kit}
+\toolbadge{Anti-static wrist strap}
+\toolbadge{Safety glasses}
+\end{toolbadges}
+
+\roadmapHead{\textbf{\color{arlizgold}$\bigtriangleup$ CAUTION --- Read Before Anything Else}}
+\checkitem{The TV/CRT power board has a flyback/SMPS section: large electrolytic capacitors here can hold lethal voltage (100--400V) for hours or days after unplugging}{Never touch the large caps or the flyback area with bare hands or metal tools until you have discharged them with a 1k--10k$\Omega$, 2W resistor across the terminals, and confirmed 0V with a multimeter}
+\checkitem{Never work on any mains-connected board while it is plugged in --- disconnect from the wall before opening or probing}{}
+\checkitem{The PBX/SLIC board rings a phone line at roughly 90V AC on top of --48V DC. This is not lethal but is a genuine, memorable shock --- treat every wire on that board as live until proven otherwise}{}
+\checkitem{Li-ion phone batteries (Huawei board): never puncture, short, bend, or charge a swollen cell. If a cell is puffy, isolate it outdoors and do not reuse it}{}
+\checkitem{Keep a small CO2 or dry-powder fire extinguisher nearby whenever you power up a reworked board for the first time}{}
+
+\roadmapHead{Workspace Setup}
+\checkitem{One dedicated table, good overhead light, and a mat you don't mind burning slightly with solder splashes}{}
+\checkitem{Separate the workspace into two zones: ``mains/AC'' (TV board, PSU work) and ``low-voltage/DC'' (everything else) --- never let stripped mains wire touch your DC bench}{}
+\checkitem{Keep a small parts tray or labelled containers for screws --- phone-teardown screws are tiny and easy to lose}{}
+\checkitem{Photograph every board before you touch it, and again after each disassembly step --- you will need these photos to remember where wires went}{}
+
+\newpage
+% ══════════════════════════════════════════════════════════════════════════════
+\roadmapSubSection{0.2}{Electronics From Absolute Zero}{2 Weeks}
+
+{\small\itshape\color{arligray} This is the physics and vocabulary every later track quietly assumes. Go slowly here --- it pays for itself immediately.}
+
+\roadmapHead{The Three Basic Quantities}
+\checkitem{Voltage (V, volts) --- electrical ``pressure'' between two points. A multimeter measures this between two probes, never on a single point alone}{}
+\checkitem{Current (I, amps) --- the flow of charge through a path. Measured in series (the meter becomes part of the circuit) --- this is why a multimeter can blow a fuse if used wrong}{}
+\checkitem{Resistance (R, ohms $\Omega$) --- how much a material opposes current flow. Measured with the circuit unpowered}{}
+\checkitem{Ohm's Law: $V = I \times R$. If you know any two, you can find the third. This single equation explains almost every fault you will diagnose}{Example: a relay coil measures 400$\Omega$ and needs 12V to click --- expected current is $12/400 = 30$mA}
+\checkitem{AC vs DC: DC (battery, USB, most boards) flows one direction; AC (wall socket, ring voltage) reverses direction 50/60 times per second}{}
+\checkitem{Power: $P = V \times I$, measured in watts. This tells you how hot something gets and what size wire/fuse you need}{}
+
+\roadmapHead{Using a Multimeter --- Practice on Known-Good Parts First}
+\checkitem{Voltage mode (V with a straight or wavy line for DC/AC): probe across a battery, note polarity for DC}{}
+\checkitem{Continuity/beep mode: confirms an unbroken wire or closed switch --- your main tool for tracing salvaged wiring}{}
+\checkitem{Diode mode: tests diodes, LEDs, and transistor junctions --- most meters share this with continuity mode}{Forward-biased silicon diode reads about 0.5--0.7V; a dead short reads near 0; an open circuit reads OL}
+\checkitem{Resistance mode: always measure resistance with power removed from the circuit, or you will get a wrong reading and risk damaging the meter}{}
+\checkitem{Current mode: probes go in series in the circuit path, and most meters need the red probe moved to a separate ``10A'' or ``mA'' jack --- check this every time before switching modes}{}
+
+\roadmapHead{Passive Components You Will Meet on These Boards}
+\checkitem{Resistor: limits current. Color bands or printed code give the value; a multimeter confirms it}{}
+\checkitem{Capacitor: stores charge, smooths voltage, blocks DC while passing AC. The big cylindrical ones on the TV board are electrolytic and polarized --- reversing them can make them explode}{}
+\checkitem{Diode: lets current flow one direction only. Has a stripe marking the cathode (negative) end}{}
+\checkitem{Transistor (BJT or MOSFET): acts as an electronically-controlled switch or amplifier --- this is how a 3.3V microcontroller pin will control a much bigger relay or load}{}
+\checkitem{Relay: an electromagnet that mechanically pulls a switch closed. Low-voltage coil side is electrically isolated from the high-current contact side --- this isolation is exactly why the green relay board is useful}{}
+\checkitem{IC (integrated circuit): a black chip containing a whole sub-circuit. You will not reverse-engineer the silicon --- you will read its datasheet and treat it as a black box with defined pins}{}
+
+\roadmapHead{Reading a Simple Schematic}
+\checkitem{A schematic is a map, not a photo --- component position on paper has nothing to do with position on the physical board}{}
+\checkitem{Lines are wires; a dot where two lines cross means connected, no dot means they just cross over}{}
+\checkitem{Ground (GND) symbol appears many times on a schematic but represents one single shared electrical point}{}
+\checkitem{Practice: draw the schematic of a single LED + resistor + battery circuit from memory, then build it on a breadboard and confirm it matches}{}
+
+\newpage
+% ══════════════════════════════════════════════════════════════════════════════
+\roadmapSubSection{0.3}{Microcontrollers and Firmware From Zero}{1.5 Weeks}
+
+{\small\itshape\color{arligray} Every project track after this one runs on an ESP32. Learn the platform once, here.}
+
+\roadmapHead{Tools}
+\begin{toolbadges}
+\toolbadge{ESP32 DevKitC (WROOM-32) x2}
+\toolbadge{USB-A to Micro-USB / USB-C cable (data-capable, not charge-only)}
+\toolbadge{Arduino IDE 2.x}
+\end{toolbadges}
+
+\roadmapHead{What a Microcontroller Actually Is}
+\checkitem{A microcontroller is a tiny computer on one chip: CPU + RAM + flash storage + GPIO pins, all in one package}{}
+\checkitem{GPIO (General Purpose Input/Output) pins can be set HIGH (3.3V) or LOW (0V) under program control, or read as HIGH/LOW from outside}{}
+\checkitem{ESP32 specifically adds built-in WiFi and Bluetooth radios --- this is why every project below can talk over your home network}{}
+\checkitem{``Flashing firmware'' means uploading your compiled program into the chip's flash memory over USB}{}
+
+\roadmapHead{Arduino IDE Setup and First Programs}
+\checkitem{Install Arduino IDE, add the ESP32 board package via Boards Manager (search ``esp32'' by Espressif)}{}
+\checkitem{Select the correct board (e.g. ``ESP32 Dev Module'') and COM/serial port before uploading}{}
+\checkitem{Write and upload Blink: toggle one GPIO pin HIGH/LOW with delays, watch an LED flash}{This is the ``hello world'' of embedded programming --- if this works, your toolchain is correct}
+\checkitem{Learn \texttt{pinMode()}, \texttt{digitalWrite()}, \texttt{digitalRead()}, \texttt{analogRead()}, \texttt{delay()} --- these five functions cover most of Track 1}{}
+\checkitem{Open Serial Monitor at 115200 baud, use \texttt{Serial.println()} to print debug values --- this is your primary debugging tool for the entire roadmap}{}
+\checkitem{Learn basic C/C++ control flow needed here: variables, \texttt{if/else}, \texttt{for}/\texttt{while} loops, functions, arrays --- you do not need advanced C++ for this roadmap}{}
+
+\roadmapHead{Power and Wiring Basics for ESP32 Projects}
+\checkitem{ESP32 GPIO pins are 3.3V logic and low current (a few mA safe draw) --- never connect them directly to a relay coil, motor, or mains}{Always go through a transistor, MOSFET, or driver IC when switching anything bigger than an LED}
+\checkitem{Power the ESP32 itself from 5V via USB, or from a regulated 5V/3.3V supply --- never feed it raw battery voltage above spec}{}
+\checkitem{Common ground rule: every powered module in a project (ESP32, driver board, sensor) must share one common ground, or nothing will work reliably}{}
+
+\newpage
+% ══════════════════════════════════════════════════════════════════════════════
+\roadmapSubSection{0.4}{Networking From Zero --- LAN, WiFi, and Protocols}{1 Week}
+
+{\small\itshape\color{arligray} This is what makes these projects ``smart'' instead of just wired gadgets. Needed for Tracks 2, 4, and 5.}
+
+\roadmapHead{Core Concepts}
+\checkitem{LAN (Local Area Network): the devices inside your home, all reachable without going through the internet}{}
+\checkitem{Router: the box that assigns addresses and moves traffic between your LAN and the internet}{}
+\checkitem{IP address: a device's numeric address on the network, e.g. \texttt{192.168.1.42} --- find yours on any device's WiFi settings}{}
+\checkitem{DHCP vs static/reserved IP: DHCP auto-assigns an address that can change; for devices you'll talk to by address (our ESP32 stations), reserve a fixed IP in the router settings}{}
+\checkitem{Port number: an address's ``door number'' for a specific service --- two devices talking need to agree on which port}{}
+
+\roadmapHead{TCP vs UDP --- Know Which One and Why}
+\checkitem{TCP: reliable, ordered, but adds latency for retransmission/acknowledgement --- good for file transfer, web pages, SIP signaling}{}
+\checkitem{UDP: fast, unordered, no delivery guarantee, minimal overhead --- the correct choice for live audio, where a late packet is worse than a lost one}{}
+\checkitem{This is why the intercom project (Track 2) streams audio over UDP, while the VoIP call setup (Track 4) uses SIP over TCP/UDP for signaling}{}
+
+\roadmapHead{Practical Skills}
+\checkitem{Find and reserve static IPs for your ESP32 boards in your router's DHCP settings}{}
+\checkitem{Use \texttt{ping} from a laptop terminal to confirm a device is reachable on the LAN before debugging code}{}
+\checkitem{Install and try a WiFi analyzer app to see channel congestion in your home --- relevant later for Track 5's RF bridge}{}
+\checkitem{Write and run a five-line Arduino sketch that connects the ESP32 to your WiFi (\texttt{WiFi.begin(ssid, password)}) and prints its assigned IP over Serial}{This confirms your ESP32 can join the network before any project-specific code is added}

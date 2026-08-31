@@ -1,0 +1,73 @@
+\roadmapSection{4}{ANALOG-TO-VOIP GATEWAY}{2--3 Weeks}
+
+{\small\itshape\color{arligray} Bridges the analog phone line from Track 3 to the internet, so an old rotary phone can call a softphone app anywhere --- built on a Raspberry Pi running Asterisk.}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\roadmapSubSection{4.1}{VoIP and SIP From Zero}{2--3 Days}
+
+\checkitem{VoIP (Voice over IP): carrying a phone call as digital audio packets over a normal internet/network connection instead of a dedicated phone circuit}{}
+\checkitem{SIP (Session Initiation Protocol): the signaling protocol that sets up, manages, and tears down a VoIP call --- think of it as ``dialing and ringing'' logic, separate from the actual voice audio}{}
+\checkitem{RTP (Real-time Transport Protocol): the protocol that actually carries the voice audio once a SIP call is connected, running over UDP for the same low-latency reasons as Track 2's audio stream}{}
+\checkitem{Codec: the compression format for the voice audio (e.g. G.711 --- simple, low-CPU, higher bandwidth; Opus --- efficient, more CPU) --- start with G.711 for simplicity}{}
+\checkitem{Extension: an internal short number (e.g. 101, 102) assigned to each phone/softphone on your private VoIP system, separate from any real outside phone number}{}
+\checkitem{Softphone: an app (e.g. Zoiper, Linphone) that registers to your SIP server and lets a phone/laptop act as a SIP endpoint}{}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\roadmapSubSection{4.2}{Setting Up Asterisk}{3--4 Days}
+
+\roadmapHead{Tools}
+\begin{toolbadges}
+\toolbadge{Raspberry Pi 4 (or similar SBC) + SD card + power supply}
+\toolbadge{Asterisk (open-source PBX software)}
+\toolbadge{Zoiper or Linphone (softphone app for testing)}
+\end{toolbadges}
+
+\checkitem{Install a Linux distribution (Raspberry Pi OS Lite is enough) on the Pi, then install Asterisk from your distro's package manager or source}{}
+\checkitem{Reserve a static/DHCP-reserved IP for the Pi on your LAN, same pattern as Track 0.4}{}
+\checkitem{Create two or three simple SIP extensions in Asterisk's configuration and register a softphone app on your phone to one of them}{}
+\checkitem{Call between two softphone extensions first, entirely without any hardware, to confirm Asterisk itself is working correctly}{}
+
+\newpage
+% ══════════════════════════════════════════════════════════════════════════════
+\roadmapSubSection{4.3}{Bridging the Analog Line to Digital}{1--1.5 Weeks}
+
+{\small\itshape\color{arligray} Two realistic approaches, matching the fork from Track 3.4.}
+
+\roadmapHead{Approach A --- Your Own SLIC Interface (if Track 3 Path B succeeded)}
+\checkitem{Extend the ESP32/controller code from Track 3 to also sample the SLIC's analog voice path through an ADC, packetize it, and send it to the Pi over UDP --- the exact same pattern as Track 2's audio streaming}{}
+\checkitem{On the Pi, write a small bridge (using Asterisk's \texttt{chan\_audiosocket} module, or a custom script feeding a \texttt{Local} channel) that turns the incoming UDP audio into an Asterisk channel}{}
+\checkitem{This is a genuinely advanced integration --- budget extra time, and treat Approach B as an acceptable permanent solution, not just a fallback}{}
+
+\roadmapHead{Approach B --- Commercial FXS/FXO Module (recommended for a reliable result)}
+\checkitem{An FXS (Foreign Exchange Station) port lets Asterisk directly power and control one analog phone line, exactly like a real telephone exchange --- a small USB or PCI FXS adapter (e.g. OpenVox, Digium TDM/HG series) does this out of the box}{}
+\checkitem{Plug the analog phone (or, once confident, your Track 3 board's line pair) into the FXS module, plug the module into the Pi}{}
+\checkitem{Install the vendor's Asterisk driver (e.g. DAHDI for OpenVox/Digium cards), and map the FXS port to a new Asterisk channel}{}
+\checkitem{This path sidesteps the hardest reverse-engineering risk of Track 3 while still delivering the same end-user result --- combine both boards over time as Track 3 matures}{}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\roadmapSubSection{4.4}{Dialplan --- Mapping Extensions to Lines}{2 Days}
+
+\checkitem{Asterisk's dialplan (\texttt{extensions.conf}) is the logic that decides what happens when a number is dialled --- e.g. dialling \texttt{2} rings extension 102's softphone}{}
+\checkitem{Create a dialplan rule so lifting the analog phone and dialling a short code rings a specific softphone extension, and vice versa}{}
+\checkitem{Add a rule so an incoming call from a softphone can ring the analog phone's FXS/SLIC channel with real ring voltage}{}
+\checkitem{Test every direction: analog $\to$ soft, soft $\to$ analog, soft $\to$ soft, before considering the gateway finished}{}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\roadmapSubSection{4.5}{End-to-End Test}{1--2 Days}
+
+\checkitem{Pick up the rotary/analog phone, dial the short code for a softphone extension, confirm ringing and two-way audio}{}
+\checkitem{From the softphone, call the analog extension's short code, confirm the physical phone rings and can be answered with clear audio both ways}{}
+\checkitem{Note and fix any audio quality issues: check codec settings, network jitter, and gain levels on the FXS/SLIC path}{}
+
+\vspace{6pt}
+\noindent
+\begin{tcolorbox}[
+  enhanced, colback=bgsubtle, colframe=arlizblue!30,
+  leftrule=4pt, sharp corners, left=10pt, right=10pt, top=6pt, bottom=6pt
+]
+{\small\color{arligray}\itshape
+\textbf{\color{arliznavy}Milestone:} An old analog phone can place and receive real, two-way calls through your own
+Asterisk server to any softphone on your network. This is the point where the project stops being a demo and
+becomes an actual usable home telephone system --- and the direct foundation for Track 5's multi-house version.
+}
+\end{tcolorbox}

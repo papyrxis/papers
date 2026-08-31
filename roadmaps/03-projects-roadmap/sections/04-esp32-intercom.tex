@@ -1,0 +1,98 @@
+\roadmapSection{2}{ESP32 WIFI INTERCOM}{3--4 Weeks}
+
+{\small\itshape\color{arligray} Two or more ESP32 stations, built from salvaged phone speakers/mics, stream live audio to each other over your home WiFi --- a modern, network-based version of a classic intercom.}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\roadmapSubSection{2.1}{Salvaging and Testing Speakers and Microphones}{3--4 Days}
+
+\roadmapHead{Tools}
+\begin{toolbadges}
+\toolbadge{Precision screwdriver set (phone teardown bits)}
+\toolbadge{Hot air station or fine iron tip}
+\toolbadge{Multimeter}
+\toolbadge{Small containers for screws}
+\end{toolbadges}
+
+\checkitem{Open the Huawei and Nokia boards carefully, photographing each step; note the tiny speaker (round or rectangular capsule) and the small electret/MEMS microphone}{}
+\checkitem{Test the speaker with multimeter resistance mode --- a healthy small speaker usually reads 4--8$\Omega$; open (OL) means a broken voice coil, unusable}{}
+\checkitem{Identify the microphone type: an electret capsule has 2--3 exposed pads and needs a bias voltage; a MEMS mic (small flat rectangular package) often already sits on a tiny breakout inside the phone --- either can work, but electret is easier to wire by hand}{}
+\checkitem{Desolder the confirmed-good speaker and microphone with hot air or a fine iron tip; keep the flexible ribbon/wires attached if possible to avoid re-soldering directly to tiny pads}{}
+\checkitem{If salvaged parts test bad or are too fragile to reuse reliably, buy a cheap replacement speaker (8$\Omega$, 0.5--1W) and an electret mic capsule --- the rest of this track is identical either way}{}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\roadmapSubSection{2.2}{Audio Basics for Embedded Systems}{2--3 Days}
+
+{\small\itshape\color{arligray} A short but necessary theory stop before any wiring.}
+
+\checkitem{Sound is a continuous analog wave; a microcontroller can only store numbers, so audio must be sampled: measured at regular intervals and converted to digital values}{}
+\checkitem{Sample rate: how many measurements per second, e.g. 8000Hz (telephone-quality) or 16000Hz (clearer voice) --- higher rate means more data and more network bandwidth needed}{}
+\checkitem{Bit depth: how many bits represent each sample's amplitude, e.g. 16-bit --- more bits means finer volume resolution}{}
+\checkitem{PCM (Pulse Code Modulation): the raw, uncompressed format of sampled audio --- simplest to generate and stream, at the cost of higher bandwidth. This roadmap uses raw PCM for simplicity}{}
+\checkitem{I2S (Inter-IC Sound): a digital audio bus (separate clock, word-select, and data lines) built into the ESP32 specifically for streaming audio to/from external DAC and ADC/mic chips --- this is what makes ESP32 a good fit here}{}
+
+\newpage
+% ══════════════════════════════════════════════════════════════════════════════
+\roadmapSubSection{2.3}{Hardware --- Wiring the Audio Chain}{3--4 Days}
+
+\roadmapHead{Tools and Parts}
+\begin{toolbadges}
+\toolbadge{ESP32 DevKitC x2 (one per station)}
+\toolbadge{MAX98357A I2S DAC + Class-D amp module x2}
+\toolbadge{INMP441 I2S MEMS microphone module x2}
+\toolbadge{Salvaged or replacement 8$\Omega$ speaker x2}
+\toolbadge{Push-button (for push-to-talk) x2}
+\toolbadge{Perfboard, wire, 3.3V/5V supply}
+\end{toolbadges}
+
+\checkitem{Output chain: ESP32 I2S pins (BCLK, LRC, DOUT) $\to$ MAX98357A input $\to$ speaker on the module's output terminals}{The MAX98357A takes digital I2S audio directly and outputs enough power to drive a small speaker --- no separate amplifier stage needed}
+\checkitem{Input chain: INMP441 I2S mic module (BCLK, WS, SD) $\to$ ESP32 I2S input pins --- note the ESP32 can run I2S input and output on separate pin sets simultaneously}{}
+\checkitem{Assign and document exact GPIO-to-module pin mapping for both stations identically, so firmware can be shared}{}
+\checkitem{Wire the push-to-talk button to a GPIO with \texttt{INPUT\_PULLUP}, same pattern as the relay panel's backup button}{}
+\checkitem{Power both modules and the ESP32 from a common, well-decoupled 5V/3.3V supply; salvaged phone charger + a simple 3.3V regulator works, or the Huawei battery through a TP4056 charge module for a portable station}{}
+\checkitem{Bench test each direction separately before combining: play a test tone through the DAC/speaker chain, and read raw mic samples over Serial from the input chain}{}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\roadmapSubSection{2.4}{Firmware --- UDP Audio Streaming}{1--1.5 Weeks}
+
+{\small\itshape\color{arligray} The hardest and most rewarding part of this track: getting audio across the network with usable latency.}
+
+\roadmapHead{Core Design}
+\checkitem{Each station runs two loops: read a block of samples from the I2S mic input, send it as a UDP packet to the other station's IP; and receive incoming UDP packets, write their contents to the I2S speaker output}{}
+\checkitem{Use small, fixed-size packets (e.g. 256--512 samples per packet) to keep latency low --- larger packets add delay, smaller packets add network overhead}{}
+\checkitem{UDP is correct here (see Track 0.4): a dropped audio packet should just produce a tiny click, not stall the whole stream waiting for retransmission}{}
+\checkitem{Start with one-directional streaming (Station A mic $\to$ Station B speaker) and get that fully working before adding the reverse direction}{}
+\checkitem{Add push-to-talk logic: only send UDP packets while the button is held, to avoid constant open-mic noise and reduce network load}{}
+\checkitem{Use the ESP32 Arduino \texttt{WiFiUDP} library for the socket work, and the \texttt{ESP\_I2S}/\texttt{driver/i2s.h} APIs for the audio hardware}{}
+
+\roadmapHead{Alternative Transport --- ESP-NOW}
+\checkitem{ESP-NOW is a low-latency, connectionless Espressif protocol that talks directly ESP32-to-ESP32 without needing a router at all}{Worth trying once basic UDP-over-WiFi works, as a lower-latency alternative for two stations that are always paired}
+\checkitem{Trade-off: ESP-NOW has a small payload limit per message and no built-in support for more than a handful of peers, while UDP over your existing WiFi scales to as many stations as you want and works alongside your router's other traffic}{}
+
+\newpage
+% ══════════════════════════════════════════════════════════════════════════════
+\roadmapSubSection{2.5}{Enclosure and Power}{2--3 Days}
+
+\checkitem{Reuse the phone's original plastic shell as the station enclosure where the size allows --- cut a small speaker grille opening if needed}{}
+\checkitem{Mount the push-to-talk button where the phone's original send/call button was, for a nice finished feel}{}
+\checkitem{If using the salvaged Huawei battery: confirm its resting voltage with the multimeter (healthy Li-ion cell should read 3.6--4.2V), then wire through a TP4056 charge/protection module before connecting to the ESP32's 5V input}{Never wire a bare Li-ion cell directly to the ESP32 --- always go through a protection/charge module}
+\checkitem{Alternatively, power each station from a simple 5V USB wall adapter for a fixed, always-on installation (e.g. one station mounted permanently by the front door)}{}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\roadmapSubSection{2.6}{Testing and Calibration}{2 Days}
+
+\checkitem{Measure round-trip latency by talking and timing the delay to the other station by ear --- aim for well under 300ms for comfortable conversation}{}
+\checkitem{If latency is too high, reduce packet size, reduce sample rate to 8000Hz, or check for WiFi congestion (Track 0.4's WiFi analyzer)}{}
+\checkitem{Adjust MAX98357A gain (some boards have a gain-select pin) and mic input scaling in firmware if audio is too quiet or clipping}{}
+\checkitem{Test at the real installation distance and through real walls before declaring the build finished --- WiFi signal strength, not just code, determines reliability}{}
+
+\vspace{6pt}
+\noindent
+\begin{tcolorbox}[
+  enhanced, colback=bgsubtle, colframe=arlizblue!30,
+  leftrule=4pt, sharp corners, left=10pt, right=10pt, top=6pt, bottom=6pt
+]
+{\small\color{arligray}\itshape
+\textbf{\color{arliznavy}Milestone:} Two-way, push-to-talk audio between two salvaged-phone-shell stations over your home
+WiFi, with usable latency. This is the direct hardware/firmware ancestor of the VoIP gateway in Track 4.
+}
+\end{tcolorbox}

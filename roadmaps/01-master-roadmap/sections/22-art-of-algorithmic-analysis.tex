@@ -1,0 +1,78 @@
+\roadmapSection{Book}{THE ART OF ALGORITHMIC ANALYSIS}{Write During Section 4 Advanced, Months 8--15}
+
+{\small\itshape\color{arligray} Rigorous analysis of algorithms. Not just Big-O --- the actual mathematics of proving bounds, showing optimality, and understanding what makes an algorithm beautiful. Sits between Mathesis (foundations) and ARLIZ (data structures).}
+
+\textbf{Repository:} \texttt{github.com/papyrxis/the-art-of-algorithmic-analysis}
+
+\roadmapHead{Writing Discipline}
+\checkitem{Write only after implementing: code first, analyze second, write third. Theory without practice is empty}{}
+\checkitem{Every chapter must contain: one formal proof + one concrete implementation in C + one worked example}{}
+\checkitem{Use Mathesis as reference: every claim here should trace back to a proof in Mathesis}{}
+\checkitem{Cross-reference ARLIZ: every data structure chapter in ARLIZ should cite the analysis here}{}
+
+\vspace{0.3cm}
+
+% ── Part 0 ────────────────────────────────────────────────────────────────────
+\roadmapSubSection{A.0}{Part 0: Prerequisites and Mathematical Toolkit}{Write in Month 6--7}
+
+{\small\itshape\color{arligray} Don't start here first. Read Mathesis Parts I--V before writing this section.}
+
+\checkitem{Mathematical induction: weak, strong, structural --- prove correctness of recursive algorithms}{}
+\checkitem{Summations: arithmetic series, geometric series, harmonic series --- appear in every analysis}{}
+\checkitem{Recurrence relations: substitution method, recursion trees, Master Theorem}{}
+\checkitem{Logarithms and exponentials: fluency in log₂ n, lg n, ln n, their relationships}{}
+\checkitem{Floor, ceiling, modular arithmetic --- appear in every sorting and hashing analysis}{}
+\checkitem{Probability theory basics: expected value, linearity of expectation, indicator random variables}{}
+
+% ── Part I ────────────────────────────────────────────────────────────────────
+\roadmapSubSection{A.1}{Part I: Foundations of Algorithmic Analysis}{Write in Month 7--8}
+
+\checkitem{RAM model: what computation costs, what the model assumes, where it breaks down}{}
+\checkitem{Asymptotic notation: O, Ω, Θ, o, ω --- formal definitions, not just intuition}{}
+\checkitem{Prove O-notation claims formally: find c and n₀. Don't hand-wave}{}
+\checkitem{Best, average, worst case: why the distinction matters, when each is relevant}{}
+\checkitem{Algorithm correctness: loop invariants, pre/post-conditions, formal verification}{}
+\checkitem{Space complexity: auxiliary space vs total space, in-place algorithms}{}
+\checkitem{Implement a benchmark harness in C: time and cache-miss measurement}{}
+
+% ── Part II ───────────────────────────────────────────────────────────────────
+\roadmapSubSection{A.2}{Part II: Advanced Analysis Techniques}{Write in Month 9--10}
+
+\checkitem{Amortized analysis: aggregate, accounting, potential methods --- dynamic array doubling}{}
+\checkitem{Amortized analysis: binary counter, stack with multipop, splay trees}{}
+\checkitem{Randomized algorithms: expected-case analysis, Las Vegas vs Monte Carlo}{}
+\checkitem{Quicksort expected O(n log n): prove with indicator random variables}{}
+\checkitem{Competitive analysis: online algorithms, secretary problem}{}
+\checkitem{Smoothed analysis: why simplex runs fast in practice despite exponential worst case}{}
+
+\newpage
+% ── Part III ──────────────────────────────────────────────────────────────────
+\roadmapSubSection{A.3}{Part III: Lower Bounds and Optimality}{Write in Month 10--11}
+
+\checkitem{Comparison-based sorting: Ω(n log n) lower bound via decision tree argument}{}
+\checkitem{Information-theoretic lower bounds: how many bits needed → lower bound on operations}{}
+\checkitem{Reductions: prove problem A is at least as hard as problem B}{}
+\checkitem{NP-completeness: P, NP, NP-hard, NP-complete --- Cook-Levin theorem}{}
+\checkitem{Show a problem is NP-complete: reduce from known NP-complete problem}{}
+\checkitem{Approximation algorithms: when optimal is intractable, how close can we get?}{}
+
+% ── Part IV ───────────────────────────────────────────────────────────────────
+\roadmapSubSection{A.4}{Part IV: Specialized Topics}{Write in Month 11--13}
+
+\checkitem{Cache-oblivious algorithms: analyze for real hardware, not RAM model}{}
+\checkitem{External memory algorithms: B-trees, merge sort variants for disk}{}
+\checkitem{Parallel algorithms: work and span model, PRAM, Brent's theorem}{}
+\checkitem{Streaming algorithms: process data in one pass with O(log n) space}{}
+\checkitem{Online algorithms: decisions without future knowledge}{}
+\checkitem{Geometric algorithms: convex hull, line intersection, closest pair}{}
+\checkitem{String algorithms: KMP, Aho-Corasick, suffix arrays --- connect to ARLIZ Vol III Stage 5}{}
+
+% ── Part V ────────────────────────────────────────────────────────────────────
+\roadmapSubSection{A.5}{Part V: Practical Considerations and Case Studies}{Write in Month 13--15}
+
+\checkitem{Real-world performance vs theoretical analysis: cache effects, branch prediction, SIMD}{}
+\checkitem{Profiling: use perf, valgrind, cachegrind. Theory informs where to look; profiler shows truth}{}
+\checkitem{Case study: analyze your ring buffer implementation formally (Sections 4.3)}{}
+\checkitem{Case study: analyze ARLIZ Vol III sorting algorithms --- write the formal proof here}{}
+\checkitem{Case study: analyze a repair-data analysis script --- algorithmic thinking applied}{}
+\checkitem{Write the conclusion: when does analysis matter, when does it not, how to think algorithmically}{}

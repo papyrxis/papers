@@ -1,0 +1,82 @@
+\roadmapSection{Book}{MATHESIS --- Mathematical Foundations}{Write During Sections 8, 4, 6}
+
+{\small\itshape\color{arligray} Mathesis is the mathematical backbone of everything. Write alongside study --- not after. Three books form a path: Mathesis → Art of Algorithmic Analysis → ARLIZ.}
+
+\textbf{Repository:} \texttt{github.com/papyrxis/mathesis}
+
+\roadmapHead{Writing Discipline --- Applies to All Parts}
+\checkitem{After every relevant math study session: write one paragraph minimum, same evening}{}
+\checkitem{Every two weeks: re-read and revise previous two weeks of drafts}{}
+\checkitem{Every month: run \texttt{make} and fix all \LaTeX{} compilation errors}{}
+\checkitem{After every revision: add one concrete example from your actual work (repair, code, circuit)}{}
+\checkitem{Use \texttt{.pxis} build system for compilation and chapter scaffolding}{}
+
+\vspace{0.3cm}
+
+% ── Part I ────────────────────────────────────────────────────────────────────
+\roadmapSubSection{M.1}{Part I: Logic and the Foundations of Reasoning}{Write During Math Section 8.3}
+
+{\small\itshape\color{arligray} Start here. Everything in computing rests on formal logic. Write while learning Boolean algebra and digital logic in electronics.}
+
+\checkitem{Propositional logic: truth values, connectives (AND, OR, NOT, XOR, IMPLIES), truth tables}{}
+\checkitem{Logical equivalences: De Morgan's laws, double negation, distributivity --- prove each, don't just memorize}{}
+\checkitem{Predicate logic: quantifiers (∀, ∃), predicates, domains --- generalize propositional logic}{}
+\checkitem{Proof techniques: direct proof, proof by contradiction, proof by contrapositive, proof by induction}{}
+\checkitem{How logic maps to hardware: Boolean algebra → gates → circuits. Write this connection explicitly}{}
+\checkitem{Formal systems: axioms, inference rules, theorems. Why rigor matters in computing}{}
+
+% ── Part II ───────────────────────────────────────────────────────────────────
+\roadmapSubSection{M.2}{Part II: Set Theory — The Language of Mathematical Objects}{Write During Math Section 8.3}
+
+{\small\itshape\color{arligray} Sets are the universal language of mathematics. Every data structure you implement is a set with operations.}
+
+\checkitem{Set notation: membership (∈), subsets (⊆), power set, empty set (∅)}{}
+\checkitem{Set operations: union (∪), intersection (∩), difference (\textbackslash), complement --- Venn diagrams}{}
+\checkitem{Cartesian product: A × B --- foundation for relations, pairs, tuples, database tables}{}
+\checkitem{Functions as sets of ordered pairs: domain, codomain, range, injective, surjective, bijective}{}
+\checkitem{Cardinality: finite sets, countable infinity (ℕ), uncountable infinity (ℝ) --- Cantor's diagonalization}{}
+\checkitem{How sets map to programming: arrays, hash tables, databases are all concrete set implementations}{}
+
+% ── Part III ──────────────────────────────────────────────────────────────────
+\roadmapSubSection{M.3}{Part III: Algebraic Structures}{Write During Section 4 Advanced C}
+
+\checkitem{Groups: closure, associativity, identity, inverses --- recognize group structure in XOR, modular arithmetic}{}
+\checkitem{Rings: addition and multiplication. Integers ℤ form a ring --- used in RSA, CRC}{}
+\checkitem{Fields: rings with multiplicative inverses. GF(2⁸) is the field AES operates in}{}
+\checkitem{Write the connection: CRC-32 is polynomial arithmetic over GF(2). AES S-box is GF(2⁸) inversion}{}
+\checkitem{Modular arithmetic: ℤₙ, equivalence classes. Used in: ring buffers, hash functions, RSA}{}
+\newpage
+% ── Part IV ───────────────────────────────────────────────────────────────────
+\roadmapSubSection{M.4}{Part IV: Number Theory}{Write During Section 8.6 (RE Math)}
+
+\checkitem{Divisibility: GCD, LCM, Euclidean algorithm --- implement in C as exercise}{}
+\checkitem{Prime numbers: fundamental theorem of arithmetic, sieve of Eratosthenes}{}
+\checkitem{Modular exponentiation: aᵇ mod n --- implement square-and-multiply in C}{}
+\checkitem{Fermat's little theorem, Euler's theorem --- why RSA encryption works}{}
+\checkitem{Extended Euclidean algorithm: find modular inverse --- required for RSA decryption}{}
+\checkitem{Chinese Remainder Theorem: reconstruct from residues. Used in RSA optimization}{}
+
+% ── Part V ────────────────────────────────────────────────────────────────────
+\roadmapSubSection{M.5}{Part V: Discrete Mathematics}{Write During Sections 4 and ARLIZ Vol III}
+
+\checkitem{Combinatorics: permutations, combinations, binomial theorem --- analyze algorithm complexity}{}
+\checkitem{Pigeonhole principle: if n+1 items in n containers → at least one has 2. Hash collisions are guaranteed}{}
+\checkitem{Recurrence relations: T(n) = 2T(n/2) + n → Merge Sort. Solve with Master Theorem}{}
+\checkitem{Graph theory: vertices, edges, paths, cycles, trees --- foundation for ARLIZ Vol III Stage 5}{}
+\checkitem{Graph algorithms: BFS, DFS, Dijkstra, topological sort --- implement each in C while reading}{}
+\checkitem{Trees: spanning trees, binary trees, balanced trees --- connect directly to ARLIZ data structures}{}
+
+% ── Parts VI–X ────────────────────────────────────────────────────────────────
+\roadmapSubSection{M.6}{Parts VI–X: Analysis, Probability, Topology, Automata, Logic}{Write During Months 10--18}
+
+{\small\itshape\color{arligray} These sections are written progressively --- not rushed. One chapter per month minimum.}
+
+\checkitem{Part VI (Analysis): limits, continuity, derivatives --- understand convergence for algorithm analysis}{}
+\checkitem{Part VI: Big-O from epsilon-delta: formal definition of asymptotic analysis rooted in analysis}{}
+\checkitem{Part VII (Probability): discrete distributions, expectation, variance --- randomized algorithms}{}
+\checkitem{Part VII: probabilistic analysis of hashing, Bloom filters, Monte Carlo methods}{}
+\checkitem{Part VIII (Topology): open sets, continuity, connectedness --- foundations of type theory}{}
+\checkitem{Part IX (Automata): DFA, NFA, regular expressions, pushdown automata, Turing machines}{}
+\checkitem{Part IX: how regex engines work, why some problems are undecidable}{}
+\checkitem{Part X (Mathematical Logic): Gödel incompleteness, Curry-Howard correspondence}{}
+\checkitem{Part X: write the connection: type systems are logic, programs are proofs}{}

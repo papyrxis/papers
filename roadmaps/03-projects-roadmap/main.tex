@@ -1,0 +1,72 @@
+\documentclass[10pt,a4paper]{article}
+
+\input{../../roadmaps/shared/preamble}
+
+% ── Override header for Projects Roadmap ──────────────────────────────────────
+\fancyhead[L]{%
+  \colorbox{arliznavy}{%
+    \parbox{\dimexpr\headwidth-6pt\relax}{%
+      \vspace{2pt}%
+      \hspace{6pt}{\small\textbf{\color{white}PROJECTS ROADMAP\enspace\textbullet\enspace Home Telecom \& Automation Lab}}%
+      \hfill%
+      {\tiny\color{white!65!arliznavy}%
+        Relay Automation \textbullet\ SLIC / PBX \textbullet\ ESP32 Intercom \textbullet\
+        VoIP Gateway \textbullet\ RF Bridge%
+      }%
+      \hspace{6pt}\vspace{2pt}%
+    }%
+  }%
+}
+
+\hypersetup{
+  pdftitle={ARLIZ Projects Roadmap},
+  pdfauthor={Mahdi Mamashli (Genix)},
+  pdfsubject={Salvaged-Board Projects --- Relay Automation, PBX/SLIC Telecom, ESP32 Intercom, VoIP Gateway, RF Bridge},
+  pdfkeywords={ARLIZ, roadmap, relay, automation, PBX, SLIC, telephony, ESP32, intercom, VoIP, Asterisk, WiFi bridge, LoRa, antenna},
+}
+
+\pdfbookmark[0]{Cover}{bookmark.cover}
+
+\begin{document}
+
+\thispagestyle{empty}
+\input{sections/00-cover}
+\newpage
+
+\thispagestyle{fancy}
+\pdfbookmark[0]{Content List}{bookmark.toc}
+\tableofcontents
+\newpage
+
+\pdfbookmark[0]{North Star}{bookmark.northstar}
+\input{sections/01-north-star}
+\newpage
+
+\pdfbookmark[0]{0 Common Foundations}{bookmark.s0}
+\input{sections/02-common-foundations}
+\newpage
+
+\pdfbookmark[0]{1 Relay Automation Panel}{bookmark.s1}
+\input{sections/03-relay-panel}
+\newpage
+
+\pdfbookmark[0]{2 ESP32 WiFi Intercom}{bookmark.s2}
+\input{sections/04-esp32-intercom}
+\newpage
+
+\pdfbookmark[0]{3 PBX and SLIC Telecom Board}{bookmark.s3}
+\input{sections/05-pbx-slic-board}
+\newpage
+
+\pdfbookmark[0]{4 Analog-to-VoIP Gateway}{bookmark.s4}
+\input{sections/06-voip-gateway}
+\newpage
+
+\pdfbookmark[0]{5 Multi-House RF Bridge}{bookmark.s5}
+\input{sections/07-multihouse-bridge}
+\newpage
+
+\pdfbookmark[0]{6 Timeline, Tools, and Budget}{bookmark.s6}
+\input{sections/08-timeline-budget}
+
+\end{document}

@@ -1,0 +1,151 @@
+\roadmapSection{6}{TIMELINE, TOOLS, AND BUDGET}{Reference}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\roadmapSubSection{6.1}{Week-by-Week Execution Plan}{16--21 Weeks}
+
+{\small\itshape\color{arligray} Assumes 1--2 hours/day on weekdays, more on weekends. Adjust linearly for your available hours. Tracks 3--5 can run partly in parallel with each other once Track 0--2 are solid.}
+
+\roadmapHead{Phase 0 --- Foundations (Weeks 1--7)}
+
+\timelineitem{Week 1}{Safety, Tools, Workspace}
+  {Buy the base tool kit. Set up the two-zone workspace. Read every caution note before opening the TV/PBX boards.}
+
+\timelineitem{Weeks 2--3}{Electronics From Zero}
+  {Ohm's Law, multimeter fluency, passive components, first breadboard circuit (LED + resistor).}
+
+\timelineitem{Weeks 4--5}{Microcontrollers}
+  {Arduino IDE setup, ESP32 Blink, digital I/O, Serial debugging, basic C/C++ control flow.}
+
+\timelineitem{Weeks 6--7}{Networking}
+  {IP/LAN/WiFi basics, static IP reservation, first ESP32 WiFi-connect sketch, ping-based troubleshooting.}
+
+\milestoneitem{Week 7 Milestone}{}
+  {Workspace fully operational. Can safely handle a mains-connected board. ESP32 joins WiFi and prints its IP over Serial.}
+
+\roadmapHead{Phase 1 --- Relay Automation Panel (Weeks 8--10)}
+
+\timelineitem{Weeks 8--9}{Desolder, Driver Circuit, Integration}
+  {Pull and test relays, build the ULN2803 driver stage, wire to ESP32, verify each channel on the breadboard.}
+
+\timelineitem{Week 10}{Firmware and Final Enclosure}
+  {Web control panel, physical backup button, mains-safe enclosure, final lamp test.}
+
+\milestoneitem{Week 10 --- First Working Build}{}
+  {Phone-controlled relay panel switching a real lamp safely. First complete, demonstrable project.}
+
+\roadmapHead{Phase 2 --- ESP32 WiFi Intercom (Weeks 11--14)}
+
+\timelineitem{Weeks 11--12}{Salvage, Audio Theory, Hardware}
+  {Extract and test speakers/mics, wire MAX98357A + INMP441 chains, bench-test each direction separately.}
+
+\timelineitem{Weeks 13--14}{Firmware and Calibration}
+  {UDP audio streaming, push-to-talk logic, enclosure in salvaged phone shell, latency tuning.}
+
+\milestoneitem{Week 14 Milestone}{}
+  {Two-way, push-to-talk intercom working over home WiFi with acceptable latency.}
+
+\roadmapHead{Phase 3 --- PBX/SLIC Board (Weeks 15--18, can start in parallel with Phase 2)}
+
+\timelineitem{Weeks 15--16}{Telephony Theory and Chip ID}
+  {Analog line theory, SLIC identification, datasheet gathering, full pinout mapping.}
+
+\timelineitem{Weeks 17--18}{Bus Probing and Path Decision}
+  {Logic analyzer capture of the control bus, choose Path A (revive) or Path B (bypass and drive directly).}
+
+\milestoneitem{Week 18 Milestone}{}
+  {One channel confirmed ringing a real analog phone, off-hook state readable by your own code (or fallback to a commercial FXS module noted and ordered).}
+
+\roadmapHead{Phase 4 --- Analog-to-VoIP Gateway (Weeks 19--20)}
+
+\timelineitem{Weeks 19--20}{Asterisk, Bridging, Dialplan}
+  {Raspberry Pi + Asterisk setup, softphone-to-softphone test, analog bridging (SLIC or FXS), dialplan routing.}
+
+\milestoneitem{Week 20 Milestone}{}
+  {Old analog phone places and receives real calls to/from a softphone through your own Asterisk server.}
+
+\roadmapHead{Phase 5 --- Multi-House RF Bridge (Weeks 21+, second location required)}
+
+\timelineitem{Weeks 21--22}{WiFi Bridge and SIP Trunk}
+  {CPE hardware mount and aim, bridge configuration, cross-house SIP trunk and dialplan.}
+
+\timelineitem{Weeks 23--24}{LoRa Backup and Integration Test}
+  {LoRa alert channel build and mount, full end-to-end and failure-scenario testing.}
+
+\milestoneitem{Final Milestone}{}
+  {Two houses linked by a self-owned RF connection carrying real phone calls, with an independent LoRa backup alert path.}
+
+\newpage
+% ══════════════════════════════════════════════════════════════════════════════
+\roadmapSubSection{6.2}{Complete Tools and Parts Budget}{Reference}
+
+{\small\itshape\color{arligray} Phase 0 tools are mandatory before starting anything else. Later-phase parts can be bought as each track begins.}
+
+\vspace{0.2cm}
+\noindent
+\begin{tabular}{@{}p{6cm} p{2cm} r@{}}
+\toprule
+\textbf{\color{arliznavy}Item} & \textbf{\color{arligray}Phase} & \textbf{\color{arlizblue}Est. USD} \\
+\midrule
+Digital multimeter & 0 & \$10 \\
+Soldering iron (adjustable/T12) & 0 & \$30 \\
+Solder, flux, desoldering pump/wick & 0 & \$12 \\
+Breadboard + jumper wire kit & 0 & \$10 \\
+Screwdriver / wire tool set & 0 & \$15 \\
+Anti-static wrist strap & 0 & \$5 \\
+1k--10k$\Omega$ discharge resistor + safety glasses & 0 & \$3 \\
+\midrule
+ESP32 DevKitC $\times$2 & 0--2 & \$16 \\
+USB-A to Micro/USB-C cables & 0 & \$6 \\
+\midrule
+ULN2803A / ULN2003A IC & 1 & \$2 \\
+1N4007 diodes, 1k$\Omega$ resistors & 1 & \$2 \\
+Perfboard, mains-safe project box, fuse holder & 1 & \$15 \\
+\midrule
+MAX98357A I2S DAC/amp module $\times$2 & 2 & \$10 \\
+INMP441 I2S mic module $\times$2 & 2 & \$8 \\
+Small 8$\Omega$ speaker (if salvage unusable) $\times$2 & 2 & \$6 \\
+TP4056 charge/protection module & 2 & \$3 \\
+\midrule
+Logic analyzer (8-channel clone) & 3 & \$12 \\
+USB-to-UART adapter (CP2102/CH340) & 3 & \$4 \\
+\midrule
+Raspberry Pi 4 + SD card + power supply & 4 & \$60 \\
+FXS/FXO USB or PCI module (fallback path) & 4 & \$50--120 \\
+\midrule
+Outdoor CPE bridge pair (TP-Link CPE210/510 class) & 5 & \$70--130 \\
+Mounting hardware, outdoor Ethernet cable & 5 & \$20 \\
+SX1278 LoRa module $\times$2 & 5 & \$10 \\
+\midrule
+\textbf{Phase 0 Total} & & \textbf{\$107} \\
+\textbf{Phase 1 Total} & & \textbf{\$19} \\
+\textbf{Phase 2 Total} & & \textbf{\$27} \\
+\textbf{Phase 3 Total} & & \textbf{\$16} \\
+\textbf{Phase 4 Total} & & \textbf{\$110--180} \\
+\textbf{Phase 5 Total} & & \textbf{\$100--160} \\
+\bottomrule
+\end{tabular}
+
+\vspace{0.5cm}
+% ══════════════════════════════════════════════════════════════════════════════
+\roadmapSubSection{6.3}{Reference --- Signals and Voltages Cheat Sheet}{Reference}
+
+{\small\itshape\color{arligray} Keep this page open on your phone while working the boards.}
+
+\vspace{0.2cm}
+\noindent
+\begin{tabular}{@{}p{5cm} p{6.5cm}@{}}
+\toprule
+\textbf{\color{arliznavy}Signal} & \textbf{\color{arlizblue}Typical Value / Note} \\
+\midrule
+ESP32 GPIO logic level & 3.3V --- never feed it 5V directly \\
+Relay coil voltage (this board) & Confirm per relay, commonly 5V or 12V \\
+TV board flyback/SMPS caps & Up to 100--400V, can persist after unplugging --- discharge first \\
+Phone line, on-hook & About $-$48V DC, no current \\
+Phone line, off-hook loop current & 20--40mA typical \\
+Ring voltage & About 90V AC on top of $-$48V DC, ~20Hz \\
+Li-ion phone battery, healthy resting & 3.6--4.2V \\
+I2S audio (ESP32 $\leftrightarrow$ MAX98357A/INMP441) & Digital, 3 wires (BCLK, WS/LRC, data) \\
+UDP audio packet size (Track 2) & 256--512 samples per packet, tune for latency \\
+WiFi ISM bands used for the RF bridge & 2.4GHz / 5GHz, license-free at normal power \\
+\bottomrule
+\end{tabular}
