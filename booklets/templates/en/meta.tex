@@ -1,0 +1,33 @@
+% ============================================================
+% booklets/templates/en/meta.tex — GENERATION TEMPLATE
+% ------------------------------------------------------------
+% This file is never used as-is. scripts/booklets.py fills in
+% the @TOKEN@ placeholders below from configs/booklets/<slug>-en.conf
+% and writes the result to booklets/<slug>/en/meta.tex before
+% every build. Do not hand-edit a booklet's generated meta.tex —
+% edit its .conf file instead, or edit this file to change what
+% ALL English booklets generate.
+%
+% Tokens available (set in .conf):
+%   BOOKLET_TITLE, BOOKLET_TITLE_SHORT, BOOKLET_SUBTITLE
+%   BOOKLET_AUTHOR, BOOKLET_AUTHOR_HANDLE, BOOKLET_EMAIL
+%   BOOKLET_YEAR, BOOKLET_EDITION, BOOKLET_NUMBER, BOOKLET_ISBN
+%   PDF_TITLE, PDF_AUTHOR, PDF_SUBJECT, PDF_KEYWORDS
+% ============================================================
+
+\newcommand{\BookletTitle}{@BOOKLET_TITLE@}
+\newcommand{\BookletTitleShort}{@BOOKLET_TITLE_SHORT@}
+\newcommand{\BookletSubtitle}{@BOOKLET_SUBTITLE@}
+\newcommand{\BookletAuthor}{@BOOKLET_AUTHOR@}
+\newcommand{\BookletAuthorHandle}{@BOOKLET_AUTHOR_HANDLE@}
+\newcommand{\BookletEmail}{@BOOKLET_EMAIL@}
+\newcommand{\BookletYear}{@BOOKLET_YEAR@}
+\newcommand{\BookletEdition}{@BOOKLET_EDITION@}
+\newcommand{\BookletNumber}{@BOOKLET_NUMBER@}
+\newcommand{\BookletISBN}{@BOOKLET_ISBN@}
+
+% -- PDF metadata (shown in PDF readers / search engines) --------------------
+\newcommand{\BookletPDFTitle}{@PDF_TITLE@}
+\newcommand{\BookletPDFAuthor}{@PDF_AUTHOR@}
+\newcommand{\BookletPDFSubject}{@PDF_SUBJECT@}
+\newcommand{\BookletPDFKeywords}{@PDF_KEYWORDS@}

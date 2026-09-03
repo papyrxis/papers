@@ -1,0 +1,109 @@
+%!TEX TS-program = pdflatex
+%!TEX encoding = UTF-8 Unicode
+% ============================================================
+% booklets/templates/en/main.tex -- GENERATION TEMPLATE
+% ------------------------------------------------------------
+% This file is the inherited shape for every English booklet.
+% It is NEVER edited inside booklets/<slug>/en/ — that copy is
+% regenerated on every build from this template plus
+% configs/booklets/<slug>-en.conf.
+%
+% Edit THIS file to change what ALL English booklets share
+% (load order, page setup, static front/backmatter).
+% Edit the .conf, chapters/, or per-booklet front/backmatter
+% to change ONE booklet.
+%
+% Build tokens resolved by scripts/booklets.py:
+%   CONFIGS_PATH, BOOKLETS_CONFIGS_PATH, SHARED_PATH,
+%   BIB_PATH (from conf), CHAPTERS (from conf CHAPTERS array).
+% ============================================================
+
+\documentclass[11pt,oneside,openany]{book}
+
+% -- Load order matters, follow exactly ---------------------------------------
+
+% 1. Base fonts & encoding (pdflatex)
+\usepackage{lmodern}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{microtype}
+\usepackage{lettrine}    % drop-caps in preface (\lettrine{T}{ext})
+
+% 2. Shared visual identity (language-neutral: colors, callout boxes)
+\input{@CONFIGS_PATH@/colors}
+\input{@CONFIGS_PATH@/boxes}
+
+% 3. Per-booklet metadata (GENERATED from .conf — see meta.tex)
+%    MUST come before \input{pagestyles} — pagestyles uses \BookletTitleShort
+\input{meta}
+
+% 4. Page geometry (A5)
+\usepackage[a5paper,margin=2.2cm,headheight=22pt]{geometry}
+
+% 5. Bibliography (biblatex + biber, chicago-notes + autocite=footnote)
+%    configs/bibliography.tex loads biblatex with the correct style.
+%    Do NOT inline a \usepackage[biblatex] call here — it will conflict.
+\input{@CONFIGS_PATH@/bibliography}
+\addbibresource{@BIB_PATH@}
+
+% 6. Hyperref — after biblatex so biblatex can configure it cleanly
+\usepackage[breaklinks=true,pdfpagelabels=true]{hyperref}
+
+% 7. Page styles (uses \BookletTitleShort from meta — load after meta)
+\input{@BOOKLETS_CONFIGS_PATH@/pagestyles}
+
+% 8. PDF metadata (hypersetup after hyperref + pagestyles)
+\hypersetup{
+  colorlinks=true,
+  linkcolor=primary,
+  citecolor=primary,
+  urlcolor=accent,
+  pdftitle={\BookletPDFTitle},
+  pdfauthor={\BookletPDFAuthor},
+  pdfsubject={\BookletPDFSubject},
+  pdfkeywords={\BookletPDFKeywords}
+}
+
+% =============================================================================
+\begin{document}
+
+% ── FRONT MATTER ─────────────────────────────────────────────────────────────
+\frontmatter
+% Cover page (shared — visual title card for print/PDF)
+\input{@SHARED_PATH@/en/frontmatter/cover}
+% Formal title page (shared)
+\input{@SHARED_PATH@/en/frontmatter/title}
+% Copyright, license, edition info (shared)
+\input{@SHARED_PATH@/en/frontmatter/copyright}
+% Table of Contents
+\tableofcontents
+% Preface (per-booklet)
+\input{frontmatter/preface}
+
+% ── MAIN MATTER ──────────────────────────────────────────────────────────────
+\mainmatter
+% Per-booklet chapters:
+@CHAPTERS@
+
+% ── BACK MATTER ──────────────────────────────────────────────────────────────
+\backmatter
+% Conclusion / Afterword (per-booklet — optional, skip if file absent)
+\InputIfFileExists{backmatter/conclusion}{}{}
+% A Note on This Booklet (per-booklet)
+\input{backmatter/note}
+% References — all cited works (shared renderer)
+\input{@SHARED_PATH@/en/backmatter/references}
+% Further Reading (shared)
+\input{@SHARED_PATH@/en/backmatter/further-reading}
+% Glossary (per-booklet — optional, skip if file absent)
+\InputIfFileExists{backmatter/glossary}{}{}
+% About ARLIZ (shared)
+\input{@SHARED_PATH@/en/backmatter/about-arliz}
+% About the Author (shared)
+\input{@SHARED_PATH@/en/backmatter/about-author}
+% Repository & Links (shared)
+\input{@SHARED_PATH@/en/backmatter/repository}
+% Suggested Citation (shared — uses meta commands)
+\input{@SHARED_PATH@/en/backmatter/suggested-citation}
+
+\end{document}
