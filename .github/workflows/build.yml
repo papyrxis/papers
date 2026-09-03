@@ -165,6 +165,7 @@ jobs:
           apt-get install -y --no-install-recommends \
             git make bash python3 \
             librsvg2-bin \
+            fonts-freefont-ttf \
             fonts-liberation \
             fonts-urw-base35 \
             fonts-noto \
@@ -201,7 +202,7 @@ jobs:
           for log in build/booklets/*/*/main.log; do
             if [ -f "$log" ]; then
               echo "\n========== $log =========="
-              grep -A 5 "^!" "$log" || true
+              grep -E "^!|font|Font|not found|Warning.*fontspec|cannot find" "$log" | head -40 || true
             fi
           done
 
