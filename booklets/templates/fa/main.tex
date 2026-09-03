@@ -13,12 +13,18 @@
 % Mirrors resumes/fa/resume.tex load order: xepersian MUST be the
 % very last package. Every package that touches fonts, bidirectional
 % text, or hyperlinks must be loaded BEFORE xepersian.
+%
+% Placeholder tokens (expanded by scripts/booklets.py):
+%   ../../../configs          → ../../../configs
+%   ../../configs → ../../configs
+%   ../../shared           → ../../shared
+%   ../references/paper.bib              → path to paper.bib (from .conf)
 % ============================================================
 \documentclass[11pt,oneside,openany]{book}
 
 % 1. Shared visual identity (language-neutral: colors, callout boxes)
-\input{@CONFIGS_PATH@/colors}
-\input{@CONFIGS_PATH@/boxes}
+\input{../../../configs/colors}
+\input{../../../configs/boxes}
 
 % 2. Per-booklet metadata (GENERATED from .conf -- see meta.tex)
 %    MUST come before \input{pagestyles} -- pagestyles uses \BookletTitleShort
@@ -35,14 +41,14 @@
 \hbadness=4000
 
 % 4. Bibliography (biblatex + biber) -- before hyperref
-\input{@BOOKLETS_CONFIGS_PATH@/bibliography}
-\addbibresource{@BIB_PATH@}
+\input{../../configs/bibliography}
+\addbibresource{../references/paper.bib}
 
 % 5. Hyperref -- after biblatex
 \usepackage[breaklinks=true]{hyperref}
 
 % 6. Page styles (uses \BookletTitleShort -- must load after meta)
-\input{@BOOKLETS_CONFIGS_PATH@/pagestyles}
+\input{../../configs/pagestyles}
 
 % 7. PDF metadata (hypersetup after hyperref + pagestyles)
 \hypersetup{
@@ -79,6 +85,18 @@
   BoldFont=Vazirmatn-Bold.ttf
 ]{Vazirmatn-Regular.ttf}
 
+% 8b. Stub commands used by build system (no-ops in this context)
+\providecommand{\frontmatterpagenumber}{}
+\providecommand{\mainmatterpagenumber}{}
+
+% 8c. Force URLs and citation footnotes LTR (RTL fix for xepersian)
+% URLs in bibliography and footnotes
+\DeclareFieldFormat{url}{\lr{\url{#1}}}
+\DeclareFieldFormat{urldate}{\lr{(visited on #1)}}
+% Autocite footnotes: use xepersian's \LTRfootnote so English
+% citation text is rendered LTR, not reversed in the RTL page.
+\renewcommand*{\mkbibfootnote}[1]{\LTRfootnote{#1}}
+
 % 9. Post-xepersian font overrides
 % pagestyles uses \headerfont/\footerfont/\pagenumberfont (defined in
 % pagestyles.tex as \sffamily...). Latin Modern Sans has no Persian glyphs,
@@ -91,14 +109,29 @@
 % (Vazirmatn) so Persian text in callout headings renders correctly.
 \renewcommand{\sffamily}{\fontfamily{\rmdefault}\selectfont}
 
+% 10. Bibliography direction fix (FA-specific, requires xepersian's \setLTR)
+% ----------------------------------------------------------------------------
+% \autocite{} in RTL text produces RTL footnotes by default.
+% All English-language bib entries must be forced LTR so they render
+% correctly. Persian-language entries (langid=farsi in .bib) stay RTL.
+%
+% This hook runs for BOTH \printbibliography items AND \autocite footnotes,
+% so it covers the full bibliography pipeline without touching the shared
+% booklets/configs/bibliography.tex (which is also used by pdflatex/EN builds
+% that do not have \setLTR).
+\AtEveryBibitem{%
+  \iffieldequalstr{langid}{farsi}{}{\setLTR}%
+}
+
 % =============================================================================
 \begin{document}
 
 \frontmatter
 \frontmatterpagenumber
 % Static pages -- shared across all FA booklets, never edit these:
-\input{@SHARED_PATH@/fa/frontmatter/title}
-\input{@SHARED_PATH@/fa/frontmatter/copyright}
+\input{../../shared/fa/frontmatter/cover}
+\input{../../shared/fa/frontmatter/title}
+\input{../../shared/fa/frontmatter/copyright}
 \tableofcontents
 % Per-booklet content:
 \input{frontmatter/preface}
@@ -106,11 +139,20 @@
 \mainmatter
 \mainmatterpagenumber
 % Per-booklet chapters:
-@CHAPTERS@
+\input{chapters/chapter01}
+\input{chapters/chapter02}
+\input{chapters/chapter03}
 
 \backmatter
 % Per-booklet backmatter note:
 \input{backmatter/note}
-\input{backmatter/bibliography}
+\InputIfFileExists{backmatter/conclusion}{}{}
+\input{../../shared/fa/backmatter/references}
+\input{../../shared/fa/backmatter/further-reading}
+\InputIfFileExists{backmatter/glossary}{}{}
+\input{../../shared/fa/backmatter/about-arliz}
+\input{../../shared/fa/backmatter/about-author}
+\input{../../shared/fa/backmatter/repository}
+\input{../../shared/fa/backmatter/suggested-citation}
 
 \end{document}
