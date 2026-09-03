@@ -1,0 +1,64 @@
+%!TEX TS-program = pdflatex
+%!TEX encoding = UTF-8 Unicode
+\documentclass[11pt,oneside,openany]{book}
+
+\usepackage{lmodern}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{microtype}
+\usepackage{lettrine}
+
+\input{../../../configs/colors}
+\input{../../../configs/boxes}
+
+\input{meta}
+
+\usepackage[a5paper,margin=2.2cm,headheight=22pt]{geometry}
+
+\input{../../../configs/bibliography}
+\addbibresource{../references/paper.bib}
+
+\usepackage[breaklinks=true,pdfpagelabels=true]{hyperref}
+
+\input{../../configs/pagestyles}
+
+\usepackage{pdfpages}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=primary,
+  citecolor=primary,
+  urlcolor=accent,
+  pdftitle={\BookletPDFTitle},
+  pdfauthor={\BookletPDFAuthor},
+  pdfsubject={\BookletPDFSubject},
+  pdfkeywords={\BookletPDFKeywords}
+}
+
+\begin{document}
+
+\frontmatter
+\input{../../shared/cover/cover}
+\BookletCover{frontmatter/cover}
+\input{../../shared/en/frontmatter/title}
+\input{../../shared/en/frontmatter/copyright}
+\tableofcontents
+\input{frontmatter/preface}
+
+\mainmatter
+\input{chapters/chapter01}
+\input{chapters/chapter02}
+\input{chapters/chapter03}
+
+\backmatter
+\InputIfFileExists{backmatter/conclusion}{}{}
+\input{backmatter/note}
+\input{../../shared/en/backmatter/references}
+\input{../../shared/en/backmatter/further-reading}
+\InputIfFileExists{backmatter/glossary}{}{}
+\input{../../shared/en/backmatter/about-arliz}
+\input{../../shared/en/backmatter/about-author}
+\input{../../shared/en/backmatter/repository}
+\input{../../shared/en/backmatter/suggested-citation}
+
+\end{document}

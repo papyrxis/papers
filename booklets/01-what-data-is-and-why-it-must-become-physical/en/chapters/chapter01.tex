@@ -1,0 +1,93 @@
+\chapter{The Nature of Data}
+\label{ch:nature-of-data}
+
+This chapter raises a question that most people skip past and pretend they already know the answer to: what is data?\\
+Usually this question is answered very briefly, and the discussion quickly moves on to more "practical" territory. Things like:
+how data is stored, how it is searched, how it is compressed, and other practical matters\autocite{knuth1997,shannon1948,pierce2002}. The answer matters more than it first appears to. The way you think about data shapes every decision you make when working with it.
+\newpage
+\section{A Question Everyone Thinks They Already Know}
+\label{sec:question-everyone-thinks-they-know}
+
+If we look back at human history, we see that in the last 20--30 years, unlike most of the rest of human history, humanity has gained access to nearly instant data, and the answer to almost any question is only a few nanoseconds away (and with the beginning of the AI era, we could say this speed has only increased).\\
+Or, in Marx's words:\\
+In the past, tradition, or the weight of past generations, pressed on the minds of the living like a mountain\autocite{marx1852}. But over these past 20--30 years, this unprecedented access has brought a paradox along with it. Many members of what is called the millennial generation and Generation Z have begun questioning values, goals, beliefs, and so on. Because if the answer is always available, what is the need to suffer to reach it?\\
+And well, having every answer available before the question is even asked creates a strange and unexpected paradox, one that tends to get framed as "there's too much data, and that's bad", but the real issue is that \textbf{having access to data and possessing wisdom are two entirely different things.} For example, I could find thousands of credible sources for a random person without knowing anything about French history myself, without knowing what that history is even about or why it unfolded the way it did. In what follows, we can categorize this large gap between understanding and merely possessing well-dressed, decorated texts.
+
+\subsection{Back to the Main Question}
+\label{sub:return-to-main-question}
+
+So let's return to the main question: what is data? Data can be considered to be almost anything. So that this claim doesn't stay abstract, let's test it on a real text. For example, in the book \textit{The Eighteenth Brumaire of Louis Bonaparte}, written by Karl Marx\autocite{marx1852}:
+
+\begin{quote}
+\itshape
+``Upon the overthrow of the first Napoleon came the restoration of the Bourbon throne (Louis XVIII, succeeded by Charles X). In July, 1830, an uprising of the upper tier of the bourgeoisie, or capitalist class --- the aristocracy of finance ---, overthrew the Bourbon throne, or landed aristocracy, and set up the throne of Orleans, a younger branch of the house of Bourbon, with Louis Philippe as king. From the month in which this revolution occurred, Louis Philippe's monarchy is called the ``July Monarchy.'' In February, 1848, a revolt of a lower tier of the capitalist class --- the industrial bourgeoisie ---, against the aristocracy of finance, in turn dethroned Louis Philippe. This affair, also named from the month in which it took place, is the ``February Revolution.'' The ``Eighteenth Brumaire'' starts with that event.
+
+Despite the inapplicableness to our own affairs of the political names and political leadership herein described, both these names and leaderships are to such an extent the products of an economic-social development that has here too taken place with even greater sharpness, and they have their present or threatened counterparts here so completely, that, by the light of this work of Marx', we are best enabled to understand our own history, to know whence we came, and whither we are going, and how to conduct ourselves.''
+\end{quote}
+Before reading on, ask yourself: exactly what information and data do you get from this text?\\
+If we want to be very general, we can get the fate of the first and second Napoleon, and also the revolutions of France, from this text. If we look more closely, we can extract information such as the names of kings, specific dates (1830, 1848), and even social classifications (the aristocracy of finance, the industrial bourgeoisie), from these few lines alone.\\
+But things get really interesting when we change the reader's point of view.
+
+\subsubsection{A Child}
+reading this text would recognize only much simpler data: "This text is in English, it talks about people named Napoleon and Louis, and there are a few years like 1830 and 1848 in it."
+\subsubsection{A Reader Familiar With English}
+might receive more linguistic data: "This text is written in English, uses certain sentence structures, and has historical and political vocabulary."
+\subsubsection{A Historian}
+might see something else: "This text is about political developments in France, in the period from Napoleon's fall to the 1848 revolution, and describes the shift of power among different social and political groups."
+\subsubsection{A Political Economist}
+instead of focusing on the names of kings, pays attention to the class structure and the relationship among economic groups: the role of the bourgeoisie, the financial aristocracy, and the industrial bourgeoisie.
+\subsubsection{A Political Philosopher}
+sees the text as data about power, class, the state, revolution, and the transformation of social structures.
+\subsubsection{A Literary Scholar}
+pays attention to the writing style, vocabulary, narrative structure, and the way history is represented in the text.\\
+From this same text, we can also gather the division of power between the proletariat and the bourgeoisie in France, and, as already mentioned, we can tell that this text is a work by Marx, a German philosopher and theorist.\\
+The next thing that can be drawn from the text is analytical points that aren't written directly in the text, but are arrived at through analysis of the text. For example, the phrase:
+
+\begin{quote}
+``Louis Philippe's monarchy is called the `July Monarchy'''
+\end{quote}
+directly states a relation between \textit{Louis Philippe} and \textit{July Monarchy}, a relation the text itself never explicitly announces, but which the reader arrives at through analysis and examination.\\
+Now, having understood these points, we should turn to the central point. All of these came out of one fixed string of identical characters. Nothing in the text itself changed, and each reader judges the text based on their own knowledge.\\
+\section{The DIKW Pyramid: From Raw String to Wisdom}
+\label{sec:levels-of-data}
+
+What we saw above is, in fact, a hierarchy of different levels. Something known in the data science and information management literature under the standard name of the \textbf{DIKW} pyramid, which consists of Data, Information, Knowledge, and Wisdom\autocite{ackoff1989,ratzan2004,walliman2011,unesco2008}.\\
+This pyramid is exactly the same gap referred to at the beginning, and it's the strange paradox among the newer generations of humanity that shows having a lot of data provides no guarantee of reaching the fourth layer: wisdom.
+
+\subsection{What Is the DIKW Pyramid?}
+\label{sub:what-is-dikw}
+
+\subsubsection{Data}
+Something directly available to us: a string of characters or words, without any interpretation or additional organization. In the example above, the English text quoted, prior to any analysis, is raw data. This is the same layer mentioned earlier, available to anyone in a fraction of a second.
+
+\subsubsection{Information}
+When raw data is extracted from the text and organized into a specific format, and takes on meaning within a defined structure and context. For example, "the February Revolution of 1848" or "the July Monarchy" are information: raw data organized into the form of specific historical events.
+
+\subsubsection{Knowledge}
+When the combination of information and the relationships among them gives us an understanding of a subject. Understanding the political and class transformation of France in this period, and the fate of France after Napoleon's fall, is knowledge. Not merely a list of dates and names, but an understanding of the \emph{why} and the \emph{relationship} between them.
+
+\subsubsection{Wisdom}
+The highest layer of this pyramid, where knowledge turns into sound judgment and correct action: not merely knowing why the July Monarchy fell, but the ability to apply that understanding to correctly read similar events today. The very thing missing at the start of the chapter: instant access to thousands of historical documents (data) itself never substitutes for the wisdom needed to understand \emph{why} an event matters. In fact, we could say the difference among individuals, organizations, and systems is often revealed not in the amount of data they have, but in their ability to organize, interpret, and use that data.
+\newpage
+\section{What No Definition Directly Says}
+\label{sec:what-no-definition-says}
+
+Now that we understand where data sits and the path to wisdom, before drawing any conclusions or prejudgments, let's look at the root of the word itself: data.\\
+Historically, the word data comes from the Latin word datum, the past participle of the verb dare, meaning "to give."\\
+In everyday speech, we often treat the form data as a mass singular noun ("the data is clear"), but in technical writing, the plural form is preferred.\\
+Since anyone can hold their own judgment about any text, the word data itself is no exception, and at a global level every person or organization has defined data from their own point of view\autocite{floridi2010,zins2007}:\\
+\textbf{Rob, Morris, and Coronel} describe it as "raw facts": facts that have not yet been processed for their meaning to become clear\autocite{rob2013};\\
+\textbf{Webster's Dictionary} regards it as something "given or accepted," a basis from which an inference is drawn\autocite{websters1934};\\
+\textbf{The Oxford English Dictionary}, more briefly, regards it as facts or things known that are used as a basis for inference or calculation\autocite{oed2023}.\\
+\newpage
+Taken together, all these definitions point to something that none of them state directly:
+
+\begin{quote}
+\itshape
+Data has no shape that belongs to it independent of a particular point of view. A fact is only counted as data when it is placed within a framework, a framework of meaning, purpose, or use, relative to which it is relevant, organized, coherent, and useful.
+\end{quote}
+A growth ring means nothing to a system with no concept of seasons; a voltage means nothing to a circuit built to ignore it. Data presupposes a kind of prior agreement, however informal, about what is worth paying attention to in the first place. This is exactly the point the Marx example made clear: the child, the historian, and the economist all looked at the same identical string of characters, but received three different "data," because they brought three different frameworks with them.\\
+But one thing in that same Marx text still remains unanswered. A monarchy that had no inherent connection to the month of July was named the July Monarchy, simply because it began in that month. Was that a good enough reason? Just as a revolution that had nothing to do with the concept of February was called the February Revolution. Why wasn't a different name chosen for it? A name for something it itself is not was put to use, and everyone, without any objection, accepted that same name and recognized that revolution by that name.
+In fact, we could say these names carried nothing within the text itself; they were used only as a sign pointing to something else, outside themselves. So what is that unanswered question?\\
+How can a word, a number, or a sign take the place of something else in this way?\\
+This question takes us from data itself to a more fundamental issue: the relationship between the thing we see and the thing it represents.

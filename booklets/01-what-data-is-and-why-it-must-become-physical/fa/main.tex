@@ -1,0 +1,102 @@
+%!TEX TS-program = xelatex
+%!TEX encoding = UTF-8 Unicode
+\documentclass[11pt,oneside,openany]{book}
+
+\input{../../../configs/colors}
+\input{../../../configs/boxes}
+
+\input{meta}
+
+\usepackage[a5paper,margin=2.2cm,headheight=22pt]{geometry}
+
+\usepackage{microtype}
+\emergencystretch=3em
+\tolerance=4000
+\hbadness=4000
+
+\input{../../configs/bibliography}
+\addbibresource{../references/paper.bib}
+
+\usepackage[breaklinks=true]{hyperref}
+
+\input{../../configs/pagestyles}
+
+\usepackage{pdfpages}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=primary,
+  citecolor=primary,
+  urlcolor=accent,
+  pdftitle={\BookletPDFTitle},
+  pdfauthor={\BookletPDFAuthor},
+  pdfsubject={\BookletPDFSubject},
+  pdfkeywords={\BookletPDFKeywords}
+}
+
+\usepackage{xepersian}
+\settextfont[
+  Scale=1,
+  BoldFont=Vazirmatn-Bold.ttf,
+  Path=/usr/share/fonts/truetype/vazirmatn/
+]{Vazirmatn-Regular.ttf}
+\setlatintextfont[
+  Scale=0.95,
+  Ligatures=TeX,
+  BoldFont=FreeSerifBold.ttf,
+  ItalicFont=FreeSerifItalic.ttf,
+  BoldItalicFont=FreeSerifBoldItalic.ttf,
+  Path=/usr/share/fonts/truetype/freefont/
+]{FreeSerif.ttf}
+\setdigitfont[
+  Path=/usr/share/fonts/truetype/vazirmatn/,
+  BoldFont=Vazirmatn-Bold.ttf
+]{Vazirmatn-Regular.ttf}
+
+\providecommand{\frontmatterpagenumber}{}
+\providecommand{\mainmatterpagenumber}{}
+
+\DeclareFieldFormat{url}{\lr{\url{#1}}}
+\DeclareFieldFormat{urldate}{\lr{(visited on #1)}}
+\renewcommand*{\mkbibfootnote}[1]{\LTRfootnote{#1}}
+
+\renewcommand{\headerfont}{\bfseries\small}
+\renewcommand{\footerfont}{\scriptsize}
+\renewcommand{\pagenumberfont}{\bfseries\small}
+
+\renewcommand{\sffamily}{\fontfamily{\rmdefault}\selectfont}
+
+\AtEveryBibitem{%
+  \iffieldequalstr{langid}{farsi}{}{\setLTR}%
+}
+
+\begin{document}
+
+\frontmatter
+\frontmatterpagenumber
+\input{../../shared/cover/cover}
+\BookletCover{frontmatter/cover}
+\input{../../shared/fa/frontmatter/title}
+\input{../../shared/fa/frontmatter/copyright}
+\tableofcontents
+\input{frontmatter/preface}
+
+\mainmatter
+\mainmatterpagenumber
+% Per-booklet chapters:
+\input{chapters/chapter01}
+\input{chapters/chapter02}
+\input{chapters/chapter03}
+
+\backmatter
+\input{backmatter/note}
+\InputIfFileExists{backmatter/conclusion}{}{}
+\input{../../shared/fa/backmatter/references}
+\input{../../shared/fa/backmatter/further-reading}
+\InputIfFileExists{backmatter/glossary}{}{}
+\input{../../shared/fa/backmatter/about-arliz}
+\input{../../shared/fa/backmatter/about-author}
+\input{../../shared/fa/backmatter/repository}
+\input{../../shared/fa/backmatter/suggested-citation}
+
+\end{document}
