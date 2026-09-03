@@ -1,0 +1,116 @@
+%!TEX TS-program = xelatex
+%!TEX encoding = UTF-8 Unicode
+% ============================================================
+% booklets/templates/fa/main.tex -- GENERATION TEMPLATE
+% ------------------------------------------------------------
+% This file is the inherited shape for every Persian booklet.
+% It is never edited inside booklets/<slug>/fa/ -- that copy is
+% regenerated on every build from this template plus
+% configs/booklets/<slug>-fa.conf. Edit THIS file to change what
+% ALL Persian booklets share. Edit the .conf / chapters / per-booklet
+% frontmatter+backmatter to change ONE booklet.
+%
+% Mirrors resumes/fa/resume.tex load order: xepersian MUST be the
+% very last package. Every package that touches fonts, bidirectional
+% text, or hyperlinks must be loaded BEFORE xepersian.
+% ============================================================
+\documentclass[11pt,oneside,openany]{book}
+
+% 1. Shared visual identity (language-neutral: colors, callout boxes)
+\input{@CONFIGS_PATH@/colors}
+\input{@CONFIGS_PATH@/boxes}
+
+% 2. Per-booklet metadata (GENERATED from .conf -- see meta.tex)
+%    MUST come before \input{pagestyles} -- pagestyles uses \BookletTitleShort
+%    Uses \def (not \newcommand) so macros can be redefined in this preamble.
+\input{meta}
+
+% 3. Page geometry
+\usepackage[a5paper,margin=2.2cm,headheight=22pt]{geometry}
+
+% 3b. Line-breaking helpers -- reduce text overflow beyond margins
+\usepackage{microtype}
+\emergencystretch=3em
+\tolerance=4000
+\hbadness=4000
+
+% 4. Bibliography (biblatex + biber) -- before hyperref
+\input{@BOOKLETS_CONFIGS_PATH@/bibliography}
+\addbibresource{@BIB_PATH@}
+
+% 5. Hyperref -- after biblatex
+\usepackage[breaklinks=true]{hyperref}
+
+% 6. Page styles (uses \BookletTitleShort -- must load after meta)
+\input{@BOOKLETS_CONFIGS_PATH@/pagestyles}
+
+% 7. PDF metadata (hypersetup after hyperref + pagestyles)
+\hypersetup{
+  colorlinks=true,
+  linkcolor=primary,
+  citecolor=primary,
+  urlcolor=accent,
+  pdftitle={\BookletPDFTitle},
+  pdfauthor={\BookletPDFAuthor},
+  pdfsubject={\BookletPDFSubject},
+  pdfkeywords={\BookletPDFKeywords}
+}
+
+% 8. xepersian -- THE VERY LAST PACKAGE (no \usepackage after this line)
+\usepackage{xepersian}
+\settextfont[
+  Scale=1,
+  BoldFont=Vazirmatn-Bold.ttf,
+  Path=/usr/share/fonts/truetype/vazirmatn/
+]{Vazirmatn-Regular.ttf}
+% Latin font: must NOT be Vazirmatn (no Latin glyph shaping).
+% A proper Latin font ensures \lr{...} blocks are shaped LTR
+% and letters are not rendered as disconnected isolated glyphs.
+\setlatintextfont[
+  Scale=0.95,
+  Ligatures=TeX,
+  BoldFont=FreeSerifBold.ttf,
+  ItalicFont=FreeSerifItalic.ttf,
+  BoldItalicFont=FreeSerifBoldItalic.ttf,
+  Path=/usr/share/fonts/truetype/freefont/
+]{FreeSerif.ttf}
+\setdigitfont[
+  Path=/usr/share/fonts/truetype/vazirmatn/,
+  BoldFont=Vazirmatn-Bold.ttf
+]{Vazirmatn-Regular.ttf}
+
+% 9. Post-xepersian font overrides
+% pagestyles uses \headerfont/\footerfont/\pagenumberfont (defined in
+% pagestyles.tex as \sffamily...). Latin Modern Sans has no Persian glyphs,
+% so drop \sffamily and use the plain bold/small variant of Vazirmatn instead.
+\renewcommand{\headerfont}{\bfseries\small}
+\renewcommand{\footerfont}{\scriptsize}
+\renewcommand{\pagenumberfont}{\bfseries\small}
+
+% configs/boxes.tex uses \sffamily for callout titles; redirect to \rmfamily
+% (Vazirmatn) so Persian text in callout headings renders correctly.
+\renewcommand{\sffamily}{\fontfamily{\rmdefault}\selectfont}
+
+% =============================================================================
+\begin{document}
+
+\frontmatter
+\frontmatterpagenumber
+% Static pages -- shared across all FA booklets, never edit these:
+\input{@SHARED_PATH@/fa/frontmatter/title}
+\input{@SHARED_PATH@/fa/frontmatter/copyright}
+\tableofcontents
+% Per-booklet content:
+\input{frontmatter/preface}
+
+\mainmatter
+\mainmatterpagenumber
+% Per-booklet chapters:
+@CHAPTERS@
+
+\backmatter
+% Per-booklet backmatter note:
+\input{backmatter/note}
+\input{backmatter/bibliography}
+
+\end{document}
