@@ -1,56 +1,23 @@
 %!TEX TS-program = xelatex
 %!TEX encoding = UTF-8 Unicode
-% ============================================================
-% booklets/templates/fa/main.tex -- GENERATION TEMPLATE
-% ------------------------------------------------------------
-% This file is the inherited shape for every Persian booklet.
-% It is never edited inside booklets/<slug>/fa/ -- that copy is
-% regenerated on every build from this template plus
-% configs/booklets/<slug>-fa.conf. Edit THIS file to change what
-% ALL Persian booklets share. Edit the .conf / chapters / per-booklet
-% frontmatter+backmatter to change ONE booklet.
-%
-% Mirrors resumes/fa/resume.tex load order: xepersian MUST be the
-% very last package. Every package that touches fonts, bidirectional
-% text, or hyperlinks must be loaded BEFORE xepersian.
-%
-% Placeholder tokens (expanded by scripts/booklets.py):
-%   ../../../configs          → ../../../configs
-%   ../../configs → ../../configs
-%   ../../shared           → ../../shared
-%   ../references/paper.bib              → path to paper.bib (from .conf)
-% ============================================================
 \documentclass[11pt,oneside,openany]{book}
 
-% 1. Shared visual identity (language-neutral: colors, callout boxes)
 \input{../../../configs/colors}
 \input{../../../configs/boxes}
 
-% 2. Per-booklet metadata (GENERATED from .conf -- see meta.tex)
-%    MUST come before \input{pagestyles} -- pagestyles uses \BookletTitleShort
-%    Uses \def (not \newcommand) so macros can be redefined in this preamble.
 \input{meta}
-
-% 3. Page geometry
 \usepackage[a5paper,margin=2.2cm,headheight=22pt]{geometry}
-
-% 3b. Line-breaking helpers -- reduce text overflow beyond margins
 \usepackage{microtype}
 \emergencystretch=3em
 \tolerance=4000
 \hbadness=4000
-
-% 4. Bibliography (biblatex + biber) -- before hyperref
 \input{../../configs/bibliography}
 \addbibresource{../references/paper.bib}
-
-% 5. Hyperref -- after biblatex
 \usepackage[breaklinks=true]{hyperref}
-
-% 6. Page styles (uses \BookletTitleShort -- must load after meta)
 \input{../../configs/pagestyles}
 
-% 7. PDF metadata (hypersetup after hyperref + pagestyles)
+\usepackage{pdfpages}
+
 \hypersetup{
   colorlinks=true,
   linkcolor=primary,
@@ -61,17 +28,12 @@
   pdfsubject={\BookletPDFSubject},
   pdfkeywords={\BookletPDFKeywords}
 }
-
-% 8. xepersian -- THE VERY LAST PACKAGE (no \usepackage after this line)
 \usepackage{xepersian}
 \settextfont[
   Scale=1,
   BoldFont=Vazirmatn-Bold.ttf,
   Path=/usr/share/fonts/truetype/vazirmatn/
 ]{Vazirmatn-Regular.ttf}
-% Latin font: must NOT be Vazirmatn (no Latin glyph shaping).
-% A proper Latin font ensures \lr{...} blocks are shaped LTR
-% and letters are not rendered as disconnected isolated glyphs.
 \setlatintextfont[
   Scale=0.95,
   Ligatures=TeX,
@@ -85,55 +47,31 @@
   BoldFont=Vazirmatn-Bold.ttf
 ]{Vazirmatn-Regular.ttf}
 
-% 8b. Stub commands used by build system (no-ops in this context)
 \providecommand{\frontmatterpagenumber}{}
 \providecommand{\mainmatterpagenumber}{}
 
-% 8c. Force URLs and citation footnotes LTR (RTL fix for xepersian)
-% URLs in bibliography and footnotes
 \DeclareFieldFormat{url}{\lr{\url{#1}}}
 \DeclareFieldFormat{urldate}{\lr{(visited on #1)}}
-% Autocite footnotes: use xepersian's \LTRfootnote so English
-% citation text is rendered LTR, not reversed in the RTL page.
 \renewcommand*{\mkbibfootnote}[1]{\LTRfootnote{#1}}
 
-% 9. Post-xepersian font overrides
-% pagestyles uses \headerfont/\footerfont/\pagenumberfont (defined in
-% pagestyles.tex as \sffamily...). Latin Modern Sans has no Persian glyphs,
-% so drop \sffamily and use the plain bold/small variant of Vazirmatn instead.
 \renewcommand{\headerfont}{\bfseries\small}
 \renewcommand{\footerfont}{\scriptsize}
 \renewcommand{\pagenumberfont}{\bfseries\small}
 
-% configs/boxes.tex uses \sffamily for callout titles; redirect to \rmfamily
-% (Vazirmatn) so Persian text in callout headings renders correctly.
 \renewcommand{\sffamily}{\fontfamily{\rmdefault}\selectfont}
-
-% 10. Bibliography direction fix (FA-specific, requires xepersian's \setLTR)
-% ----------------------------------------------------------------------------
-% \autocite{} in RTL text produces RTL footnotes by default.
-% All English-language bib entries must be forced LTR so they render
-% correctly. Persian-language entries (langid=farsi in .bib) stay RTL.
-%
-% This hook runs for BOTH \printbibliography items AND \autocite footnotes,
-% so it covers the full bibliography pipeline without touching the shared
-% booklets/configs/bibliography.tex (which is also used by pdflatex/EN builds
-% that do not have \setLTR).
 \AtEveryBibitem{%
   \iffieldequalstr{langid}{farsi}{}{\setLTR}%
 }
 
-% =============================================================================
 \begin{document}
 
 \frontmatter
 \frontmatterpagenumber
-% Static pages -- shared across all FA booklets, never edit these:
-\input{../../shared/fa/frontmatter/cover}
+\input{../../shared/cover/cover}
+\BookletCover{frontmatter/cover}
 \input{../../shared/fa/frontmatter/title}
 \input{../../shared/fa/frontmatter/copyright}
 \tableofcontents
-% Per-booklet content:
 \input{frontmatter/preface}
 
 \mainmatter
