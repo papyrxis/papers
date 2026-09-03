@@ -166,6 +166,7 @@ jobs:
             git make bash python3 \
             librsvg2-bin \
             fonts-liberation \
+            fonts-urw-base35 \
             fonts-noto \
             fonts-noto-cjk \
             fonts-vazirmatn \
@@ -176,7 +177,17 @@ jobs:
           echo "biber:    $(biber --version)"
           echo "python3:  $(python3 --version)"
           echo "rsvg:     $(rsvg-convert --version)"
-          fc-list | grep -i vazir || echo "WARNING: Vazirmatn font not found!"
+          fc-list | grep -i vazir   || echo "WARNING: Vazirmatn not found!"
+          fc-list | grep -i liberation || echo "WARNING: Liberation not found!"
+
+      - name: Dump available fonts (debug)
+        run: |
+          echo "=== All system fonts ==="
+          fc-list | sort
+          echo ""
+          echo "=== TeX Live font dirs ==="
+          find /usr/share/texmf /usr/local/texlive -name "*.otf" -o -name "*.ttf" 2>/dev/null \
+            | sed 's|.*/||' | sort | head -80 || true
 
       - name: Build all booklets (EN + FA)
         env:
