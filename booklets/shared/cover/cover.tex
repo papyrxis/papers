@@ -1,0 +1,10 @@
+\newcommand{\BookletCover}[1]{%
+  \clearpage
+  \thispagestyle{empty}%
+  \includepdf[%
+    pages=1,%
+    pagecommand={\thispagestyle{empty}},%
+    fitpaper=true%
+  ]{#1}%
+  \clearpage
+}

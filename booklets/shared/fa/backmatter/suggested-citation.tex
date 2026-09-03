@@ -1,0 +1,55 @@
+\chapter*{استناد پیشنهادی}
+\addcontentsline{toc}{chapter}{استناد پیشنهادی}
+\markboth{استناد پیشنهادی}{استناد پیشنهادی}
+
+اگر از این کتابچه در کار خود استفاده می‌کنی یا به آن ارجاع می‌دهی،
+قالب‌های استناد زیر پیشنهاد می‌شوند.
+
+\bigskip
+
+\noindent\textbf{شیکاگو (نویسنده-تاریخ):}
+
+\smallskip
+\begin{latin}
+\noindent\hangindent=1.5em
+\BookletAuthor. \BookletYear. \textit{\BookletTitle.}
+Booklet No.\,\BookletNumber\ in \textit{Arliz: Zero to Bit.}
+\BookletEdition.
+\url{https://github.com/papyrxis/arliz}.
+\end{latin}
+
+\bigskip
+
+\noindent\textbf{\lr{APA}:}
+
+\smallskip
+\begin{latin}
+\noindent\hangindent=1.5em
+\BookletAuthor. (\BookletYear).
+\textit{\BookletTitle}
+(Arliz Booklet No.\,\BookletNumber, \BookletEdition).
+Retrieved from \url{https://github.com/papyrxis/arliz}
+\end{latin}
+
+\bigskip
+
+\noindent\textbf{\lr{BibTeX}:}
+
+\medskip
+\begin{latin}
+\begin{tcolorbox}[
+  colback=codebackground, colframe=border,
+  arc=3pt, boxrule=0.4pt,
+  fontupper=\ttfamily\small,
+  left=6pt, right=6pt, top=5pt, bottom=5pt
+]
+@booklet\{arliz-booklet-\BookletNumber,\\
+\quad author    = \{\BookletAuthor\},\\
+\quad title     = \{\BookletTitle\},\\
+\quad subtitle  = \{Booklet No.\,\BookletNumber\ in Arliz: Zero to Bit\},\\
+\quad year      = \{\BookletYear\},\\
+\quad edition   = \{\BookletEdition\},\\
+\quad url       = \{https://github.com/papyrxis/arliz\},\\
+\}
+\end{tcolorbox}
+\end{latin}

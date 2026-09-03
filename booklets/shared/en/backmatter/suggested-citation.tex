@@ -1,0 +1,49 @@
+\chapter*{Suggested Citation}
+\addcontentsline{toc}{chapter}{Suggested Citation}
+\markboth{Suggested Citation}{Suggested Citation}
+
+If you use or refer to this booklet in your own work, the following
+citation formats are suggested.
+
+\bigskip
+
+\noindent\textbf{Chicago (author-date):}
+
+\smallskip
+\noindent\hangindent=1.5em
+\BookletAuthor. \BookletYear. \textit{\BookletTitle.}
+Booklet No.\,\BookletNumber\ in \textit{Arliz: Zero to Bit.}
+\BookletEdition.
+\url{https://github.com/papyrxis/arliz}.
+
+\bigskip
+
+\noindent\textbf{APA:}
+
+\smallskip
+\noindent\hangindent=1.5em
+\BookletAuthor. (\BookletYear).
+\textit{\BookletTitle}
+(Arliz Booklet No.\,\BookletNumber, \BookletEdition).
+Retrieved from \url{https://github.com/papyrxis/arliz}
+
+\bigskip
+
+\noindent\textbf{BibTeX:}
+
+\medskip
+\begin{tcolorbox}[
+  colback=codebackground, colframe=border,
+  arc=3pt, boxrule=0.4pt,
+  fontupper=\ttfamily\small,
+  left=6pt, right=6pt, top=5pt, bottom=5pt
+]
+@booklet\{arliz-booklet-\BookletNumber,\\
+\quad author    = \{\BookletAuthor\},\\
+\quad title     = \{\BookletTitle\},\\
+\quad subtitle  = \{Booklet No.\,\BookletNumber\ in Arliz: Zero to Bit\},\\
+\quad year      = \{\BookletYear\},\\
+\quad edition   = \{\BookletEdition\},\\
+\quad url       = \{https://github.com/papyrxis/arliz\},\\
+\}
+\end{tcolorbox}
