@@ -1,0 +1,82 @@
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{ifthen}
+\usepackage{amssymb}
+\usepackage{pdfpages}
+
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\newcommand{\bkltDiamond}{%
+  \kern 0.15em\textcolor{accent}{$\blacklozenge$}\kern 0.15em%
+}
+\newcommand{\bkltDot}{%
+  \kern 0.12em\textcolor{accent!70}{\textperiodcentered}\kern 0.12em%
+}
+
+\newcommand{\headerfont}{\sffamily\small\bfseries}
+\newcommand{\footerfont}{\sffamily\scriptsize}
+\newcommand{\pagenumberfont}{\sffamily\small\bfseries}
+
+\setlength{\headsep}{16pt}
+
+\fancypagestyle{main}{%
+  \fancyhf{}
+  \fancyhead[LO,RE]{\headerfont\color{primary}\nouppercase{\leftmark}}
+  \fancyhead[RO,LE]{\headerfont\color{accent}\textsc{\BookletTitleShort}}
+  \fancyfoot[C]{%
+    \footerfont\color{accent}%
+    \bkltDiamond\quad\pagenumberfont\thepage\quad\bkltDiamond%
+  }
+  \renewcommand{\headrulewidth}{0.6pt}
+  \renewcommand{\footrulewidth}{0pt}
+  \renewcommand{\headrule}{\hbox to\headwidth{\color{accent}\leaders\hrule height \headrulewidth\hfill}}
+}
+
+% ── FRONTMATTER — roman-numbered pages ──────────────────────
+\fancypagestyle{frontmatter}{%
+  \fancyhf{}
+  \fancyhead[C]{\headerfont\color{primary}\textsc{\BookletTitleShort}}
+  \fancyfoot[C]{\pagenumberfont\color{textsecondary}\thepage}
+  \renewcommand{\headrulewidth}{0.5pt}
+  \renewcommand{\footrulewidth}{0pt}
+  \renewcommand{\headrule}{\hbox to\headwidth{\color{primary!50}\leaders\hrule height 0.45pt\hfill}}
+}
+
+% ── BACKMATTER ───────────────────────────────────────────────
+\fancypagestyle{backmatter}{%
+  \fancyhf{}
+  \fancyhead[L]{\headerfont\color{primary}\nouppercase{\leftmark}}
+  \fancyhead[R]{\headerfont\color{accent}\textsc{\BookletTitleShort}}
+  \fancyfoot[R]{\pagenumberfont\color{primary}\textbf{\thepage}}
+  \renewcommand{\headrulewidth}{0.8pt}
+  \renewcommand{\footrulewidth}{0pt}
+}
+
+% ── EMPTY — cover / intentionally blank ─────────────────────
+\fancypagestyle{empty}{%
+  \fancyhf{}
+  \renewcommand{\headrulewidth}{0pt}
+  \renewcommand{\footrulewidth}{0pt}
+}
+
+\pagestyle{main}
+
+\let\oldfrontmatter\frontmatter
+\renewcommand{\frontmatter}{%
+  \oldfrontmatter%        ← does \pagenumbering{roman} + resets counter to 1
+  \pagestyle{frontmatter}%
+}
+
+\let\oldmainmatter\mainmatter
+\renewcommand{\mainmatter}{%
+  \oldmainmatter%         ← does \pagenumbering{arabic} + resets counter to 1
+  \pagestyle{main}%
+}
+
+\let\oldbackmatter\backmatter
+\renewcommand{\backmatter}{%
+  \oldbackmatter%         ← no counter reset, continues arabic
+  \pagestyle{backmatter}%
+}
