@@ -139,11 +139,15 @@ jobs:
           if-no-files-found: error
 
   # ─────────────────────────────────────────────────────────────────────────
-  # Job 3 — Booklets (xelatex, English + Farsi)
+  # Job 3 — Booklets (pdflatex EN + xelatex FA, both need full TL + SVG)
+  # Uses texlive/texlive:latest container so lmodern, biblatex, biber, etc.
+  # are all present. Installs rsvg-convert + Farsi fonts on top.
   # ─────────────────────────────────────────────────────────────────────────
   booklets:
     name: Build Booklets
     runs-on: ubuntu-latest
+    container:
+      image: texlive/texlive:latest
 
     outputs:
       artifact-name: ${{ steps.set-name.outputs.name }}
@@ -155,25 +159,23 @@ jobs:
           submodules: recursive
           fetch-depth: 0
 
-      - name: Install TeX Live (xelatex + fonts)
+      - name: Install prerequisites
         run: |
-          sudo apt-get update -qq
-          sudo apt-get install -y --no-install-recommends \
-            texlive-xetex \
-            texlive-latex-recommended \
-            texlive-latex-extra \
-            texlive-fonts-recommended \
-            texlive-fonts-extra \
-            texlive-lang-arabic \
+          apt-get update -qq
+          apt-get install -y --no-install-recommends \
+            git make bash python3 \
+            librsvg2-bin \
             fonts-liberation \
             fonts-noto \
             fonts-noto-cjk \
             fonts-vazirmatn \
-            fontconfig \
-            python3
+            fontconfig
           fc-cache -fv >/dev/null 2>&1 || true
-          echo "xelatex: $(xelatex --version | head -1)"
-          echo "python3: $(python3 --version)"
+          echo "pdflatex: $(pdflatex --version | head -1)"
+          echo "xelatex:  $(xelatex --version | head -1)"
+          echo "biber:    $(biber --version)"
+          echo "python3:  $(python3 --version)"
+          echo "rsvg:     $(rsvg-convert --version)"
           fc-list | grep -i vazir || echo "WARNING: Vazirmatn font not found!"
 
       - name: Build all booklets (EN + FA)
@@ -182,7 +184,7 @@ jobs:
           BUILD_DATE: ${{ github.run_started_at }}
         run: python3 scripts/px.py booklets build all
 
-      - name: Show xelatex logs on failure
+      - name: Show logs on failure
         if: failure()
         run: |
           for log in build/booklets/*/*/main.log; do
