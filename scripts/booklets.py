@@ -37,6 +37,13 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
+import shutil as _shutil
+_RSVG = _shutil.which("rsvg-convert")
+try:
+    import cairosvg as _cairosvg
+except ImportError:
+    _cairosvg = None
+
 SCRIPT_DIR = Path(__file__).resolve().parent
 ROOT       = SCRIPT_DIR.parent
 sys.path.insert(0, str(SCRIPT_DIR))
@@ -207,6 +214,9 @@ BOOKLET_AUTHOR="Mahdi Mamashli"
 BOOKLET_AUTHOR_HANDLE="Genix"
 BOOKLET_EMAIL="bitsgenix@gmail.com"
 BOOKLET_YEAR="{year}"
+BOOKLET_EDITION="First Edition"
+BOOKLET_NUMBER="XX"
+BOOKLET_ISBN=""
 
 PDF_TITLE="{title_en}"
 PDF_AUTHOR="Mahdi Mamashli"
@@ -243,8 +253,30 @@ CHAPTERS=(
         "\\chapter{Chapter Title}\n\\label{ch:chapter01}\n\nWrite the chapter here.\n",
         encoding="utf-8",
     )
+    # Optional backmatter stubs (both are \InputIfFileExists — safe to leave blank)
+    (BOOKLETS_DIR / slug / "en" / "backmatter" / "conclusion.tex").write_text(
+        "% Conclusion / Afterword — fill in or delete this file.\n"
+        "% If the file exists it is included automatically; if deleted,\n"
+        "% the template silently skips it (\\InputIfFileExists).\n\n"
+        "\\chapter*{Conclusion}\n"
+        "\\addcontentsline{toc}{chapter}{Conclusion}\n"
+        "\\markboth{Conclusion}{Conclusion}\n\n"
+        "Write the conclusion or afterword here.\n",
+        encoding="utf-8",
+    )
+    (BOOKLETS_DIR / slug / "en" / "backmatter" / "glossary.tex").write_text(
+        "% Glossary — fill in or delete this file.\n"
+        "% If the file exists it is included automatically; if deleted,\n"
+        "% the template silently skips it (\\InputIfFileExists).\n\n"
+        "\\chapter*{Glossary}\n"
+        "\\addcontentsline{toc}{chapter}{Glossary}\n"
+        "\\markboth{Glossary}{Glossary}\n\n"
+        "% Add terms below using:\n"
+        "% \\noindent\\textbf{Term.} Definition.\n"
+        "% \\medskip\n",
+        encoding="utf-8",
+    )
 
-    # ── fa side ──────────────────────────────────────────────────────────────
     (CONFIGS_BOOKLETS / f"{slug}-fa.conf").write_text(
         f"""\
 # configs/booklets/{slug}-fa.conf
@@ -255,6 +287,9 @@ BOOKLET_AUTHOR="مهدی ممشلی"
 BOOKLET_AUTHOR_HANDLE="Genix"
 BOOKLET_EMAIL="bitsgenix@gmail.com"
 BOOKLET_YEAR="{year}"
+BOOKLET_EDITION="ویرایش اول"
+BOOKLET_NUMBER="XX"
+BOOKLET_ISBN=""
 
 PDF_TITLE="{title_en}"
 PDF_AUTHOR="Mahdi Mamashli"
@@ -356,6 +391,9 @@ def _generate_booklet_tex(slug: str, lang: str) -> None:
         "@BOOKLET_AUTHOR@":      meta.get("BOOKLET_AUTHOR", "Mahdi Mamashli"),
         "@BOOKLET_AUTHOR_HANDLE@": meta.get("BOOKLET_AUTHOR_HANDLE", "Genix"),
         "@BOOKLET_EMAIL@":       meta.get("BOOKLET_EMAIL", "bitsgenix@gmail.com"),
+        "@BOOKLET_EDITION@":     meta.get("BOOKLET_EDITION", "First Edition"),
+        "@BOOKLET_NUMBER@":      meta.get("BOOKLET_NUMBER", "XX"),
+        "@BOOKLET_ISBN@":        meta.get("BOOKLET_ISBN", ""),
         "@BOOKLET_YEAR@":        year,
         "@PDF_TITLE@":           meta.get("PDF_TITLE", meta.get("BOOKLET_TITLE", "")),
         "@PDF_AUTHOR@":          meta.get("PDF_AUTHOR", "Mahdi Mamashli"),
@@ -408,6 +446,36 @@ def _build_one_edition(slug: str, lang: str) -> bool:
 
     log(f"[{slug}:{lang}] generate main.tex + meta.tex")
     _generate_booklet_tex(slug, lang)
+
+    # Convert cover.svg → cover.pdf so \BookletCover{\includepdf} can use it.
+    cover_svg = booklet_lang_dir / "frontmatter" / "cover.svg"
+    cover_pdf = booklet_lang_dir / "frontmatter" / "cover.pdf"
+    if cover_svg.exists():
+        converted = False
+        # 1st choice: rsvg-convert (Pango backend — correct bidi/RTL for FA)
+        if _RSVG:
+            rc, _, err = run_quiet(
+                [_RSVG, "--format", "pdf", "--output", str(cover_pdf), str(cover_svg)],
+                cwd=booklet_lang_dir,
+            )
+            if rc == 0:
+                log(f"[{slug}:{lang}] cover.svg → cover.pdf  (rsvg-convert)")
+                converted = True
+            else:
+                warn(f"[{slug}:{lang}] rsvg-convert failed: {err.strip()}")
+        # 2nd choice: cairosvg (LTR-only; fine for EN, broken bidi for FA)
+        if not converted:
+            if _cairosvg is not None:
+                try:
+                    _cairosvg.svg2pdf(url=str(cover_svg), write_to=str(cover_pdf))
+                    log(f"[{slug}:{lang}] cover.svg → cover.pdf  (cairosvg)")
+                except Exception as exc:
+                    warn(f"[{slug}:{lang}] cairosvg SVG→PDF failed: {exc}")
+            else:
+                warn(
+                    f"[{slug}:{lang}] cover.svg found but no SVG converter available. "
+                    f"Install rsvg-convert (librsvg2-bin) or cairosvg."
+                )
 
     meta   = load_conf(conf_path)
     engine = meta.get("ENGINE", LANG_ENGINE_DEFAULT.get(lang, "pdflatex"))

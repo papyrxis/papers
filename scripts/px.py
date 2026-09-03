@@ -39,6 +39,7 @@ MODULES = {
     "papers":   ("p",  "papers.py",   "Manage LaTeX papers"),
     "resumes":  ("r",  "resumes.py",  "Manage LaTeX resumes"),
     "roadmaps": ("rm", "roadmaps.py", "Manage LaTeX roadmaps"),
+    "booklets": ("b",  "booklets.py", "Manage LaTeX booklets"),
 }
 
 # alias → canonical name
