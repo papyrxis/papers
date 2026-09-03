@@ -46,10 +46,17 @@ jobs:
           name: ${{ needs.build.outputs.resumes-artifact }}
           path: dist/resumes
 
+      - name: Download booklet PDFs
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ needs.build.outputs.booklets-artifact }}
+          path: dist/booklets
+
       - name: List files to be released
         run: |
           echo "=== Papers ===" && ls -lh dist/papers/
           echo "=== Resumes ===" && ls -lh dist/resumes/
+          echo "=== Booklets ===" && ls -lh dist/booklets/
 
       # ── Changelog from git log since last stable tag ──────────────────────
       - name: Extract changelog
@@ -86,6 +93,11 @@ jobs:
             RESUMES_LIST="${RESUMES_LIST}- \`$(basename "$f")\`\n"
           done
 
+          BOOKLETS_LIST=""
+          for f in dist/booklets/*.pdf; do
+            BOOKLETS_LIST="${BOOKLETS_LIST}- \`$(basename "$f")\`\n"
+          done
+
           cat > release_body.md << EOF
           ## 🚀 ${VERSION}
 
@@ -100,6 +112,10 @@ jobs:
           ### 📋 رزومه / Resumes
 
           $(echo -e "$RESUMES_LIST")
+
+          ### 📖 جزوه‌ها / Booklets
+
+          $(echo -e "$BOOKLETS_LIST")
 
           ---
 
@@ -128,4 +144,5 @@ jobs:
             --notes-file release_body.md \
             --verify-tag \
             dist/papers/*.pdf \
-            dist/resumes/*.pdf
+            dist/resumes/*.pdf \
+            dist/booklets/*.pdf

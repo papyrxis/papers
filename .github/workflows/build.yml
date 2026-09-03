@@ -15,6 +15,9 @@ on:
       resumes-artifact:
         description: "Name of the uploaded resumes artifact"
         value: ${{ jobs.resumes.outputs.artifact-name }}
+      booklets-artifact:
+        description: "Name of the uploaded booklets artifact"
+        value: ${{ jobs.booklets.outputs.artifact-name }}
 
 jobs:
   # ─────────────────────────────────────────────────────────────────────────
@@ -132,5 +135,71 @@ jobs:
         with:
           name: ${{ steps.set-name.outputs.name }}
           path: build/Mahdi-Mamashli-Resume*.pdf
+          retention-days: 30
+          if-no-files-found: error
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # Job 3 — Booklets (xelatex, English + Farsi)
+  # ─────────────────────────────────────────────────────────────────────────
+  booklets:
+    name: Build Booklets
+    runs-on: ubuntu-latest
+
+    outputs:
+      artifact-name: ${{ steps.set-name.outputs.name }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Install TeX Live (xelatex + fonts)
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends \
+            texlive-xetex \
+            texlive-latex-recommended \
+            texlive-latex-extra \
+            texlive-fonts-recommended \
+            texlive-fonts-extra \
+            texlive-lang-arabic \
+            fonts-liberation \
+            fonts-noto \
+            fonts-noto-cjk \
+            fonts-vazirmatn \
+            fontconfig \
+            python3
+          fc-cache -fv >/dev/null 2>&1 || true
+          echo "xelatex: $(xelatex --version | head -1)"
+          echo "python3: $(python3 --version)"
+          fc-list | grep -i vazir || echo "WARNING: Vazirmatn font not found!"
+
+      - name: Build all booklets (EN + FA)
+        env:
+          PROJECT_VERSION: ${{ inputs.version }}
+          BUILD_DATE: ${{ github.run_started_at }}
+        run: python3 scripts/px.py booklets build all
+
+      - name: Show xelatex logs on failure
+        if: failure()
+        run: |
+          for log in build/booklets/*/*/main.log; do
+            if [ -f "$log" ]; then
+              echo "\n========== $log =========="
+              grep -A 5 "^!" "$log" || true
+            fi
+          done
+
+      - name: Set artifact name
+        id: set-name
+        run: echo "name=booklets-${{ inputs.version }}" >> "$GITHUB_OUTPUT"
+
+      - name: Upload booklet PDFs
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.set-name.outputs.name }}
+          path: build/booklets/**/*.pdf
           retention-days: 30
           if-no-files-found: error

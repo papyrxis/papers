@@ -51,10 +51,17 @@ jobs:
           name: ${{ needs.build.outputs.resumes-artifact }}
           path: dist/resumes
 
+      - name: Download booklet PDFs
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ needs.build.outputs.booklets-artifact }}
+          path: dist/booklets
+
       - name: List files to be released
         run: |
           echo "=== Papers ===" && ls -lh dist/papers/
           echo "=== Resumes ===" && ls -lh dist/resumes/
+          echo "=== Booklets ===" && ls -lh dist/booklets/
 
       - name: Move latest-pre-release tag to HEAD
         run: |
@@ -80,6 +87,11 @@ jobs:
             RESUMES_LIST="${RESUMES_LIST}- $(basename "$f")\n"
           done
 
+          BOOKLETS_LIST=""
+          for f in dist/booklets/*.pdf; do
+            BOOKLETS_LIST="${BOOKLETS_LIST}- $(basename "$f")\n"
+          done
+
           cat > release_body.md << EOF
           ## 📄 Latest Pre-release Build
 
@@ -101,6 +113,10 @@ jobs:
           ### 📋 رزومه / Resumes
 
           $(echo -e "$RESUMES_LIST")
+
+          ### 📖 جزوه‌ها / Booklets
+
+          $(echo -e "$BOOKLETS_LIST")
 
           ---
 
@@ -127,4 +143,5 @@ jobs:
             --prerelease \
             --target "${{ github.sha }}" \
             dist/papers/*.pdf \
-            dist/resumes/*.pdf
+            dist/resumes/*.pdf \
+            dist/booklets/*.pdf
