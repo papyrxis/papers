@@ -6,19 +6,14 @@
 \input{../../../configs/boxes}
 
 \input{meta}
-
 \usepackage[a5paper,margin=2.2cm,headheight=22pt]{geometry}
-
 \usepackage{microtype}
 \emergencystretch=3em
 \tolerance=4000
 \hbadness=4000
-
 \input{../../configs/bibliography}
 \addbibresource{../references/paper.bib}
-
 \usepackage[breaklinks=true]{hyperref}
-
 \input{../../configs/pagestyles}
 
 \usepackage{pdfpages}
@@ -33,7 +28,6 @@
   pdfsubject={\BookletPDFSubject},
   pdfkeywords={\BookletPDFKeywords}
 }
-
 \usepackage{xepersian}
 \settextfont[
   Scale=1,
@@ -65,7 +59,6 @@
 \renewcommand{\pagenumberfont}{\bfseries\small}
 
 \renewcommand{\sffamily}{\fontfamily{\rmdefault}\selectfont}
-
 \AtEveryBibitem{%
   \iffieldequalstr{langid}{farsi}{}{\setLTR}%
 }
@@ -89,6 +82,7 @@
 \input{chapters/chapter03}
 
 \backmatter
+% Per-booklet backmatter note:
 \input{backmatter/note}
 \InputIfFileExists{backmatter/conclusion}{}{}
 \input{../../shared/fa/backmatter/references}
