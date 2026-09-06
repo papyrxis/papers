@@ -1,22 +1,21 @@
 \chapter{The Nature of Data}
 \label{ch:nature-of-data}
 
-This chapter raises a question that most people skip past and pretend they already know the answer to: what is data?\\
-Usually this question is answered very briefly, and the discussion quickly moves on to more "practical" territory. Things like:
-how data is stored, how it is searched, how it is compressed, and other practical matters\autocite{knuth1997,shannon1948,pierce2002}. The answer matters more than it first appears to. The way you think about data shapes every decision you make when working with it.
+This chapter raises a question that most people brush past, pretending they already know the answer: what is data?
+Usually the question gets dismissed with the briefest of answers, and the conversation quickly moves on to more ``practical'' territory. Things like:
+how data is stored, how it's searched, how it's compressed, and other practical matters\autocite{knuth1997,shannon1948,pierce2002}. But the answer matters more than it first appears to. It shapes how you think about data, and every decision you make while working with it.
 \newpage
-\section{A Question Everyone Thinks They Already Know}
+\section{A Question Everyone Thinks They Already Know the Answer To}
 \label{sec:question-everyone-thinks-they-know}
 
-If we look back at human history, we see that in the last 20--30 years, unlike most of the rest of human history, humanity has gained access to nearly instant data, and the answer to almost any question is only a few nanoseconds away (and with the beginning of the AI era, we could say this speed has only increased).\\
-Or, in Marx's words:\\
-In the past, tradition, or the weight of past generations, pressed on the minds of the living like a mountain\autocite{marx1852}. But over these past 20--30 years, this unprecedented access has brought a paradox along with it. Many members of what is called the millennial generation and Generation Z have begun questioning values, goals, beliefs, and so on. Because if the answer is always available, what is the need to suffer to reach it?\\
-And well, having every answer available before the question is even asked creates a strange and unexpected paradox, one that tends to get framed as "there's too much data, and that's bad", but the real issue is that \textbf{having access to data and possessing wisdom are two entirely different things.} For example, I could find thousands of credible sources for a random person without knowing anything about French history myself, without knowing what that history is even about or why it unfolded the way it did. In what follows, we can categorize this large gap between understanding and merely possessing well-dressed, decorated texts.
-
+If we glance back across human history, we notice that in the last twenty or thirty years --- unlike almost the whole rest of our story as a species --- humanity has gained something close to instant access to data, and the answer to nearly any question now sits only a few nanoseconds away (and with the dawn of the AI era, we might say even that has sped up further).\\
+Or, as Marx once put it: in the past, tradition, the weight of generations gone before, pressed on the minds of the living like a mountain\autocite{marx1852}. But over these same twenty or thirty years, this unprecedented access has brought a paradox along with it. Many of those belonging to what we call the Millennial generation and Generation Z have begun questioning values, goals, beliefs, and so on. Because if the answer is always within reach, what need is left for suffering to get to it?\\
+And so, having every answer on hand before the question is even asked gives rise to a strange, unexpected paradox --- one usually filed away as ``there's simply too much data, and that's the problem.'' But the real issue is that \textbf{having access to data and possessing wisdom are two entirely different things.} For instance, I could dig up thousands of credible documents on the history of France for some random person, all without knowing that history myself, without knowing what it's even about or why it unfolded the way it did. What follows is an attempt to sort through this wide gulf between genuinely understanding something and merely holding a stack of prettily worded texts about it.
+\newpage
 \subsection{Back to the Main Question}
 \label{sub:return-to-main-question}
 
-So let's return to the main question: what is data? Data can be considered to be almost anything. So that this claim doesn't stay abstract, let's test it on a real text. For example, in the book \textit{The Eighteenth Brumaire of Louis Bonaparte}, written by Karl Marx\autocite{marx1852}:
+So let's return to the main question: what is data? Data, it turns out, can be almost anything. So that this claim doesn't stay stranded in the abstract, let's put it to the test on a real text. Take, for example, this passage from Karl Marx's \textit{The Eighteenth Brumaire of Louis Bonaparte}\autocite{marx1852}:
 
 \begin{quote}
 \itshape
@@ -24,70 +23,159 @@ So let's return to the main question: what is data? Data can be considered to be
 
 Despite the inapplicableness to our own affairs of the political names and political leadership herein described, both these names and leaderships are to such an extent the products of an economic-social development that has here too taken place with even greater sharpness, and they have their present or threatened counterparts here so completely, that, by the light of this work of Marx', we are best enabled to understand our own history, to know whence we came, and whither we are going, and how to conduct ourselves.''
 \end{quote}
-Before reading on, ask yourself: exactly what information and data do you get from this text?\\
-If we want to be very general, we can get the fate of the first and second Napoleon, and also the revolutions of France, from this text. If we look more closely, we can extract information such as the names of kings, specific dates (1830, 1848), and even social classifications (the aristocracy of finance, the industrial bourgeoisie), from these few lines alone.\\
-But things get really interesting when we change the reader's point of view.
+Before you read on, ask yourself: exactly what information, what data, do you take away from this passage?\\
+If we want to stay very general about it, we can get the fates of the first and second Napoleon, and the revolutions of France, out of this text. Look more closely, and we can extract information like the names of kings, specific dates (1830, 1848), and even social classifications --- the financial aristocracy, the industrial bourgeoisie --- from just these few lines.\\
+But things get genuinely interesting once we start shifting the reader's vantage point.
 
 \subsubsection{A Child}
-reading this text would recognize only much simpler data: "This text is in English, it talks about people named Napoleon and Louis, and there are a few years like 1830 and 1848 in it."
-\subsubsection{A Reader Familiar With English}
-might receive more linguistic data: "This text is written in English, uses certain sentence structures, and has historical and political vocabulary."
+reading this passage would pick out only much simpler data: ``This text is in English, it talks about people named Napoleon and Louis, and there are a couple of years in it, like 1830 and 1848.''
+
+\subsubsection{A Reader Fluent in English}
+might pick up richer linguistic data: ``This text is written in English, it uses certain sentence structures, and it carries historical and political vocabulary.''
+
 \subsubsection{A Historian}
-might see something else: "This text is about political developments in France, in the period from Napoleon's fall to the 1848 revolution, and describes the shift of power among different social and political groups."
+might see something else entirely: ``This text is about the political developments in France between Napoleon's fall and the 1848 revolution, and it describes how power shifted among different social and political groups.''
+
 \subsubsection{A Political Economist}
-instead of focusing on the names of kings, pays attention to the class structure and the relationship among economic groups: the role of the bourgeoisie, the financial aristocracy, and the industrial bourgeoisie.
+sets the names of kings aside and pays attention instead to the class structure and the relations among economic groups: the role of the bourgeoisie, the financial aristocracy, the industrial bourgeoisie.
+
 \subsubsection{A Political Philosopher}
-sees the text as data about power, class, the state, revolution, and the transformation of social structures.
+reads the text as data about power, class, the state, revolution, and the transformation of social structures.
+
 \subsubsection{A Literary Scholar}
-pays attention to the writing style, vocabulary, narrative structure, and the way history is represented in the text.\\
-From this same text, we can also gather the division of power between the proletariat and the bourgeoisie in France, and, as already mentioned, we can tell that this text is a work by Marx, a German philosopher and theorist.\\
-The next thing that can be drawn from the text is analytical points that aren't written directly in the text, but are arrived at through analysis of the text. For example, the phrase:
+attends to the prose style, the vocabulary, the narrative structure, and the way history gets represented within the text.\\
+From this same text, one can also draw out the division of power between the proletariat and the bourgeoisie in France, and --- as already noted --- one can tell the piece belongs to Marx, the German philosopher and theorist.\\
+The next thing to be drawn from the text is a set of analytical points: things not written directly into the text, but arrived at by analyzing it. Take, for example, the phrase:
 
 \begin{quote}
 ``Louis Philippe's monarchy is called the `July Monarchy'''
 \end{quote}
-directly states a relation between \textit{Louis Philippe} and \textit{July Monarchy}, a relation the text itself never explicitly announces, but which the reader arrives at through analysis and examination.\\
-Now, having understood these points, we should turn to the central point. All of these came out of one fixed string of identical characters. Nothing in the text itself changed, and each reader judges the text based on their own knowledge.\\
+This directly states a relation between \textit{Louis Philippe} and the \textit{July Monarchy} --- a relation the text itself never explicitly announces, but one the reader arrives at only through analysis and scrutiny.\\
+Now, having grasped these points, we should move on to the central one. All of this emerged from one and the same fixed string, the very same characters. Nothing in the text itself changed; each reader simply judges it according to their own knowledge.
+\newpage
+\section{The Fate of Data in the Absence of Judgment}
+\label{sec:fate-of-data-without-judgment}
+
+Before answering that question, perhaps we should first raise another one: at what point does data become inert and invisible?\\
+The truth is, we never receive data in a vacuum. Every piece of data we run into passes through the filter of whatever knowledge, experience, and context we happen to have on hand. That's why one and the same piece of data can mean something completely different to two different people --- not because the data itself has changed, but because each person's relationship to it is different.\\
+Take, for instance, the sentence \textit{Baba naan daad} (``Father gave bread''). For most Iranians this sentence is deeply familiar: it's the very first sentence taught in first-grade primers, and hearing it revives not just its meaning but the past itself --- a sweet childhood memory, the very moment of learning the alphabet. But this flood of memory is the fruit of knowledge we already carry; we already know what ``Father gave bread'' means. Now consider a different sentence:\\
+``Amb'ar-Allah Hossein drowned in the Gulf of Mexico in the year 400 of the Islamic calendar.''\\
+Readers of this sentence fall into two groups.\\
+The first, with a judgment along the lines of ``huh, okay,'' simply passes over the sentence without a second thought. The second group is more interesting: curious people who, whenever they run into something unfamiliar, go looking for it and try to dig up more. So a single piece of data can be the end of the conversation for one person, and the start of a whole new search for another. In other words: the same data can close a discussion for one person and open a fresh inquiry for someone else.
+The second group might even decide the sentence is impossible: a piece of historical fantasy, or outright invention. But why? From the name, the time period, and their own prior knowledge, the reader guesses this person must belong to the Islamic world, or the Middle East, of the fourth Islamic century; the name ``Amb'ar-Allah'' itself already sounds unusual, implausible. But the decisive clue lies further into the sentence: drowning in the ``Gulf of Mexico'' --- a place that in the year 400 AH hadn't merely gone undiscovered, it didn't even have a name yet; nobody on this side of the ocean knew it existed. With that one clue, the reader realizes the sentence is fabricated before even reaching its final period. What actually happened in this second example shows that it's our prior knowledge that decides what we do with any given piece of data: whether we accept it outright, hesitate over it, or even suspect it of being made up. So data alone never determines what we take from it; the knowledge and experience of whoever receives it play just as essential a role.\\
+Now it's time to return to our opening question: what happens if we don't judge a piece of data at all?\\
+At first glance, it looks as though the data simply stays the data it always was --- and in truth, that's exactly right. The data doesn't change its nature just because we've overlooked it. What changes is our relationship to it.
+
+\begin{quote}
+\itshape
+A piece of data's inertness doesn't always rise out of the data itself; sometimes it springs from the limits of whoever is receiving it.
+\end{quote}
+Data we can't tie to any knowledge, experience, or context we already hold stays, for us, almost meaningless; we might see it, hear it, even store it away, and still extract nothing at all from inside it. A sentence that carries memory, meaning, and information for one person remains, for another, nothing but a cluster of unfamiliar marks.\\
+That's precisely why, instead of asking ``what is this piece of data?'', it might sometimes be better to ask:\\
+``Who does this data mean something to, in what context, and by way of what knowledge?''\\
+And this is exactly where we arrive at a more fundamental question: if data only takes on meaning in light of our context, our knowledge, and our way of interpreting things, is there any real difference among ``data,'' ``information,'' ``knowledge,'' and ``wisdom''?\\
+To answer that, we'll turn to one of the best-known frameworks in the information science and knowledge management literature: the DIKW pyramid.
+\newpage
 \section{The DIKW Pyramid: From Raw String to Wisdom}
 \label{sec:levels-of-data}
 
-What we saw above is, in fact, a hierarchy of different levels. Something known in the data science and information management literature under the standard name of the \textbf{DIKW} pyramid, which consists of Data, Information, Knowledge, and Wisdom\autocite{ackoff1989,ratzan2004,walliman2011,unesco2008}.\\
-This pyramid is exactly the same gap referred to at the beginning, and it's the strange paradox among the newer generations of humanity that shows having a lot of data provides no guarantee of reaching the fourth layer: wisdom.
+Data, information, knowledge, and wisdom are foundational concepts for human beings in their encounter with existence. And yet these four words, at least in English, carry a remarkably wide range of definitions and interpretations. It should be said plainly from the outset that untangling that confusion, that misuse, and the sometimes outright contradictory way these four terms get thrown around, is not the goal here. We routinely use the word ``data'' in place of ``information''; the two get swapped for each other constantly. We seem to sense that ``knowledge'' belongs to a slightly different bin, and we tend to save ``wisdom'' for weighty ethical matters rather than everyday decisions. But hardly anyone cares enough, or thinks it important enough, to correct us for using these terms in ways that, by any precise definition, would count as wrong.\\
+As human beings, we almost always use data and information interchangeably, and knowledge somewhat less so. This blurring might not be without reason: from a neuroscientific standpoint, data, information, and knowledge sit bound up and interconnected within our brains\autocite{seung2012}; thinking about any one of them immediately calls up whatever else is tied to it. We know these words carry separate meanings, even when we use them as if they didn't; but in practice, given how our neural hardware is wired, trying to draw a sharp line between them turns into a genuinely confusing exercise.\\
+Wisdom, though, sits in a category of its own. For thousands of years wisdom has largely belonged to the domain of philosophers like Aristotle\autocite{aristotle2020}, and far less attention has gone to how wisdom also plays an essential role in the use of data and knowledge, even in the ordinary, everyday decisions that deal only in information. Even within the academic literature, telling these terms apart proves difficult. Periodically, the scholarly community makes an effort to classify, define, and put these various concepts in order. One of the most common such efforts, one that has found its way even into professional and expert circles, is the DIKW model itself. This model is exactly the same gap pointed to at the start of the chapter --- the same strange paradox visible among humanity's newest generations, one that shows having data in abundance offers no guarantee whatsoever of reaching the fourth layer: wisdom.\\
+The model sketches out a hierarchy running from data to information, to knowledge, to wisdom: a pyramidal structure in which every lower level builds the one above it --- data shapes information, information shapes knowledge, and knowledge shapes wisdom.
 
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}[scale=1.3, font=\small]
+
+  % ---- Layer 1: Data (bottom, widest) ----
+  \fill[dikwcoral!65]
+    (0,0) -- (6,0) -- (5.3,1.3) -- (0.7,1.3) -- cycle;
+  \draw[dikwcoral!80, line width=0.4pt]
+    (0,0) -- (6,0) -- (5.3,1.3) -- (0.7,1.3) -- cycle;
+  \node[white, font=\bfseries\large] at (3,0.65) {Data};
+
+  % ---- Layer 2: Information ----
+  \fill[dikwamber!70]
+    (0.7,1.5) -- (5.3,1.5) -- (4.6,2.8) -- (1.4,2.8) -- cycle;
+  \draw[dikwamber!85, line width=0.4pt]
+    (0.7,1.5) -- (5.3,1.5) -- (4.6,2.8) -- (1.4,2.8) -- cycle;
+  \node[white, font=\bfseries\large] at (3,2.15) {Information};
+
+  % ---- Layer 3: Knowledge ----
+  \fill[dikwteal!65]
+    (1.4,3.0) -- (4.6,3.0) -- (3.9,4.3) -- (2.1,4.3) -- cycle;
+  \draw[dikwteal!80, line width=0.4pt]
+    (1.4,3.0) -- (4.6,3.0) -- (3.9,4.3) -- (2.1,4.3) -- cycle;
+  \node[white, font=\bfseries\large] at (3,3.65) {Knowledge};
+
+  % ---- Layer 4: Wisdom (top, smallest) ----
+  \fill[dikwpurple!70]
+    (2.1,4.5) -- (3.9,4.5) -- (3,5.8) -- cycle;
+  \draw[dikwpurple!85, line width=0.4pt]
+    (2.1,4.5) -- (3.9,4.5) -- (3,5.8) -- cycle;
+  \node[white, font=\bfseries] at (3,4.95) {Wisdom};
+
+  % ---- Left arrow: abstraction going up ----
+  \draw[->, thick, gray!60]
+    (-0.5,0.2) -- (-0.5,5.6);
+  \node[gray!70, rotate=90, font=\footnotesize] at (-1.0,2.9)
+    {Level of abstraction $\uparrow$};
+
+  % ---- Right arrow: volume going down ----
+  \draw[->, thick, gray!60]
+    (6.5,5.6) -- (6.5,0.2);
+  \node[gray!70, rotate=-90, font=\footnotesize] at (7.0,2.9)
+    {$\uparrow$ Volume of data};
+
+\end{tikzpicture}
+\caption{The DIKW pyramid: the four layers of data, information, knowledge, and wisdom}
+\label{fig:dikw-pyramid}
+\end{figure}
+
+\newpage
 \subsection{What Is the DIKW Pyramid?}
 \label{sub:what-is-dikw}
 
+The pyramidal DIKW model implies that value increases as you climb: information is worth more than data, knowledge is worth more than information, and wisdom is worth more than knowledge\autocite{mishra2018}. But it isn't clear whether this rise in value comes paired with a drop in volume. Pyramid-shaped models generally imply that value rises as volume shrinks the higher you climb, but whether that rule actually holds for data, information, knowledge, and wisdom is far from obvious. So before we can settle that question, we need to define each of these layers on its own.
+
 \subsubsection{Data}
-Something directly available to us: a string of characters or words, without any interpretation or additional organization. In the example above, the English text quoted, prior to any analysis, is raw data. This is the same layer mentioned earlier, available to anyone in a fraction of a second.
+Data is the pyramid's first level: whatever sits directly and immediately in our hands --- a string of characters or words, with no interpretation or organization layered on top. In the example above, the quoted English passage itself, prior to any analysis, is exactly this raw data: the very layer named at the start of the chapter, the one available to anyone in a fraction of a second.
 
 \subsubsection{Information}
-When raw data is extracted from the text and organized into a specific format, and takes on meaning within a defined structure and context. For example, "the February Revolution of 1848" or "the July Monarchy" are information: raw data organized into the form of specific historical events.
+Despite the many accepted definitions floating around for this word, the precise meaning of ``information'' shifts from field to field. But broadly speaking, we can think of information as labels attached to blocks of data that carry a specific meaning: what happens when raw data gets pulled from a text and organized into a defined shape, taking on meaning within a particular context. ``The February Revolution of 1848,'' say, or ``the July Monarchy,'' are information: raw data organized into the shape of specific historical events.
 
 \subsubsection{Knowledge}
-When the combination of information and the relationships among them gives us an understanding of a subject. Understanding the political and class transformation of France in this period, and the fate of France after Napoleon's fall, is knowledge. Not merely a list of dates and names, but an understanding of the \emph{why} and the \emph{relationship} between them.
+Knowledge emerges when the combination of information, and the relationships running between its pieces, produces an understanding of some subject. Even so, knowledge remains an extremely fuzzy term in the existing literature; here, we'll take it to mean the capacity to connect the scattered, separate pieces of information and their labels. This very difficulty, stitching together the disconnected fragments of information, has been the focus of a great deal of recent effort. To give an example: grasping the political and class transformation of France across this period, and the fate that befell France after Napoleon's fall, is knowledge --- not merely a list of dates and names, but an understanding of the \emph{why} and the \emph{relationships} running among them.
 
 \subsubsection{Wisdom}
-The highest layer of this pyramid, where knowledge turns into sound judgment and correct action: not merely knowing why the July Monarchy fell, but the ability to apply that understanding to correctly read similar events today. The very thing missing at the start of the chapter: instant access to thousands of historical documents (data) itself never substitutes for the wisdom needed to understand \emph{why} an event matters. In fact, we could say the difference among individuals, organizations, and systems is often revealed not in the amount of data they have, but in their ability to organize, interpret, and use that data.
+Compared with the other three levels, wisdom is the one layer in DIKW with almost no adequate definition to its name. At the pyramid's topmost layer is exactly where knowledge turns into sound judgment and right action: not merely knowing why the July Monarchy fell, but holding the capacity to put that understanding to work reading comparable events correctly today. This is exactly what was missing at the chapter's opening: instant access to thousands of historical documents (data) never substitutes for the wisdom needed to grasp \emph{why} an event matters. Indeed, one could say that what separates individuals, organizations, and systems from one another often has less to do with how much data they hold, and everything to do with their ability to organize, interpret, and put that data to use.\\
+No model, of course, is flawless, and DIKW is no exception. Still, for our purposes, this pyramid remains the best available model in the open literature --- one carrying at least two fundamental shortcomings, the very ones that weaken it as a useful concept. First, there's little consensus, or really none at all, over what the elements of DIKW --- data, information, knowledge, and wisdom --- actually mean. Second, no explanation is given for how these elements get used, or how they come to generate value. These two shortcomings are knotted together: generating value is impossible so long as there's no agreement on what these elements even are, or how they function.\\
+And perhaps this is exactly where we should pause: if even the experts can't agree on what these elements mean, then before we take any of these definitions for granted, we'd do well to look more closely at them ourselves.
 \newpage
 \section{What No Definition Directly Says}
 \label{sec:what-no-definition-says}
 
-Now that we understand where data sits and the path to wisdom, before drawing any conclusions or prejudgments, let's look at the root of the word itself: data.\\
-Historically, the word data comes from the Latin word datum, the past participle of the verb dare, meaning "to give."\\
-In everyday speech, we often treat the form data as a mass singular noun ("the data is clear"), but in technical writing, the plural form is preferred.\\
-Since anyone can hold their own judgment about any text, the word data itself is no exception, and at a global level every person or organization has defined data from their own point of view\autocite{floridi2010,zins2007}:\\
-\textbf{Rob, Morris, and Coronel} describe it as "raw facts": facts that have not yet been processed for their meaning to become clear\autocite{rob2013};\\
-\textbf{Webster's Dictionary} regards it as something "given or accepted," a basis from which an inference is drawn\autocite{websters1934};\\
-\textbf{The Oxford English Dictionary}, more briefly, regards it as facts or things known that are used as a basis for inference or calculation\autocite{oed2023}.\\
-\newpage
-Taken together, all these definitions point to something that none of them state directly:
+Bearing that warning in mind, let's get more precise about at least the pyramid's first and most foundational element: ``data.'' Before drawing any conclusion or forming any prejudgment, let's first look at the root of the word itself: data.\\
+Historically, data comes from the Latin datum, the past participle of the verb dare, ``to give.'' So at its etymological root, data is nothing other than ``that which has been given.'' And perhaps hidden inside this seemingly simple point is the first trace of the question that will close out this chapter: before anything can be data, it must first have been given --- from one side to another, and in some particular form.\\
+This same ambiguity even shows up in English usage: sometimes we treat ``data'' as a general, uncountable mass, the way we treat ``water'' or ``rice,'' saying ``the data is''; and sometimes we treat it explicitly as a plural, saying ``the data are.'' This wavering between the singular and the plural may well mirror the very uncertainty that lingers at the heart of the concept itself: is data one single thing, or a great heap of separate things?\\
+Just as we saw with ``information'' in the previous section, the precise meaning of data also shifts from field to field, as if every individual, every discipline, every organization has defined data through a window of its own\autocite{floridi2010,zins2007}:\\
+\textbf{Rob, Morris, and Coronel} treat data as ``raw facts'' that haven't yet been processed to make their meaning clear\autocite{rob2013};\\
+\textbf{Webster's Dictionary} defines it as something ``given or admitted,'' a basis from which an inference is drawn\autocite{websters1934};\\
+\textbf{Oxford English Dictionary}, more tersely than either, treats data as facts or things known that serve as a basis for inference or calculation\autocite{oed2023}.\\
+At first glance these three definitions don't look particularly alike: one stresses rawness, another acceptance, the third inference. But look a little more closely and you'll find all three, without quite meaning to, pointing at the very same thing --- something none of them states outright:
 
 \begin{quote}
 \itshape
-Data has no shape that belongs to it independent of a particular point of view. A fact is only counted as data when it is placed within a framework, a framework of meaning, purpose, or use, relative to which it is relevant, organized, coherent, and useful.
+Data has no form of its own independent of some particular point of view. A fact only counts as data once it has been placed inside a framework --- a framework of meaning, purpose, or use --- relative to which it turns out relevant, organized, coherent, and useful.
 \end{quote}
-A growth ring means nothing to a system with no concept of seasons; a voltage means nothing to a circuit built to ignore it. Data presupposes a kind of prior agreement, however informal, about what is worth paying attention to in the first place. This is exactly the point the Marx example made clear: the child, the historian, and the economist all looked at the same identical string of characters, but received three different "data," because they brought three different frameworks with them.\\
-But one thing in that same Marx text still remains unanswered. A monarchy that had no inherent connection to the month of July was named the July Monarchy, simply because it began in that month. Was that a good enough reason? Just as a revolution that had nothing to do with the concept of February was called the February Revolution. Why wasn't a different name chosen for it? A name for something it itself is not was put to use, and everyone, without any objection, accepted that same name and recognized that revolution by that name.
-In fact, we could say these names carried nothing within the text itself; they were used only as a sign pointing to something else, outside themselves. So what is that unanswered question?\\
-How can a word, a number, or a sign take the place of something else in this way?\\
-This question takes us from data itself to a more fundamental issue: the relationship between the thing we see and the thing it represents.
+A tree's growth ring is nothing at all to a system with no concept of seasons; a circuit's voltage is nothing at all to a circuit built specifically to ignore that very voltage. Data always presupposes some prior agreement, however unspoken and informal, about what's even worth paying attention to in the first place. And this is exactly what the Marx example, back at the start of the chapter, made so clear: the child, the historian, and the economist all fixed their eyes on the exact same string of characters, yet each came away with a different datum, because each had brought a different framework along.\\
+And yet one point in that same Marx passage still goes unsaid, one we're now, having grasped this dependence on framework, better placed to see. A monarchy with no inherent tie whatsoever to the month of July got named the ``July Monarchy,'' for the sole reason that it happened to begin in that month. Was that reason good enough? A revolution with no connection whatsoever to the concept of February, likewise, got called the ``February Revolution.'' Why wasn't some other name chosen for it? A name was put to use for something it itself was not, and everyone, without a single objection, accepted that very name and came to know the event by it. In truth, these names carried nothing of the substance of the thing itself; they functioned only as signs, pointing toward something else, out beyond themselves.
+
+\begin{quote}
+\itshape
+A name never holds within itself the content of the thing it names; a name is only a sign facing outward, a gesture toward something it itself is not.
+\end{quote}
+And here we run into a question whose answer can be found neither in Marx's text, nor in any definition of data:\\
+How can a word, a number, or a sign come to stand in for something else this way?\\
+This question carries us beyond data itself, into a more fundamental problem: the relationship between the thing we see and the thing that represents it.
