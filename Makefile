@@ -182,23 +182,10 @@ clean:
 		-o -name "*.ind" -o -name "*.run.xml" -o -name "*.bcf" \
 		\) -delete 2>/dev/null || true
 
-# ── version ───────────────────────────────────────────────────────────────────
-
-version:
-	@echo "Version:    $(VERSION)"
-	@echo "Build date: $(BUILD_DATE)"
-
-
 booklet:
-   ifndef SLUG
-   	$(error SLUG is not set. Usage: make booklet SLUG=<slug> LANG=en|fa)
-   endif
    	@$(PX) booklets build $(SLUG) $(LANG)
 
 new-booklet:
-   ifndef SLUG
-   	$(error SLUG is not set.)
-   endif
    	@$(PX) booklets new $(SLUG)
 
 # ── help ──────────────────────────────────────────────────────────────────────
