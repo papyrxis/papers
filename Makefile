@@ -183,10 +183,10 @@ clean:
 		\) -delete 2>/dev/null || true
 
 booklet:
-   	@$(PX) booklets build $(SLUG) $(LANG)
+	@$(PX) booklets build $(SLUG) $(LANG)
 
 new-booklet:
-   	@$(PX) booklets new $(SLUG)
+	@$(PX) booklets new $(SLUG)
 
 # ── help ──────────────────────────────────────────────────────────────────────
 
