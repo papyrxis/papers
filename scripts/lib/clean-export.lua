@@ -6,6 +6,23 @@ end
 
 local REFERENCES_HEADING  = env_or("EXPORT_REFERENCES_HEADING", "References")
 local REFERENCES_NUMBERED = env_or("EXPORT_REFERENCES_NUMBERED", "0") == "1"
+local HTML_OUTPUT         = env_or("EXPORT_HTML_OUTPUT", "0") == "1"
+
+local LABEL_TITLES = {}
+do
+  local raw = env_or("EXPORT_LABEL_MAP", "")
+  for entry in raw:gmatch("([^\30]+)") do
+    local key, title = entry:match("^([^\31]*)\31(.*)$")
+    if key and title then
+      LABEL_TITLES[key] = title
+    end
+  end
+end
+
+local function prettify_label(label)
+  local slug = label:gsub("^%a+:", ""):gsub("[-_]", " ")
+  return slug
+end
 
 local function strip_outer_emph(block)
   if block.t ~= "Para" and block.t ~= "Plain" then
@@ -148,9 +165,10 @@ end
 function Header(el)
   if #el.content == 1 and el.content[1].t == "Str"
      and (el.content[1].text == "Bibliography" or el.identifier == "bibliography") then
-    return pandoc.Header(el.level, { pandoc.Str(REFERENCES_HEADING) }, el.attr)
+    el = pandoc.Header(el.level, { pandoc.Str(REFERENCES_HEADING) }, el.attr)
   end
-  return nil
+  el.attr.identifier = ""
+  return el
 end
 
 local function strip_html_tags(s)
@@ -162,18 +180,26 @@ end
 
 function RawInline(el)
   if el.format == "html" then
+    if HTML_OUTPUT then
+      return nil
+    end
     if el.text:match("^<a ") then
       return pandoc.Str(strip_html_tags(el.text))
     end
     return {}
   end
   if el.format == "latex" then
+    local eqlabel = el.text:match("\\eqref%{(.-)%}")
+    if eqlabel then
+      local title = LABEL_TITLES[eqlabel]
+      return pandoc.Str(title or "the referenced equation")
+    end
     local label = el.text:match("\\ref%{(.-)%}")
       or el.text:match("\\autoref%{(.-)%}")
       or el.text:match("\\nameref%{(.-)%}")
-      or el.text:match("\\eqref%{(.-)%}")
     if label then
-      return pandoc.Str(label)
+      local title = LABEL_TITLES[label]
+      return pandoc.Str(title or prettify_label(label))
     end
     if el.text:match("^\\") then
       return {}
@@ -183,6 +209,9 @@ function RawInline(el)
 end
 
 function RawBlock(el)
+  if el.format == "html" and HTML_OUTPUT then
+    return nil
+  end
   if el.format == "html" or el.format == "latex" then
     return {}
   end

@@ -1,5 +1,5 @@
 TARGET_LABEL="SSRN"
-CSL_FILE="chicago-author-date.csl"
+CSL_FILE="apa.csl"
 REFERENCES_HEADING="References"
 REFERENCES_NUMBERED="0"
 OUTPUT_EXT="md"
