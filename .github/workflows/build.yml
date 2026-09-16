@@ -18,13 +18,16 @@ on:
       booklets-artifact:
         description: "Name of the uploaded booklets artifact"
         value: ${{ jobs.booklets.outputs.artifact-name }}
+      roadmaps-artifact:
+        description: "Name of the uploaded roadmaps artifact"
+        value: ${{ jobs.roadmaps.outputs.artifact-name }}
 
 jobs:
   # ─────────────────────────────────────────────────────────────────────────
   # Job 1 — Papers (pdflatex + biber)
   # ─────────────────────────────────────────────────────────────────────────
   papers:
-    name: Build Papers
+    name: "📚 Build Papers"
     runs-on: ubuntu-latest
     container:
       image: texlive/texlive:latest
@@ -37,15 +40,15 @@ jobs:
         uses: actions/checkout@v4
         with:
           submodules: recursive
-          fetch-depth: 0           # needed for git describe inside px.py
+          fetch-depth: 0
 
       - name: Install prerequisites
         run: |
           apt-get update -qq
           apt-get install -y --no-install-recommends git make bash python3
-          echo "pdflatex: $(pdflatex --version | head -1)"
-          echo "biber:    $(biber --version)"
-          echo "python3:  $(python3 --version)"
+          echo "pdflatex : $(pdflatex --version | head -1)"
+          echo "biber    : $(biber --version)"
+          echo "python3  : $(python3 --version)"
 
       - name: Build all papers
         env:
@@ -57,10 +60,10 @@ jobs:
         if: failure()
         run: |
           for log in build/*/main.log; do
-            if [ -f "$log" ]; then
-              echo "\n========== $log =========="
-              grep -A 5 "^!" "$log" || true
-            fi
+            [ -f "$log" ] || continue
+            echo ""
+            echo "========== $log =========="
+            grep -A 5 "^!" "$log" || true
           done
 
       - name: Set artifact name
@@ -79,7 +82,7 @@ jobs:
   # Job 2 — Resumes (xelatex, English + Farsi)
   # ─────────────────────────────────────────────────────────────────────────
   resumes:
-    name: Build Resumes
+    name: "📋 Build Resumes"
     runs-on: ubuntu-latest
 
     outputs:
@@ -92,7 +95,7 @@ jobs:
           submodules: recursive
           fetch-depth: 0
 
-      - name: Install TeX Live (xelatex + fonts)
+      - name: Install TeX Live + fonts
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y --no-install-recommends \
@@ -109,8 +112,8 @@ jobs:
             fontconfig \
             python3
           fc-cache -fv >/dev/null 2>&1 || true
-          echo "xelatex: $(xelatex --version | head -1)"
-          echo "python3: $(python3 --version)"
+          echo "xelatex : $(xelatex --version | head -1)"
+          echo "python3 : $(python3 --version)"
           fc-list | grep -i vazir || echo "WARNING: Vazirmatn font not found!"
 
       - name: Build all resumes (EN + FA)
@@ -120,10 +123,10 @@ jobs:
         if: failure()
         run: |
           for log in build/resumes/*/resume.log; do
-            if [ -f "$log" ]; then
-              echo "\n========== $log =========="
-              grep -A 5 "^!" "$log" || true
-            fi
+            [ -f "$log" ] || continue
+            echo ""
+            echo "========== $log =========="
+            grep -A 5 "^!" "$log" || true
           done
 
       - name: Set artifact name
@@ -139,12 +142,12 @@ jobs:
           if-no-files-found: error
 
   # ─────────────────────────────────────────────────────────────────────────
-  # Job 3 — Booklets (pdflatex EN + xelatex FA, both need full TL + SVG)
-  # Uses texlive/texlive:latest container so lmodern, biblatex, biber, etc.
-  # are all present. Installs rsvg-convert + Farsi fonts on top.
+  # Job 3 — Booklets (pdflatex EN + xelatex FA)
+  # Uses texlive/texlive:latest container (lmodern, biblatex, biber included).
+  # Installs rsvg-convert + Farsi fonts on top.
   # ─────────────────────────────────────────────────────────────────────────
   booklets:
-    name: Build Booklets
+    name: "📖 Build Booklets"
     runs-on: ubuntu-latest
     container:
       image: texlive/texlive:latest
@@ -173,22 +176,13 @@ jobs:
             fonts-vazirmatn \
             fontconfig
           fc-cache -fv >/dev/null 2>&1 || true
-          echo "pdflatex: $(pdflatex --version | head -1)"
-          echo "xelatex:  $(xelatex --version | head -1)"
-          echo "biber:    $(biber --version)"
-          echo "python3:  $(python3 --version)"
-          echo "rsvg:     $(rsvg-convert --version)"
-          fc-list | grep -i vazir   || echo "WARNING: Vazirmatn not found!"
+          echo "pdflatex : $(pdflatex --version | head -1)"
+          echo "xelatex  : $(xelatex --version | head -1)"
+          echo "biber    : $(biber --version)"
+          echo "python3  : $(python3 --version)"
+          echo "rsvg     : $(rsvg-convert --version)"
+          fc-list | grep -i vazir      || echo "WARNING: Vazirmatn not found!"
           fc-list | grep -i liberation || echo "WARNING: Liberation not found!"
-
-      - name: Dump available fonts (debug)
-        run: |
-          echo "=== All system fonts ==="
-          fc-list | sort
-          echo ""
-          echo "=== TeX Live font dirs ==="
-          find /usr/share/texmf /usr/local/texlive -name "*.otf" -o -name "*.ttf" 2>/dev/null \
-            | sed 's|.*/||' | sort | head -80 || true
 
       - name: Build all booklets (EN + FA)
         env:
@@ -200,11 +194,26 @@ jobs:
         if: failure()
         run: |
           for log in build/booklets/*/*/main.log; do
-            if [ -f "$log" ]; then
-              echo "\n========== $log =========="
-              grep -E "^!|font|Font|not found|Warning.*fontspec|cannot find" "$log" | head -40 || true
-            fi
+            [ -f "$log" ] || continue
+            echo ""
+            echo "========== $log =========="
+            grep -E "^!|font|Font|not found|Warning.*fontspec|cannot find" "$log" \
+              | head -40 || true
           done
+
+      - name: Collect and rename booklet PDFs
+        # Flatten nested build/booklets/<slug>/<lang>/*.pdf
+        # into descriptive names so the release shows them clearly sorted.
+        run: |
+          mkdir -p dist/booklets
+          find build/booklets -name "*.pdf" | sort | while read -r pdf; do
+            # e.g. build/booklets/01-what-data-is.../en/Mamashli-What-Data-Is-EN.pdf
+            fname="$(basename "$pdf")"
+            cp "$pdf" "dist/booklets/$fname"
+            echo "  collected: $fname"
+          done
+          echo "Booklet PDFs collected:"
+          ls -lh dist/booklets/
 
       - name: Set artifact name
         id: set-name
@@ -214,6 +223,60 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.set-name.outputs.name }}
-          path: build/booklets/**/*.pdf
+          path: dist/booklets/*.pdf
           retention-days: 30
           if-no-files-found: error
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # Job 4 — Roadmaps (pdflatex)
+  # ─────────────────────────────────────────────────────────────────────────
+  roadmaps:
+    name: "🗺️ Build Roadmaps"
+    runs-on: ubuntu-latest
+    container:
+      image: texlive/texlive:latest
+
+    outputs:
+      artifact-name: ${{ steps.set-name.outputs.name }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Install prerequisites
+        run: |
+          apt-get update -qq
+          apt-get install -y --no-install-recommends git make bash python3
+          echo "pdflatex : $(pdflatex --version | head -1)"
+          echo "python3  : $(python3 --version)"
+
+      - name: Build all roadmaps
+        env:
+          PROJECT_VERSION: ${{ inputs.version }}
+          BUILD_DATE: ${{ github.run_started_at }}
+        run: python3 scripts/px.py roadmaps build all
+
+      - name: Show logs on failure
+        if: failure()
+        run: |
+          for log in build/roadmaps/*/main.log; do
+            [ -f "$log" ] || continue
+            echo ""
+            echo "========== $log =========="
+            grep -A 5 "^!" "$log" || true
+          done
+
+      - name: Set artifact name
+        id: set-name
+        run: echo "name=roadmaps-${{ inputs.version }}" >> "$GITHUB_OUTPUT"
+
+      - name: Upload roadmap PDFs
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.set-name.outputs.name }}
+          path: build/roadmaps/*.pdf
+          retention-days: 30
+          if-no-files-found: warn    # roadmaps may not exist yet
