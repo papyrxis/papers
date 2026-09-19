@@ -28,9 +28,9 @@ from pathlib import Path
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 ROOT       = SCRIPT_DIR.parent
-sys.path.insert(0, str(SCRIPT_DIR))
+sys.path.insert(0, str(ROOT / "workspace"))
 
-from common import (                                          # noqa: E402
+from px import (                                              # noqa: E402
     BOLD, CYAN, DIM, GREEN, RED, RESET, YELLOW, BLUE, GREY,
     BaseModule,
     b, c,

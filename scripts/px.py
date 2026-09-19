@@ -24,10 +24,11 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
-SCRIPT_DIR = Path(__file__).resolve().parent
-sys.path.insert(0, str(SCRIPT_DIR / "lib"))
+SCRIPT_DIR    = Path(__file__).resolve().parent
+WORKSPACE_DIR = SCRIPT_DIR.parent / "workspace"
+sys.path.insert(0, str(WORKSPACE_DIR))
 
-from common import (
+from px import (
     BOLD, BLUE, CYAN, DIM, GREEN, RED, RESET, YELLOW,
     b, c, dim, error, hr, prompt, warn,
 )
