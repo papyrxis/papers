@@ -38,10 +38,10 @@ make paper      PAPER=<slug|#>                   # build → PDF
 make build                                        # build all → PDF
 make export     PAPER=<slug|#|all>               # export to Markdown (all targets)
 make export     PAPER=<slug|#|all> TARGET="..."  # export to specific target(s)
-make watch      PAPER=<slug|#>                   # auto-rebuild on save
+make watch      PAPER=<slug|#>                   # auto-rebuild when you save
 make list                                         # list papers
 
-# ── Booklets ──────────────────────────────────────────────────────────────────
+# ── Booklets ────────────────────────────────────────────────────────────────────
 make new-booklet    SLUG=<slug>                  # scaffold EN + FA skeleton
 make booklet        SLUG=<slug> [LANG=<en|fa>]   # build → PDF (both langs if no LANG)
 make booklet-all                                  # build all booklets
@@ -55,19 +55,32 @@ make booklet-export SLUG=<slug> [LANG=en] \
 make resume         LANG=<lang|#>               # build → PDF
 make resume-all                                  # build all resumes
 make resume-rename  LANG=<lang|#> NAME=<name>   # rename output PDF
-make resume-list                                 # list resumes
+make resume-list                                # list resumes
 
 # ── Roadmaps ──────────────────────────────────────────────────────────────────
 make roadmap        ROADMAP=<slug|#>            # build → PDF
-make roadmap-all                                 # build all roadmaps
+make roadmap-all                                  # build all roadmaps
 make roadmap-new    SLUG=<slug>                 # scaffold
 make roadmap-list                                # list roadmaps
+make help                                         # full command reference
 
 # ── Global ────────────────────────────────────────────────────────────────────
 make clean           # remove all build artifacts
 make version         # show version + build date
 make help            # full command reference
 ```
+
+## License
+
+This repository contains different kinds of works; see [`CONTENT-LICENSE.md`](./CONTENT-LICENSE.md) for the policy by artifact type.
+
+- **Research papers and standalone articles:** CC BY 4.0 by default, unless the work's own copyright page or a publisher/co-author agreement specifies otherwise.
+- **Booklets and learning roadmaps:** CC BY-SA 4.0 by default, unless the work says otherwise.
+- **Resumes/CVs and personal documents:** all rights reserved by default; no public reuse license is granted unless the document explicitly says so.
+- **Source code, scripts, build configuration, and tooling:** MIT License in [`LICENSE`](./LICENSE).
+- **Third-party content:** excluded unless the rights holder's own notice explicitly says otherwise.
+
+Each published PDF should state its license on its copyright page. Do not assume a repository-level license overrides a journal, publisher, co-author, employer, or third-party rights agreement.
 
 ---
 
