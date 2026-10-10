@@ -41,28 +41,27 @@ make export     PAPER=<slug|#|all> TARGET="..."  # export to specific target(s)
 make watch      PAPER=<slug|#>                   # auto-rebuild when you save
 make list                                         # list papers
 
-# ── Booklets ────────────────────────────────────────────────────────────────────
+# ── Booklets ──────────────────────────────────────────────────────────────────
 make new-booklet    SLUG=<slug>                  # scaffold EN + FA skeleton
 make booklet        SLUG=<slug> [LANG=<en|fa>]   # build → PDF (both langs if no LANG)
 make booklet-all                                  # build all booklets
-make booklet-list                                 # list booklets & build status
+make booklet-list                                # list all booklets
 make booklet-watch  SLUG=<slug> LANG=<en|fa>     # watch mode
 make booklet-clean  [SLUG=<slug>] [LANG=<en|fa>] # clean artifacts
 make booklet-export SLUG=<slug> [LANG=en] \
                     [CHAPTERS=1,2] [TARGET="..."] # export chapters as articles
 
-# ── Resumes ───────────────────────────────────────────────────────────────────
+# ── Resumes ────────────────────────────────────────────────────────────────────
 make resume         LANG=<lang|#>               # build → PDF
 make resume-all                                  # build all resumes
 make resume-rename  LANG=<lang|#> NAME=<name>   # rename output PDF
-make resume-list                                # list resumes
+make resume-list                                 # list resumes
 
-# ── Roadmaps ──────────────────────────────────────────────────────────────────
+# ── Roadmaps ────────────────────────────────────────────────────────────────────
 make roadmap        ROADMAP=<slug|#>            # build → PDF
 make roadmap-all                                  # build all roadmaps
 make roadmap-new    SLUG=<slug>                 # scaffold
 make roadmap-list                                # list roadmaps
-make help                                         # full command reference
 
 # ── Global ────────────────────────────────────────────────────────────────────
 make clean           # remove all build artifacts
