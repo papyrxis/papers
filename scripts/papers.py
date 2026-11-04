@@ -550,7 +550,7 @@ def _load_target_conf(target: str) -> dict:
 
     conf: dict = {
         "TARGET_LABEL":           target,
-        "CSL_FILE":               "ieee.csl",
+        "CSL_FILE":               "",
         "REFERENCES_HEADING":     "References",
         "REFERENCES_NUMBERED":    "0",
         "OUTPUT_EXT":             "md",
@@ -723,8 +723,9 @@ def _export_one_target(slug: str, target: str) -> bool:
 
     tcfg = _load_target_conf(target)
 
-    csl_path = CSL_DIR / tcfg["CSL_FILE"]
-    if not csl_path.exists():
+    csl_file = tcfg["CSL_FILE"].strip()
+    csl_path = CSL_DIR / csl_file if csl_file else None
+    if csl_path is not None and not csl_path.is_file():
         warn(f"[{slug}/{target}] missing CSL style: {csl_path}")
         return False
 
@@ -747,8 +748,9 @@ def _export_one_target(slug: str, target: str) -> bool:
         pandoc_args += [
             "--citeproc",
             f"--bibliography={out_dir / 'refs.bib'}",
-            f"--csl={csl_path}",
         ]
+        if csl_path is not None:
+            pandoc_args.append(f"--csl={csl_path}")
     pandoc_args += [f"--lua-filter={LUA_FILTER}"]
 
     if tcfg.get("EXTRA_LUA_FILTER"):
