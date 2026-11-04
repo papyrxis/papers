@@ -1,20 +1,20 @@
 # Content licensing policy
 
-Copyright in each original work remains with its author unless a separate written agreement says otherwise. This repository contains different kinds of works, so a single blanket license is not appropriate for every file.
+Copyright in each original work remains with its author unless a separate written agreement says otherwise. Research papers, standalone articles, books and educational booklets may have different terms; no single blanket license should override a work's own copyright page.
 
-## Default terms by artifact type
+## Default terms
 
-- **Research papers and standalone articles:** CC BY 4.0, unless the individual work's copyright page or publication agreement specifies another license. This permits sharing and adaptation, including commercial reuse, with attribution.
-- **Booklets and educational chapters:** CC BY-SA 4.0, unless the individual work's copyright page specifies otherwise. Adaptations must be shared under the same or a compatible license.
-- **Learning roadmaps and original educational diagrams:** CC BY-SA 4.0, unless the individual work says otherwise.
-- **Resumes/CVs and personal documents:** all rights reserved by default. No public reuse license is granted unless the document explicitly says so.
-- **Third-party material:** excluded from the above licenses unless the relevant rights holder has expressly licensed it under those terms. Follow the notice attached to the material and applicable law.
+- Research papers and standalone articles: CC BY 4.0, unless the individual work or publisher agreement specifies otherwise.
+- Books and educational booklets: CC BY-SA 4.0, unless the individual work specifies otherwise.
+- Third-party material is excluded from these defaults unless the rights holder expressly licenses it under the same terms.
+
+Personal CVs are not publications in this repository. Their sources are being kept temporarily for transfer to a dedicated repository; this policy grants no public reuse rights over them.
 
 ## License texts
 
 - CC BY 4.0: https://creativecommons.org/licenses/by/4.0/legalcode
 - CC BY-SA 4.0: https://creativecommons.org/licenses/by-sa/4.0/legalcode
 
-Each published PDF should carry its own license and third-party-material notice on its copyright page. Repository-level defaults do not override a journal, publisher, co-author, employer, or other rights holder's agreement.
+Each released PDF should carry its own license and third-party-material notices. Repository defaults do not override journal, publisher, co-author or other rights-holder agreements.
 
-Source code, build scripts, and tooling are covered by the MIT License in [LICENSE](./LICENSE), not by the content licenses above.
+Source code and tooling are covered by the repository MIT License, not by the content licenses above.
