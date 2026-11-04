@@ -61,7 +61,7 @@ jobs:
           echo "LD_LIBRARY_PATH=$(dirname "$library"):${LD_LIBRARY_PATH:-}" >> "$GITHUB_ENV"
 
       - name: Run Pipeline LaTeX preset
-        uses: m-mdy-m/pipeline/.github/actions/toolchain-quality@e946f93e460e102fde32d9d8f1427e1808bdd4ab
+        uses: m-mdy-m/pipeline/.github/actions/toolchain-quality@abf3b0e2ac17f9845b6cb06f1f7258c75c61ed26
         with:
           language: latex
           working-directory: .
