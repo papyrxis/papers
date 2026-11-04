@@ -5,18 +5,14 @@ Usage:
     python scripts/px.py <module> [command] [args]
 
 Modules:
-    papers   (p)   Manage LaTeX papers
-    resumes  (r)   Manage LaTeX resumes
-    roadmaps (rm)  Manage LaTeX roadmaps
+    papers   (p)   Manage standalone papers and articles
+    booklets (b)   Manage books and booklets
 
 Examples:
     python scripts/px.py
     python scripts/px.py papers list
     python scripts/px.py p build 1
-    python scripts/px.py resumes build en
-    python scripts/px.py r watch fa
-    python scripts/px.py roadmaps build all
-    python scripts/px.py rm new 02-electronics
+    python scripts/px.py booklets build all
 """
 
 from __future__ import annotations
@@ -37,10 +33,8 @@ from px import (
 
 # (canonical_name, short_alias, filename, description)
 MODULES = {
-    "papers":   ("p",  "papers.py",   "Manage LaTeX papers"),
-    "resumes":  ("r",  "resumes.py",  "Manage LaTeX resumes"),
-    "roadmaps": ("rm", "roadmaps.py", "Manage LaTeX roadmaps"),
-    "booklets": ("b",  "booklets.py", "Manage LaTeX booklets"),
+    "papers":   ("p", "papers.py", "Manage standalone papers and articles"),
+    "booklets": ("b", "booklets.py", "Manage books and booklets"),
 }
 
 # alias → canonical name
@@ -132,10 +126,7 @@ def cmd_help() -> None:
     print(f"    python scripts/px.py papers list")
     print(f"    python scripts/px.py p build 1")
     print(f"    python scripts/px.py p export 1 devto medium")
-    print(f"    python scripts/px.py resumes build en")
-    print(f"    python scripts/px.py r watch fa")
-    print(f"    python scripts/px.py roadmaps build all")
-    print(f"    python scripts/px.py rm new 02-electronics")
+    print(f"    python scripts/px.py booklets build all")
     print()
     print(f"  {c('Per-module help:')}")
     for name in MODULES:
