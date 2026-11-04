@@ -491,27 +491,40 @@ def _build_one_edition(slug: str, lang: str) -> bool:
         "BUILD_DATE":      datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
     }
 
-    def compile_pass() -> int:
-        rc, _, _ = run_quiet(
+    def compile_pass(label: str) -> bool:
+        rc, _, stderr = run_quiet(
             [engine, "-interaction=nonstopmode",
              f"-output-directory={out_dir}", "main.tex"],
             cwd=booklet_lang_dir, env=env,
         )
-        return rc
+        if rc != 0:
+            detail = f": {stderr.strip()}" if stderr and stderr.strip() else ""
+            warn(f"[{slug}:{lang}] {engine} {label} failed with exit code {rc}{detail}; see {out_dir / 'main.log'}")
+            return False
+        return True
 
-    compile_pass()
-    if not (out_dir / "main.pdf").exists():
-        warn(f"[{slug}:{lang}] {engine} pass 1 failed — see {out_dir / 'main.log'}")
+    if not compile_pass("first pass"):
+        return False
+    if not (out_dir / "main.pdf").is_file():
+        warn(f"[{slug}:{lang}] {engine} produced no PDF — see {out_dir / 'main.log'}")
         return False
 
     main_tex_content = (booklet_lang_dir / "main.tex").read_text(encoding="utf-8")
     if "\\addbibresource" in main_tex_content or "\\printbibliography" in main_tex_content:
         bcf = out_dir / "main.bcf"
-        if bcf.exists():
-            run_quiet([bibtex, str(out_dir / "main")], cwd=booklet_lang_dir, env=env)
-            compile_pass()
+        if not bcf.is_file():
+            warn(f"[{slug}:{lang}] bibliography was requested but {bcf} is missing")
+            return False
+        bib_rc, _, bib_stderr = run_quiet([bibtex, str(out_dir / "main")], cwd=booklet_lang_dir, env=env)
+        if bib_rc != 0:
+            detail = f": {bib_stderr.strip()}" if bib_stderr and bib_stderr.strip() else ""
+            warn(f"[{slug}:{lang}] {bibtex} failed with exit code {bib_rc}{detail}")
+            return False
+        if not compile_pass("post-bibliography pass"):
+            return False
 
-    compile_pass()
+    if not compile_pass("final pass"):
+        return False
 
     src = out_dir / "main.pdf"
     dst = BUILD_DIR / "booklets" / f"{out}.pdf"
