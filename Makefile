@@ -1,6 +1,10 @@
 VERSION ?= $(shell git describe --tags --always --dirty 2>/dev/null || echo dev)
+RELEASE_VERSION ?=
+LEVEL ?= patch
+TAGS ?= 0
 BUILD_DATE ?= $(shell date -u '+%Y-%m-%d_%H:%M:%S')
 PX := python3 scripts/px.py
+WPX := PYTHONPATH=workspace python3 -m px --root .
 PAPER ?=
 SLUG ?=
 LANG ?=
@@ -9,7 +13,7 @@ TARGET ?=
 CHAPTERS ?= all
 AVAILABLE_TARGETS := $(patsubst scripts/lib/targets/%.target.sh,%, $(wildcard scripts/lib/targets/*.target.sh))
 
-.PHONY: all help doctor sync version build clean paper watch export targets list styles new-paper delete-paper booklet booklet-all booklet-list booklet-watch booklet-clean booklet-delete new-booklet booklet-export
+.PHONY: all help doctor sync version build clean paper watch export targets list styles new-paper delete-paper booklet booklet-all booklet-list booklet-watch booklet-clean booklet-delete new-booklet booklet-export tags changelog bump tag push
 
 all: help
 
@@ -20,14 +24,35 @@ doctor:
 	@command -v latexmk >/dev/null
 	@command -v biber >/dev/null
 	@command -v pandoc >/dev/null || echo "pandoc is optional and is required only for Markdown export"
+	@command -v gix >/dev/null
+	@command -v psx >/dev/null
+	@psx check --config psx.yml
 
 sync:
 	@git submodule update --init --recursive
 	@git submodule update --remote --merge workspace
 
 version:
-	@echo "Version: $(VERSION)"
+	@gix version show
 	@echo "Build date: $(BUILD_DATE)"
+
+tags:
+	@$(WPX) tags
+
+changelog:
+	@$(WPX) changelog
+
+bump:
+	@gix version bump "$(LEVEL)"
+
+tag:
+ifndef RELEASE_VERSION
+	$(error RELEASE_VERSION is required: make tag RELEASE_VERSION=v1.2.0)
+endif
+	@$(WPX) tag "$(RELEASE_VERSION)" --sign
+
+push:
+	@$(WPX) push $(if $(filter 1,$(TAGS)),--tags,)
 
 # Pipeline LaTeX preset delegates to this target. Build publication content only.
 build: clean
@@ -146,6 +171,8 @@ help:
 	@echo "  make booklet-all | booklet-list | new-booklet SLUG=<slug>"
 	@echo "  make booklet-export SLUG=<slug> LANG=en CHAPTERS=1,2 TARGET=\"devto ieee\""
 	@echo "  make targets | list | styles | watch PAPER=<slug>"
+	@echo "  make tags | changelog | bump LEVEL=minor"
+	@echo "  make tag RELEASE_VERSION=v1.2.0 | push TAGS=1"
 	@echo "  make clean | sync | doctor | version"
 	@echo "  CVs await transfer; roadmaps are not part of this repository."
 
