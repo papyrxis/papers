@@ -400,31 +400,36 @@ def _build_one_paper(slug: str) -> bool:
         "BUILD_DATE":      datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
     }
 
-    def compile_pass() -> int:
-        rc, _, _ = run_quiet(
+    def compile_pass(label: str) -> None:
+        rc, _, stderr = run_quiet(
             [engine, "-interaction=nonstopmode",
              f"-output-directory={out_dir}", "main.tex"],
             cwd=paper_dir, env=env,
         )
-        return rc
+        if rc != 0:
+            detail = f" ({stderr.strip()})" if stderr and stderr.strip() else ""
+            error(
+                f"[{slug}] {engine} {label} failed with exit code {rc}{detail} — "
+                f"see {out_dir / 'main.log'}"
+            )
 
-    compile_pass()
-    if not (out_dir / "main.pdf").exists():
-        print()
-        error(
-            f"[{slug}] {engine} pass 1 failed — "
-            f"see {out_dir / 'main.log'}"
-        )
-        
+    compile_pass("first pass")
+    if not (out_dir / "main.pdf").is_file():
+        error(f"[{slug}] {engine} produced no PDF — see {out_dir / 'main.log'}")
+
     main_tex_content = (paper_dir / "main.tex").read_text(encoding="utf-8")
     if "\\addbibresource" in main_tex_content or "\\printbibliography" in main_tex_content:
         bcf = out_dir / "main.bcf"
-        if not bcf.exists():
-            error(f"[{slug}] main.bcf not found after pass 1 — see {out_dir / 'main.log'}")
-        run_quiet([bibtex, str(out_dir / "main")], cwd=paper_dir, env=env)
-        compile_pass()
+        if not bcf.is_file():
+            error(f"[{slug}] main.bcf not found after first pass — see {out_dir / 'main.log'}")
+        bib_rc, _, bib_stderr = run_quiet([bibtex, str(out_dir / "main")], cwd=paper_dir, env=env)
+        if bib_rc != 0:
+            detail = f": {bib_stderr.strip()}" if bib_stderr and bib_stderr.strip() else ""
+            error(f"[{slug}] {bibtex} failed with exit code {bib_rc}{detail}")
 
-    compile_pass()
+        compile_pass("post-bibliography pass")
+
+    compile_pass("final pass")
 
     year       = datetime.now(timezone.utc).strftime("%Y")
     title      = meta.get("PAPER_TITLE", slug)
