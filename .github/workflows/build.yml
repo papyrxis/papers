@@ -71,6 +71,21 @@ jobs:
           PROJECT_VERSION: ${{ inputs.version }}
           BUILD_DATE: ${{ github.run_started_at }}
 
+      - name: Upload LaTeX failure diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: latex-diagnostics-${{ inputs.version }}
+          path: |
+            build/**/*.log
+            build/**/*.fls
+            build/**/*.fdb_latexmk
+            build/**/*.bcf
+            papers/**/main.tex
+            .pxis/preset.tex
+          retention-days: 7
+          if-no-files-found: warn
+
       - name: Set artifact name
         id: set-name
         run: echo "name=publications-${{ inputs.version }}" >> "$GITHUB_OUTPUT"
