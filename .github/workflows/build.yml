@@ -1,282 +1,73 @@
-name: Build
+name: Publication Build
 
 on:
   workflow_call:
     inputs:
       version:
-        description: "Version string embedded in the build (e.g. v0.3.1-pre)"
+        description: "Version label for build metadata"
         required: false
         type: string
         default: "dev"
     outputs:
-      papers-artifact:
-        description: "Name of the uploaded papers artifact"
-        value: ${{ jobs.papers.outputs.artifact-name }}
-      resumes-artifact:
-        description: "Name of the uploaded resumes artifact"
-        value: ${{ jobs.resumes.outputs.artifact-name }}
-      booklets-artifact:
-        description: "Name of the uploaded booklets artifact"
-        value: ${{ jobs.booklets.outputs.artifact-name }}
-      roadmaps-artifact:
-        description: "Name of the uploaded roadmaps artifact"
-        value: ${{ jobs.roadmaps.outputs.artifact-name }}
+      publications-artifact:
+        description: "Artifact containing built papers and booklets"
+        value: ${{ jobs.publications.outputs.artifact-name }}
+
+permissions:
+  contents: read
 
 jobs:
-  # ─────────────────────────────────────────────────────────────────────────
-  # Job 1 — Papers (pdflatex + biber)
-  # ─────────────────────────────────────────────────────────────────────────
-  papers:
-    name: "📚 Build Papers"
+  publications:
+    name: Build papers and booklets
     runs-on: ubuntu-latest
-    container:
-      image: texlive/texlive:latest
-
+    timeout-minutes: 90
     outputs:
       artifact-name: ${{ steps.set-name.outputs.name }}
-
     steps:
-      - name: Checkout
+      - name: Checkout with shared Workspace
         uses: actions/checkout@v4
         with:
           submodules: recursive
           fetch-depth: 0
 
-      - name: Install prerequisites
+      - name: Install publication-specific tools
         run: |
-          apt-get update -qq
-          apt-get install -y --no-install-recommends git make bash python3
-          echo "pdflatex : $(pdflatex --version | head -1)"
-          echo "biber    : $(biber --version)"
-          echo "python3  : $(python3 --version)"
-
-      - name: Build all papers
-        env:
-          PROJECT_VERSION: ${{ inputs.version }}
-          BUILD_DATE: ${{ github.run_started_at }}
-        run: python3 scripts/px.py papers build all
-
-      - name: Show pdflatex logs on failure
-        if: failure()
-        run: |
-          for log in build/*/main.log; do
-            [ -f "$log" ] || continue
-            echo ""
-            echo "========== $log =========="
-            grep -A 5 "^!" "$log" || true
-          done
-
-      - name: Set artifact name
-        id: set-name
-        run: echo "name=papers-${{ inputs.version }}" >> "$GITHUB_OUTPUT"
-
-      - name: Upload paper PDFs
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ steps.set-name.outputs.name }}
-          path: build/*.pdf
-          retention-days: 30
-          if-no-files-found: error
-
-  # ─────────────────────────────────────────────────────────────────────────
-  # Job 2 — Resumes (xelatex, English + Farsi)
-  # ─────────────────────────────────────────────────────────────────────────
-  resumes:
-    name: "📋 Build Resumes"
-    runs-on: ubuntu-latest
-
-    outputs:
-      artifact-name: ${{ steps.set-name.outputs.name }}
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
-          fetch-depth: 0
-
-      - name: Install TeX Live + fonts
-        run: |
+          set -euo pipefail
           sudo apt-get update -qq
-          sudo apt-get install -y --no-install-recommends \
-            texlive-xetex \
-            texlive-latex-recommended \
-            texlive-latex-extra \
-            texlive-fonts-recommended \
-            texlive-fonts-extra \
-            texlive-lang-arabic \
-            fonts-liberation \
-            fonts-noto \
-            fonts-noto-cjk \
-            fonts-vazirmatn \
-            fontconfig \
-            python3
-          fc-cache -fv >/dev/null 2>&1 || true
-          echo "xelatex : $(xelatex --version | head -1)"
-          echo "python3 : $(python3 --version)"
-          fc-list | grep -i vazir || echo "WARNING: Vazirmatn font not found!"
+          sudo apt-get install -y --no-install-recommends librsvg2-bin fonts-freefont-ttf fonts-urw-base35 cmake build-essential
+          fc-cache -f
 
-      - name: Build all resumes (EN + FA)
-        run: python3 scripts/px.py resumes build all
-
-      - name: Show xelatex logs on failure
-        if: failure()
+      - name: Build m-mdy-m/log.c
         run: |
-          for log in build/resumes/*/resume.log; do
-            [ -f "$log" ] || continue
-            echo ""
-            echo "========== $log =========="
-            grep -A 5 "^!" "$log" || true
-          done
+          set -euo pipefail
+          git clone --depth 1 --branch v0.1.0 https://github.com/m-mdy-m/log.c.git "$RUNNER_TEMP/mmlog"
+          cmake -S "$RUNNER_TEMP/mmlog" -B "$RUNNER_TEMP/mmlog/build" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$RUNNER_TEMP/mmlog/install" -DBUILD_SHARED_LIBS=ON -DM_MDY_M_LOG_BUILD_TESTS=OFF -DM_MDY_M_LOG_BUILD_EXAMPLES=OFF
+          cmake --build "$RUNNER_TEMP/mmlog/build" --parallel
+          cmake --install "$RUNNER_TEMP/mmlog/build"
+          library="$(find "$RUNNER_TEMP/mmlog/install" -type f -name 'libm-mdy-m-log.so*' -print -quit)"
+          test -n "$library"
+          echo "M_MDY_M_LOG_LIBRARY=$library" >> "$GITHUB_ENV"
+          echo "LD_LIBRARY_PATH=$(dirname "$library"):${LD_LIBRARY_PATH:-}" >> "$GITHUB_ENV"
 
-      - name: Set artifact name
-        id: set-name
-        run: echo "name=resumes-${{ inputs.version }}" >> "$GITHUB_OUTPUT"
-
-      - name: Upload resume PDFs
-        uses: actions/upload-artifact@v4
+      - name: Run Pipeline LaTeX preset
+        uses: m-mdy-m/pipeline/.github/actions/toolchain-quality@96ad066bfc6c59c667ca6447db66729a28abb10f
         with:
-          name: ${{ steps.set-name.outputs.name }}
-          path: build/Mahdi-Mamashli-Resume*.pdf
-          retention-days: 30
-          if-no-files-found: error
-
-  # ─────────────────────────────────────────────────────────────────────────
-  # Job 3 — Booklets (pdflatex EN + xelatex FA)
-  # Uses texlive/texlive:latest container (lmodern, biblatex, biber included).
-  # Installs rsvg-convert + Farsi fonts on top.
-  # ─────────────────────────────────────────────────────────────────────────
-  booklets:
-    name: "📖 Build Booklets"
-    runs-on: ubuntu-latest
-    container:
-      image: texlive/texlive:latest
-
-    outputs:
-      artifact-name: ${{ steps.set-name.outputs.name }}
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
-          fetch-depth: 0
-
-      - name: Install prerequisites
-        run: |
-          apt-get update -qq
-          apt-get install -y --no-install-recommends \
-            git make bash python3 \
-            librsvg2-bin \
-            fonts-freefont-ttf \
-            fonts-liberation \
-            fonts-urw-base35 \
-            fonts-noto \
-            fonts-noto-cjk \
-            fonts-vazirmatn \
-            fontconfig
-          fc-cache -fv >/dev/null 2>&1 || true
-          echo "pdflatex : $(pdflatex --version | head -1)"
-          echo "xelatex  : $(xelatex --version | head -1)"
-          echo "biber    : $(biber --version)"
-          echo "python3  : $(python3 --version)"
-          echo "rsvg     : $(rsvg-convert --version)"
-          fc-list | grep -i vazir      || echo "WARNING: Vazirmatn not found!"
-          fc-list | grep -i liberation || echo "WARNING: Liberation not found!"
-
-      - name: Build all booklets (EN + FA)
+          language: latex
+          working-directory: .
+          stages: build,test
+          timeout-seconds: "3600"
         env:
           PROJECT_VERSION: ${{ inputs.version }}
           BUILD_DATE: ${{ github.run_started_at }}
-        run: python3 scripts/px.py booklets build all
-
-      - name: Show logs on failure
-        if: failure()
-        run: |
-          for log in build/booklets/*/*/main.log; do
-            [ -f "$log" ] || continue
-            echo ""
-            echo "========== $log =========="
-            grep -E "^!|font|Font|not found|Warning.*fontspec|cannot find" "$log" \
-              | head -40 || true
-          done
-
-      - name: Collect and rename booklet PDFs
-        # Flatten nested build/booklets/<slug>/<lang>/*.pdf
-        # into descriptive names so the release shows them clearly sorted.
-        run: |
-          mkdir -p dist/booklets
-          find build/booklets -name "*.pdf" | sort | while read -r pdf; do
-            # e.g. build/booklets/01-what-data-is.../en/Mamashli-What-Data-Is-EN.pdf
-            fname="$(basename "$pdf")"
-            cp "$pdf" "dist/booklets/$fname"
-            echo "  collected: $fname"
-          done
-          echo "Booklet PDFs collected:"
-          ls -lh dist/booklets/
 
       - name: Set artifact name
         id: set-name
-        run: echo "name=booklets-${{ inputs.version }}" >> "$GITHUB_OUTPUT"
+        run: echo "name=publications-${{ inputs.version }}" >> "$GITHUB_OUTPUT"
 
-      - name: Upload booklet PDFs
+      - name: Upload publication PDFs
         uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.set-name.outputs.name }}
-          path: dist/booklets/*.pdf
+          path: build/**/*.pdf
           retention-days: 30
           if-no-files-found: error
-
-  # ─────────────────────────────────────────────────────────────────────────
-  # Job 4 — Roadmaps (pdflatex)
-  # ─────────────────────────────────────────────────────────────────────────
-  roadmaps:
-    name: "🗺️ Build Roadmaps"
-    runs-on: ubuntu-latest
-    container:
-      image: texlive/texlive:latest
-
-    outputs:
-      artifact-name: ${{ steps.set-name.outputs.name }}
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
-          fetch-depth: 0
-
-      - name: Install prerequisites
-        run: |
-          apt-get update -qq
-          apt-get install -y --no-install-recommends git make bash python3
-          echo "pdflatex : $(pdflatex --version | head -1)"
-          echo "python3  : $(python3 --version)"
-
-      - name: Build all roadmaps
-        env:
-          PROJECT_VERSION: ${{ inputs.version }}
-          BUILD_DATE: ${{ github.run_started_at }}
-        run: python3 scripts/px.py roadmaps build all
-
-      - name: Show logs on failure
-        if: failure()
-        run: |
-          for log in build/roadmaps/*/main.log; do
-            [ -f "$log" ] || continue
-            echo ""
-            echo "========== $log =========="
-            grep -A 5 "^!" "$log" || true
-          done
-
-      - name: Set artifact name
-        id: set-name
-        run: echo "name=roadmaps-${{ inputs.version }}" >> "$GITHUB_OUTPUT"
-
-      - name: Upload roadmap PDFs
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ steps.set-name.outputs.name }}
-          path: build/roadmaps/*.pdf
-          retention-days: 30
-          if-no-files-found: warn    # roadmaps may not exist yet
