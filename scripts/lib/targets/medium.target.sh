@@ -1,5 +1,5 @@
 TARGET_LABEL="medium.com"
-CSL_FILE="ieee.csl"
+CSL_FILE=""
 REFERENCES_HEADING="References"
 REFERENCES_NUMBERED="1"
 OUTPUT_EXT="html"
