@@ -3,146 +3,65 @@ name: Release
 on:
   push:
     tags:
-      - "v[0-9]+.[0-9]+.[0-9]+"        # v1.0.0
-      - "v[0-9]+.[0-9]+.[0-9]+-*"      # v1.0.0-hotfix (still stable, just suffixed)
+      - "v[0-9]+.[0-9]+.[0-9]+"
+      - "v[0-9]+.[0-9]+.[0-9]+-*"
 
 permissions:
   contents: write
 
 jobs:
-  # ─────────────────────────────────────────────────────────────────────────
-  # Step 1 — compile everything (delegated to reusable workflow)
-  # ─────────────────────────────────────────────────────────────────────────
   build:
-    name: Build (reusable)
+    name: Build publications
     uses: ./.github/workflows/build.yml
     with:
-      version: ${{ github.ref_name }}   # e.g. "v1.0.0"
+      version: ${{ github.ref_name }}
 
-  # ─────────────────────────────────────────────────────────────────────────
-  # Step 2 — publish stable release
-  # ─────────────────────────────────────────────────────────────────────────
   publish:
-    name: Publish Release
+    name: Publish stable release
     needs: build
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      # ── Download artifacts ────────────────────────────────────────────────
-      - name: Download paper PDFs
+      - name: Download publication PDFs
         uses: actions/download-artifact@v4
         with:
-          name: ${{ needs.build.outputs.papers-artifact }}
-          path: dist/papers
+          name: ${{ needs.build.outputs.publications-artifact }}
+          path: dist/publications
 
-      - name: Download resume PDFs
-        uses: actions/download-artifact@v4
-        with:
-          name: ${{ needs.build.outputs.resumes-artifact }}
-          path: dist/resumes
-
-      - name: Download booklet PDFs
-        uses: actions/download-artifact@v4
-        with:
-          name: ${{ needs.build.outputs.booklets-artifact }}
-          path: dist/booklets
-
-      - name: List files to be released
+      - name: Generate release notes
         run: |
-          echo "=== Papers ===" && ls -lh dist/papers/
-          echo "=== Resumes ===" && ls -lh dist/resumes/
-          echo "=== Booklets ===" && ls -lh dist/booklets/
-
-      # ── Changelog from git log since last stable tag ──────────────────────
-      - name: Extract changelog
-        id: changelog
-        run: |
+          set -euo pipefail
           VERSION="${{ github.ref_name }}"
-
-          # Find the previous vX.Y.Z tag (skip pre-release tags)
-          PREV_TAG="$(git tag --list 'v*' \
-            | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' \
-            | sort -V \
-            | grep -v "$VERSION" \
-            | tail -1 || true)"
-
-          if [[ -n "$PREV_TAG" ]]; then
-            RANGE="${PREV_TAG}..HEAD"
-            SINCE_MSG="Changes since \`${PREV_TAG}\`"
-          else
-            RANGE="HEAD"
-            SINCE_MSG="Initial release"
-          fi
-
+          PREV_TAG="$(git tag --list 'v*' | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | grep -v "^${VERSION}$" | sort -V | tail -1 || true)"
+          if [[ -n "$PREV_TAG" ]]; then RANGE="${PREV_TAG}..HEAD"; SINCE="Changes since ${PREV_TAG}"; else RANGE="HEAD"; SINCE="Initial release"; fi
           COMMITS="$(git log "$RANGE" --oneline --no-merges | head -30 || true)"
-
           BUILD_TIME="$(date -u '+%Y-%m-%d %H:%M UTC')"
+          FILES=""
+          while IFS= read -r file; do FILES="${FILES}- $(basename "$file")"$'\n'; done < <(find dist/publications -type f -name '*.pdf' | sort)
 
-          PAPERS_LIST=""
-          for f in dist/papers/*.pdf; do
-            PAPERS_LIST="${PAPERS_LIST}- \`$(basename "$f")\`\n"
-          done
+          cat > release_body.md <<EOF
+          ## ${VERSION}
 
-          RESUMES_LIST=""
-          for f in dist/resumes/*.pdf; do
-            RESUMES_LIST="${RESUMES_LIST}- \`$(basename "$f")\`\n"
-          done
+          **${SINCE}** — built on ${BUILD_TIME}
 
-          BOOKLETS_LIST=""
-          for f in dist/booklets/*.pdf; do
-            BOOKLETS_LIST="${BOOKLETS_LIST}- \`$(basename "$f")\`\n"
-          done
+          ### Publications
 
-          cat > release_body.md << EOF
-          ## 🚀 ${VERSION}
+          ${FILES:-No publication PDFs were produced.}
 
-          **${SINCE_MSG}** — built on ${BUILD_TIME}
+          ### Changelog
 
-          ---
-
-          ### 📚 مقالات / Papers
-
-          $(echo -e "$PAPERS_LIST")
-
-          ### 📋 رزومه / Resumes
-
-          $(echo -e "$RESUMES_LIST")
-
-          ### 📖 جزوه‌ها / Booklets
-
-          $(echo -e "$BOOKLETS_LIST")
-
-          ---
-
-          ### 📝 تغییرات / Changelog
-
-          \`\`\`
           ${COMMITS:-No commits found}
-          \`\`\`
-
-          ---
-
-          > **نسخه پایدار** — برای آخرین build غیررسمی به \`latest-pre-release\` مراجعه کنید.
-          > *Stable release — for the latest unofficial build see \`latest-pre-release\`.*
           EOF
 
-          echo "Generated release body:"
-          cat release_body.md
-
-      # ── Create the stable GitHub release ─────────────────────────────────
-      - name: Create stable release
+      - name: Publish GitHub release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release create "${{ github.ref_name }}" \
-            --title "Release ${{ github.ref_name }}" \
-            --notes-file release_body.md \
-            --verify-tag \
-            dist/papers/*.pdf \
-            dist/resumes/*.pdf \
-            dist/booklets/*.pdf
+          set -euo pipefail
+          mapfile -t pdfs < <(find dist/publications -type f -name '*.pdf' | sort)
+          test "${#pdfs[@]}" -gt 0
+          gh release create "${{ github.ref_name }}" --title "Release ${{ github.ref_name }}" --notes-file release_body.md --verify-tag "${pdfs[@]}"
