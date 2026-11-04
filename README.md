@@ -1,92 +1,71 @@
-# Papers — Mahdi Mamashli (Genix)
+# Papyrxis Publications
 
-A structured LaTeX workspace for writing, building, and releasing research papers,
-standalone booklets, resumes, and learning roadmaps — all from source to PDF and
-to Markdown for every major article platform.
+Books, booklets and standalone articles published by Papyrxis.
 
-Built on the [Papyrxis workspace](https://github.com/papyrxis/workspace) system
-(same foundation as [Arliz](https://github.com/papyrxis/arliz)).
+This repository owns publication content: document sources, references, figures and project-specific editorial metadata. Reusable tooling belongs in Papyrxis Workspace: https://github.com/papyrxis/workspace.
 
----
+The intended repository name is papyrxis/publications. This PR does not change GitHub repository metadata; the current URL remains papyrxis/papers until the owner renames it.
+
+## Scope
+
+Included: research papers, standalone articles, books and educational booklets, including English and Persian editions.
+
+Excluded: personal CVs/resumes and personal roadmaps. Roadmap content is removed from this repository. Resume source files remain temporarily in the legacy tree so they can be transferred to a dedicated repository under m-mdy-m without losing data; they are excluded from the CLI, build, CI and release workflows.
+
+## Structure
+
+    papers/                 standalone papers and articles
+    booklets/               books and booklets, language editions
+    configs/papers/         legacy paper metadata
+    configs/booklets/       booklet metadata
+    scripts/papers.py       publication-specific compatibility commands
+    scripts/booklets.py     booklet-specific compatibility commands
+    scripts/lib/            publication export adapters and filters
+    workspace/              shared Workspace Git submodule
+    build/                  generated artifacts; do not edit
+
+Shared Python, LaTeX, logging, process, configuration and release helpers belong in Workspace. Do not copy them into this repository.
+
+## Requirements
+
+- Python 3.10+.
+- TeX Live with pdfLaTeX, XeLaTeX, latexmk, Biber and the packages used by each document.
+- Pandoc for Markdown export.
+- gix for version/branch workflows and psx for repository quality policy.
+- m-mdy-m/log.c for native structured logs.
+- m-mdy-m/pipeline for CI/CD. The LaTeX toolchain is being added in Pipeline PR #19: https://github.com/m-mdy-m/pipeline/pull/19.
 
 ## Quick start
 
-```bash
-# Papers
-make new-paper SLUG=02-my-paper STYLE=academic    # scaffold a new paper
-make paper     PAPER=02-my-paper                   # build to PDF
-make export    PAPER=02-my-paper TARGET="devto ieee" # export as article Markdown
+    git clone --recurse-submodules https://github.com/papyrxis/papers.git
+    cd papers
+    git submodule update --init --recursive
+    make list
+    make build
 
-# Booklets
-make booklet SLUG=01-what-data-is-and-why-it-must-become-physical LANG=en
-make booklet-export \
-  SLUG=01-what-data-is-and-why-it-must-become-physical \
-  LANG=en CHAPTERS=1,2 TARGET="devto ieee scirp"  # export chapters as articles
+Create and build a publication:
 
-# Everything else
-make list          # list all papers
-make booklet-list  # list all booklets
-make help          # full command reference
-```
+    make new-paper SLUG=02-my-article STYLE=academic
+    make new-booklet SLUG=02-my-booklet
+    make paper PAPER=01-my-paper
+    make booklet SLUG=01-my-booklet LANG=fa
 
-## Build reference
+## Export targets and CSL
 
-```bash
-# ── Papers ────────────────────────────────────────────────────────────────────
-make new-paper  SLUG=<slug> STYLE=<style>        # scaffold
-make paper      PAPER=<slug|#>                   # build → PDF
-make build                                        # build all → PDF
-make export     PAPER=<slug|#|all>               # export to Markdown (all targets)
-make export     PAPER=<slug|#|all> TARGET="..."  # export to specific target(s)
-make watch      PAPER=<slug|#>                   # auto-rebuild when you save
-make list                                         # list papers
+Target differences should be configuration, not repeated build scripts. A target should define only genuine differences: output format, front matter, title/byline policy, bibliography heading, optional Lua filters and optional CSL.
 
-# ── Booklets ──────────────────────────────────────────────────────────────────
-make new-booklet    SLUG=<slug>                  # scaffold EN + FA skeleton
-make booklet        SLUG=<slug> [LANG=<en|fa>]   # build → PDF (both langs if no LANG)
-make booklet-all                                  # build all booklets
-make booklet-list                                # list all booklets
-make booklet-watch  SLUG=<slug> LANG=<en|fa>     # watch mode
-make booklet-clean  [SLUG=<slug>] [LANG=<en|fa>] # clean artifacts
-make booklet-export SLUG=<slug> [LANG=en] \
-                    [CHAPTERS=1,2] [TARGET="..."] # export chapters as articles
+- No global CSL is assumed.
+- A target without explicit CSL uses Pandoc's default citation style when cite processing is enabled.
+- dev.to and Medium do not attach the IEEE CSL file.
+- Targets that need a particular citation style declare only that style.
+- Identical CSL files must not be copied into individual publications.
 
-# ── Resumes ────────────────────────────────────────────────────────────────────
-make resume         LANG=<lang|#>               # build → PDF
-make resume-all                                  # build all resumes
-make resume-rename  LANG=<lang|#> NAME=<name>   # rename output PDF
-make resume-list                                 # list resumes
+## CI and releases
 
-# ── Roadmaps ────────────────────────────────────────────────────────────────────
-make roadmap        ROADMAP=<slug|#>            # build → PDF
-make roadmap-all                                  # build all roadmaps
-make roadmap-new    SLUG=<slug>                 # scaffold
-make roadmap-list                                # list roadmaps
+The reusable build workflow runs the Pipeline LaTeX preset, builds papers and booklets, validates generated PDFs, and uploads one publication artifact. Releases contain publication PDFs only.
 
-# ── Global ────────────────────────────────────────────────────────────────────
-make clean           # remove all build artifacts
-make version         # show version + build date
-make help            # full command reference
-```
+## Migration notes
 
-## License
+See docs/REPOSITORY-BOUNDARIES.md. Resume files are intentionally retained until the destination repository under m-mdy-m can be created and the transfer verified. No CV data is deleted by this refactor.
 
-This repository contains different kinds of works; see [`CONTENT-LICENSE.md`](./CONTENT-LICENSE.md) for the policy by artifact type.
-
-- **Research papers and standalone articles:** CC BY 4.0 by default, unless the work's own copyright page or a publisher/co-author agreement specifies otherwise.
-- **Booklets and learning roadmaps:** CC BY-SA 4.0 by default, unless the work says otherwise.
-- **Resumes/CVs and personal documents:** all rights reserved by default; no public reuse license is granted unless the document explicitly says so.
-- **Source code, scripts, build configuration, and tooling:** MIT License in [`LICENSE`](./LICENSE).
-- **Third-party content:** excluded unless the rights holder's own notice explicitly says otherwise.
-
-Each published PDF should state its license on its copyright page. Do not assume a repository-level license overrides a journal, publisher, co-author, employer, or third-party rights agreement.
-
----
-
-## Releases
-
-Every push to `main` triggers a rolling **pre-release** (`latest-pre-release`).
-Pushing a `vX.Y.Z` tag creates a **stable release**.
-
-Both releases attach the compiled PDFs for all papers, booklets (EN + FA),
-resumes, and roadmaps with direct download links.
+Each published work should carry its own copyright and third-party-material notices. See CONTENT-LICENSE.md.
