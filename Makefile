@@ -30,7 +30,8 @@ doctor:
 
 sync:
 	@git submodule update --init --recursive
-	@git submodule update --remote --merge workspace
+	@test -f workspace/src/sync.sh || { echo "Workspace submodule is missing its sync entry point" >&2; exit 1; }
+	@bash workspace/src/sync.sh
 
 version:
 	@gix version show
@@ -55,7 +56,7 @@ push:
 	@$(WPX) push $(if $(filter 1,$(TAGS)),--tags,)
 
 # Pipeline LaTeX preset delegates to this target. Build publication content only.
-build: clean
+build: sync clean
 	@PROJECT_VERSION="$(VERSION)" BUILD_DATE="$(BUILD_DATE)" $(PX) papers build all
 	@PROJECT_VERSION="$(VERSION)" BUILD_DATE="$(BUILD_DATE)" $(PX) booklets build all
 
