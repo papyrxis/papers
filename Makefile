@@ -19,7 +19,7 @@ doctor:
 	@command -v xelatex >/dev/null
 	@command -v latexmk >/dev/null
 	@command -v biber >/dev/null
-	@command -v pandoc >/dev/null
+	@command -v pandoc >/dev/null || echo "pandoc is optional and is required only for Markdown export"
 
 sync:
 	@git submodule update --init --recursive
@@ -30,7 +30,7 @@ version:
 	@echo "Build date: $(BUILD_DATE)"
 
 # Pipeline LaTeX preset delegates to this target. Build publication content only.
-build:
+build: clean
 	@PROJECT_VERSION="$(VERSION)" BUILD_DATE="$(BUILD_DATE)" $(PX) papers build all
 	@PROJECT_VERSION="$(VERSION)" BUILD_DATE="$(BUILD_DATE)" $(PX) booklets build all
 
