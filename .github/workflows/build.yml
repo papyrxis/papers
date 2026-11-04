@@ -37,6 +37,17 @@ jobs:
           sudo apt-get install -y --no-install-recommends librsvg2-bin fonts-freefont-ttf fonts-urw-base35 cmake build-essential
           fc-cache -f
 
+      - name: Install PSX
+        uses: actions/setup-go@v7
+        with:
+          go-version: stable
+
+      - name: Run repository quality policy
+        run: |
+          go install github.com/m-mdy-m/psx/cmd/psx@v0.3.2
+          echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
+          "$(go env GOPATH)/bin/psx" check --config psx.yml
+
       - name: Build m-mdy-m/log.c
         run: |
           set -euo pipefail
