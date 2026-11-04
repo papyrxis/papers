@@ -143,7 +143,7 @@ for TARGET in "${TARGET_LIST[@]}"; do
 
   # ── Load target config defaults then override ─────────────────────────────
   TARGET_LABEL="$TARGET"
-  CSL_FILE="ieee.csl"
+  CSL_FILE=""
   REFERENCES_HEADING="References"
   REFERENCES_NUMBERED="1"
   OUTPUT_EXT="md"
@@ -157,10 +157,13 @@ for TARGET in "${TARGET_LIST[@]}"; do
   # shellcheck source=/dev/null
   source "$TFILE"
 
-  CSL_PATH="$CSL_DIR/$CSL_FILE"
-  if [[ ! -f "$CSL_PATH" ]]; then
-    warn "CSL style not found: $CSL_PATH — skipping target $TARGET."
-    continue
+  CSL_PATH=""
+  if [[ -n "$CSL_FILE" ]]; then
+    CSL_PATH="$CSL_DIR/$CSL_FILE"
+    if [[ ! -f "$CSL_PATH" ]]; then
+      warn "CSL style not found: $CSL_PATH — skipping target $TARGET."
+      continue
+    fi
   fi
 
   # ── Writer selection ───────────────────────────────────────────────────────
@@ -229,8 +232,11 @@ for TARGET in "${TARGET_LIST[@]}"; do
     [[ -f "$BIB_FILE"   ]] && PANDOC_ARGS+=(--bibliography "$BIB_FILE")
     [[ -f "$SHARED_BIB" ]] && PANDOC_ARGS+=(--bibliography "$SHARED_BIB")
 
-    # Citation processing
-    PANDOC_ARGS+=(--csl "$CSL_PATH" --citeproc)
+    # Use Pandoc default CSL unless the selected target explicitly requests one.
+    if [[ -f "$BIB_FILE" || -f "$SHARED_BIB" ]]; then
+      PANDOC_ARGS+=(--citeproc)
+      [[ -z "$CSL_PATH" ]] || PANDOC_ARGS+=(--csl "$CSL_PATH")
+    fi
 
     # Lua filters
     [[ -f "$LUA_FILTER" ]] && PANDOC_ARGS+=(--lua-filter "$LUA_FILTER")
