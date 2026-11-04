@@ -65,7 +65,8 @@ jobs:
         with:
           language: latex
           working-directory: .
-          stages: build,test
+          stages: install,build,test
+          install-command: python -m pip install -e workspace
           timeout-seconds: "3600"
         env:
           PROJECT_VERSION: ${{ inputs.version }}
