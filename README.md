@@ -33,7 +33,7 @@ Shared Python, LaTeX, logging, process, configuration and release helpers belong
 - Pandoc for Markdown export.
 - gix for version/branch workflows and psx for repository quality policy.
 - m-mdy-m/log.c for native structured logs.
-- m-mdy-m/pipeline for CI/CD. The LaTeX toolchain is being added in Pipeline PR #19: https://github.com/m-mdy-m/pipeline/pull/19.
+- m-mdy-m/pipeline for CI/CD. GitHub Actions consumes the shared LaTeX toolchain action from the Pipeline `main` branch.
 
 ## Quick start
 
