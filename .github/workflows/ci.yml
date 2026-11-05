@@ -10,6 +10,15 @@ permissions:
   contents: read
 
 jobs:
+  test-release-assets:
+    name: Test release asset staging
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Test release asset staging
+        run: python -m unittest discover -s scripts/tests -v
+
   build:
     uses: ./.github/workflows/build.yml
     with:

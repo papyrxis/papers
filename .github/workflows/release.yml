@@ -32,6 +32,9 @@ jobs:
           name: ${{ needs.build.outputs.publications-artifact }}
           path: dist/publications
 
+      - name: Prepare release assets
+        run: python scripts/prepare_release_assets.py dist/publications dist/release-assets
+
       - name: Generate release notes
         run: |
           set -euo pipefail
@@ -40,8 +43,12 @@ jobs:
           if [[ -n "$PREV_TAG" ]]; then RANGE="${PREV_TAG}..HEAD"; SINCE="Changes since ${PREV_TAG}"; else RANGE="HEAD"; SINCE="Initial release"; fi
           COMMITS="$(git log "$RANGE" --oneline --no-merges | head -30 || true)"
           BUILD_TIME="$(date -u '+%Y-%m-%d %H:%M UTC')"
+          REPO="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}"
           FILES=""
-          while IFS= read -r file; do FILES="${FILES}- $(basename "$file")"$'\n'; done < <(find dist/publications -type f -name '*.pdf' | sort)
+          while IFS= read -r -d '' file; do
+            name="$(basename "$file")"
+            FILES="${FILES}- [${name}](${REPO}/releases/download/${VERSION}/${name})"$'\n'
+          done < <(find dist/release-assets -type f -name '*.pdf' -print0 | sort -z)
 
           cat > release_body.md <<EOF
           ## ${VERSION}
@@ -62,6 +69,6 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
-          mapfile -t pdfs < <(find dist/publications -type f -name '*.pdf' | sort)
+          mapfile -t pdfs < <(find dist/release-assets -type f -name '*.pdf' | sort)
           test "${#pdfs[@]}" -gt 0
           gh release create "${{ github.ref_name }}" --title "Release ${{ github.ref_name }}" --notes-file release_body.md --verify-tag "${pdfs[@]}"
