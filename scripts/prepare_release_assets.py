@@ -7,7 +7,6 @@ import argparse
 import hashlib
 import re
 import shutil
-import sys
 from pathlib import Path
 
 

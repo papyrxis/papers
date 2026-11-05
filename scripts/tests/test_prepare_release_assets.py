@@ -1,13 +1,13 @@
 from __future__ import annotations
 
+import subprocess
 import sys
 import tempfile
 import unittest
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "scripts"))
 
-from prepare_release_assets import prepare_release_assets
+SCRIPT = Path(__file__).resolve().parents[1] / "prepare_release_assets.py"
 
 
 class PrepareReleaseAssetsTests(unittest.TestCase):
@@ -27,21 +27,35 @@ class PrepareReleaseAssetsTests(unittest.TestCase):
                 source.parent.mkdir(parents=True, exist_ok=True)
                 source.write_bytes(content)
 
-            first_assets = prepare_release_assets(source_dir, destination_dir)
-            first_names = [asset.name for asset in first_assets]
+            result = subprocess.run(
+                [sys.executable, str(SCRIPT), str(source_dir), str(destination_dir)],
+                check=False,
+                capture_output=True,
+                text=True,
+            )
 
-            self.assertEqual(len(expected), len(first_assets))
-            self.assertEqual(len(first_names), len(set(first_names)))
+            self.assertEqual(0, result.returncode, result.stderr)
+            assets = sorted(destination_dir.glob("*.pdf"))
+            names = [asset.name for asset in assets]
+
+            self.assertEqual(len(expected), len(assets))
+            self.assertEqual(len(names), len(set(names)))
             self.assertCountEqual(
                 expected.values(),
-                (asset.read_bytes() for asset in first_assets),
+                (asset.read_bytes() for asset in assets),
             )
 
             stale_asset = destination_dir / "stale.pdf"
             stale_asset.write_bytes(b"stale")
-            second_assets = prepare_release_assets(source_dir, destination_dir)
+            repeated_result = subprocess.run(
+                [sys.executable, str(SCRIPT), str(source_dir), str(destination_dir)],
+                check=False,
+                capture_output=True,
+                text=True,
+            )
 
-            self.assertEqual(first_names, [asset.name for asset in second_assets])
+            self.assertEqual(0, repeated_result.returncode, repeated_result.stderr)
+            self.assertEqual(names, sorted(asset.name for asset in destination_dir.glob("*.pdf")))
             self.assertFalse(stale_asset.exists())
 
     def test_empty_source_directory_is_rejected(self) -> None:
@@ -50,16 +64,30 @@ class PrepareReleaseAssetsTests(unittest.TestCase):
             source_dir = temporary_path / "publications"
             source_dir.mkdir()
 
-            with self.assertRaisesRegex(ValueError, "No publication PDFs found"):
-                prepare_release_assets(source_dir, temporary_path / "release-assets")
+            result = subprocess.run(
+                [sys.executable, str(SCRIPT), str(source_dir), str(temporary_path / "release-assets")],
+                check=False,
+                capture_output=True,
+                text=True,
+            )
+
+            self.assertNotEqual(0, result.returncode)
+            self.assertIn("No publication PDFs found", result.stderr)
 
     def test_destination_must_not_be_inside_source_directory(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:
             source_dir = Path(temporary_directory) / "publications"
             source_dir.mkdir()
 
-            with self.assertRaisesRegex(ValueError, "must not be inside"):
-                prepare_release_assets(source_dir, source_dir / "release-assets")
+            result = subprocess.run(
+                [sys.executable, str(SCRIPT), str(source_dir), str(source_dir / "release-assets")],
+                check=False,
+                capture_output=True,
+                text=True,
+            )
+
+            self.assertNotEqual(0, result.returncode)
+            self.assertIn("must not be inside", result.stderr)
 
 
 if __name__ == "__main__":
