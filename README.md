@@ -74,7 +74,7 @@ Target differences should be configuration, not repeated build scripts. A target
 
 ## CI and releases
 
-The reusable build workflow runs the Pipeline LaTeX preset, builds papers and booklets, validates generated PDFs, and uploads one publication artifact. Releases contain publication PDFs only.
+The reusable build workflow runs the Pipeline LaTeX preset, builds papers and booklets, and uploads a separate artifact for the English and Persian resumes after validating both as one-page PDFs. The rolling latest-pre-release includes both artifact sets; versioned stable releases consume publication PDFs only.
 
 ## Migration notes
 
