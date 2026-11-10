@@ -13,6 +13,7 @@ texlive-luatex
 texlive-lang-arabic
 texlive-fonts-recommended
 # Fonts and document assets
+poppler-utils
 fonts-freefont-ttf
 fonts-urw-base35
 fonts-liberation
