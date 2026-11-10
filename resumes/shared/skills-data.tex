@@ -8,7 +8,7 @@
   }%
 }
 
-% Only list technologies and practices supported by maintained source work.
+% List only languages, technologies and practices demonstrated in maintained work.
 \newcommand{\newskill}[3]{%
   \ifstrequal{#3}{on}{\addtocatlist{#1}{#2}}{}%
 }
@@ -19,6 +19,7 @@
 \newskill{Languages}{Go}{on}
 \newskill{Languages}{Lua}{on}
 \newskill{Languages}{Python}{on}
+\newskill{Languages}{Common Lisp}{on}
 \newskill{Languages}{Bash}{on}
 
 \newskill{Backend}{Node.js}{on}
@@ -27,19 +28,20 @@
 \newskill{Backend}{Dependency injection}{on}
 
 \newskill{Systems}{C11}{on}
-\newskill{Systems}{Lua 5.4}{on}
+\newskill{Systems}{Lua 5.4 / SBCL}{on}
 \newskill{Systems}{SDL3}{on}
 \newskill{Systems}{CMake / Make}{on}
 
-\newskill{Architecture}{Modular design}{on}
+\newskill{Architecture}{Modular system design}{on}
+\newskill{Architecture}{API / protocol contracts}{on}
 \newskill{Architecture}{Plugin systems}{on}
-\newskill{Architecture}{API and protocol contracts}{on}
 \newskill{Architecture}{Cross-platform tooling}{on}
 
 \newskill{DevOps}{GitHub Actions}{on}
 \newskill{DevOps}{CI/CD}{on}
-\newskill{DevOps}{Test and release automation}{on}
+\newskill{DevOps}{Build and release automation}{on}
 
 \newskill{Environment}{Git}{on}
-\newskill{Environment}{Linux}{on}
+\newskill{Environment}{Linux / Windows}{on}
+\newskill{Environment}{Docker}{on}
 \newskill{Environment}{LaTeX / Pandoc}{on}
