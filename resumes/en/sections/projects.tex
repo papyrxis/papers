@@ -1,52 +1,31 @@
-% ── cdin ─────────────────────────────────────
+% Selected work is intentionally balanced across the author's portfolio.
 \newcommand{\projcdin}{%
-  \proj{cdin}{C $\cdot$ Lua $\cdot$ SDL3}{%
-    \item Open-source text editor with a C runtime (SDL3, stb\_truetype) and a fully
-    Lua-based editor layer — documents, keymaps, and plugins load at runtime without
-    recompilation. Normal/Insert/Visual modes, Ex command line, Git-aware project tree,
-    and cross-platform builds (Linux, macOS, Windows).%
-  }{\ProjCdinShort}%
+  \proj{CDIN}{C11 $\cdot$ Lua 5.4 $\cdot$ SDL3}{%
+    \item A modular, cross-platform text-editor project built around explicit component boundaries: document kernel, Lua runtime, native backend, and terminal/desktop frontends. The SDL desktop renderer remains experimental.%
+  }{cdin-editor/cdin}%
 }
 
-% ── Gland ────────────────────────────────────
 \newcommand{\projgland}{%
-  \proj{Gland}{TypeScript $\cdot$ Event-Driven $\cdot$ DI Container}{%
-    \item Event-driven backend framework with radix tree routing, a zero-dependency DI
-    container, and adapter-based protocol support for HTTP and WebSocket; 80\%+ test coverage
-    across unit and integration suites.%
-  }{\ProjGlandShort}%
+  \proj{GlandJS}{TypeScript $\cdot$ Node.js $\cdot$ Event-driven systems}{%
+    \item An open-source backend framework and package ecosystem built around message-driven communication, dependency injection, modular composition, and a transport-independent HTTP layer with multiple server adapters.%
+  }{glandjs/gland}%
 }
 
-% ── PSX ──────────────────────────────────────
-\newcommand{\projpsx}{%
-  \proj{PSX}{Go $\cdot$ CLI $\cdot$ Concurrent Validation}{%
-    \item Project-structure validator with 47 built-in rules, parallel execution, auto-fix
-    mode, YAML-based configuration, and cross-platform binary releases via GitHub Actions.%
-  }{\ProjPSXShort}%
+\newcommand{\projinfra}{%
+  \proj{Developer Infrastructure}{Go $\cdot$ C11 $\cdot$ Python}{%
+    \item Reusable engineering tools including Pipeline (task-graph CI), gix (Git workflow CLI), psx (repository quality checks), and log.c (structured C logging library).%
+  }{m-mdy-m/pipeline}%
 }
 
-% ── FTX ──────────────────────────────────────
-\newcommand{\projftx}{%
-  \proj{FTX}{Vim Script $\cdot$ Async $\cdot$ Editor Tooling}{%
-    \item Asynchronous file tree plugin for Vim/Neovim with timer-based background
-    updates, content-hash directory cache, per-file Git status display, and zero
-    runtime dependencies.%
-  }{\ProjFTXShort}%
+\newcommand{\projpapyrxis}{%
+  \proj{Papyrxis}{LaTeX $\cdot$ Python $\cdot$ Technical Publishing}{%
+    \item A publishing workspace and body of technical/educational works spanning computing foundations, algorithms, and mathematics, with English and Persian editions and shared build tooling.%
+  }{papyrxis/papers}%
 }
 
-% ── Agas ─────────────────────────────────────
-\newcommand{\projagas}{%
-  \proj{Agas}{TypeScript $\cdot$ Bun $\cdot$ HTTP Client}{%
-    \item HTTP client with an event-driven lifecycle, extensible interceptor chain,
-    streaming support, retry logic, and a persistent-history CLI; 800+ Docker Hub pulls.%
-  }{\ProjAgasShort}%
-}
-
-% ── Section renderer — top 3 for one-page fit ─
 \newcommand{\ResumeProjectsEN}{%
-  \ifcdin  \projcdin  \fi
-  \ifgland \projgland \fi
-  \ifpsx   \projpsx   \fi
-  \ifftx   \projftx   \fi
-  \ifagas  \projagas  \fi
+  \projcdin
+  \projgland
+  \projinfra
+  \projpapyrxis
 }

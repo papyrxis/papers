@@ -12,6 +12,18 @@ Included: research papers, standalone articles, books and educational booklets, 
 
 Excluded: personal CVs/resumes and personal roadmaps. Roadmap content is removed from this repository. Resume source files remain temporarily in the legacy tree so they can be transferred to a dedicated repository under m-mdy-m without losing data; they are excluded from the CLI, build, CI and release workflows.
 
+## Authoring instructions
+
+Use the directory-specific agent instructions before drafting or revising content:
+
+| Content | Instructions | Scope |
+| --- | --- | --- |
+| Research papers and standalone articles | [papers/AGENTS.md](papers/AGENTS.md) | Research integrity, argument structure, citations, figures, and article builds |
+| Books and booklets | [booklets/AGENTS.md](booklets/AGENTS.md) | Learning design, chapter structure, bilingual editions, references, and PDF quality |
+| Personal resume sources | [resumes/AGENTS.md](resumes/AGENTS.md) | Person-first positioning, one-page layout, evidence, privacy, and the legacy build boundary |
+
+The resume guide applies only when the owner explicitly requests work on the retained personal sources. It does not change the repository's publication scope or add resumes to the normal publication build and release pipeline.
+
 ## Structure
 
     papers/                 standalone papers and articles
@@ -33,7 +45,7 @@ Shared Python, LaTeX, logging, process, configuration and release helpers belong
 - Pandoc for Markdown export.
 - gix for version/branch workflows and psx for repository quality policy.
 - m-mdy-m/log.c for native structured logs.
-- m-mdy-m/pipeline for CI/CD. GitHub Actions consumes the shared LaTeX toolchain action from the Pipeline `main` branch.
+- m-mdy-m/pipeline for CI/CD. GitHub Actions consumes the shared LaTeX toolchain action from the Pipeline main branch.
 
 ## Quick start
 

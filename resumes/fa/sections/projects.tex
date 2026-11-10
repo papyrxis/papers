@@ -1,80 +1,61 @@
-% ── cdin ─────────────────────────────────────
+% نمونه‌کارها از چهار حوزهٔ مکمل انتخاب شده‌اند.
 \newcommand{\projcdinFA}{%
   \cventry
-    {\lr{C · Lua · SDL3}}%
-    {\lr{cdin} — ویرایشگر متن}%
-    {\href{\ProjCdin}{\lr{\ProjCdinShort}}}%
+    {\lr{C11 · Lua 5.4 · SDL3}}%
+    {\lr{CDIN} — ویرایشگر متن ماژولار}%
+    {\href{\ProjCdin}{\lr{cdin-editor/cdin}}}%
     {}%
     {%
       \begin{cvitems}
-        \item {ویرایشگر متن متن‌باز با هسته \lr{C} (رندر نرم‌افزاری از طریق \lr{SDL3}) و لایه توسعه‌پذیر \lr{Lua} — پلاگین‌ها و کلیدنگاشت‌ها بدون کامپایل مجدد بارگذاری می‌شوند؛ پشتیبانی از \lr{Linux}، \lr{macOS} و \lr{Windows}.}
+        \item {پروژهٔ ویرایشگر متن چندسکویی با مرزبندی روشن میان هستهٔ اسناد، زمان‌اجرای \lr{Lua}، بک‌اند بومی و رابط‌های ترمینال/دسکتاپ؛ رندرر دسکتاپ مبتنی بر \lr{SDL} هنوز آزمایشی است.}
       \end{cvitems}%
     }%
 }
 
-% ── Gland ────────────────────────────────────
 \newcommand{\projglandFA}{%
   \cventry
-    {\lr{TypeScript · Event-Driven · DI Container}}%
-    {\lr{Gland} — فریم‌ورک بک‌اند}%
-    {\href{\ProjGland}{\lr{\ProjGlandShort}}}%
+    {\lr{TypeScript · Node.js · Event-driven}}%
+    {\lr{GlandJS} — اکوسیستم فریم‌ورک بک‌اند}%
+    {\href{\ProjGland}{\lr{glandjs/gland}}}%
     {}%
     {%
       \begin{cvitems}
-        \item {فریم‌ورک بک‌اند رویداد‌محور با مسیریابی \lr{Radix Tree}، کانتینر \lr{DI} بدون وابستگی خارجی و آداپتورهای قابل تعویض \lr{HTTP/WebSocket}؛ پوشش تست بیش از ۸۰٪.}
+        \item {فریم‌ورک متن‌باز بک‌اند با ارتباط پیام‌محور، تزریق وابستگی، ترکیب ماژولار و لایهٔ مستقل از انتقال \lr{HTTP} همراه با آداپتورهای چندگانهٔ سرور.}
       \end{cvitems}%
     }%
 }
 
-% ── PSX ──────────────────────────────────────
-\newcommand{\projpsxFA}{%
+\newcommand{\projinfraFA}{%
   \cventry
-    {\lr{Go · CLI · Concurrent Validation}}%
-    {\lr{PSX} — اعتبارسنج ساختار پروژه}%
-    {\href{\ProjPSX}{\lr{\ProjPSXShort}}}%
+    {\lr{Go · C11 · Python}}%
+    {ابزارهای زیرساخت و توسعه}%
+    {\href{\ProjPipeline}{\lr{m-mdy-m/pipeline}}}%
     {}%
     {%
       \begin{cvitems}
-        \item {ابزار خط فرمان برای اعتبارسنجی ساختار پروژه با ۴۷ قانون داخلی، اجرای موازی، حالت اصلاح خودکار و انتشار باینری چندسکویی از طریق \lr{GitHub Actions}.}
+        \item {ساخت مجموعه‌ای از ابزارهای مهندسی قابل استفادهٔ مجدد: \lr{Pipeline} برای اجرای گراف وظایف و \lr{CI}، ابزار \lr{gix} برای گردش‌کار \lr{Git}، ابزار کنترل کیفیت مخزن \lr{psx} و کتابخانهٔ لاگ ساختاریافتهٔ \lr{log.c}.}
       \end{cvitems}%
     }%
 }
 
-% ── FTX ──────────────────────────────────────
-\newcommand{\projftxFA}{%
+\newcommand{\projpapyrxisFA}{%
   \cventry
-    {\lr{Vim Script · Async · Editor Tooling}}%
-    {\lr{FTX} — پلاگین درخت فایل}%
-    {\href{\ProjFTX}{\lr{\ProjFTXShort}}}%
+    {\lr{LaTeX · Python · Technical Publishing}}%
+    {\lr{Papyrxis} — نشر فنی و آموزشی}%
+    {\href{\ProjPapyrxis}{\lr{papyrxis/papers}}}%
     {}%
     {%
       \begin{cvitems}
-        \item {پلاگین درخت فایل برای \lr{Vim/Neovim} با به‌روزرسانی غیرهمزمان، کش مبتنی بر هش محتوا، نمایش وضعیت \lr{Git} و معماری سبک بدون وابستگی خارجی.}
+        \item {محیط مشترک تولید و انتشار به‌همراه مجموعه‌ای از آثار فنی و آموزشی در مبانی رایانش، الگوریتم‌ها و ریاضیات؛ با نسخه‌های فارسی و انگلیسی و ابزارهای ساخت مشترک.}
       \end{cvitems}%
     }%
 }
 
-% ── Agas ─────────────────────────────────────
-\newcommand{\projagasFA}{%
-  \cventry
-    {\lr{TypeScript · Bun · HTTP Client}}%
-    {\lr{Agas} — کلاینت \lr{HTTP}}%
-    {\href{\ProjAgas}{\lr{\ProjAgasShort}}}%
-    {}%
-    {%
-      \begin{cvitems}
-        \item {کلاینت \lr{HTTP} با معماری رویداد‌محور، زنجیره اینترسپتور قابل توسعه، پشتیبانی از استریمینگ، منطق تلاش مجدد و \lr{CLI} با تاریخچه ماندگار؛ بیش از ۸۰۰ بارگیری از \lr{Docker Hub}.}
-      \end{cvitems}%
-    }%
-}
-
-% ── Section renderer ─────────────────────────
 \newcommand{\ResumeProjectsFA}{%
   \begin{cventries}
-    \ifcdin  \projcdinFA  \fi
-    \ifgland \projglandFA \fi
-    \ifpsx   \projpsxFA   \fi
-    \ifftx   \projftxFA   \fi
-    \ifagas  \projagasFA  \fi
+    \projcdinFA
+    \projglandFA
+    \projinfraFA
+    \projpapyrxisFA
   \end{cventries}%
 }
