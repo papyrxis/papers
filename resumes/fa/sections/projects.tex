@@ -1,4 +1,4 @@
-% پنج محور اصلی portfolio؛ پروژه‌های دیگر در یادداشت پایانی آمده‌اند.
+% پنج محور اصلی portfolio؛ پروژه‌های تکمیلی در یادداشت پایانی آمده‌اند.
 \newcommand{\projcdinFA}{%
   \cventry
     {\lr{C11 · Lua 5.4 · SDL3}}%
@@ -7,7 +7,7 @@
     {}%
     {%
       \begin{cvitems}
-        \item {روی طراحی و یکپارچه‌سازی یک \lr{text editor} ماژولار و cross-platform کار می‌کنم. \lr{Kernel} مالک document state و \lr{undo/redo} است، \lr{Lua Runtime} فرمان‌ها و pluginها را مدیریت می‌کند، \lr{Backend} نشست‌ها و \lr{OS services} را فراهم می‌کند و \lr{Frontend} رابط‌های \lr{TUI} و \lr{GUI-SDL} را ارائه می‌دهد؛ رندرر \lr{GUI-SDL} هنوز experimental است.}
+        \item {در معماری و یکپارچه‌سازی یک \lr{text editor} ماژولار مشارکت دارم: \lr{Kernel} مالک document state و \lr{undo/redo} است؛ \lr{Lua Runtime} فرمان‌ها و pluginها را مدیریت می‌کند و \lr{Backend} نشست‌ها و \lr{OS services} را فراهم می‌کند. \lr{TUI} محصول اصلی و \lr{GUI-SDL} هنوز experimental است.}
       \end{cvitems}%
     }%
 }
@@ -20,7 +20,7 @@
     {}%
     {%
       \begin{cvitems}
-        \item {یک framework بک‌اند برای ساخت سرویس‌های modular در \lr{Node.js}. ارتباط componentها از مسیر \lr{message bus} و \lr{event-driven flow} انجام می‌شود؛ \lr{Dependency Injection} و metadata مربوط به module و controller ترکیب برنامه را مدیریت می‌کنند و \lr{HTTP adapters} از core جدا هستند.}
+        \item {یک framework برای ساخت سرویس‌های \lr{Node.js} است: componentها از طریق \lr{message bus} با هم ارتباط دارند؛ \lr{Dependency Injection} ترکیب moduleها را انجام می‌دهد و \lr{HTTP adapter}ها مستقل از core هستند.}
       \end{cvitems}%
     }%
 }
@@ -33,7 +33,7 @@
     {}%
     {%
       \begin{cvitems}
-        \item {یک coding agent که در یک process پایدار \lr{SBCL} اجرا می‌شود. مدل می‌تواند در همان runtime عبارت‌های \lr{Lisp} را ارزیابی کند، tool و skill بسازد و آن‌ها را در قالب \lr{cell} نگه دارد؛ تغییرات به‌صورت generation ثبت می‌شوند و امکان rollback دارند.}
+        \item {یک \lr{coding agent} مبتنی بر \lr{Common Lisp} است که در process پایدار \lr{SBCL} اجرا می‌شود. مدل در runtime زنده ابزار و skill می‌سازد؛ تعریف‌ها به‌شکل \lr{cell} ذخیره می‌شوند و تغییرات generation قابلیت rollback دارند.}
       \end{cvitems}%
     }%
 }
@@ -46,7 +46,7 @@
     {}%
     {%
       \begin{cvitems}
-        \item {یک پلتفرم modular برای decision-making و trading که \lr{market data}، strategy، risk policy، brain و execution provider را با contractهای جدا نگه می‌دارد. نمونهٔ فعلی، simulation عصبی مبتنی بر connectome مگس را به‌عنوان brain قابل‌جایگزینی به جریان \lr{paper trading} برای \lr{BTC-USDC} متصل می‌کند؛ اجرای live به opt-in صریح نیاز دارد.}
+        \item {پلتفرمی modular برای آزمایش سیستم‌های تصمیم‌گیری و trading است. \lr{Market data}، strategy، risk policy و execution با contractهای مستقل متصل‌اند؛ در نمونهٔ فعلی، شبیه‌سازی connectome مگس به‌عنوان brain در \lr{BTC-USDC paper trading} به‌کار می‌رود.}
       \end{cvitems}%
     }%
 }
@@ -59,7 +59,7 @@
     {}%
     {%
       \begin{cvitems}
-        \item {\lr{Pipeline} یک task runner و toolkit برای اجرای workflowها در local، \lr{GitHub Actions} و \lr{GitLab} است؛ \lr{gix} گردش branchهای \lr{Git} و versioning را مدیریت می‌کند؛ \lr{psx} ساختار و قواعد repository را بررسی می‌کند؛ و \lr{log.c} یک logger مبتنی بر \lr{C11} با structured records و \lr{stable C ABI} است.}
+        \item {\lr{Pipeline} اجرای taskها و \lr{CI} را یکپارچه می‌کند؛ \lr{gix} گردش branch و versioning در \lr{Git} را مدیریت می‌کند؛ \lr{psx} ساختار و quality checks مخزن را می‌سنجد؛ و \lr{log.c} یک logger ساختاریافتهٔ \lr{C11} با \lr{stable C ABI} است.}
       \end{cvitems}%
     }%
 }
@@ -75,8 +75,7 @@
   \vspace{1pt}
   {\small
     \textbf{پروژه‌های دیگر:}
-    \lr{Atabeh} با \lr{Go} کانفیگ‌های \lr{VPN/Proxy} را جمع‌آوری، parse و normalize می‌کند
-    و اتصال آن‌ها را می‌سنجد؛ \lr{FTX.vim} هم یک \lr{file-tree explorer} ناهمگام و
-    \lr{Git-aware} برای \lr{Vim/Neovim} است.
+    \lr{Atabeh} ابزار \lr{Go} برای parse، normalize و تست کانفیگ‌های \lr{VPN/Proxy} است؛
+    \lr{FTX.vim} یک \lr{file-tree explorer} ناهمگام و \lr{Git-aware} برای \lr{Vim/Neovim} است.
   }%
 }
