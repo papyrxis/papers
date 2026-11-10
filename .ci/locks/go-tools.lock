@@ -2,3 +2,4 @@
 # Upgrade deliberately and review each tool's changelog before changing a pin.
 GIX_VERSION=v1.2.0
 PSX_VERSION=v0.3.2
+LOG_C_VERSION=v0.1.0
