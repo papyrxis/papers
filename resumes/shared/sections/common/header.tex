@@ -1,16 +1,23 @@
 \newcommand{\ResumeHeader}{%
   \begin{center}
     {\fontsize{\ThemeFontSizeHeader}{\ThemeFontSizeHeader}\bfseries \ResumeAuthorName}\\[2pt]
-    \small\color{ResumeSubtle}
-    \href{\LinkEmail}{\ResumeEmail}
-    \,\textbullet\,
-    \href{\LinkGithub}{github.com/\ResumeGithub}
-    \,\textbullet\,
-    \href{\LinkHomepage}{\ResumeHomepage}
-    \,\textbullet\,
-    \href{\LinkStackOverflow}{Stack Overflow}
-    \,\textbullet\,
-    \ResumeLocation
+    {\small\bfseries \ResumePosition}\\[3pt]
+    {\footnotesize\color{ResumeSubtle}
+      \href{\LinkEmail}{\ResumeEmail}
+      \,\textbullet\,
+      \href{\LinkGithub}{github.com/\ResumeGithub}
+      \,\textbullet\,
+      \href{\LinkHomepage}{\ResumeHomepage}
+    }\\[1pt]
+    {\footnotesize\color{ResumeSubtle}
+      \href{\LinkDevTo}{Dev.to}
+      \,\textbullet\,
+      \href{\LinkMedium}{Medium}
+      \,\textbullet\,
+      \href{\LinkNpmProfile}{npm}
+      \,\textbullet\,
+      \href{\LinkORCID}{ORCID}
+    }
   \end{center}
   \vspace{\ThemeHeaderGap}%
 }
