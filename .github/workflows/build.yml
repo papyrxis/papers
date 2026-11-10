@@ -8,6 +8,11 @@ on:
         required: false
         type: string
         default: "dev"
+      build_resumes:
+        description: "Build the English and Persian resume PDFs"
+        required: false
+        type: boolean
+        default: true
     outputs:
       publications-artifact:
         description: "Artifact containing built papers and booklets"
@@ -126,9 +131,11 @@ jobs:
           BUILD_DATE: ${{ github.run_started_at }}
 
       - name: Build English and Persian resumes
+        if: ${{ inputs.build_resumes }}
         run: python scripts/resumes.py build all
 
       - name: Verify both resume PDFs are one-page A4 documents
+        if: ${{ inputs.build_resumes }}
         shell: bash
         run: |
           set -euo pipefail
@@ -168,6 +175,7 @@ jobs:
         run: echo "name=publications-${{ inputs.version }}" >> "$GITHUB_OUTPUT"
 
       - name: Set resume artifact name
+        if: ${{ inputs.build_resumes }}
         id: set-resume-name
         run: echo "name=resumes-${{ inputs.version }}" >> "$GITHUB_OUTPUT"
 
@@ -184,6 +192,7 @@ jobs:
           if-no-files-found: error
 
       - name: Upload bilingual resume PDFs
+        if: ${{ inputs.build_resumes }}
         uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.set-resume-name.outputs.name }}
