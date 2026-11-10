@@ -78,7 +78,7 @@ jobs:
           |---|---:|---|
           ${rows:-| No publication PDFs were produced | — | — |}
 
-          This rolling pre-release contains publications only.
+          This rolling pre-release contains publications and the owner's English and Persian resume PDFs.
           EOF
 
       - name: Replace rolling pre-release
