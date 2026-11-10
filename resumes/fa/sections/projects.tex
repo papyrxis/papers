@@ -7,7 +7,7 @@
     {}%
     {%
       \begin{cvitems}
-        \item {در معماری و یکپارچه‌سازی یک \lr{text editor} ماژولار مشارکت دارم: \lr{Kernel} مالک document state و \lr{undo/redo} است؛ \lr{Lua Runtime} فرمان‌ها و pluginها را مدیریت می‌کند و \lr{Backend} نشست‌ها و \lr{OS services} را فراهم می‌کند. \lr{TUI} محصول اصلی و \lr{GUI-SDL} هنوز experimental است.}
+        \item {در طراحی و یکپارچه‌سازی CDIN، یک \lr{text editor} ماژولار، مشارکت دارم. \lr{Kernel} داده و تاریخچهٔ ویرایش سند را نگه می‌دارد؛ \lr{Lua Runtime} فرمان‌ها و pluginها را اجرا می‌کند و \lr{Backend} مسئول sessionها و \lr{OS services} است. \lr{TUI} مسیر اصلی محصول است و \lr{GUI-SDL} هنوز experimental است.}
       \end{cvitems}%
     }%
 }
@@ -20,7 +20,7 @@
     {}%
     {%
       \begin{cvitems}
-        \item {یک framework برای ساخت سرویس‌های \lr{Node.js} است: componentها از طریق \lr{message bus} با هم ارتباط دارند؛ \lr{Dependency Injection} ترکیب moduleها را انجام می‌دهد و \lr{HTTP adapter}ها مستقل از core هستند.}
+        \item {frameworkی برای ساخت سرویس‌های \lr{Node.js} است. componentها با \lr{message bus} و \lr{event-driven flow} به هم متصل می‌شوند؛ \lr{Dependency Injection} ترکیب moduleها را انجام می‌دهد و \lr{HTTP adapter}ها از core جدا هستند.}
       \end{cvitems}%
     }%
 }
@@ -33,7 +33,7 @@
     {}%
     {%
       \begin{cvitems}
-        \item {یک \lr{coding agent} مبتنی بر \lr{Common Lisp} است که در process پایدار \lr{SBCL} اجرا می‌شود. مدل در runtime زنده ابزار و skill می‌سازد؛ تعریف‌ها به‌شکل \lr{cell} ذخیره می‌شوند و تغییرات generation قابلیت rollback دارند.}
+        \item {یک \lr{coding agent} مبتنی بر \lr{Common Lisp} است که در process پایدار \lr{SBCL} اجرا می‌شود. مدل در runtime زنده ابزار و skill می‌سازد؛ تعریف‌ها در قالب \lr{cell} نگه‌داری می‌شوند و تغییرات generation قابلیت rollback دارند.}
       \end{cvitems}%
     }%
 }
@@ -46,7 +46,7 @@
     {}%
     {%
       \begin{cvitems}
-        \item {پلتفرمی modular برای آزمایش سیستم‌های تصمیم‌گیری و trading است. \lr{Market data}، strategy، risk policy و execution با contractهای مستقل متصل‌اند؛ در نمونهٔ فعلی، شبیه‌سازی connectome مگس به‌عنوان brain در \lr{BTC-USDC paper trading} به‌کار می‌رود.}
+        \item {پلتفرمی modular برای آزمایش سیستم‌های تصمیم‌گیری است. \lr{Market data}، strategy، risk policy و execution با contractهای مستقل متصل‌اند؛ در نمونهٔ فعلی، شبیه‌سازی connectome مگس به‌عنوان brain در \lr{BTC-USDC paper trading} به‌کار می‌رود. اجرای live به opt-in صریح نیاز دارد.}
       \end{cvitems}%
     }%
 }
@@ -59,7 +59,7 @@
     {}%
     {%
       \begin{cvitems}
-        \item {\lr{Pipeline} اجرای taskها و \lr{CI} را یکپارچه می‌کند؛ \lr{gix} گردش branch و versioning در \lr{Git} را مدیریت می‌کند؛ \lr{psx} ساختار و quality checks مخزن را می‌سنجد؛ و \lr{log.c} یک logger ساختاریافتهٔ \lr{C11} با \lr{stable C ABI} است.}
+        \item {\lr{Pipeline} اجرای taskها و \lr{CI} را در local و providerهای مختلف یکپارچه می‌کند؛ \lr{gix} branch و versioning را مدیریت می‌کند؛ \lr{psx} ساختار و quality checks مخزن را بررسی می‌کند؛ و \lr{log.c} logging ساختاریافته را به برنامه‌های \lr{C11} اضافه می‌کند.}
       \end{cvitems}%
     }%
 }
@@ -75,7 +75,7 @@
   \vspace{1pt}
   {\small
     \textbf{پروژه‌های دیگر:}
-    \lr{Atabeh} ابزار \lr{Go} برای parse، normalize و تست کانفیگ‌های \lr{VPN/Proxy} است؛
+    \lr{Atabeh} ابزار \lr{Go} برای جمع‌آوری، parse و تست کانفیگ‌های \lr{VPN/Proxy} است؛
     \lr{FTX.vim} یک \lr{file-tree explorer} ناهمگام و \lr{Git-aware} برای \lr{Vim/Neovim} است.
   }%
 }
