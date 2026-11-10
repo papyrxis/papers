@@ -12,10 +12,11 @@ This repository is limited to works intended for publication: research papers, s
 
 The existing resume sources are being prepared for a dedicated repository under the m-mdy-m account. The connected GitHub actions can read/write existing repositories and create branches/PRs, but cannot create a new repository or transfer repository ownership. Therefore:
 
-1. Resume commands have been removed from the publication CLI, Makefile and release workflows.
+1. Resume commands remain excluded from the publication CLI and local Makefile targets.
 2. Resume source directories are retained temporarily so no personal document is lost.
-3. Create the destination repository under m-mdy-m, then transfer resumes/, configs/resumes/, resume templates and resume-specific metadata.
-4. After verifying the destination repository and CI, remove the retained source directories here in a follow-up PR.
+3. By the owner's explicit request, the reusable CI build compiles the English and Persian PDFs as a separate artifact; only the rolling latest-pre-release downloads that artifact. Versioned stable releases remain publication-only.
+4. Create the destination repository under m-mdy-m, then transfer resumes/, configs/resumes/, resume templates and resume-specific metadata.
+5. After verifying the destination repository and CI, remove the retained source directories here in a follow-up PR.
 
 ## Roadmaps
 
