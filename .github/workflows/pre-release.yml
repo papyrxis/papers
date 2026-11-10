@@ -18,6 +18,7 @@ jobs:
     uses: ./.github/workflows/build.yml
     with:
       version: latest-pre-release
+      build_resumes: true
 
   publish:
     name: Publish rolling pre-release
