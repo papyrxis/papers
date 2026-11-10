@@ -11,7 +11,10 @@ on:
     outputs:
       publications-artifact:
         description: "Artifact containing built papers and booklets"
-        value: ${{ jobs.publications.outputs.artifact-name }}
+        value: ${{ jobs.publications.outputs.publications-artifact }}
+      resumes-artifact:
+        description: "Artifact containing the English and Persian resume PDFs"
+        value: ${{ jobs.publications.outputs.resumes-artifact }}
 
 permissions:
   contents: read
