@@ -1,13 +1,13 @@
-% نمونه‌کارها از چهار حوزهٔ مکمل انتخاب شده‌اند.
+% پنج محور اصلی portfolio؛ پروژه‌های دیگر در یادداشت پایانی آمده‌اند.
 \newcommand{\projcdinFA}{%
   \cventry
     {\lr{C11 · Lua 5.4 · SDL3}}%
-    {\lr{CDIN} — ویرایشگر متن ماژولار}%
+    {\lr{CDIN} — \lr{Modular Text Editor}}%
     {\href{\ProjCdin}{\lr{cdin-editor/cdin}}}%
     {}%
     {%
       \begin{cvitems}
-        \item {پروژهٔ ویرایشگر متن چندسکویی با مرزبندی روشن میان هستهٔ اسناد، زمان‌اجرای \lr{Lua}، بک‌اند بومی و رابط‌های ترمینال/دسکتاپ؛ رندرر دسکتاپ مبتنی بر \lr{SDL} هنوز آزمایشی است.}
+        \item {روی طراحی و یکپارچه‌سازی یک \lr{text editor} ماژولار و cross-platform کار می‌کنم. \lr{Kernel} مالک document state و \lr{undo/redo} است، \lr{Lua Runtime} فرمان‌ها و pluginها را مدیریت می‌کند، \lr{Backend} نشست‌ها و \lr{OS services} را فراهم می‌کند و \lr{Frontend} رابط‌های \lr{TUI} و \lr{GUI-SDL} را ارائه می‌دهد؛ رندرر \lr{GUI-SDL} هنوز experimental است.}
       \end{cvitems}%
     }%
 }
@@ -15,38 +15,51 @@
 \newcommand{\projglandFA}{%
   \cventry
     {\lr{TypeScript · Node.js · Event-driven}}%
-    {\lr{GlandJS} — اکوسیستم فریم‌ورک بک‌اند}%
+    {\lr{GlandJS} — \lr{Backend Framework}}%
     {\href{\ProjGland}{\lr{glandjs/gland}}}%
     {}%
     {%
       \begin{cvitems}
-        \item {فریم‌ورک متن‌باز بک‌اند با ارتباط پیام‌محور، تزریق وابستگی، ترکیب ماژولار و لایهٔ مستقل از انتقال \lr{HTTP} همراه با آداپتورهای چندگانهٔ سرور.}
+        \item {یک framework بک‌اند برای ساخت سرویس‌های modular در \lr{Node.js}. ارتباط componentها از مسیر \lr{message bus} و \lr{event-driven flow} انجام می‌شود؛ \lr{Dependency Injection} و metadata مربوط به module و controller ترکیب برنامه را مدیریت می‌کنند و \lr{HTTP adapters} از core جدا هستند.}
+      \end{cvitems}%
+    }%
+}
+
+\newcommand{\projnodecodeFA}{%
+  \cventry
+    {\lr{Common Lisp · SBCL · Agent Runtime}}%
+    {\lr{Nodecode} — \lr{Coding Agent}}%
+    {\href{\ProjNodecode}{\lr{m-mdy-m/nodecode}}}%
+    {}%
+    {%
+      \begin{cvitems}
+        \item {یک coding agent که در یک process پایدار \lr{SBCL} اجرا می‌شود. مدل می‌تواند در همان runtime عبارت‌های \lr{Lisp} را ارزیابی کند، tool و skill بسازد و آن‌ها را در قالب \lr{cell} نگه دارد؛ تغییرات به‌صورت generation ثبت می‌شوند و امکان rollback دارند.}
+      \end{cvitems}%
+    }%
+}
+
+\newcommand{\projfladeFA}{%
+  \cventry
+    {\lr{Python · Neural Simulation · Risk Controls}}%
+    {\lr{FLADE} — \lr{Modular Decision Platform}}%
+    {\href{\ProjFlade}{\lr{m-mdy-m/flade}}}%
+    {}%
+    {%
+      \begin{cvitems}
+        \item {یک پلتفرم modular برای decision-making و trading که \lr{market data}، strategy، risk policy، brain و execution provider را با contractهای جدا نگه می‌دارد. نمونهٔ فعلی، simulation عصبی مبتنی بر connectome مگس را به‌عنوان brain قابل‌جایگزینی به جریان \lr{paper trading} برای \lr{BTC-USDC} متصل می‌کند؛ اجرای live به opt-in صریح نیاز دارد.}
       \end{cvitems}%
     }%
 }
 
 \newcommand{\projinfraFA}{%
   \cventry
-    {\lr{Go · C11 · Python · TypeScript}}%
-    {ابزارهای زیرساخت و توسعه}%
+    {\lr{Go · Python · C11}}%
+    {ابزارهای مهندسی و توسعه}%
     {\href{\ProjPipeline}{\lr{m-mdy-m/pipeline}}}%
     {}%
     {%
       \begin{cvitems}
-        \item {ابزارهای مهندسی قابل استفادهٔ مجدد: \lr{Pipeline} برای گراف وظایف و \lr{CI}، ابزار \lr{gix} برای گردش‌کار \lr{Git}، کنترل کیفیت مخزن با \lr{psx}، لاگ ساختاریافته با \lr{log.c} و بسته‌های منتشرشده در فضای نام‌های \lr{@medishn} و \lr{@glandjs} در \lr{npm}.}
-      \end{cvitems}%
-    }%
-}
-
-\newcommand{\projpapyrxisFA}{%
-  \cventry
-    {\lr{LaTeX · Python · Technical Publishing}}%
-    {\lr{Papyrxis} — نشر فنی و آموزشی}%
-    {\href{\ProjPapyrxis}{\lr{papyrxis/papers}}}%
-    {}%
-    {%
-      \begin{cvitems}
-        \item {محیط مشترک تولید و انتشار به‌همراه مجموعه‌ای از آثار فنی و آموزشی در مبانی رایانش، الگوریتم‌ها و ریاضیات؛ با نسخه‌های فارسی و انگلیسی و ابزارهای ساخت مشترک.}
+        \item {\lr{Pipeline} یک task runner و toolkit برای اجرای workflowها در local، \lr{GitHub Actions} و \lr{GitLab} است؛ \lr{gix} گردش branchهای \lr{Git} و versioning را مدیریت می‌کند؛ \lr{psx} ساختار و قواعد repository را بررسی می‌کند؛ و \lr{log.c} یک logger مبتنی بر \lr{C11} با structured records و \lr{stable C ABI} است.}
       \end{cvitems}%
     }%
 }
@@ -55,7 +68,15 @@
   \begin{cventries}
     \projcdinFA
     \projglandFA
+    \projnodecodeFA
+    \projfladeFA
     \projinfraFA
-    \projpapyrxisFA
   \end{cventries}%
+  \vspace{1pt}
+  {\small
+    \textbf{پروژه‌های دیگر:}
+    \lr{Atabeh} با \lr{Go} کانفیگ‌های \lr{VPN/Proxy} را جمع‌آوری، parse و normalize می‌کند
+    و اتصال آن‌ها را می‌سنجد؛ \lr{FTX.vim} هم یک \lr{file-tree explorer} ناهمگام و
+    \lr{Git-aware} برای \lr{Vim/Neovim} است.
+  }%
 }
