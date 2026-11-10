@@ -22,7 +22,7 @@ Use the directory-specific agent instructions before drafting or revising conten
 | Books and booklets | [booklets/AGENTS.md](booklets/AGENTS.md) | Learning design, chapter structure, bilingual editions, references, and PDF quality |
 | Personal resume sources | [resumes/AGENTS.md](resumes/AGENTS.md) | Person-first positioning, one-page layout, evidence, privacy, and the legacy build boundary |
 
-The resume guide applies only when the owner explicitly requests work on the retained personal sources. It does not change the repository's publication scope or add resumes to the normal publication build and release pipeline.
+The resume guide applies only when the owner explicitly requests work on the retained personal sources. The resumes remain outside the publication CLI and local Makefile targets; the owner-requested CI build compiles both language editions and publishes them only in the rolling latest-pre-release.
 
 ## Structure
 
