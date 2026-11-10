@@ -125,6 +125,23 @@ jobs:
           PROJECT_VERSION: ${{ inputs.version }}
           BUILD_DATE: ${{ github.run_started_at }}
 
+      - name: Build English and Persian resumes
+        run: python scripts/resumes.py build all
+
+      - name: Verify both resume PDFs are one-page A4 documents
+        shell: bash
+        run: |
+          set -euo pipefail
+          for pdf in build/Mahdi-Mamashli-Resume.pdf build/Mahdi-Mamashli-Resume-FA.pdf; do
+            test -s "$pdf"
+            pages="$(pdfinfo "$pdf" | awk '$1 == "Pages:" { print $2 }')"
+            if [[ "$pages" != "1" ]]; then
+              echo "Expected exactly one page in $pdf; found ${pages:-unknown}." >&2
+              exit 1
+            fi
+            echo "Verified $pdf (${pages} page)."
+          done
+
       - name: Upload LaTeX failure diagnostics
         if: always()
         uses: actions/upload-artifact@v4
