@@ -105,7 +105,7 @@ def _build_one(lang: str) -> bool:
     out_dir.mkdir(parents=True, exist_ok=True)
 
     result = subprocess.run(
-        [engine, "-interaction=nonstopmode",
+        [engine, "-interaction=nonstopmode", "-halt-on-error", "-file-line-error",
          f"-output-directory={out_dir}", "resume.tex"],
         cwd=resume_dir,
         stdout=subprocess.PIPE,
