@@ -1,0 +1,25 @@
+# Ubuntu apt package manifest for the Papers publication build.
+# One apt package name per line; this file is also the apt archive cache key.
+# LaTeX toolchain
+latexmk
+biber
+texlive-latex-base
+texlive-latex-recommended
+texlive-latex-extra
+texlive-bibtex-extra
+texlive-science
+texlive-xetex
+texlive-luatex
+texlive-lang-arabic
+texlive-fonts-recommended
+# Fonts and document assets
+fonts-freefont-ttf
+fonts-urw-base35
+fonts-liberation
+fonts-noto
+fonts-vazirmatn
+fontconfig
+librsvg2-bin
+# Native logging dependency build
+cmake
+build-essential
