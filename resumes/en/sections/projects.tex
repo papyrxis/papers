@@ -1,31 +1,40 @@
-% Selected work is intentionally balanced across the author's portfolio.
+% Five primary workstreams plus a compact note on additional open-source projects.
 \newcommand{\projcdin}{%
   \proj{CDIN}{C11 $\cdot$ Lua 5.4 $\cdot$ SDL3}{%
-    \item A modular, cross-platform text-editor project built around explicit component boundaries: document kernel, Lua runtime, native backend, and terminal/desktop frontends. The SDL desktop renderer remains experimental.%
+    \item I work on the architecture and integration of a modular, cross-platform text editor. The Kernel owns document state and undo/redo; the Lua Runtime manages commands and plugins; the Backend provides sessions and OS services; and Frontends provide TUI and GUI-SDL interfaces. The GUI-SDL renderer remains experimental.%
   }{cdin-editor/cdin}%
 }
 
 \newcommand{\projgland}{%
-  \proj{GlandJS}{TypeScript $\cdot$ Node.js $\cdot$ Event-driven systems}{%
-    \item An open-source backend framework and package ecosystem built around message-driven communication, dependency injection, modular composition, and a transport-independent HTTP layer with multiple server adapters.%
+  \proj{GlandJS}{TypeScript $\cdot$ Node.js $\cdot$ Event-driven}{%
+    \item A backend framework for modular Node.js services. Components communicate through a message bus; dependency injection and module/controller metadata handle composition; and HTTP adapters stay separate from the core. This keeps application logic from depending directly on one server or transport.%
   }{glandjs/gland}%
 }
 
-\newcommand{\projinfra}{%
-  \proj{Developer Infrastructure}{Go $\cdot$ C11 $\cdot$ Python $\cdot$ TypeScript}{%
-    \item Reusable engineering tools including Pipeline (task-graph CI), gix (Git workflow CLI), psx (repository quality checks), and log.c (structured C logging), alongside published packages in the \texttt{@medishn} and \texttt{@glandjs} npm namespaces.%
-  }{m-mdy-m/pipeline}%
+\newcommand{\projnodecode}{%
+  \proj{Nodecode}{Common Lisp $\cdot$ SBCL $\cdot$ Agent Runtime}{%
+    \item A coding agent that runs in a persistent SBCL process. The model evaluates Lisp in the live runtime, defines reusable tools and skills as cells, and keeps changes as generations that can be rolled back.%
+  }{m-mdy-m/nodecode}%
 }
 
-\newcommand{\projpapyrxis}{%
-  \proj{Papyrxis}{LaTeX $\cdot$ Python $\cdot$ Technical Publishing}{%
-    \item A publishing workspace and body of technical/educational works spanning computing foundations, algorithms, and mathematics, with English and Persian editions and shared build tooling.%
-  }{papyrxis/papers}%
+\newcommand{\projflade}{%
+  \proj{FLADE}{Python $\cdot$ Neural Simulation $\cdot$ Risk Controls}{%
+    \item A modular decision and trading platform with separate contracts for market data, strategies, risk policies, brains, and execution providers. Its current research setup uses a fly-connectome neural simulation as a pluggable decision module in a BTC-USDC paper-trading flow; live execution requires explicit opt-in.%
+  }{m-mdy-m/flade}%
+}
+
+\newcommand{\projinfra}{%
+  \proj{Developer Infrastructure}{Go $\cdot$ Python $\cdot$ C11}{%
+    \item Reusable engineering tools: Pipeline, a task runner and cross-provider CI toolkit; gix, a Git-branching and versioning CLI; psx, repository-structure and quality checks; and log.c, a C11 logger with structured records and a stable C ABI.%
+  }{m-mdy-m/pipeline}%
 }
 
 \newcommand{\ResumeProjectsEN}{%
   \projcdin
   \projgland
+  \projnodecode
+  \projflade
   \projinfra
-  \projpapyrxis
+  \vspace{1pt}
+  {\small\textit{Additional work:} Atabeh (Go) collects, parses and normalizes VPN/proxy configurations and tests connectivity; FTX.vim is an asynchronous, Git-aware file-tree explorer for Vim/Neovim.}
 }
