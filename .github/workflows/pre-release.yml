@@ -35,6 +35,12 @@ jobs:
           name: ${{ needs.build.outputs.publications-artifact }}
           path: dist/publications
 
+      - name: Download English and Persian resume PDFs
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ needs.build.outputs.resumes-artifact }}
+          path: dist/publications/resumes
+
       - name: Move rolling tag to HEAD
         run: |
           git config user.name "github-actions[bot]"
