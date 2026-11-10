@@ -175,6 +175,6 @@ help:
 	@echo "  make tags | changelog | bump LEVEL=minor"
 	@echo "  make tag RELEASE_VERSION=v1.2.0 | push TAGS=1"
 	@echo "  make clean | sync | doctor | version"
-	@echo "  CVs await transfer; roadmaps are not part of this repository."
+	@echo "  CVs stay outside local publication builds; CI attaches them to latest-pre-release per owner request."
 
 .DEFAULT_GOAL := help
