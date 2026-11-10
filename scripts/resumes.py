@@ -116,6 +116,10 @@ def _build_one(lang: str) -> bool:
         if any(x in line for x in ("! ", "l.", "Error", "Warning")):
             print(f"  {line}")
 
+    if result.returncode != 0:
+        warn(f"[{lang}] {engine} exited with status {result.returncode}")
+        return False
+
     src = out_dir / "resume.pdf"
     dst = BUILD_DIR / f"{out}.pdf"
 
