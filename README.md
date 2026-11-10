@@ -10,7 +10,7 @@ The intended repository name is papyrxis/publications. This PR does not change G
 
 Included: research papers, standalone articles, books and educational booklets, including English and Persian editions.
 
-Excluded: personal CVs/resumes and personal roadmaps. Roadmap content is removed from this repository. Resume source files remain temporarily in the legacy tree so they can be transferred to a dedicated repository under m-mdy-m without losing data; they are excluded from the CLI, build, CI and release workflows.
+Excluded from publication authoring and the local CLI: personal CVs/resumes and personal roadmaps. Roadmap content is removed from this repository. Resume source files remain temporarily in the legacy tree for transfer to a dedicated repository under m-mdy-m. Per the owner's explicit request, CI builds both resume languages as a separate artifact and attaches them only to the rolling latest-pre-release; versioned stable releases remain publication-only.
 
 ## Authoring instructions
 
