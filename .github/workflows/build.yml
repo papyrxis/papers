@@ -30,28 +30,77 @@ jobs:
           submodules: recursive
           fetch-depth: 0
 
-      - name: Install publication-specific tools
-        run: |
-          set -euo pipefail
-          sudo apt-get update -qq
-          sudo apt-get install -y --no-install-recommends librsvg2-bin fonts-freefont-ttf fonts-urw-base35 cmake build-essential
-          fc-cache -f
-
-      - name: Install PSX
+      - name: Set up Go for pinned repository tools
         uses: actions/setup-go@v7
         with:
-          go-version: stable
+          go-version: "1.25.x"
+          cache: false
 
-      - name: Run repository quality policy
-        run: |
-          go install github.com/m-mdy-m/psx/cmd/psx@v0.3.2
-          echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
-          "$(go env GOPATH)/bin/psx" check --config psx.yml
+      - name: Record resolved Go version
+        id: go-version
+        shell: bash
+        run: echo "version=$(go version | awk '{print $3}')" >> "$GITHUB_OUTPUT"
 
-      - name: Build m-mdy-m/log.c
+      - name: Cache Go modules, compiler cache and pinned tools
+        id: go-tools-cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/go/pkg/mod
+            ~/.cache/go-build
+            ~/go/bin
+          key: papers-go-${{ runner.os }}-${{ runner.arch }}-${{ steps.go-version.outputs.version }}-${{ hashFiles('.ci/locks/go-tools.lock') }}
+
+      - name: Install pinned repository tools
+        shell: bash
+        env:
+          GO_TOOLS_CACHE_HIT: ${{ steps.go-tools-cache.outputs.cache-hit }}
         run: |
           set -euo pipefail
-          git clone --depth 1 --branch v0.1.0 https://github.com/m-mdy-m/log.c.git "$RUNNER_TEMP/mmlog"
+          source .ci/locks/go-tools.lock
+          : "${GIX_VERSION:?GIX_VERSION is required in .ci/locks/go-tools.lock}"
+          : "${PSX_VERSION:?PSX_VERSION is required in .ci/locks/go-tools.lock}"
+          : "${LOG_C_VERSION:?LOG_C_VERSION is required in .ci/locks/go-tools.lock}"
+          tool_bin="$(go env GOPATH)/bin"
+          if [[ "$GO_TOOLS_CACHE_HIT" != "true" || ! -x "$tool_bin/gix" || ! -x "$tool_bin/psx" ]]; then
+            go install "github.com/m-mdy-m/gix/cmd/gix@${GIX_VERSION}"
+            go install "github.com/m-mdy-m/psx/cmd/psx@${PSX_VERSION}"
+          else
+            echo "Restored gix ${GIX_VERSION} and psx ${PSX_VERSION} from the lock-scoped cache."
+          fi
+          echo "$tool_bin" >> "$GITHUB_PATH"
+
+      - name: Cache Ubuntu package archives
+        uses: actions/cache@v4
+        with:
+          path: /var/cache/apt/archives/*.deb
+          key: papers-apt-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('.ci/locks/ubuntu-packages.lock') }}
+
+      - name: Install locked Ubuntu build dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -t packages < <(grep -Ev '^[[:space:]]*(#|$)' .ci/locks/ubuntu-packages.lock)
+          test "${#packages[@]}" -gt 0
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends "${packages[@]}"
+          fc-cache -f
+
+      - name: Cache Python package downloads
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: papers-pip-${{ runner.os }}-py-${{ hashFiles('.ci/locks/python-requirements.lock') }}
+
+      - name: Run repository quality policy
+        run: psx check --config psx.yml
+
+      - name: Build m-mdy-m/log.c
+        shell: bash
+        run: |
+          set -euo pipefail
+          source .ci/locks/go-tools.lock
+          git clone --depth 1 --branch "$LOG_C_VERSION" https://github.com/m-mdy-m/log.c.git "$RUNNER_TEMP/mmlog"
           cmake -S "$RUNNER_TEMP/mmlog" -B "$RUNNER_TEMP/mmlog/build" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$RUNNER_TEMP/mmlog/install" -DBUILD_SHARED_LIBS=ON -DM_MDY_M_LOG_BUILD_TESTS=OFF -DM_MDY_M_LOG_BUILD_EXAMPLES=OFF
           cmake --build "$RUNNER_TEMP/mmlog/build" --parallel
           cmake --install "$RUNNER_TEMP/mmlog/build"
@@ -66,7 +115,7 @@ jobs:
           language: latex
           working-directory: .
           stages: install,build,test
-          install-command: python -m pip install -e workspace
+          install-command: python -m pip install -r .ci/locks/python-requirements.lock -e workspace
           timeout-seconds: "3600"
         env:
           PROJECT_VERSION: ${{ inputs.version }}
