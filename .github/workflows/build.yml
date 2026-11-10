@@ -165,6 +165,9 @@ jobs:
             build/**/*.fls
             build/**/*.fdb_latexmk
             build/**/*.bcf
+            build/resumes/**/*.pdf
+            build/Mahdi-Mamashli-Resume.pdf
+            build/Mahdi-Mamashli-Resume-FA.pdf
             papers/**/main.tex
             .pxis/preset.tex
           retention-days: 7
