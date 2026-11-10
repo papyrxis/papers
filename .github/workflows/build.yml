@@ -21,7 +21,7 @@ permissions:
 
 jobs:
   publications:
-    name: Build papers and booklets
+    name: Build publications and bilingual resumes
     runs-on: ubuntu-latest
     timeout-minutes: 90
     outputs:
@@ -134,12 +134,18 @@ jobs:
           set -euo pipefail
           for pdf in build/Mahdi-Mamashli-Resume.pdf build/Mahdi-Mamashli-Resume-FA.pdf; do
             test -s "$pdf"
-            pages="$(pdfinfo "$pdf" | awk '$1 == "Pages:" { print $2 }')"
+            metadata="$(pdfinfo "$pdf")"
+            pages="$(awk '$1 == "Pages:" { print $2 }' <<< "$metadata")"
+            page_size="$(sed -n 's/^Page size:[[:space:]]*//p' <<< "$metadata")"
             if [[ "$pages" != "1" ]]; then
               echo "Expected exactly one page in $pdf; found ${pages:-unknown}." >&2
               exit 1
             fi
-            echo "Verified $pdf (${pages} page)."
+            if [[ "$page_size" != *"(A4)"* ]]; then
+              echo "Expected A4 page size in $pdf; found ${page_size:-unknown}." >&2
+              exit 1
+            fi
+            echo "Verified $pdf (${pages} page, ${page_size})."
           done
 
       - name: Upload LaTeX failure diagnostics
