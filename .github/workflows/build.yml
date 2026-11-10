@@ -25,7 +25,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 90
     outputs:
-      artifact-name: ${{ steps.set-name.outputs.name }}
+      publications-artifact: ${{ steps.set-publication-name.outputs.name }}
+      resumes-artifact: ${{ steps.set-resume-name.outputs.name }}
     steps:
       - name: Checkout with shared Workspace
         uses: actions/checkout@v4
