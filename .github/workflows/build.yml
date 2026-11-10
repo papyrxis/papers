@@ -157,14 +157,32 @@ jobs:
           retention-days: 7
           if-no-files-found: warn
 
-      - name: Set artifact name
-        id: set-name
+      - name: Set publication artifact name
+        id: set-publication-name
         run: echo "name=publications-${{ inputs.version }}" >> "$GITHUB_OUTPUT"
+
+      - name: Set resume artifact name
+        id: set-resume-name
+        run: echo "name=resumes-${{ inputs.version }}" >> "$GITHUB_OUTPUT"
 
       - name: Upload publication PDFs
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ steps.set-name.outputs.name }}
-          path: build/**/*.pdf
+          name: ${{ steps.set-publication-name.outputs.name }}
+          path: |
+            build/**/*.pdf
+            !build/Mahdi-Mamashli-Resume.pdf
+            !build/Mahdi-Mamashli-Resume-FA.pdf
+            !build/resumes/**/*.pdf
+          retention-days: 30
+          if-no-files-found: error
+
+      - name: Upload bilingual resume PDFs
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.set-resume-name.outputs.name }}
+          path: |
+            build/Mahdi-Mamashli-Resume.pdf
+            build/Mahdi-Mamashli-Resume-FA.pdf
           retention-days: 30
           if-no-files-found: error
