@@ -105,7 +105,7 @@ def _build_one(lang: str) -> bool:
     out_dir.mkdir(parents=True, exist_ok=True)
 
     result = subprocess.run(
-        [engine, "-interaction=nonstopmode",
+        [engine, "-interaction=nonstopmode", "-halt-on-error", "-file-line-error",
          f"-output-directory={out_dir}", "resume.tex"],
         cwd=resume_dir,
         stdout=subprocess.PIPE,
@@ -115,6 +115,10 @@ def _build_one(lang: str) -> bool:
     for line in result.stdout.splitlines():
         if any(x in line for x in ("! ", "l.", "Error", "Warning")):
             print(f"  {line}")
+
+    if result.returncode != 0:
+        warn(f"[{lang}] {engine} exited with status {result.returncode}")
+        return False
 
     src = out_dir / "resume.pdf"
     dst = BUILD_DIR / f"{out}.pdf"

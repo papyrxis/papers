@@ -8,21 +8,30 @@ on:
         required: false
         type: string
         default: "dev"
+      build_resumes:
+        description: "Build the English and Persian resume PDFs"
+        required: false
+        type: boolean
+        default: true
     outputs:
       publications-artifact:
         description: "Artifact containing built papers and booklets"
-        value: ${{ jobs.publications.outputs.artifact-name }}
+        value: ${{ jobs.publications.outputs.publications-artifact }}
+      resumes-artifact:
+        description: "Artifact containing the English and Persian resume PDFs"
+        value: ${{ jobs.publications.outputs.resumes-artifact }}
 
 permissions:
   contents: read
 
 jobs:
   publications:
-    name: Build papers and booklets
+    name: Build publications and bilingual resumes
     runs-on: ubuntu-latest
     timeout-minutes: 90
     outputs:
-      artifact-name: ${{ steps.set-name.outputs.name }}
+      publications-artifact: ${{ steps.set-publication-name.outputs.name }}
+      resumes-artifact: ${{ steps.set-resume-name.outputs.name }}
     steps:
       - name: Checkout with shared Workspace
         uses: actions/checkout@v4
@@ -30,28 +39,77 @@ jobs:
           submodules: recursive
           fetch-depth: 0
 
-      - name: Install publication-specific tools
-        run: |
-          set -euo pipefail
-          sudo apt-get update -qq
-          sudo apt-get install -y --no-install-recommends librsvg2-bin fonts-freefont-ttf fonts-urw-base35 cmake build-essential
-          fc-cache -f
-
-      - name: Install PSX
+      - name: Set up Go for pinned repository tools
         uses: actions/setup-go@v7
         with:
-          go-version: stable
+          go-version: "1.25.x"
+          cache: false
 
-      - name: Run repository quality policy
-        run: |
-          go install github.com/m-mdy-m/psx/cmd/psx@v0.3.2
-          echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
-          "$(go env GOPATH)/bin/psx" check --config psx.yml
+      - name: Record resolved Go version
+        id: go-version
+        shell: bash
+        run: echo "version=$(go version | awk '{print $3}')" >> "$GITHUB_OUTPUT"
 
-      - name: Build m-mdy-m/log.c
+      - name: Cache Go modules, compiler cache and pinned tools
+        id: go-tools-cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/go/pkg/mod
+            ~/.cache/go-build
+            ~/go/bin
+          key: papers-go-${{ runner.os }}-${{ runner.arch }}-${{ steps.go-version.outputs.version }}-${{ hashFiles('.ci/locks/go-tools.lock') }}
+
+      - name: Install pinned repository tools
+        shell: bash
+        env:
+          GO_TOOLS_CACHE_HIT: ${{ steps.go-tools-cache.outputs.cache-hit }}
         run: |
           set -euo pipefail
-          git clone --depth 1 --branch v0.1.0 https://github.com/m-mdy-m/log.c.git "$RUNNER_TEMP/mmlog"
+          source .ci/locks/go-tools.lock
+          : "${GIX_VERSION:?GIX_VERSION is required in .ci/locks/go-tools.lock}"
+          : "${PSX_VERSION:?PSX_VERSION is required in .ci/locks/go-tools.lock}"
+          : "${LOG_C_VERSION:?LOG_C_VERSION is required in .ci/locks/go-tools.lock}"
+          tool_bin="$(go env GOPATH)/bin"
+          if [[ "$GO_TOOLS_CACHE_HIT" != "true" || ! -x "$tool_bin/gix" || ! -x "$tool_bin/psx" ]]; then
+            go install "github.com/m-mdy-m/gix/cmd/gix@${GIX_VERSION}"
+            go install "github.com/m-mdy-m/psx/cmd/psx@${PSX_VERSION}"
+          else
+            echo "Restored gix ${GIX_VERSION} and psx ${PSX_VERSION} from the lock-scoped cache."
+          fi
+          echo "$tool_bin" >> "$GITHUB_PATH"
+
+      - name: Cache Ubuntu package archives
+        uses: actions/cache@v4
+        with:
+          path: /var/cache/apt/archives/*.deb
+          key: papers-apt-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('.ci/locks/ubuntu-packages.lock') }}
+
+      - name: Install locked Ubuntu build dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -t packages < <(grep -Ev '^[[:space:]]*(#|$)' .ci/locks/ubuntu-packages.lock)
+          test "${#packages[@]}" -gt 0
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends "${packages[@]}"
+          fc-cache -f
+
+      - name: Cache Python package downloads
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: papers-pip-${{ runner.os }}-py-${{ hashFiles('.ci/locks/python-requirements.lock') }}
+
+      - name: Run repository quality policy
+        run: psx check --config psx.yml
+
+      - name: Build m-mdy-m/log.c
+        shell: bash
+        run: |
+          set -euo pipefail
+          source .ci/locks/go-tools.lock
+          git clone --depth 1 --branch "$LOG_C_VERSION" https://github.com/m-mdy-m/log.c.git "$RUNNER_TEMP/mmlog"
           cmake -S "$RUNNER_TEMP/mmlog" -B "$RUNNER_TEMP/mmlog/build" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$RUNNER_TEMP/mmlog/install" -DBUILD_SHARED_LIBS=ON -DM_MDY_M_LOG_BUILD_TESTS=OFF -DM_MDY_M_LOG_BUILD_EXAMPLES=OFF
           cmake --build "$RUNNER_TEMP/mmlog/build" --parallel
           cmake --install "$RUNNER_TEMP/mmlog/build"
@@ -66,11 +124,36 @@ jobs:
           language: latex
           working-directory: .
           stages: install,build,test
-          install-command: python -m pip install -e workspace
+          install-command: python -m pip install -r .ci/locks/python-requirements.lock -e workspace
           timeout-seconds: "3600"
         env:
           PROJECT_VERSION: ${{ inputs.version }}
           BUILD_DATE: ${{ github.run_started_at }}
+
+      - name: Build English and Persian resumes
+        if: ${{ inputs.build_resumes }}
+        run: python scripts/resumes.py build all
+
+      - name: Verify both resume PDFs are one-page A4 documents
+        if: ${{ inputs.build_resumes }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          for pdf in build/Mahdi-Mamashli-Resume.pdf build/Mahdi-Mamashli-Resume-FA.pdf; do
+            test -s "$pdf"
+            metadata="$(pdfinfo "$pdf")"
+            pages="$(awk '$1 == "Pages:" { print $2 }' <<< "$metadata")"
+            page_size="$(sed -n 's/^Page size:[[:space:]]*//p' <<< "$metadata")"
+            if [[ "$pages" != "1" ]]; then
+              echo "Expected exactly one page in $pdf; found ${pages:-unknown}." >&2
+              exit 1
+            fi
+            if [[ "$page_size" != *"(A4)"* ]]; then
+              echo "Expected A4 page size in $pdf; found ${page_size:-unknown}." >&2
+              exit 1
+            fi
+            echo "Verified $pdf (${pages} page, ${page_size})."
+          done
 
       - name: Upload LaTeX failure diagnostics
         if: always()
@@ -87,14 +170,34 @@ jobs:
           retention-days: 7
           if-no-files-found: warn
 
-      - name: Set artifact name
-        id: set-name
+      - name: Set publication artifact name
+        id: set-publication-name
         run: echo "name=publications-${{ inputs.version }}" >> "$GITHUB_OUTPUT"
+
+      - name: Set resume artifact name
+        if: ${{ inputs.build_resumes }}
+        id: set-resume-name
+        run: echo "name=resumes-${{ inputs.version }}" >> "$GITHUB_OUTPUT"
 
       - name: Upload publication PDFs
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ steps.set-name.outputs.name }}
-          path: build/**/*.pdf
+          name: ${{ steps.set-publication-name.outputs.name }}
+          path: |
+            build/**/*.pdf
+            !build/Mahdi-Mamashli-Resume.pdf
+            !build/Mahdi-Mamashli-Resume-FA.pdf
+            !build/resumes/**/*.pdf
+          retention-days: 30
+          if-no-files-found: error
+
+      - name: Upload bilingual resume PDFs
+        if: ${{ inputs.build_resumes }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.set-resume-name.outputs.name }}
+          path: |
+            build/Mahdi-Mamashli-Resume.pdf
+            build/Mahdi-Mamashli-Resume-FA.pdf
           retention-days: 30
           if-no-files-found: error

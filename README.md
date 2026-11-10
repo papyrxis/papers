@@ -10,7 +10,7 @@ The intended repository name is papyrxis/publications. This PR does not change G
 
 Included: research papers, standalone articles, books and educational booklets, including English and Persian editions.
 
-Excluded: personal CVs/resumes and personal roadmaps. Roadmap content is removed from this repository. Resume source files remain temporarily in the legacy tree so they can be transferred to a dedicated repository under m-mdy-m without losing data; they are excluded from the CLI, build, CI and release workflows.
+Excluded from publication authoring and the local CLI: personal CVs/resumes and personal roadmaps. Roadmap content is removed from this repository. Resume source files remain temporarily in the legacy tree for transfer to a dedicated repository under m-mdy-m. Per the owner's explicit request, CI builds both resume languages as a separate artifact and attaches them only to the rolling latest-pre-release; versioned stable releases remain publication-only.
 
 ## Authoring instructions
 
@@ -22,7 +22,7 @@ Use the directory-specific agent instructions before drafting or revising conten
 | Books and booklets | [booklets/AGENTS.md](booklets/AGENTS.md) | Learning design, chapter structure, bilingual editions, references, and PDF quality |
 | Personal resume sources | [resumes/AGENTS.md](resumes/AGENTS.md) | Person-first positioning, one-page layout, evidence, privacy, and the legacy build boundary |
 
-The resume guide applies only when the owner explicitly requests work on the retained personal sources. It does not change the repository's publication scope or add resumes to the normal publication build and release pipeline.
+The resume guide applies only when the owner explicitly requests work on the retained personal sources. The resumes remain outside the publication CLI and local Makefile targets; the owner-requested CI build compiles both language editions and publishes them only in the rolling latest-pre-release.
 
 ## Structure
 
@@ -74,7 +74,7 @@ Target differences should be configuration, not repeated build scripts. A target
 
 ## CI and releases
 
-The reusable build workflow runs the Pipeline LaTeX preset, builds papers and booklets, validates generated PDFs, and uploads one publication artifact. Releases contain publication PDFs only.
+The reusable build workflow runs the Pipeline LaTeX preset, builds papers and booklets, and uploads a separate artifact for the English and Persian resumes after validating both as one-page PDFs. The rolling latest-pre-release includes both artifact sets; versioned stable releases consume publication PDFs only.
 
 ## Migration notes
 

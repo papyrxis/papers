@@ -18,6 +18,7 @@ jobs:
     uses: ./.github/workflows/build.yml
     with:
       version: latest-pre-release
+      build_resumes: true
 
   publish:
     name: Publish rolling pre-release
@@ -34,6 +35,12 @@ jobs:
         with:
           name: ${{ needs.build.outputs.publications-artifact }}
           path: dist/publications
+
+      - name: Download English and Persian resume PDFs
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ needs.build.outputs.resumes-artifact }}
+          path: dist/publications/resumes
 
       - name: Move rolling tag to HEAD
         run: |
@@ -72,7 +79,7 @@ jobs:
           |---|---:|---|
           ${rows:-| No publication PDFs were produced | — | — |}
 
-          This rolling pre-release contains publications only.
+          This rolling pre-release contains publications and the owner's English and Persian resume PDFs.
           EOF
 
       - name: Replace rolling pre-release
