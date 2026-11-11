@@ -1,31 +1,33 @@
-% Selected public projects with clear, attributable descriptions.
-\newcommand{\projcdin}{%
-  \proj{CDIN}{C11 $\cdot$ Lua 5.4 $\cdot$ SDL3}{%
-    \item I created CDIN, a project to build a modular text editor. Its core stores document content and edit history, the Lua-based runtime executes commands and plugins, and a separate layer handles operating-system services. The terminal interface is the primary experience; the SDL-based graphical interface is still experimental.%
-  }{cdin-editor/cdin}%
-}
-
+% Selected public projects with attributable work and clear maturity labels.
 \newcommand{\projgland}{%
-  \proj{GlandJS}{TypeScript $\cdot$ Node.js $\cdot$ Event-driven}{%
-    \item GlandJS is a framework for building server-side applications with TypeScript and Node.js. Instead of calling one another directly, parts of an application communicate through messages and events. The framework manages service creation and keeps the core separate from the web server, so the request-handling layer can change without rewriting the main application logic.%
+  \proj{GlandJS}{TypeScript · Node.js · Event-driven}{%
+    \item Creator and primary maintainer of an event-driven Node.js framework. Its package ecosystem combines module bootstrapping, dependency injection, lifecycle hooks, event messaging, and a transport-independent HTTP layer with adapters for Express, Fastify, Koa, Hono, and node:http. Core packages are published under the \texttt{@glandjs} npm scope.%
   }{glandjs/gland}%
 }
 
+\newcommand{\projcdin}{%
+  \proj{CDIN Editor}{C11 · Lua 5.4 · Protocol design}{%
+    \item Creator and architect of a modular text-editor project. Its independently maintained components separate binary-safe document state (Kernel), Lua-based editor behavior (Runtime), OS/session services (Backend), and protocol-driven presentation (Frontend). Product composition and the first interactive release remain in active development; the SDL desktop renderer is experimental.%
+  }{cdin-editor/cdin}%
+}
+
 \newcommand{\projinfra}{%
-  \proj{Developer Tools}{Go $\cdot$ Python $\cdot$ C11}{%
-    \item A set of tools for everyday software development: Pipeline defines build, test, and release tasks once and runs them locally or in GitHub Actions and GitLab CI; gix simplifies Git branch and version management; psx checks whether a repository has the files and structure required by its project rules; and log.c is a lightweight logging library for C programs.%
+  \proj{Developer Toolchain}{Go · Python · CI/CD}{%
+    \item Built a reusable engineering toolchain: Pipeline runs one task graph locally and in GitHub Actions or GitLab CI; gix automates a configured Git branching and release flow; PSX checks repository structure and project policy.%
   }{m-mdy-m/pipeline}%
 }
 
-\newcommand{\projftx}{%
-  \proj{FTX.vim}{Vim Script $\cdot$ Vim $\cdot$ Neovim}{%
-    \item A file-tree plugin for Vim and Neovim. It updates the tree asynchronously to keep the editor responsive and displays Git status alongside files and directories.%
-  }{m-mdy-m/ftx.vim}%
+\newcommand{\projpapyrxis}{%
+  \proj{Papyrxis Publishing}{LaTeX · Python · Technical Writing}{%
+    \item Created a bilingual publishing workflow and the reusable Papyrxis Workspace for books, booklets, articles, and multi-document releases. It supports configurable LaTeX builds, export, PDF validation, and release automation; authored works include Arliz, Git Internals, and the ongoing Mathesis series.%
+  }{papyrxis/papers}%
 }
 
 \newcommand{\ResumeProjectsEN}{%
-  \projcdin
   \projgland
+  \projcdin
   \projinfra
-  \projftx
+  \projpapyrxis
+  \vspace{1pt}
+  {\small\textbf{Additional work:} Agas, a terminal and JavaScript HTTP client distributed through npm and Docker Hub; Shelf, a local-first PDF reading workspace with optional source-grounded AI, in active development; and FTX.vim, an asynchronous file-tree plugin for Vim and Neovim.}%
 }
