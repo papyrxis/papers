@@ -382,7 +382,7 @@ def _build_one_paper(slug: str) -> bool:
     _generate_main_tex(slug)
     env = os.environ.copy()
     env["PYTHONPATH"] = os.pathsep.join(filter(None, [str(ROOT / "workspace"), env.get("PYTHONPATH", "")]))
-    command = [sys.executable, "-m", "px", "--root", str(ROOT), "build", slug, "--edition", "default"]
+    command = [sys.executable, "-m", "px", "--root", str(ROOT), "build", slug, "--edition", "en"]
     result = subprocess.run(command, cwd=ROOT, env=env, check=False)
     if result.returncode:
         warn(f"[{slug}] Workspace build failed with exit code {result.returncode}")
