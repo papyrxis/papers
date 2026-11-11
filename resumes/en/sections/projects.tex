@@ -1,33 +1,41 @@
-% Selected public projects with attributable work and clear maturity labels.
+% Five compact groups represent the wider portfolio without turning the page
+% into a repository dump. Every project name links to its canonical repository.
 \newcommand{\projgland}{%
-  \proj{GlandJS}{TypeScript · Node.js · Event-driven}{%
-    \item Creator and primary maintainer of an event-driven Node.js framework. Its package ecosystem combines module bootstrapping, dependency injection, lifecycle hooks, event messaging, and a transport-independent HTTP layer with adapters for Express, Fastify, Koa, Hono, and node:http. Core packages are published under the \texttt{@glandjs} npm scope.%
+  \proj{GlandJS}{TypeScript $\cdot$ Node.js $\cdot$ Event-driven}{%
+    \item Creator and primary maintainer of an event-driven Node.js framework with module lifecycle, dependency injection, event messaging, and a transport-independent HTTP layer with server adapters.%
   }{glandjs/gland}%
 }
 
+\newcommand{\projworkspace}{%
+  \proj{IDIOS \& Shelf}{Go $\cdot$ TypeScript $\cdot$ Local-first}{%
+    \item Created two local-first workspaces: IDIOS brings projects, notes, reading, and planning into CLI and Web/PWA clients; Shelf focuses on PDF reading, annotations, and optional source-grounded AI assistance. Shelf remains in active development.%
+  }{m-mdy-m/idios}%
+}
+
 \newcommand{\projcdin}{%
-  \proj{CDIN Editor}{C11 · Lua 5.4 · Protocol design}{%
-    \item Creator and architect of a modular text-editor project. Its independently maintained components separate binary-safe document state (Kernel), Lua-based editor behavior (Runtime), OS/session services (Backend), and protocol-driven presentation (Frontend). Product composition and the first interactive release remain in active development; the SDL desktop renderer is experimental.%
+  \proj{CDIN Editor}{C11 $\cdot$ Lua 5.4 $\cdot$ Protocol design}{%
+    \item Creator and architect of a modular editor with separate document Kernel, Lua Runtime, native Backend, and protocol-driven Frontend. Product integration remains in development; the SDL desktop renderer is experimental.%
   }{cdin-editor/cdin}%
 }
 
 \newcommand{\projinfra}{%
-  \proj{Developer Toolchain}{Go · Python · CI/CD}{%
-    \item Built a reusable engineering toolchain: Pipeline runs one task graph locally and in GitHub Actions or GitLab CI; gix automates a configured Git branching and release flow; PSX checks repository structure and project policy.%
+  \proj{Developer Infrastructure}{Go $\cdot$ Python $\cdot$ C11}{%
+    \item Built Pipeline for shared local/CI task execution, gix for Git flow and release versioning, PSX for repository policy checks, and log.c, a structured C11 logging library with a stable C ABI.%
   }{m-mdy-m/pipeline}%
 }
 
-\newcommand{\projpapyrxis}{%
-  \proj{Papyrxis Publishing}{LaTeX · Python · Technical Writing}{%
-    \item Created a bilingual publishing workflow and the reusable Papyrxis Workspace for books, booklets, articles, and multi-document releases. It supports configurable LaTeX builds, export, PDF validation, and release automation; authored works include Arliz, Git Internals, and the ongoing Mathesis series.%
-  }{papyrxis/papers}%
+\newcommand{\projtools}{%
+  \proj{CLI \& Editor Tools}{TypeScript $\cdot$ Python $\cdot$ Vimscript}{%
+    \item Agas is an HTTP client for the terminal and JavaScript, distributed through npm and Docker Hub. NExa fetches Dev.to articles from the terminal; FTX.vim is an asynchronous, Git-aware file-tree plugin for Vim and Neovim.%
+  }{m-mdy-m/agas}%
 }
 
 \newcommand{\ResumeProjectsEN}{%
   \projgland
+  \projworkspace
   \projcdin
   \projinfra
-  \projpapyrxis
+  \projtools
   \vspace{1pt}
-  {\small\textbf{Additional work:} Agas, a terminal and JavaScript HTTP client distributed through npm and Docker Hub; Shelf, a local-first PDF reading workspace with optional source-grounded AI, in active development; and FTX.vim, an asynchronous file-tree plugin for Vim and Neovim.}%
+  {\small\textbf{Further work:} TRK (CLI time tracker), NExa (terminal article reader), algorithms and data-structure implementations in C, and Talken, a documented electronics and embedded-C learning project.}%
 }
