@@ -1,61 +1,63 @@
-% نمونه‌کارهای عمومی و قابل انتساب؛ توضیح هر مورد با زبان روشن و بدون انباشت اصطلاحات.
-\newcommand{\projcdinFA}{%
+% نمونه‌کارهای عمومی؛ نقش، کارکرد و وضعیت هر پروژه با دقت بیان شده است.
+\newcommand{\projglandFA}{%
   \cventry
-    {\lr{C11 · Lua 5.4 · SDL3}}%
-    {\lr{CDIN} — ویرایشگر متن ماژولار}%
-    {\href{\ProjCdin}{\lr{cdin-editor/cdin}}}%
-    {}%
+    {\lr{TypeScript · Node.js · Event-driven}}
+    {\lr{GlandJS} — فریمورک رویدادمحور برای \lr{Node.js}}
+    {\href{https://github.com/glandjs/gland}{\lr{glandjs/gland}}}
+    {}
     {%
       \begin{cvitems}
-        \item {خالق \lr{CDIN} هستم؛ پروژه‌ای برای ساخت یک ویرایشگر متن ماژولار. در ساختار آن، هسته متن و سابقهٔ ویرایش را نگه می‌دارد، بخش مبتنی بر \lr{Lua} فرمان‌ها و افزونه‌ها را اجرا می‌کند و بخش جداگانه‌ای ارتباط با سیستم‌عامل را بر عهده دارد. رابط متنی، مسیر اصلی برنامه است و رابط گرافیکی مبتنی بر \lr{SDL} هنوز آزمایشی است.}
+        \item {سازنده و توسعه‌دهندهٔ اصلی یک فریمورک رویدادمحور برای \lr{Node.js} هستم. مجموعهٔ آن مدیریت ماژول‌ها، \lr{Dependency Injection}، چرخهٔ عمر سرویس‌ها، پیام‌رسانی رویدادمحور و یک لایهٔ مستقل \lr{HTTP} را در بر می‌گیرد که به وب‌سرورهایی مانند \lr{Express}، \lr{Fastify}، \lr{Koa} و \lr{Hono} متصل می‌شود. پکیج‌های اصلی با نام \lr{@glandjs} در \lr{npm} منتشر می‌شوند.}
       \end{cvitems}%
     }%
 }
 
-\newcommand{\projglandFA}{%
+\newcommand{\projcdinFA}{%
   \cventry
-    {\lr{TypeScript · Node.js · Event-driven}}%
-    {\lr{GlandJS} — چارچوب توسعهٔ سرویس‌های سمت سرور}%
-    {\href{\ProjGland}{\lr{glandjs/gland}}}%
-    {}%
+    {\lr{C11 · Lua 5.4 · Protocol Design}}
+    {\lr{CDIN Editor} — پروژهٔ ویرایشگر متن ماژولار}
+    {\href{https://github.com/cdin-editor/cdin}{\lr{cdin-editor/cdin}}}
+    {}
     {%
       \begin{cvitems}
-        \item {\lr{GlandJS} چارچوبی برای ساخت برنامه‌های سمت سرور با \lr{Node.js} و \lr{TypeScript} است. در آن، بخش‌های مختلف برنامه به‌جای فراخوانی مستقیم یکدیگر، با پیام‌ها و رویدادها ارتباط می‌گیرند. چارچوب، ساخت و اتصال سرویس‌ها را مدیریت می‌کند و هسته را از وب‌سرور جدا نگه می‌دارد؛ بنابراین می‌توان شیوهٔ دریافت درخواست‌ها را تغییر داد، بی‌آنکه منطق اصلی برنامه بازنویسی شود.}
+        \item {خالق و معمار \lr{CDIN} هستم؛ پروژه‌ای برای ساخت ویرایشگر متنی ماژولار. در معماری آن، \lr{Kernel} مدیریت امن محتوای سند و سابقهٔ ویرایش را بر عهده دارد، \lr{Runtime} رفتار و افزونه‌ها را با \lr{Lua} اجرا می‌کند، \lr{Backend} سرویس‌های سیستم‌عامل و نشست‌ها را مدیریت می‌کند و \lr{Frontend} از طریق یک پروتکل مستقل با آن ارتباط دارد. یکپارچه‌سازی محصول و انتشار رابط تعاملی هنوز در حال توسعه است؛ رابط گرافیکی \lr{SDL} نیز آزمایشی است.}
       \end{cvitems}%
     }%
 }
 
 \newcommand{\projinfraFA}{%
   \cventry
-    {\lr{Go · Python · C11}}%
-    {ابزارهای توسعهٔ نرم‌افزار}%
-    {\href{\ProjPipeline}{\lr{m-mdy-m/pipeline}}}%
-    {}%
+    {\lr{Go · Python · CI/CD}}
+    {ابزارهای توسعه و خودکارسازی}
+    {\href{https://github.com/m-mdy-m/pipeline}{\lr{m-mdy-m/pipeline}}}
+    {}
     {%
       \begin{cvitems}
-        \item {\href{\ProjPipeline}{\lr{Pipeline}} کارهای تکراری مانند ساخت برنامه، اجرای آزمون‌ها و آماده‌سازی نسخهٔ انتشار را یک‌جا تعریف می‌کند؛ همین کارها را می‌توان روی رایانهٔ شخصی یا در \lr{GitHub Actions} و \lr{GitLab CI} اجرا کرد. \href{\ProjGix}{\lr{gix}} مدیریت شاخه‌ها و نسخه‌های \lr{Git} را ساده می‌کند. \href{\ProjPSX}{\lr{psx}} ساختار پروژه را بررسی می‌کند و کمبود فایل‌های ضروری، مانند راهنمای پروژه، مجوز و آزمون‌ها را گزارش می‌دهد. \href{\ProjLogC}{\lr{log.c}} نیز کتابخانه‌ای سبک برای ثبت پیام‌ها و خطاهای برنامه‌های \lr{C} است.}
+        \item {\href{https://github.com/m-mdy-m/pipeline}{\lr{Pipeline}} یک مسیر مشترک برای اجرای کارهای ساخت و آزمون، هم در سیستم شخصی و هم در \lr{GitHub Actions} و \lr{GitLab CI} فراهم می‌کند. \href{https://github.com/m-mdy-m/gix}{\lr{gix}} مدیریت شاخه‌ها و انتشار نسخه‌ها را خودکار می‌کند و \href{https://github.com/m-mdy-m/psx}{\lr{PSX}} ساختار و قواعد هر پروژه را بررسی می‌کند.}
       \end{cvitems}%
     }%
 }
 
-\newcommand{\projftxFA}{%
+\newcommand{\projpapyrxisFA}{%
   \cventry
-    {\lr{Vim Script · Vim · Neovim}}%
-    {\lr{FTX.vim} — افزونهٔ نمایش فایل‌ها}%
-    {\href{\ProjFTX}{\lr{m-mdy-m/ftx.vim}}}%
-    {}%
+    {\lr{LaTeX · Python · Technical Writing}}
+    {\lr{Papyrxis} — نشر فنی و تولید محتوای آموزشی}
+    {\href{https://github.com/papyrxis/papers}{\lr{papyrxis/papers}}}
+    {}
     {%
       \begin{cvitems}
-        \item {افزونه‌ای برای \lr{Vim} و \lr{Neovim} است که فایل‌ها و پوشه‌های پروژه را به‌شکل درختی نمایش می‌دهد. فهرست فایل‌ها را در پس‌زمینه به‌روزرسانی می‌کند تا ویرایشگر هنگام کار با پروژه‌های بزرگ پاسخ‌گو بماند؛ وضعیت \lr{Git} نیز کنار فایل‌ها نمایش داده می‌شود.}
+        \item {سامانهٔ نشر دوزبانه و ابزار مشترک \lr{Papyrxis Workspace} را برای آماده‌سازی و انتشار مقاله‌ها، کتاب‌ها و مجموعه‌های چندجلدی توسعه داده‌ام. این ابزارها ساخت اسناد با \lr{LaTeX}، خروجی‌گیری، بررسی کیفیت \lr{PDF} و خودکارسازی انتشار را پوشش می‌دهند.}
       \end{cvitems}%
     }%
 }
 
 \newcommand{\ResumeProjectsFA}{%
   \begin{cventries}
-    \projcdinFA
     \projglandFA
+    \projcdinFA
     \projinfraFA
-    \projftxFA
+    \projpapyrxisFA
   \end{cventries}%
+  \vspace{1pt}
+  {\small\textbf{کارهای دیگر:} \lr{Agas}، ابزار ارسال درخواست‌های \lr{HTTP} از ترمینال و \lr{JavaScript} با انتشار در \lr{npm} و \lr{Docker Hub}؛ \lr{Shelf}، محیط مطالعهٔ فایل‌های \lr{PDF} با رویکرد \lr{Local-first} و قابلیت‌های اختیاری \lr{AI} که در حال توسعه است؛ و \lr{FTX.vim}، افزونهٔ نمایش درختی فایل‌ها برای \lr{Vim} و \lr{Neovim}.}%
 }
