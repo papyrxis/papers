@@ -8,7 +8,7 @@
   }%
 }
 
-% List only languages, technologies and practices demonstrated in maintained work.
+% List technologies and practices demonstrated in authored or maintained work.
 \newcommand{\newskill}[3]{%
   \ifstrequal{#3}{on}{\addtocatlist{#1}{#2}}{}%
 }
@@ -20,27 +20,29 @@
 \newskill{Languages}{Lua}{on}
 \newskill{Languages}{Python}{on}
 \newskill{Languages}{Bash}{on}
+\newskill{Languages}{Vimscript}{on}
 
 \newskill{Backend}{Node.js}{on}
-\newskill{Backend}{HTTP / WebSocket}{on}
 \newskill{Backend}{Event-driven systems}{on}
 \newskill{Backend}{Dependency injection}{on}
+\newskill{Backend}{HTTP APIs and adapters}{on}
 
 \newskill{Systems}{C11}{on}
+\newskill{Systems}{C ABI design}{on}
 \newskill{Systems}{Lua 5.4}{on}
-\newskill{Systems}{SDL3}{on}
-\newskill{Systems}{CMake / Make}{on}
+\newskill{Systems}{Cross-platform development}{on}
 
 \newskill{Architecture}{Modular system design}{on}
-\newskill{Architecture}{API / protocol contracts}{on}
+\newskill{Architecture}{API and protocol contracts}{on}
 \newskill{Architecture}{Plugin systems}{on}
-\newskill{Architecture}{Cross-platform tooling}{on}
+\newskill{Architecture}{Test automation}{on}
 
-\newskill{DevOps}{GitHub Actions}{on}
 \newskill{DevOps}{CI/CD}{on}
+\newskill{DevOps}{GitHub Actions / GitLab CI}{on}
+\newskill{DevOps}{Docker / OCI}{on}
 \newskill{DevOps}{Build and release automation}{on}
 
 \newskill{Environment}{Git}{on}
-\newskill{Environment}{Linux / Windows}{on}
-\newskill{Environment}{Docker}{on}
+\newskill{Environment}{Make / CMake}{on}
+\newskill{Environment}{npm}{on}
 \newskill{Environment}{LaTeX / Pandoc}{on}
