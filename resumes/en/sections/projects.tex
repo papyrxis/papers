@@ -1,49 +1,49 @@
-% Five individual primary projects, selected to show different areas of work.
+% Five public, attributable projects selected across distinct areas of engineering.
 \newcommand{\projgland}{%
   \proj{GlandJS}{TypeScript $\cdot$ Node.js $\cdot$ Event-driven}{%
-    \item Creator and primary maintainer of an event-driven Node.js framework with module lifecycle, dependency injection, event messaging, and a transport-independent HTTP layer with server adapters.%
+    \item Creator and primary developer of a modular server-side framework for Node.js and TypeScript. Its event-driven architecture combines dependency injection, module lifecycle management, and transport-independent HTTP adapters for Express, Fastify, Koa, Hono, and \texttt{node:http}.%
   }{glandjs/gland}%
 }
 
 \newcommand{\projidios}{%
-  \proj{IDIOS}{Go $\cdot$ TypeScript $\cdot$ Local-first}{%
-    \item Created a personal workspace that brings projects, repository work, notes, reading, planning, and optional AI tools into CLI and Web/PWA clients.%
+  \proj{IDIOS}{Go $\cdot$ TypeScript $\cdot$ SQLite $\cdot$ Local-first}{%
+    \item Built a local-first workspace with CLI and Web/PWA clients for project and repository work, notes, reading, planning, and optional AI integrations.%
   }{m-mdy-m/idios}%
 }
 
-\newcommand{\projcdin}{%
-  \proj{CDIN Editor}{C11 $\cdot$ Lua 5.4 $\cdot$ Protocol design}{%
-    \item Creator and architect of a modular editor with separate document Kernel, Lua Runtime, native Backend, and protocol-driven Frontend. Product integration remains in development; the SDL desktop renderer is experimental.%
-  }{cdin-editor/cdin}%
+\newcommand{\projqiks}{%
+  \proj{QIKS}{TypeScript $\cdot$ Caching $\cdot$ npm}{%
+    \item Developed a TypeScript caching library with LRU/LFU/MRU eviction, TTL expiration, namespaces, dependency invalidation, batch operations, and persistence utilities.%
+  }{medishen/qiks}%
 }
 
-\newcommand{\projflade}{%
-  \proj{FLADE}{Python $\cdot$ Modular decision systems}{%
-    \item Designed a modular decision and trading engine with replaceable data, strategy, risk, brain, and execution components. Its current fly-connectome integration is an experimental decision component, not a claim of trading profitability.%
-  }{m-mdy-m/flade}%
+\newcommand{\projlog}{%
+  \proj{log.c}{C11 $\cdot$ C ABI $\cdot$ Systems}{%
+    \item Redesigned and extended an existing C logger with explicit logger instances, structured records, configurable console/file/callback sinks, and a versioned C ABI for language bindings, while preserving upstream attribution.%
+  }{m-mdy-m/log.c}%
 }
 
 \newcommand{\projagas}{%
-  \proj{Agas}{TypeScript $\cdot$ Bun $\cdot$ HTTP}{%
-    \item Created an HTTP client for both the terminal and JavaScript, with saved requests and readable output; published as an npm package and Docker image.%
+  \proj{Agas}{TypeScript $\cdot$ Bun $\cdot$ HTTP $\cdot$ Docker}{%
+    \item Created an HTTP client for the terminal and JavaScript, with request history, saved and replayable requests, and formatted output; published through npm and Docker Hub.%
   }{m-mdy-m/agas}%
 }
 
 \newcommand{\ResumeProjectsEN}{%
   \projgland
   \projidios
-  \projcdin
-  \projflade
+  \projqiks
+  \projlog
   \projagas
   \vspace{1pt}
   {\small\textbf{Additional work:}
-    developer infrastructure and release automation
-      (\href{https://github.com/m-mdy-m/pipeline}{Pipeline});
-    CLI utilities and Vim/Neovim extensions
+    modular editor architecture and development in C/Lua
+      (\href{https://github.com/cdin-editor/cdin}{CDIN; integration in progress});
+    build, release, and developer-workflow tools
+      (\href{https://github.com/m-mdy-m/pipeline}{Pipeline},
+       \href{https://github.com/m-mdy-m/gix}{GIX},
+       \href{https://github.com/m-mdy-m/psx}{PSX});
+    a Vim/Neovim file-tree plugin
       (\href{https://github.com/m-mdy-m/ftx.vim}{FTX.vim});
-    a local-first PDF workspace
-      (\href{https://github.com/m-mdy-m/shelf}{Shelf});
-    and C systems exercises and embedded-electronics projects
-      (\href{https://github.com/m-mdy-m/algorithms-data-structures}{C implementations},
-       \href{https://github.com/m-mdy-m/Talken}{Talken}).}%
+    and CLI, algorithm-analysis, C, and embedded projects.}%
 }
