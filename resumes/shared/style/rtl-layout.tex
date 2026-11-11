@@ -5,6 +5,7 @@
 \usepackage{enumitem}
 \usepackage{titlesec}
 \usepackage{array}
+\usepackage{tabularx}
 
 \geometry{
   a4paper,
@@ -67,18 +68,17 @@
   \par\vspace{\TokenRTLParaAfterSkip}%
 }
 
+% Fixed label column + flexible value column prevents LTR skill lists from
+% running beyond the left page boundary in the RTL document.
 \newenvironment{cvskills}{%
-  \vspace{\TokenRTLSectionSpaceBelow}
-  \begin{center}
-    \renewcommand{\arraystretch}{0.95}
-    \begin{tabular*}{\linewidth}{@{\extracolsep{\fill}} r l @{}}
+  \vspace{\TokenRTLSectionSpaceBelow}%
+  \renewcommand{\arraystretch}{1.12}%
+  \begin{tabularx}{\linewidth}{@{}>{\raggedleft\arraybackslash}p{2.2cm}@{\hspace{0.65em}}>{\raggedright\arraybackslash}X@{}}
 }{%
-    \end{tabular*}
-  \end{center}
+  \end{tabularx}%
 }
-\newcommand{\cvskill}[2]{#1 & #2 \\[\TokenRTLSkillRowSep]}
+\newcommand{\cvskill}[2]{\textbf{#1} & {\small #2} \\[\TokenRTLSkillRowSep]}
 
-% Compact contact block. Location is omitted until a current location is confirmed.
 \newcommand{\makecvheader}{%
   \begin{center}%
     {\fontsize{18pt}{22pt}\bfseries\selectfont \ResumeAuthorName}\\[3pt]%
