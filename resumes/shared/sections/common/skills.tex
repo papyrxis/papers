@@ -1,4 +1,8 @@
-% Default English labels (override per language before calling)
+\usepackage{tabularx}
+\usepackage{array}
+
+% Keep the labels fixed and let the values wrap within the remaining width.
+% A natural-width "ll" tabular lets long skill strings escape the page.
 \providecommand{\SkillLabelLanguages}{Languages}
 \providecommand{\SkillLabelBackend}{Backend}
 \providecommand{\SkillLabelFrontend}{Frontend}
@@ -8,12 +12,11 @@
 \providecommand{\SkillLabelDatabases}{Databases}
 \providecommand{\SkillLabelMessaging}{Messaging}
 \providecommand{\SkillLabelEnvironment}{Tooling}
-\providecommand{\SkillLabelAI}{AI / ML}
-\providecommand{\SkillLabelMobile}{Mobile}
-\providecommand{\SkillLabelSecurity}{Security}
 
 \newcommand{\ResumeSkillsTable}{%
-  \begin{tabular}{@{}ll}
+  {\small
+  \renewcommand{\arraystretch}{1.12}%
+  \begin{tabularx}{\linewidth}{@{}>{\bfseries}p{1.12in}@{\hspace{0.12in}}>{\raggedright\arraybackslash}X@{}}
     \skillrow{SkillLanguages}{\SkillLabelLanguages}
     \skillrow{SkillBackend}{\SkillLabelBackend}
     \skillrow{SkillDatabases}{\SkillLabelDatabases}
@@ -21,5 +24,5 @@
     \skillrow{SkillArchitecture}{\SkillLabelArchitecture}
     \skillrow{SkillDevOps}{\SkillLabelDevOps}
     \skillrow{SkillEnvironment}{\SkillLabelEnvironment}
-  \end{tabular}%
+  \end{tabularx}}%
 }
