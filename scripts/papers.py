@@ -358,16 +358,12 @@ def _generate_main_tex(slug: str) -> None:
 # ── build ─────────────────────────────────────────────────────────────────────
 
 def _ensure_pxis() -> None:
-    if not (ROOT / ".pxis" / "preset.tex").exists():
-        warn(".pxis/preset.tex missing — running sync…")
-        workspace = ROOT / "workspace"
-        if (workspace / "src" / "sync.sh").exists():
-            run(["bash", str(workspace / "src" / "sync.sh")])
-        else:
-            error(
-                ".pxis/preset.tex missing and no workspace/ submodule found. "
-                "Run: make sync"
-            )
+    if not (ROOT / ".pxis" / "preset.tex").is_file():
+        error(
+            ".pxis/preset.tex is missing. Restore the tracked project preset; "
+            "Workspace v0.5.0 is installed as a Python package and does not "
+            "require a repository sync or submodule checkout."
+        )
 
 
 def _build_one_paper(slug: str) -> bool:
@@ -378,10 +374,8 @@ def _build_one_paper(slug: str) -> bool:
         return False
     log(f"[{slug}] generate main.tex")
     _generate_main_tex(slug)
-    env = os.environ.copy()
-    env["PYTHONPATH"] = os.pathsep.join(filter(None, [str(ROOT / "workspace"), env.get("PYTHONPATH", "")]))
     command = [sys.executable, "-m", "px", "--root", str(ROOT), "build", slug, "--edition", "en"]
-    result = subprocess.run(command, cwd=ROOT, env=env, check=False)
+    result = subprocess.run(command, cwd=ROOT, check=False)
     if result.returncode:
         warn(f"[{slug}] Workspace build failed with exit code {result.returncode}")
         return False
