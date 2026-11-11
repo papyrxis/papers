@@ -19,6 +19,7 @@ all: help
 
 doctor:
 	@$(PX) help
+	@python3 -c 'import px' || { echo "Install Workspace: python3 -m pip install -r .ci/locks/python-requirements.lock" >&2; exit 1; }
 	@command -v pdflatex >/dev/null
 	@command -v xelatex >/dev/null
 	@command -v latexmk >/dev/null
