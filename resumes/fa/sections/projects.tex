@@ -1,13 +1,13 @@
-% سه محور اصلی portfolio بر اساس کار توسعه‌ای قابل ارائه؛ پروژه‌های تکمیلی در یادداشت پایانی آمده‌اند.
+% نمونه‌کارهای عمومی و قابل انتساب؛ توضیح هر مورد با زبان روشن و بدون انباشت اصطلاحات.
 \newcommand{\projcdinFA}{%
   \cventry
     {\lr{C11 · Lua 5.4 · SDL3}}%
-    {\lr{CDIN} — \lr{Modular Text Editor}}%
+    {\lr{CDIN} — ویرایشگر متن ماژولار}%
     {\href{\ProjCdin}{\lr{cdin-editor/cdin}}}%
     {}%
     {%
       \begin{cvitems}
-        \item {در طراحی و یکپارچه‌سازی CDIN، یک \lr{text editor} ماژولار، مشارکت دارم. \lr{Kernel} داده و تاریخچهٔ ویرایش سند را نگه می‌دارد؛ \lr{Lua Runtime} فرمان‌ها و pluginها را اجرا می‌کند و \lr{Backend} مسئول sessionها و \lr{OS services} است. \lr{TUI} مسیر اصلی محصول است و \lr{GUI-SDL} هنوز experimental است.}
+        \item {خالق \lr{CDIN} هستم؛ پروژه‌ای برای ساخت یک ویرایشگر متن ماژولار. در طراحی آن، نگه‌داری متن و سابقهٔ ویرایش، اجرای فرمان‌ها و افزونه‌ها، و ارتباط با امکانات سیستم‌عامل در بخش‌های جداگانه انجام می‌شود. رابط متنی، مسیر اصلی برنامه است و رابط گرافیکی مبتنی بر \lr{SDL} هنوز آزمایشی است.}
       \end{cvitems}%
     }%
 }
@@ -15,12 +15,12 @@
 \newcommand{\projglandFA}{%
   \cventry
     {\lr{TypeScript · Node.js · Event-driven}}%
-    {\lr{GlandJS} — \lr{Backend Framework}}%
+    {\lr{GlandJS} — چارچوب توسعهٔ سرویس‌های سمت سرور}%
     {\href{\ProjGland}{\lr{glandjs/gland}}}%
     {}%
     {%
       \begin{cvitems}
-        \item {یک \lr{framework} برای ساخت سرویس‌های \lr{Node.js} است. componentها با \lr{message bus} و \lr{event-driven flow} به هم متصل می‌شوند؛ \lr{Dependency Injection} ترکیب moduleها را مدیریت می‌کند و \lr{HTTP adapter}ها از core جدا هستند.}
+        \item {\lr{GlandJS} چارچوبی برای ساخت برنامه‌ها و سرویس‌های سمت سرور با \lr{Node.js} و \lr{TypeScript} است. بخش‌های مختلف برنامه از راه پیام‌ها و رویدادها با هم ارتباط می‌گیرند، نه از طریق وابستگی مستقیم به یکدیگر. چارچوب، ساخت و اتصال سرویس‌ها را مدیریت می‌کند و ارتباط \lr{HTTP} را از هسته جدا نگه می‌دارد؛ بنابراین می‌توان وب‌سرور را تغییر داد، بی‌آنکه منطق اصلی برنامه بازنویسی شود.}
       \end{cvitems}%
     }%
 }
@@ -28,12 +28,25 @@
 \newcommand{\projinfraFA}{%
   \cventry
     {\lr{Go · Python · C11}}%
-    {ابزارهای مهندسی و توسعه}%
+    {ابزارهای توسعهٔ نرم‌افزار}%
     {\href{\ProjPipeline}{\lr{m-mdy-m/pipeline}}}%
     {}%
     {%
       \begin{cvitems}
-        \item {\lr{Pipeline} اجرای taskها و \lr{CI} را در local و providerهای مختلف یکپارچه می‌کند؛ \lr{gix} branch و versioning را مدیریت می‌کند؛ \lr{psx} ساختار و quality checks مخزن را بررسی می‌کند؛ و \lr{log.c} logging ساختاریافته را به برنامه‌های \lr{C11} اضافه می‌کند.}
+        \item {\href{\ProjPipeline}{\lr{Pipeline}} کارهای تکراری مانند ساخت برنامه، اجرای آزمون‌ها و آماده‌سازی نسخهٔ انتشار را یک‌جا تعریف می‌کند؛ همین کارها را می‌توان روی رایانهٔ شخصی یا در \lr{GitHub Actions} و \lr{GitLab CI} اجرا کرد. \href{\ProjGix}{\lr{gix}} مدیریت شاخه‌ها و نسخه‌های \lr{Git} را ساده می‌کند. \href{\ProjPSX}{\lr{psx}} ساختار پروژه را بررسی می‌کند و کمبود فایل‌های ضروری، مانند راهنمای پروژه، مجوز و آزمون‌ها را گزارش می‌دهد. \href{\ProjLogC}{\lr{log.c}} نیز کتابخانه‌ای سبک برای ثبت پیام‌ها و خطاهای برنامه‌های \lr{C} است.}
+      \end{cvitems}%
+    }%
+}
+
+\newcommand{\projftxFA}{%
+  \cventry
+    {\lr{Vim Script · Vim · Neovim}}%
+    {\lr{FTX.vim} — افزونهٔ نمایش فایل‌ها}%
+    {\href{\ProjFTX}{\lr{m-mdy-m/ftx.vim}}}%
+    {}%
+    {%
+      \begin{cvitems}
+        \item {افزونه‌ای برای \lr{Vim} و \lr{Neovim} است که فایل‌ها و پوشه‌های پروژه را به‌شکل درختی نمایش می‌دهد. فهرست فایل‌ها را در پس‌زمینه به‌روزرسانی می‌کند تا ویرایشگر هنگام کار با پروژه‌های بزرگ پاسخ‌گو بماند؛ وضعیت \lr{Git} نیز کنار فایل‌ها نمایش داده می‌شود.}
       \end{cvitems}%
     }%
 }
@@ -43,11 +56,6 @@
     \projcdinFA
     \projglandFA
     \projinfraFA
+    \projftxFA
   \end{cventries}%
-  \vspace{1pt}
-  {\small
-    \textbf{پروژه‌های دیگر:}
-    \lr{Atabeh} ابزار \lr{Go} برای جمع‌آوری، parse و بررسی اتصال کانفیگ‌های \lr{VPN/Proxy} است؛
-    \lr{FTX.vim} یک \lr{file-tree explorer} ناهمگام و \lr{Git-aware} برای \lr{Vim/Neovim} است.
-  }%
 }
