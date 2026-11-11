@@ -4,7 +4,7 @@ LEVEL ?= patch
 TAGS ?= 0
 BUILD_DATE ?= $(shell date -u '+%Y-%m-%d_%H:%M:%S')
 PX := python3 scripts/px.py
-WPX := PYTHONPATH=workspace python3 -m px --root .
+WPX := python3 -m px --root .
 PAPER ?=
 SLUG ?=
 LANG ?=
@@ -13,7 +13,7 @@ TARGET ?=
 CHAPTERS ?= all
 AVAILABLE_TARGETS := $(patsubst scripts/lib/targets/%.target.sh,%, $(wildcard scripts/lib/targets/*.target.sh))
 
-.PHONY: all help doctor sync version build clean paper watch export targets list styles new-paper delete-paper booklet booklet-all booklet-list booklet-watch booklet-clean booklet-delete new-booklet booklet-export tags changelog bump tag push
+.PHONY: all help doctor version build clean paper watch export targets list styles new-paper delete-paper booklet booklet-all booklet-list booklet-watch booklet-clean booklet-delete new-booklet booklet-export tags changelog bump tag push
 
 all: help
 
@@ -28,10 +28,6 @@ doctor:
 	@command -v psx >/dev/null
 	@psx check --config psx.yml
 
-sync:
-	@git submodule update --init --recursive
-	@test -f workspace/src/sync.sh || { echo "Workspace submodule is missing its sync entry point" >&2; exit 1; }
-	@bash workspace/src/sync.sh
 
 version:
 	@gix version show
@@ -56,7 +52,7 @@ push:
 	@$(WPX) push $(if $(filter 1,$(TAGS)),--tags,)
 
 # Pipeline LaTeX preset delegates to this target. Build publication content only.
-build: sync
+build:
 	@PROJECT_VERSION="$(VERSION)" BUILD_DATE="$(BUILD_DATE)" $(PX) papers build all
 	@PROJECT_VERSION="$(VERSION)" BUILD_DATE="$(BUILD_DATE)" $(PX) booklets build all
 	@$(WPX) verify
@@ -175,7 +171,7 @@ help:
 	@echo "  make targets | list | styles | watch PAPER=<slug>"
 	@echo "  make tags | changelog | bump LEVEL=minor"
 	@echo "  make tag RELEASE_VERSION=v1.2.0 | push TAGS=1"
-	@echo "  make clean | sync | doctor | version"
+	@echo "  make clean | doctor | version"
 	@echo "  CVs stay outside local publication builds; CI attaches them to latest-pre-release per owner request."
 
 .DEFAULT_GOAL := help
