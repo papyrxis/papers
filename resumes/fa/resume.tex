@@ -1,4 +1,4 @@
-%!TEX TS-program = xelatex
+\%!TEX TS-program = xelatex
 %!TEX encoding = UTF-8 Unicode
 \documentclass[10pt,a4paper]{article}
 
@@ -46,16 +46,16 @@
 
 \cvsection{مهارت‌های کلیدی}
 \begin{cvskills}
-  \ifcsdef{SkillLanguages}{\cvskill{زبان‌ها}{\lr{\SkillLanguages}}}{}
-  \ifcsdef{SkillBackend}{\cvskill{بک‌اند}{\lr{\SkillBackend}}}{}
-  \ifcsdef{SkillDatabases}{\cvskill{پایگاه داده‌ها}{\lr{\SkillDatabases}}}{}
-  \ifcsdef{SkillSystems}{\cvskill{سیستم‌ها}{\lr{\SkillSystems}}}{}
-  \ifcsdef{SkillArchitecture}{\cvskill{معماری}{\lr{\SkillArchitecture}}}{}
+  \ifcsdef{SkillLanguages}{\cvskill{زبان‌ها}{\SkillLanguages}}{}
+  \ifcsdef{SkillBackend}{\cvskill{بک‌اند}{\SkillBackend}}{}
+  \ifcsdef{SkillDatabases}{\cvskill{پایگاه داده‌ها}{\SkillDatabases}}{}
+  \ifcsdef{SkillSystems}{\cvskill{سیستم‌ها}{\SkillSystems}}{}
+  \ifcsdef{SkillArchitecture}{\cvskill{معماری}{\SkillArchitecture}}{}
   \ifcsdef{SkillDevOps}{%
     \ifcsdef{SkillEnvironment}{%
-      \cvskill{زیرساخت و ابزارها}{\lr{\SkillDevOps, \SkillEnvironment}}%
-    }{\cvskill{زیرساخت}{\lr{\SkillDevOps}}}%
-  }{\ifcsdef{SkillEnvironment}{\cvskill{ابزارها}{\lr{\SkillEnvironment}}}{}}%
+      \cvskill{زیرساخت و ابزارها}{\SkillDevOps, \SkillEnvironment}%
+    }{\cvskill{زیرساخت}{\SkillDevOps}}%
+  }{\ifcsdef{SkillEnvironment}{\cvskill{ابزارها}{\SkillEnvironment}}{}}%
 \end{cvskills}
 
 \cvsection{توسعهٔ مستقل و متن‌باز}
