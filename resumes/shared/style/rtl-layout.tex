@@ -68,15 +68,8 @@
   \par\vspace{\TokenRTLParaAfterSkip}%
 }
 
-% Fixed label column + flexible value column prevents LTR skill lists from
-% running beyond the left page boundary in the RTL document.
-\newenvironment{cvskills}{%
-  \vspace{\TokenRTLSectionSpaceBelow}%
-  \renewcommand{\arraystretch}{1.12}%
-  \begin{tabularx}{\linewidth}{@{}>{\raggedleft\arraybackslash}p{2.2cm}@{\hspace{0.65em}}>{\raggedright\arraybackslash}X@{}}
-}{%
-  \end{tabularx}%
-}
+% Used as rows inside the direct tabularx in the Persian resume. tabularx
+% collects its own body, so it must not be wrapped in another environment.
 \newcommand{\cvskill}[2]{\textbf{#1} & {\small #2} \\[\TokenRTLSkillRowSep]}
 
 \newcommand{\makecvheader}{%
