@@ -15,7 +15,7 @@ documents:
     title: "The Nature of Data"
     style: academic
     editions:
-      default:
+      en:
         source: papers/01-the-nature-of-data/main.tex
         working_directory: papers/01-the-nature-of-data
         engine: pdflatex
