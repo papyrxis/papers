@@ -1,14 +1,13 @@
-% Five compact groups represent the wider portfolio without turning the page
-% into a repository dump. Every project name links to its canonical repository.
+% Five individual primary projects, selected to show different areas of work.
 \newcommand{\projgland}{%
   \proj{GlandJS}{TypeScript $\cdot$ Node.js $\cdot$ Event-driven}{%
     \item Creator and primary maintainer of an event-driven Node.js framework with module lifecycle, dependency injection, event messaging, and a transport-independent HTTP layer with server adapters.%
   }{glandjs/gland}%
 }
 
-\newcommand{\projworkspace}{%
-  \proj{IDIOS \& Shelf}{Go $\cdot$ TypeScript $\cdot$ Local-first}{%
-    \item Created two local-first workspaces: \href{https://github.com/m-mdy-m/idios}{IDIOS} brings projects, notes, reading, and planning into CLI and Web/PWA clients; \href{https://github.com/m-mdy-m/shelf}{Shelf} focuses on PDF reading, annotations, and optional source-grounded AI assistance. Shelf remains in active development.%
+\newcommand{\projidios}{%
+  \proj{IDIOS}{Go $\cdot$ TypeScript $\cdot$ Local-first}{%
+    \item Created a personal workspace that brings projects, repository work, notes, reading, planning, and optional AI tools into CLI and Web/PWA clients.%
   }{m-mdy-m/idios}%
 }
 
@@ -18,24 +17,34 @@
   }{cdin-editor/cdin}%
 }
 
-\newcommand{\projinfra}{%
-  \proj{Developer Infrastructure}{Go $\cdot$ Python $\cdot$ C11}{%
-    \item Built \href{https://github.com/m-mdy-m/pipeline}{Pipeline} for shared local/CI task execution, \href{https://github.com/m-mdy-m/gix}{gix} for Git flow and release versioning, \href{https://github.com/m-mdy-m/psx}{PSX} for repository policy checks, and \href{https://github.com/m-mdy-m/log.c}{log.c}, a structured C11 logging library with a stable C ABI.%
-  }{m-mdy-m/pipeline}%
+\newcommand{\projflade}{%
+  \proj{FLADE}{Python $\cdot$ Modular decision systems}{%
+    \item Designed a modular decision and trading engine with replaceable data, strategy, risk, brain, and execution components. Its current fly-connectome integration is an experimental decision component, not a claim of trading profitability.%
+  }{m-mdy-m/flade}%
 }
 
-\newcommand{\projtools}{%
-  \proj{CLI \& Editor Tools}{TypeScript $\cdot$ Python $\cdot$ Vimscript}{%
-    \item \href{https://github.com/m-mdy-m/agas}{Agas} is an HTTP client for the terminal and JavaScript, distributed through npm and Docker Hub. \href{https://github.com/m-mdy-m/NExa}{NExa} fetches Dev.to articles from the terminal; \href{https://github.com/m-mdy-m/ftx.vim}{FTX.vim} is an asynchronous, Git-aware file-tree plugin for Vim and Neovim; \href{https://github.com/m-mdy-m/trk}{TRK} is a CLI time tracker.%
+\newcommand{\projagas}{%
+  \proj{Agas}{TypeScript $\cdot$ Bun $\cdot$ HTTP}{%
+    \item Created an HTTP client for both the terminal and JavaScript, with saved requests and readable output; published as an npm package and Docker image.%
   }{m-mdy-m/agas}%
 }
 
 \newcommand{\ResumeProjectsEN}{%
   \projgland
-  \projworkspace
+  \projidios
   \projcdin
-  \projinfra
-  \projtools
+  \projflade
+  \projagas
   \vspace{1pt}
-  {\small\textbf{Further work:} \href{https://github.com/m-mdy-m/flade}{FLADE}, a modular decision engine integrating a fly-connectome simulation; \href{https://github.com/m-mdy-m/algorithms-data-structures}{C algorithms and data structures}; and \href{https://github.com/m-mdy-m/Talken}{Talken}, an electronics and embedded-C learning project.}%
+  {\small\textbf{Additional work:}
+    \href{https://github.com/m-mdy-m/shelf}{Shelf};
+    \href{https://github.com/m-mdy-m/pipeline}{Pipeline},
+    \href{https://github.com/m-mdy-m/gix}{gix},
+    \href{https://github.com/m-mdy-m/psx}{PSX},
+    \href{https://github.com/m-mdy-m/log.c}{log.c};
+    \href{https://github.com/m-mdy-m/NExa}{NExa},
+    \href{https://github.com/m-mdy-m/ftx.vim}{FTX.vim},
+    \href{https://github.com/m-mdy-m/trk}{TRK};
+    C algorithms and data structures; and
+    \href{https://github.com/m-mdy-m/Talken}{Talken} (electronics and embedded C).}%
 }
