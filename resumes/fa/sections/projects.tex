@@ -1,65 +1,65 @@
-% پنج نمونه‌کار اصلی از حوزه‌های متفاوت؛ سایر فعالیت‌ها در یادداشت کوتاه پایانی آمده‌اند.
+% پنج پروژهٔ عمومی و قابل‌استناد از حوزه‌های متفاوت؛ پروژه‌های خصوصی و Forkها در رزومهٔ عمومی نمی‌آیند.
 \newcommand{\projglandFA}{%
   \cventry
-    {\lr{TypeScript · Node.js · Event-driven}}
-    {\lr{GlandJS} — فریمورک رویدادمحور}
+    {\lr{TypeScript · Node.js · Event-Driven}}
+    {\lr{GlandJS} — فریمورک سمت سرور برای \lr{Node.js}}
     {\href{https://github.com/glandjs/gland}{\lr{glandjs/gland}}}
     {}
     {%
       \begin{cvitems}
-        \item {سازنده و توسعه‌دهندهٔ اصلی فریمورکی برای \lr{Node.js} هستم که مدیریت ماژول‌ها، \lr{Dependency Injection}، چرخهٔ عمر سرویس‌ها و پیام‌رسانی رویدادمحور را فراهم می‌کند و به وب‌سرورهای مختلف متصل می‌شود.}
+        \item {خالق و توسعه‌دهندهٔ اصلی فریمورکی ماژولار برای ساخت اپلیکیشن‌های سمت سرور با \lr{Node.js} و \lr{TypeScript} هستم. معماری آن بر پایهٔ \lr{Event-Driven}، \lr{Dependency Injection}، مدیریت \lr{Module} و \lr{Lifecycle} و جداسازی منطق برنامه از لایهٔ انتقال است؛ اکوسیستم آن Adapterهای \lr{Express}، \lr{Fastify}، \lr{Koa}، \lr{Hono} و \lr{node:http} را دارد.}
       \end{cvitems}%
     }%
 }
 
 \newcommand{\projidiosFA}{%
   \cventry
-    {\lr{Go · TypeScript · Local-first}}
-    {\lr{IDIOS} — محیط کاری شخصی}
+    {\lr{Go · TypeScript · SQLite · Local-first}}
+    {\lr{IDIOS} — محیط کاری یکپارچه}
     {\href{https://github.com/m-mdy-m/idios}{\lr{github.com/m-mdy-m/idios}}}
     {}
     {%
       \begin{cvitems}
-        \item {محیطی برای مدیریت پروژه‌ها، کارهای مربوط به ریپازیتوری‌ها، یادداشت‌ها، مطالعه و برنامه‌ریزی ساخته‌ام که رابط \lr{CLI} و \lr{Web/PWA} دارد و از ابزارهای \lr{AI} نیز به‌صورت اختیاری پشتیبانی می‌کند.}
+        \item {یک محیط کاری \lr{Local-first} با رابط‌های \lr{CLI} و \lr{Web/PWA} ساخته‌ام که مدیریت پروژه‌ها، ریپازیتوری‌ها و کارهای توسعه، یادداشت‌ها، مطالعه، برنامه‌ریزی و اتصال اختیاری به ابزارهای \lr{AI} را در یک برنامه گرد هم می‌آورد.}
       \end{cvitems}%
     }%
 }
 
-\newcommand{\projcdinFA}{%
+\newcommand{\projqiksFA}{%
   \cventry
-    {\lr{C11 · Lua 5.4 · Protocol design}}
-    {\lr{CDIN Editor} — ویرایشگر متن ماژولار}
-    {\href{https://github.com/cdin-editor/cdin}{\lr{cdin-editor/cdin}}}
+    {\lr{TypeScript · Caching · npm}}
+    {\lr{QIKS} — کتابخانهٔ مدیریت Cache}
+    {\href{https://github.com/medishen/qiks}{\lr{medishen/qiks}}}
     {}
     {%
       \begin{cvitems}
-        \item {خالق و معمار ویرایشگری ماژولار با اجزای مستقل برای مدیریت سند، اجرای رفتارهای ویرایشگر با \lr{Lua}، سرویس‌های سیستمی و رابط‌های متصل از طریق پروتکل هستم. یکپارچه‌سازی محصول هنوز در حال توسعه است و نسخهٔ گرافیکی مبتنی بر \lr{SDL} آزمایشی است.}
+        \item {کتابخانه‌ای برای مدیریت Cache در برنامه‌های \lr{TypeScript} توسعه داده‌ام که سیاست‌های جایگزینی \lr{LRU/LFU/MRU}، انقضای مبتنی بر \lr{TTL}، فضای نام، ابطال وابستگی‌ها و ابزارهای مدیریت گروهی و ذخیره‌سازی را ارائه می‌کند.}
       \end{cvitems}%
     }%
 }
 
-\newcommand{\projfladeFA}{%
+\newcommand{\projlogFA}{%
   \cventry
-    {\lr{Python · Modular decision systems}}
-    {\lr{FLADE} — موتور تصمیم‌گیری ماژولار}
-    {\href{https://github.com/m-mdy-m/flade}{\lr{github.com/m-mdy-m/flade}}}
+    {\lr{C11 · C ABI · Systems}}
+    {\lr{log.c} — کتابخانهٔ Logging برای \lr{C}}
+    {\href{https://github.com/m-mdy-m/log.c}{\lr{m-mdy-m/log.c}}}
     {}
     {%
       \begin{cvitems}
-        \item {موتوری ماژولار برای تصمیم‌گیری و معامله طراحی کرده‌ام که دریافت داده، \lr{Strategy / Risk Policy}، مدل تصمیم‌گیر و اجرای سفارش را از هم جدا می‌کند. شبیه‌سازی \lr{connectome} مگس یکی از پیاده‌سازی‌های آزمایشی بخش تصمیم‌گیر است و به‌معنای اثبات سودآوری نیست.}
+        \item {کتابخانهٔ اولیه را با حفظ انتساب به پروژهٔ اصلی بازطراحی و توسعه داده‌ام: نمونه‌های مستقل Logger، رکوردهای ساخت‌یافته، خروجی قابل‌تنظیم برای Console و File و Callback و یک \lr{C ABI} نسخه‌بندی‌شده برای اتصال زبان‌های دیگر.}
       \end{cvitems}%
     }%
 }
 
 \newcommand{\projagasFA}{%
   \cventry
-    {\lr{TypeScript · Bun · HTTP}}
-    {\lr{Agas} — کلاینت \lr{HTTP} برای ترمینال و برنامه‌های \lr{JavaScript}}
-    {\href{https://github.com/m-mdy-m/agas}{\lr{github.com/m-mdy-m/agas}}}
+    {\lr{TypeScript · Bun · HTTP · Docker}}
+    {\lr{Agas} — کلاینت \lr{HTTP} برای ترمینال و \lr{JavaScript}}
+    {\href{https://github.com/m-mdy-m/agas}{\lr{m-mdy-m/agas}}}
     {}
     {%
       \begin{cvitems}
-        \item {ابزاری برای ارسال و مدیریت درخواست‌های \lr{HTTP} از ترمینال و برنامه‌های \lr{JavaScript} ساخته‌ام که درخواست‌های ذخیره‌شده و خروجی خوانا دارد؛ این پروژه در \lr{npm} و \lr{Docker Hub} منتشر شده است.}
+        \item {ابزاری برای ارسال درخواست‌های \lr{HTTP} از ترمینال و استفاده در برنامه‌های \lr{JavaScript} ساخته‌ام؛ با قابلیت ذخیره و اجرای دوبارهٔ درخواست‌ها، تاریخچه و نمایش قالب‌بندی‌شدهٔ پاسخ. پکیج آن در \lr{npm} و Image آن در \lr{Docker Hub} منتشر شده است.}
       \end{cvitems}%
     }%
 }
@@ -68,19 +68,18 @@
   \begin{cventries}
     \projglandFA
     \projidiosFA
-    \projcdinFA
-    \projfladeFA
+    \projqiksFA
+    \projlogFA
     \projagasFA
   \end{cventries}%
   \vspace{1pt}
-  {\small\textbf{سایر فعالیت‌ها:}
-    ابزارهای مهندسی و خودکارسازی انتشار
-      (\href{https://github.com/m-mdy-m/pipeline}{\lr{Pipeline}})؛
-    ابزارهای خط فرمان و افزونه‌های \lr{Vim/Neovim}
+  {\small\textbf{دیگر پروژه‌ها و ابزارها:}
+    معماری و توسعهٔ ویرایشگر ماژولار \lr{CDIN} با \lr{C} و \lr{Lua}؛
+    ابزارهای ساخت و انتشار و مدیریت گردش کار توسعه
+      (\href{https://github.com/m-mdy-m/pipeline}{\lr{Pipeline}}،
+       \href{https://github.com/m-mdy-m/gix}{\lr{GIX}}،
+       \href{https://github.com/m-mdy-m/psx}{\lr{PSX}})؛
+    افزونهٔ مدیریت فایل برای \lr{Vim/Neovim}
       (\href{https://github.com/m-mdy-m/ftx.vim}{\lr{FTX.vim}})؛
-    محیط مطالعهٔ فایل‌های \lr{PDF} با رویکرد \lr{Local-first}
-      (\href{https://github.com/m-mdy-m/shelf}{\lr{Shelf}})؛
-    و پروژه‌های سیستمی با \lr{C} و آموزش الکترونیک و \lr{Embedded C}
-      (\href{https://github.com/m-mdy-m/algorithms-data-structures}{پیاده‌سازی‌ها}،
-       \href{https://github.com/m-mdy-m/Talken}{\lr{Talken}}).}%
+    و ابزارهای \lr{CLI}، تحلیل الگوریتم و پروژه‌های \lr{C} و \lr{Embedded}.}%
 }
