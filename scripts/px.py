@@ -21,9 +21,6 @@ import sys
 from pathlib import Path
 
 SCRIPT_DIR    = Path(__file__).resolve().parent
-WORKSPACE_DIR = SCRIPT_DIR.parent / "workspace"
-sys.path.insert(0, str(WORKSPACE_DIR))
-
 from px import (
     BOLD, BLUE, CYAN, DIM, GREEN, RED, RESET, YELLOW,
     b, c, dim, error, hr, prompt, warn,
