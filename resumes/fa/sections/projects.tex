@@ -1,4 +1,4 @@
-% پنج محور اصلی portfolio؛ پروژه‌های تکمیلی در یادداشت پایانی آمده‌اند.
+% سه محور اصلی portfolio بر اساس کار توسعه‌ای قابل ارائه؛ پروژه‌های تکمیلی در یادداشت پایانی آمده‌اند.
 \newcommand{\projcdinFA}{%
   \cventry
     {\lr{C11 · Lua 5.4 · SDL3}}%
@@ -25,32 +25,6 @@
     }%
 }
 
-\newcommand{\projnodecodeFA}{%
-  \cventry
-    {\lr{Common Lisp · SBCL · Agent Runtime}}%
-    {\lr{Nodecode} — \lr{Coding Agent}}%
-    {\href{\ProjNodecode}{\lr{m-mdy-m/nodecode}}}%
-    {}%
-    {%
-      \begin{cvitems}
-        \item {یک \lr{coding agent} مبتنی بر \lr{Common Lisp} است که در process پایدار \lr{SBCL} اجرا می‌شود. مدل در runtime زنده ابزار و skill می‌سازد؛ تعریف‌ها در قالب \lr{cell} نگه‌داری می‌شوند و تغییرات generation قابلیت rollback دارند.}
-      \end{cvitems}%
-    }%
-}
-
-\newcommand{\projfladeFA}{%
-  \cventry
-    {\lr{Python · Neural Simulation · Risk Controls}}%
-    {\lr{FLADE} — \lr{Modular Decision Platform}}%
-    {\href{\ProjFlade}{\lr{m-mdy-m/flade}}}%
-    {}%
-    {%
-      \begin{cvitems}
-        \item {یک پلتفرم ماژولار برای آزمایش سیستم‌های تصمیم‌گیری است. \lr{Market data}، strategy، risk policy و execution با contractهای مستقل متصل‌اند؛ در نمونهٔ فعلی، شبیه‌سازی connectome مگس به‌عنوان brain در \lr{BTC-USDC paper trading} به‌کار می‌رود. اجرای live به opt-in صریح نیاز دارد.}
-      \end{cvitems}%
-    }%
-}
-
 \newcommand{\projinfraFA}{%
   \cventry
     {\lr{Go · Python · C11}}%
@@ -68,8 +42,6 @@
   \begin{cventries}
     \projcdinFA
     \projglandFA
-    \projnodecodeFA
-    \projfladeFA
     \projinfraFA
   \end{cventries}%
   \vspace{1pt}
