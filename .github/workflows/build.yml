@@ -79,11 +79,24 @@ jobs:
           fi
           echo "$tool_bin" >> "$GITHUB_PATH"
 
+      - name: Preserve downloaded APT packages
+        shell: bash
+        run: |
+          set -euo pipefail
+          # GitHub's Ubuntu images inherit docker-clean, which removes downloaded
+          # .deb files after installation and makes an archive cache ineffective.
+          sudo rm -f /etc/apt/apt.conf.d/docker-clean
+          printf '%s\\n' 'APT::Keep-Downloaded-Packages "true";' | sudo tee /etc/apt/apt.conf.d/keep-cache >/dev/null
+          sudo install -d -m 0755 /var/cache/apt/archives/partial
+          sudo chown -R "$(id -u):$(id -g)" /var/cache/apt/archives
+
       - name: Cache Ubuntu package archives
         uses: actions/cache@v4
         with:
           path: /var/cache/apt/archives/*.deb
           key: papers-apt-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('.ci/locks/ubuntu-packages.lock') }}
+          restore-keys: |
+            papers-apt-${{ runner.os }}-${{ runner.arch }}-
 
       - name: Install locked Ubuntu build dependencies
         shell: bash
@@ -123,6 +136,9 @@ jobs:
         with:
           language: latex
           working-directory: .
+          # The locked system toolchain was installed and cached above. Verify it
+          # here instead of running a second apt-get update/install in Pipeline.
+          latex-setup-mode: verify
           stages: install,build,test
           install-command: python -m pip install -r .ci/locks/python-requirements.lock -e workspace
           timeout-seconds: "3600"
