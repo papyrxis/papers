@@ -33,10 +33,9 @@ jobs:
       publications-artifact: ${{ steps.set-publication-name.outputs.name }}
       resumes-artifact: ${{ steps.set-resume-name.outputs.name }}
     steps:
-      - name: Checkout with shared Workspace
+      - name: Checkout
         uses: actions/checkout@v4
         with:
-          submodules: recursive
           fetch-depth: 0
 
       - name: Set up Go for pinned repository tools
@@ -140,7 +139,7 @@ jobs:
           # here instead of running a second apt-get update/install in Pipeline.
           latex-setup-mode: verify
           stages: install,build,test
-          install-command: python -m pip install -r .ci/locks/python-requirements.lock -e workspace
+          install-command: python -m pip install -r .ci/locks/python-requirements.lock
           timeout-seconds: "3600"
         env:
           PROJECT_VERSION: ${{ inputs.version }}
