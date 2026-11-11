@@ -28,8 +28,6 @@ from pathlib import Path
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 ROOT       = SCRIPT_DIR.parent
-sys.path.insert(0, str(ROOT / "workspace"))
-
 from px import (                                              # noqa: E402
     BOLD, CYAN, DIM, GREEN, RED, RESET, YELLOW, BLUE, GREY,
     BaseModule,
@@ -448,10 +446,8 @@ def cmd_watch(slug_input: str = "") -> None:
 # ── clean ─────────────────────────────────────────────────────────────────────
 
 def _workspace_command(*args: str) -> int:
-    env = os.environ.copy()
-    env["PYTHONPATH"] = os.pathsep.join(filter(None, [str(ROOT / "workspace"), env.get("PYTHONPATH", "")]))
     return subprocess.run([sys.executable, "-m", "px", "--root", str(ROOT), *args],
-                          cwd=ROOT, env=env, check=False).returncode
+                          cwd=ROOT, check=False).returncode
 
 
 def cmd_clean(slug_input: str = "") -> None:
