@@ -10,7 +10,7 @@ build:
   default_engine: pdflatex
   timeout_seconds: 1800
 documents:
-  the-nature-of-data:
+  01-the-nature-of-data:
     type: article
     title: "The Nature of Data"
     style: academic
@@ -20,7 +20,7 @@ documents:
         working_directory: papers/01-the-nature-of-data
         engine: pdflatex
         output_name: the-nature-of-data
-  what-data-is-and-why-it-must-become-physical:
+  01-what-data-is-and-why-it-must-become-physical:
     type: booklet
     title: "What Data Is, and Why It Must Become Physical"
     editions:
