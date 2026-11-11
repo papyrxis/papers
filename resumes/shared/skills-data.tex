@@ -1,5 +1,9 @@
 \usepackage{etoolbox}
 
+% Keep technical names as separate direction-aware tokens. This allows line
+% breaks between terms in the fixed-width skill tables.
+\newcommand{\SkillTech}[1]{\ifdefined\lr\lr{#1}\else #1\fi}
+
 \def\addtocatlist#1#2{%
   \ifcsdef{Skill#1}{%
     \expandafter\appto\csname Skill#1\endcsname{, #2}%
@@ -8,9 +12,8 @@
   }%
 }
 
-% List technologies and practices demonstrated in authored or maintained work.
 \newcommand{\newskill}[3]{%
-  \ifstrequal{#3}{on}{\addtocatlist{#1}{#2}}{}%
+  \ifstrequal{#3}{on}{\addtocatlist{#1}{\SkillTech{#2}}}{}%
 }
 
 \newskill{Languages}{C}{on}
