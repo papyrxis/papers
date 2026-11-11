@@ -34,7 +34,7 @@ from px import (                                              # noqa: E402
     b, c,
     clean_latex_artifacts, confirm, confirm_slug,
     error, git_describe, hr, info, list_conf_files,
-    load_conf, log, prompt, resolve_by_index, run, run_quiet,
+    load_conf, log, prompt, resolve_by_index, run_quiet,
     success, warn, watch_loop,
 )
 
