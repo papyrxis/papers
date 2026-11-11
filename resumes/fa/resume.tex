@@ -45,18 +45,22 @@
 \end{cvparagraph}
 
 \cvsection{مهارت‌های کلیدی}
-\begin{cvskills}
-  \ifcsdef{SkillLanguages}{\cvskill{زبان‌ها}{\SkillLanguages}}{}
-  \ifcsdef{SkillBackend}{\cvskill{بک‌اند}{\SkillBackend}}{}
-  \ifcsdef{SkillDatabases}{\cvskill{پایگاه داده‌ها}{\SkillDatabases}}{}
-  \ifcsdef{SkillSystems}{\cvskill{سیستم‌ها}{\SkillSystems}}{}
-  \ifcsdef{SkillArchitecture}{\cvskill{معماری}{\SkillArchitecture}}{}
-  \ifcsdef{SkillDevOps}{%
-    \ifcsdef{SkillEnvironment}{%
-      \cvskill{زیرساخت و ابزارها}{\SkillDevOps, \SkillEnvironment}%
-    }{\cvskill{زیرساخت}{\SkillDevOps}}%
-  }{\ifcsdef{SkillEnvironment}{\cvskill{ابزارها}{\SkillEnvironment}}{}}%
-\end{cvskills}
+{%
+  \small
+  \renewcommand{\arraystretch}{1.12}%
+  \begin{tabularx}{\linewidth}{@{}>{\raggedleft\arraybackslash}p{2.2cm}@{\hspace{0.65em}}>{\begin{latin}\raggedright\arraybackslash}X<{\end{latin}}@{}}
+    \ifcsdef{SkillLanguages}{\cvskill{زبان‌ها}{\SkillLanguages}}{}
+    \ifcsdef{SkillBackend}{\cvskill{بک‌اند}{\SkillBackend}}{}
+    \ifcsdef{SkillDatabases}{\cvskill{پایگاه داده‌ها}{\SkillDatabases}}{}
+    \ifcsdef{SkillSystems}{\cvskill{سیستم‌ها}{\SkillSystems}}{}
+    \ifcsdef{SkillArchitecture}{\cvskill{معماری}{\SkillArchitecture}}{}
+    \ifcsdef{SkillDevOps}{%
+      \ifcsdef{SkillEnvironment}{%
+        \cvskill{زیرساخت و ابزارها}{\SkillDevOps, \SkillEnvironment}%
+      }{\cvskill{زیرساخت}{\SkillDevOps}}%
+    }{\ifcsdef{SkillEnvironment}{\cvskill{ابزارها}{\SkillEnvironment}}{}}%
+  \end{tabularx}%
+}
 
 \cvsection{توسعهٔ مستقل و متن‌باز}
 \FAExperienceBlock
