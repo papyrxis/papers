@@ -1,13 +1,13 @@
 % Selected public projects with clear, attributable descriptions.
 \newcommand{\projcdin}{%
   \proj{CDIN}{C11 $\cdot$ Lua 5.4 $\cdot$ SDL3}{%
-    \item I created CDIN, a project to build a modular text editor. Its design separates document state and edit history from command and plugin execution, as well as operating-system services. The terminal interface is the primary experience; the SDL-based graphical interface is still experimental.%
+    \item I created CDIN, a project to build a modular text editor. Its core stores document content and edit history, the Lua-based runtime executes commands and plugins, and a separate layer handles operating-system services. The terminal interface is the primary experience; the SDL-based graphical interface is still experimental.%
   }{cdin-editor/cdin}%
 }
 
 \newcommand{\projgland}{%
   \proj{GlandJS}{TypeScript $\cdot$ Node.js $\cdot$ Event-driven}{%
-    \item GlandJS is a framework for building server-side applications with TypeScript and Node.js. Its event-driven design lets different parts of an application communicate through messages instead of depending directly on one another. It manages service creation and wiring while keeping HTTP/server integration separate from the core, so the server layer can change without rewriting application logic.%
+    \item GlandJS is a framework for building server-side applications with TypeScript and Node.js. Instead of calling one another directly, parts of an application communicate through messages and events. The framework manages service creation and keeps the core separate from the web server, so the request-handling layer can change without rewriting the main application logic.%
   }{glandjs/gland}%
 }
 
