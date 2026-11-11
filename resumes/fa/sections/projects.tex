@@ -1,52 +1,72 @@
-% نمونه‌کارهای عمومی؛ نقش، کارکرد و وضعیت هر پروژه با دقت بیان شده است.
+% پنج گروه منتخب برای نمایش گسترهٔ پروژه‌ها؛ نام هر پروژه به ریپازیتوری اصلی لینک شده است.
 \newcommand{\projglandFA}{%
   \cventry
     {\lr{TypeScript · Node.js · Event-driven}}
-    {\lr{GlandJS} — فریمورک رویدادمحور برای \lr{Node.js}}
+    {\lr{GlandJS} — فریمورک رویدادمحور}
     {\href{https://github.com/glandjs/gland}{\lr{glandjs/gland}}}
     {}
     {%
       \begin{cvitems}
-        \item {سازنده و توسعه‌دهندهٔ اصلی یک فریمورک رویدادمحور برای \lr{Node.js} هستم. مجموعهٔ آن مدیریت ماژول‌ها، \lr{Dependency Injection}، چرخهٔ عمر سرویس‌ها، پیام‌رسانی رویدادمحور و یک لایهٔ مستقل \lr{HTTP} را در بر می‌گیرد که به وب‌سرورهایی مانند \lr{Express}، \lr{Fastify}، \lr{Koa} و \lr{Hono} متصل می‌شود. پکیج‌های اصلی با نام \lr{@glandjs} در \lr{npm} منتشر می‌شوند.}
+        \item {سازنده و توسعه‌دهندهٔ اصلی فریمورکی برای \lr{Node.js} هستم که مدیریت ماژول‌ها، \lr{Dependency Injection}، چرخهٔ عمر سرویس‌ها، پیام‌رسانی رویدادمحور و لایهٔ مستقل \lr{HTTP} با Adapterهای مختلف را فراهم می‌کند.}
+      \end{cvitems}%
+    }%
+}
+
+\newcommand{\projworkspaceFA}{%
+  \cventry
+    {\lr{Go · TypeScript · Local-first}}
+    {\lr{IDIOS \& Shelf} — محیط‌های کاری شخصی}
+    {\href{https://github.com/m-mdy-m/idios}{\lr{IDIOS}} \enspace
+     \href{https://github.com/m-mdy-m/shelf}{\lr{Shelf}}}
+    {}
+    {%
+      \begin{cvitems}
+        \item {\lr{IDIOS} محیطی برای مدیریت پروژه‌ها، یادداشت‌ها، مطالعه و برنامه‌ریزی است که رابط \lr{CLI} و \lr{Web/PWA} دارد. \lr{Shelf} روی مطالعهٔ فایل‌های \lr{PDF}، یادداشت‌گذاری و کمک‌گرفتن از \lr{AI} با ارجاع به متن منبع تمرکز دارد و همچنان در حال توسعه است.}
       \end{cvitems}%
     }%
 }
 
 \newcommand{\projcdinFA}{%
   \cventry
-    {\lr{C11 · Lua 5.4 · Protocol Design}}
-    {\lr{CDIN Editor} — پروژهٔ ویرایشگر متن ماژولار}
+    {\lr{C11 · Lua 5.4 · Protocol design}}
+    {\lr{CDIN Editor} — ویرایشگر متن ماژولار}
     {\href{https://github.com/cdin-editor/cdin}{\lr{cdin-editor/cdin}}}
     {}
     {%
       \begin{cvitems}
-        \item {خالق و معمار \lr{CDIN} هستم؛ پروژه‌ای برای ساخت ویرایشگر متنی ماژولار. در معماری آن، \lr{Kernel} مدیریت امن محتوای سند و سابقهٔ ویرایش را بر عهده دارد، \lr{Runtime} رفتار و افزونه‌ها را با \lr{Lua} اجرا می‌کند، \lr{Backend} سرویس‌های سیستم‌عامل و نشست‌ها را مدیریت می‌کند و \lr{Frontend} از طریق یک پروتکل مستقل با آن ارتباط دارد. یکپارچه‌سازی محصول و انتشار رابط تعاملی هنوز در حال توسعه است؛ رابط گرافیکی \lr{SDL} نیز آزمایشی است.}
+        \item {خالق و معمار پروژه‌ای با اجزای مستقل برای مدیریت سند، اجرای رفتارهای ویرایشگر با \lr{Lua}، سرویس‌های سیستمی و رابط‌های متصل از طریق پروتکل هستم. یکپارچه‌سازی محصول هنوز در حال توسعه است و نسخهٔ گرافیکی مبتنی بر \lr{SDL} آزمایشی است.}
       \end{cvitems}%
     }%
 }
 
 \newcommand{\projinfraFA}{%
   \cventry
-    {\lr{Go · Python · CI/CD}}
-    {ابزارهای توسعه و خودکارسازی}
-    {\href{https://github.com/m-mdy-m/pipeline}{\lr{m-mdy-m/pipeline}}}
+    {\lr{Go · Python · C11 · CI/CD}}
+    {ابزارهای مهندسی و زیرساخت توسعه}
+    {\href{https://github.com/m-mdy-m/pipeline}{\lr{Pipeline}} \enspace
+     \href{https://github.com/m-mdy-m/gix}{\lr{gix}} \enspace
+     \href{https://github.com/m-mdy-m/psx}{\lr{PSX}} \enspace
+     \href{https://github.com/m-mdy-m/log.c}{\lr{log.c}}}
     {}
     {%
       \begin{cvitems}
-        \item {\href{https://github.com/m-mdy-m/pipeline}{\lr{Pipeline}} یک مسیر مشترک برای اجرای کارهای ساخت و آزمون، هم در سیستم شخصی و هم در \lr{GitHub Actions} و \lr{GitLab CI} فراهم می‌کند. \href{https://github.com/m-mdy-m/gix}{\lr{gix}} مدیریت شاخه‌ها و انتشار نسخه‌ها را خودکار می‌کند و \href{https://github.com/m-mdy-m/psx}{\lr{PSX}} ساختار و قواعد هر پروژه را بررسی می‌کند.}
+        \item {\lr{Pipeline} اجرای یکسان کارهای ساخت و آزمون را در سیستم شخصی و \lr{CI} ممکن می‌کند؛ \lr{gix} مدیریت شاخه‌ها و نسخه‌ها را ساده می‌کند؛ \lr{PSX} قواعد و ساختار ریپو را می‌سنجد و \lr{log.c} یک کتابخانهٔ Logging برای برنامه‌های \lr{C11} است.}
       \end{cvitems}%
     }%
 }
 
-\newcommand{\projpapyrxisFA}{%
+\newcommand{\projtoolsFA}{%
   \cventry
-    {\lr{LaTeX · Python · Technical Writing}}
-    {\lr{Papyrxis} — نشر فنی و تولید محتوای آموزشی}
-    {\href{https://github.com/papyrxis/papers}{\lr{papyrxis/papers}}}
+    {\lr{TypeScript · Python · Vimscript}}
+    {ابزارهای خط فرمان و افزونه‌های Editor}
+    {\href{https://github.com/m-mdy-m/agas}{\lr{Agas}} \enspace
+     \href{https://github.com/m-mdy-m/NExa}{\lr{NExa}} \enspace
+     \href{https://github.com/m-mdy-m/ftx.vim}{\lr{FTX.vim}} \enspace
+     \href{https://github.com/m-mdy-m/trk}{\lr{TRK}}}
     {}
     {%
       \begin{cvitems}
-        \item {سامانهٔ نشر دوزبانه و ابزار مشترک \lr{Papyrxis Workspace} را برای آماده‌سازی و انتشار مقاله‌ها، کتاب‌ها و مجموعه‌های چندجلدی توسعه داده‌ام. این ابزارها ساخت اسناد با \lr{LaTeX}، خروجی‌گیری، بررسی کیفیت \lr{PDF} و خودکارسازی انتشار را پوشش می‌دهند.}
+        \item {\lr{Agas} کلاینت \lr{HTTP} برای ترمینال و JavaScript است و در \lr{npm} و \lr{Docker Hub} منتشر شده؛ \lr{NExa} مقاله‌های \lr{Dev.to} را از ترمینال دریافت می‌کند؛ \lr{FTX.vim} فایل‌ها را به‌صورت درختی و ناهمگام نمایش می‌دهد و \lr{TRK} ابزار ثبت زمان از طریق خط فرمان است.}
       \end{cvitems}%
     }%
 }
@@ -54,10 +74,11 @@
 \newcommand{\ResumeProjectsFA}{%
   \begin{cventries}
     \projglandFA
+    \projworkspaceFA
     \projcdinFA
     \projinfraFA
-    \projpapyrxisFA
+    \projtoolsFA
   \end{cventries}%
   \vspace{1pt}
-  {\small\textbf{کارهای دیگر:} \lr{Agas}، ابزار ارسال درخواست‌های \lr{HTTP} از ترمینال و \lr{JavaScript} با انتشار در \lr{npm} و \lr{Docker Hub}؛ \lr{Shelf}، محیط مطالعهٔ فایل‌های \lr{PDF} با رویکرد \lr{Local-first} و قابلیت‌های اختیاری \lr{AI} که در حال توسعه است؛ و \lr{FTX.vim}، افزونهٔ نمایش درختی فایل‌ها برای \lr{Vim} و \lr{Neovim}.}%
+  {\small\textbf{کارهای دیگر:} پیاده‌سازی الگوریتم‌ها و Data Structureها با \lr{C} و \lr{Talken}، پروژهٔ مستندسازی‌شده‌ای برای یادگیری الکترونیک و برنامه‌نویسی \lr{Embedded C}.}%
 }
