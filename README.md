@@ -72,6 +72,21 @@ Target differences should be configuration, not repeated build scripts. A target
 - Targets that need a particular citation style declare only that style.
 - Identical CSL files must not be copied into individual publications.
 
+## GitHub dependency graph submission
+
+The dependency-submission workflow is opt-in because GitHub returns HTTP 404 when
+Dependency graph is disabled for this repository. It is skipped by default and
+runs only when the repository Actions variable
+`ENABLE_GITHUB_DEPENDENCY_GRAPH` is set to `true`.
+
+To enable submissions, first enable **Dependency graph** in the repository's
+**Settings → Security → Advanced Security**, then add the repository variable
+under **Settings → Secrets and variables → Actions → Variables**. Do not use a
+secret for this non-sensitive flag. After enabling both, run **Dependency graph**
+manually from the Actions tab, or wait for the next push that changes one of the
+workflow files listed above. Until both settings are enabled, the job remains
+skipped rather than failing every push to `main`.
+
 ## CI and releases
 
 The reusable build workflow runs the Pipeline LaTeX preset, builds papers and booklets, and uploads a separate artifact for the English and Persian resumes after validating both as one-page PDFs. The rolling latest-pre-release includes both artifact sets; versioned stable releases consume publication PDFs only.
