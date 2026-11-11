@@ -13,6 +13,10 @@ permissions:
 
 jobs:
   log-c:
+    # GitHub rejects dependency-submission snapshots when the repository's
+    # Dependency graph feature is disabled. Keep this integration opt-in so
+    # the repository's normal CI remains green until an owner enables it.
+    if: ${{ vars.ENABLE_GITHUB_DEPENDENCY_GRAPH == 'true' }}
     uses: m-mdy-m/log.c/.github/workflows/dependency-submission.yml@master
     with:
       dependency-version: "0.1.0"
