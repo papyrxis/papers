@@ -82,8 +82,10 @@ runs only when the repository Actions variable
 To enable submissions, first enable **Dependency graph** in the repository's
 **Settings → Security → Advanced Security**, then add the repository variable
 under **Settings → Secrets and variables → Actions → Variables**. Do not use a
-secret for this non-sensitive flag. Until both settings are enabled, the
-workflow remains skipped rather than failing every push to `main`.
+secret for this non-sensitive flag. After enabling both, run **Dependency graph**
+manually from the Actions tab, or wait for the next push that changes one of the
+workflow files listed above. Until both settings are enabled, the job remains
+skipped rather than failing every push to `main`.
 
 ## CI and releases
 
