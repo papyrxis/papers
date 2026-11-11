@@ -1,4 +1,4 @@
-% Five primary workstreams plus a compact note on additional open-source projects.
+% Three primary workstreams based on attributable development work.
 \newcommand{\projcdin}{%
   \proj{CDIN}{C11 $\cdot$ Lua 5.4 $\cdot$ SDL3}{%
     \item I work on the architecture and integration of a modular, cross-platform text editor. The Kernel owns document state and undo/redo; the Lua Runtime manages commands and plugins; the Backend provides sessions and OS services; and Frontends provide TUI and GUI-SDL interfaces. The GUI-SDL renderer remains experimental.%
@@ -11,18 +11,6 @@
   }{glandjs/gland}%
 }
 
-\newcommand{\projnodecode}{%
-  \proj{Nodecode}{Common Lisp $\cdot$ SBCL $\cdot$ Agent Runtime}{%
-    \item A coding agent that runs in a persistent SBCL process. The model evaluates Lisp in the live runtime, defines reusable tools and skills as cells, and keeps changes as generations that can be rolled back.%
-  }{m-mdy-m/nodecode}%
-}
-
-\newcommand{\projflade}{%
-  \proj{FLADE}{Python $\cdot$ Neural Simulation $\cdot$ Risk Controls}{%
-    \item A modular decision and trading platform with separate contracts for market data, strategies, risk policies, brains, and execution providers. Its current research setup uses a fly-connectome neural simulation as a pluggable decision module in a BTC-USDC paper-trading flow; live execution requires explicit opt-in.%
-  }{m-mdy-m/flade}%
-}
-
 \newcommand{\projinfra}{%
   \proj{Developer Infrastructure}{Go $\cdot$ Python $\cdot$ C11}{%
     \item Reusable engineering tools: Pipeline, a task runner and cross-provider CI toolkit; gix, a Git-branching and versioning CLI; psx, repository-structure and quality checks; and log.c, a C11 logger with structured records and a stable C ABI.%
@@ -32,8 +20,6 @@
 \newcommand{\ResumeProjectsEN}{%
   \projcdin
   \projgland
-  \projnodecode
-  \projflade
   \projinfra
   \vspace{1pt}
   {\small\textit{Additional work:} Atabeh (Go) collects, parses and normalizes VPN/proxy configurations and tests connectivity; FTX.vim is an asynchronous, Git-aware file-tree explorer for Vim/Neovim.}
