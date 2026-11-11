@@ -375,74 +375,19 @@ def _ensure_pxis() -> None:
 def _build_one_paper(slug: str) -> bool:
     conf_path = CONFIGS_PAPERS / f"{slug}.conf"
     paper_dir = PAPERS_DIR / slug
-
-    if not conf_path.exists():
-        warn(f"Unknown paper '{slug}' (no {conf_path})")
+    if not conf_path.exists() or not paper_dir.is_dir():
+        warn(f"Unknown paper or missing source: {slug}")
         return False
-    if not paper_dir.exists():
-        warn(f"Paper directory not found: {paper_dir}")
-        return False
-
     log(f"[{slug}] generate main.tex")
     _generate_main_tex(slug)
-
-    meta   = load_conf(conf_path)
-    engine = meta.get("ENGINE", "pdflatex")
-    bibtex = meta.get("BIBTEX", "biber")
-
-    log(f"[{slug}] compile ({engine}, 2 passes + {bibtex})")
-    out_dir = BUILD_DIR / slug
-    out_dir.mkdir(parents=True, exist_ok=True)
-
-    env = {
-        "TEXINPUTS":       f".:{paper_dir}:{ROOT}:{ROOT / 'workspace'}::",
-        "PROJECT_VERSION": git_describe(ROOT),
-        "BUILD_DATE":      datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
-    }
-
-    def compile_pass(label: str) -> None:
-        rc, _, stderr = run_quiet(
-            [engine, "-interaction=nonstopmode",
-             f"-output-directory={out_dir}", "main.tex"],
-            cwd=paper_dir, env=env,
-        )
-        if rc != 0:
-            detail = f" ({stderr.strip()})" if stderr and stderr.strip() else ""
-            error(
-                f"[{slug}] {engine} {label} failed with exit code {rc}{detail} — "
-                f"see {out_dir / 'main.log'}"
-            )
-
-    compile_pass("first pass")
-    if not (out_dir / "main.pdf").is_file():
-        error(f"[{slug}] {engine} produced no PDF — see {out_dir / 'main.log'}")
-
-    main_tex_content = (paper_dir / "main.tex").read_text(encoding="utf-8")
-    if "\\addbibresource" in main_tex_content or "\\printbibliography" in main_tex_content:
-        bcf = out_dir / "main.bcf"
-        if not bcf.is_file():
-            error(f"[{slug}] main.bcf not found after first pass — see {out_dir / 'main.log'}")
-        bib_rc, _, bib_stderr = run_quiet([bibtex, str(out_dir / "main")], cwd=paper_dir, env=env)
-        if bib_rc != 0:
-            detail = f": {bib_stderr.strip()}" if bib_stderr and bib_stderr.strip() else ""
-            error(f"[{slug}] {bibtex} failed with exit code {bib_rc}{detail}")
-
-        compile_pass("post-bibliography pass")
-
-    compile_pass("final pass")
-
-    year       = datetime.now(timezone.utc).strftime("%Y")
-    title      = meta.get("PAPER_TITLE", slug)
-    safe_title = re.sub(r'[^A-Za-z0-9_-]', '', title.replace(" ", "_"))
-    out_name   = f"{year}_Genix_{safe_title}.pdf"
-    src        = out_dir / "main.pdf"
-    dst        = BUILD_DIR / out_name
-
-    if not src.exists():
-        error(f"[{slug}] build finished but {src} not found — check {out_dir / 'main.log'}")
-
-    shutil.copy2(src, dst)
-    success(f"[{slug}] done → build/{out_name}")
+    env = os.environ.copy()
+    env["PYTHONPATH"] = os.pathsep.join(filter(None, [str(ROOT / "workspace"), env.get("PYTHONPATH", "")]))
+    command = [sys.executable, "-m", "px", "--root", str(ROOT), "build", slug, "--edition", "default"]
+    result = subprocess.run(command, cwd=ROOT, env=env, check=False)
+    if result.returncode:
+        warn(f"[{slug}] Workspace build failed with exit code {result.returncode}")
+        return False
+    success(f"[{slug}] built by Workspace")
     return True
 
 
@@ -502,46 +447,25 @@ def cmd_watch(slug_input: str = "") -> None:
 
 # ── clean ─────────────────────────────────────────────────────────────────────
 
+def _workspace_command(*args: str) -> int:
+    env = os.environ.copy()
+    env["PYTHONPATH"] = os.pathsep.join(filter(None, [str(ROOT / "workspace"), env.get("PYTHONPATH", "")]))
+    return subprocess.run([sys.executable, "-m", "px", "--root", str(ROOT), *args],
+                          cwd=ROOT, env=env, check=False).returncode
+
+
 def cmd_clean(slug_input: str = "") -> None:
-    if slug_input:
-        slug = resolve_by_index(CONFIGS_PAPERS, slug_input)
-        log(f"Cleaning build artifacts for: {slug}")
-
-        build_slug = BUILD_DIR / slug
-        if build_slug.exists():
-            shutil.rmtree(build_slug)
-
+    slugs = [resolve_by_index(CONFIGS_PAPERS, slug_input)] if slug_input else [
+        conf.stem for conf in list_conf_files(CONFIGS_PAPERS)
+    ]
+    for slug in slugs:
+        if _workspace_command("clean", slug):
+            error(f"Workspace could not clean {slug}")
         paper_dir = PAPERS_DIR / slug
         if paper_dir.exists():
             clean_latex_artifacts(paper_dir)
+    success("Cleaned " + ", ".join(slugs))
 
-        meta  = load_conf(CONFIGS_PAPERS / f"{slug}.conf")
-        title = meta.get("PAPER_TITLE", slug)
-        safe  = re.sub(r'[^A-Za-z0-9_-]', '', title.replace(" ", "_"))
-        for f in BUILD_DIR.glob(f"*{safe}*.pdf"):
-            f.unlink()
-
-        success(f"Cleaned {slug}")
-    else:
-        log("Cleaning all build artifacts…")
-
-        for conf in list_conf_files(CONFIGS_PAPERS):
-            gen = PAPERS_DIR / conf.stem / "main.tex"
-            if gen.exists():
-                try:
-                    first_lines = gen.read_text(encoding="utf-8")[:200]
-                    if "inherited template" in first_lines:
-                        gen.unlink()
-                        print(f"  removed {gen.relative_to(ROOT)}")
-                except OSError:
-                    pass
-
-        if BUILD_DIR.exists():
-            shutil.rmtree(BUILD_DIR)
-            print("  removed build/")
-
-        clean_latex_artifacts(PAPERS_DIR)
-        success("All clean")
 
 
 # ── export ────────────────────────────────────────────────────────────────────

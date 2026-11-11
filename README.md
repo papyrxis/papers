@@ -47,6 +47,12 @@ Shared Python, LaTeX, logging, process, configuration and release helpers belong
 - m-mdy-m/log.c for native structured logs.
 - m-mdy-m/pipeline for CI/CD. GitHub Actions consumes the shared LaTeX toolchain action from the Pipeline main branch.
 
+## Publishing engine
+
+`workspace.yml` is the schema-v2 source of truth for publication documents and editions. Workspace owns compilation, isolated outputs, the build manifest and PDF verification. The existing paper/booklet scripts remain content adapters: they generate the entry-point TeX and booklet metadata, then delegate compilation to `px`. The bilingual booklet is one document with `en` and `fa` editions. CV generation remains separate from the publication manifest.
+
+`make build` syncs the pinned Workspace submodule, generates entry points, builds every publication edition and verifies `build/manifest.json`. `make clean` removes publication outputs while preserving resume artifacts.
+
 ## Quick start
 
     git clone --recurse-submodules https://github.com/papyrxis/papers.git

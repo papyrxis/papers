@@ -477,65 +477,14 @@ def _build_one_edition(slug: str, lang: str) -> bool:
                     f"Install rsvg-convert (librsvg2-bin) or cairosvg."
                 )
 
-    meta   = load_conf(conf_path)
-    engine = meta.get("ENGINE", LANG_ENGINE_DEFAULT.get(lang, "pdflatex"))
-    bibtex = meta.get("BIBTEX", "biber")
-    out    = meta.get("OUTPUT_NAME", f"{slug}-{lang}")
-
-    log(f"[{slug}:{lang}] compile ({engine}, passes + {bibtex})")
-    out_dir = BUILD_DIR / "booklets" / slug / lang
-    out_dir.mkdir(parents=True, exist_ok=True)
-
-    env = {
-        "PROJECT_VERSION": git_describe(ROOT),
-        "BUILD_DATE":      datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
-    }
-
-    def compile_pass(label: str) -> bool:
-        rc, _, stderr = run_quiet(
-            [engine, "-interaction=nonstopmode",
-             f"-output-directory={out_dir}", "main.tex"],
-            cwd=booklet_lang_dir, env=env,
-        )
-        if rc != 0:
-            detail = f": {stderr.strip()}" if stderr and stderr.strip() else ""
-            warn(f"[{slug}:{lang}] {engine} {label} failed with exit code {rc}{detail}; see {out_dir / 'main.log'}")
-            return False
-        return True
-
-    if not compile_pass("first pass"):
+    env = os.environ.copy()
+    env["PYTHONPATH"] = os.pathsep.join(filter(None, [str(ROOT / "workspace"), env.get("PYTHONPATH", "")]))
+    command = [sys.executable, "-m", "px", "--root", str(ROOT), "build", slug, "--edition", lang]
+    result = subprocess.run(command, cwd=ROOT, env=env, check=False)
+    if result.returncode:
+        warn(f"[{slug}:{lang}] Workspace build failed with exit code {result.returncode}")
         return False
-    if not (out_dir / "main.pdf").is_file():
-        warn(f"[{slug}:{lang}] {engine} produced no PDF — see {out_dir / 'main.log'}")
-        return False
-
-    main_tex_content = (booklet_lang_dir / "main.tex").read_text(encoding="utf-8")
-    if "\\addbibresource" in main_tex_content or "\\printbibliography" in main_tex_content:
-        bcf = out_dir / "main.bcf"
-        if not bcf.is_file():
-            warn(f"[{slug}:{lang}] bibliography was requested but {bcf} is missing")
-            return False
-        bib_rc, _, bib_stderr = run_quiet([bibtex, str(out_dir / "main")], cwd=booklet_lang_dir, env=env)
-        if bib_rc != 0:
-            detail = f": {bib_stderr.strip()}" if bib_stderr and bib_stderr.strip() else ""
-            warn(f"[{slug}:{lang}] {bibtex} failed with exit code {bib_rc}{detail}")
-            return False
-        if not compile_pass("post-bibliography pass"):
-            return False
-
-    if not compile_pass("final pass"):
-        return False
-
-    src = out_dir / "main.pdf"
-    dst = BUILD_DIR / "booklets" / f"{out}.pdf"
-
-    if not src.exists():
-        warn(f"[{slug}:{lang}] build finished but {src} not found "
-             f"— check {out_dir / 'main.log'}")
-        return False
-
-    shutil.copy2(src, dst)
-    success(f"[{slug}:{lang}] done → build/booklets/{out}.pdf")
+    success(f"[{slug}:{lang}] built by Workspace")
     return True
 
 
@@ -593,39 +542,22 @@ def cmd_watch(target: str = "") -> None:
 
 # ── clean ─────────────────────────────────────────────────────────────────────
 
+def _workspace_command(*args: str) -> int:
+    env = os.environ.copy()
+    env["PYTHONPATH"] = os.pathsep.join(filter(None, [str(ROOT / "workspace"), env.get("PYTHONPATH", "")]))
+    return subprocess.run([sys.executable, "-m", "px", "--root", str(ROOT), *args],
+                          cwd=ROOT, env=env, check=False).returncode
+
+
 def cmd_clean(target: str = "") -> None:
-    if target:
-        slug, lang = _resolve_target(target)
-        log(f"Cleaning build artifacts for: {slug}:{lang}")
-
-        out_dir = BUILD_DIR / "booklets" / slug / lang
-        if out_dir.exists():
-            shutil.rmtree(out_dir)
-
-        booklet_lang_dir = BOOKLETS_DIR / slug / lang
-        if booklet_lang_dir.exists():
-            clean_latex_artifacts(booklet_lang_dir)
-
-        conf_path = CONFIGS_BOOKLETS / f"{slug}-{lang}.conf"
-        if conf_path.exists():
-            meta = load_conf(conf_path)
-            out  = meta.get("OUTPUT_NAME", "")
-            if out:
-                pdf = BUILD_DIR / "booklets" / f"{out}.pdf"
-                if pdf.exists():
-                    pdf.unlink()
-
-        success(f"Cleaned {slug}:{lang}")
-    else:
-        log("Cleaning all booklet build artifacts…")
-        build_booklets = BUILD_DIR / "booklets"
-        if build_booklets.exists():
-            shutil.rmtree(build_booklets)
-
-        if BOOKLETS_DIR.exists():
-            clean_latex_artifacts(BOOKLETS_DIR)
-
-        success("All booklet artifacts cleaned")
+    editions = [_resolve_target(target)] if target else [(slug, lang) for slug, lang, _ in _list_editions()]
+    for slug, lang in editions:
+        if _workspace_command("clean", slug, "--edition", lang):
+            error(f"Workspace could not clean {slug}:{lang}")
+        booklet_dir = BOOKLETS_DIR / slug / lang
+        if booklet_dir.exists():
+            clean_latex_artifacts(booklet_dir)
+    success("Cleaned " + ", ".join(f"{slug}:{lang}" for slug, lang in editions))
 
 
 # ── module class ──────────────────────────────────────────────────────────────
