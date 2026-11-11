@@ -1,26 +1,31 @@
-% Three primary workstreams based on attributable development work.
+% Selected public projects with clear, attributable descriptions.
 \newcommand{\projcdin}{%
   \proj{CDIN}{C11 $\cdot$ Lua 5.4 $\cdot$ SDL3}{%
-    \item I work on the architecture and integration of a modular, cross-platform text editor. The Kernel owns document state and undo/redo; the Lua Runtime manages commands and plugins; the Backend provides sessions and OS services; and Frontends provide TUI and GUI-SDL interfaces. The GUI-SDL renderer remains experimental.%
+    \item I created CDIN, a project to build a modular text editor. Its design separates document state and edit history from command and plugin execution, as well as operating-system services. The terminal interface is the primary experience; the SDL-based graphical interface is still experimental.%
   }{cdin-editor/cdin}%
 }
 
 \newcommand{\projgland}{%
   \proj{GlandJS}{TypeScript $\cdot$ Node.js $\cdot$ Event-driven}{%
-    \item A backend framework for modular Node.js services. Components communicate through a message bus; dependency injection and module/controller metadata handle composition; and HTTP adapters stay separate from the core. This keeps application logic from depending directly on one server or transport.%
+    \item GlandJS is a framework for building server-side applications with TypeScript and Node.js. Its event-driven design lets different parts of an application communicate through messages instead of depending directly on one another. It manages service creation and wiring while keeping HTTP/server integration separate from the core, so the server layer can change without rewriting application logic.%
   }{glandjs/gland}%
 }
 
 \newcommand{\projinfra}{%
-  \proj{Developer Infrastructure}{Go $\cdot$ Python $\cdot$ C11}{%
-    \item Reusable engineering tools: Pipeline, a task runner and cross-provider CI toolkit; gix, a Git-branching and versioning CLI; psx, repository-structure and quality checks; and log.c, a C11 logger with structured records and a stable C ABI.%
+  \proj{Developer Tools}{Go $\cdot$ Python $\cdot$ C11}{%
+    \item A set of tools for everyday software development: Pipeline defines build, test, and release tasks once and runs them locally or in GitHub Actions and GitLab CI; gix simplifies Git branch and version management; psx checks whether a repository has the files and structure required by its project rules; and log.c is a lightweight logging library for C programs.%
   }{m-mdy-m/pipeline}%
+}
+
+\newcommand{\projftx}{%
+  \proj{FTX.vim}{Vim Script $\cdot$ Vim $\cdot$ Neovim}{%
+    \item A file-tree plugin for Vim and Neovim. It updates the tree asynchronously to keep the editor responsive and displays Git status alongside files and directories.%
+  }{m-mdy-m/ftx.vim}%
 }
 
 \newcommand{\ResumeProjectsEN}{%
   \projcdin
   \projgland
   \projinfra
-  \vspace{1pt}
-  {\small\textit{Additional work:} Atabeh (Go) collects, parses and normalizes VPN/proxy configurations and tests connectivity; FTX.vim is an asynchronous, Git-aware file-tree explorer for Vim/Neovim.}
+  \projftx
 }
