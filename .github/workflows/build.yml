@@ -86,7 +86,7 @@ jobs:
           # GitHub's Ubuntu images inherit docker-clean, which removes downloaded
           # .deb files after installation and makes an archive cache ineffective.
           sudo rm -f /etc/apt/apt.conf.d/docker-clean
-          printf '%s\\n' 'APT::Keep-Downloaded-Packages "true";' | sudo tee /etc/apt/apt.conf.d/keep-cache >/dev/null
+          printf '%s\n' 'APT::Keep-Downloaded-Packages "true";' | sudo tee /etc/apt/apt.conf.d/keep-cache >/dev/null
           sudo install -d -m 0755 /var/cache/apt/archives/partial
           sudo chown -R "$(id -u):$(id -g)" /var/cache/apt/archives
 
