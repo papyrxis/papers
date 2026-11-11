@@ -21,7 +21,7 @@ Prefer a narrow, defensible contribution over a broad, weakly supported one.
 - Reusable LaTeX components, Python tooling, export targets, build orchestration, logging, and release automation belong in Papyrxis Workspace.
 - Read the repository README and docs/REPOSITORY-BOUNDARIES.md before changing repository structure.
 - Do not copy shared Workspace code into a publication.
-- Do not change the Workspace submodule revision, shared schemas, CI workflows, or repository-wide build behavior as an incidental part of editing prose.
+- Do not change the pinned Workspace package version, shared schemas, CI workflows, or repository-wide build behavior as an incidental part of editing prose.
 - Never edit generated files under build/. Change their source and rebuild instead.
 
 ## Inspect before editing
