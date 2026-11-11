@@ -46,8 +46,6 @@ except ImportError:
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 ROOT       = SCRIPT_DIR.parent
-sys.path.insert(0, str(ROOT / "workspace"))
-
 from px import (                                              # noqa: E402
     BOLD, CYAN, DIM, GREEN, RED, RESET, YELLOW, BLUE,
     BaseModule,
@@ -477,10 +475,8 @@ def _build_one_edition(slug: str, lang: str) -> bool:
                     f"Install rsvg-convert (librsvg2-bin) or cairosvg."
                 )
 
-    env = os.environ.copy()
-    env["PYTHONPATH"] = os.pathsep.join(filter(None, [str(ROOT / "workspace"), env.get("PYTHONPATH", "")]))
     command = [sys.executable, "-m", "px", "--root", str(ROOT), "build", slug, "--edition", lang]
-    result = subprocess.run(command, cwd=ROOT, env=env, check=False)
+    result = subprocess.run(command, cwd=ROOT, check=False)
     if result.returncode:
         warn(f"[{slug}:{lang}] Workspace build failed with exit code {result.returncode}")
         return False
@@ -543,10 +539,8 @@ def cmd_watch(target: str = "") -> None:
 # ── clean ─────────────────────────────────────────────────────────────────────
 
 def _workspace_command(*args: str) -> int:
-    env = os.environ.copy()
-    env["PYTHONPATH"] = os.pathsep.join(filter(None, [str(ROOT / "workspace"), env.get("PYTHONPATH", "")]))
     return subprocess.run([sys.executable, "-m", "px", "--root", str(ROOT), *args],
-                          cwd=ROOT, env=env, check=False).returncode
+                          cwd=ROOT, check=False).returncode
 
 
 def cmd_clean(target: str = "") -> None:
