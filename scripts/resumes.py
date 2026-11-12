@@ -238,7 +238,7 @@ def cmd_rename(target: str = "", new_name: str = "") -> None:
         cmd_list()
         target = prompt("Which resume to rename? (lang|#)")
         if not target:
-            error("No choice made")
+            error("No choice made.")
 
     lang      = resolve_by_index(CONFIGS_RESUMES, target)
     conf_path = CONFIGS_RESUMES / f"{lang}.conf"
