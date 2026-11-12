@@ -53,7 +53,7 @@ push:
 	@$(WPX) push $(if $(filter 1,$(TAGS)),--tags,)
 
 # Pipeline LaTeX preset delegates to this target. Build publication content only.
-build:
+build: clean
 	@PROJECT_VERSION="$(VERSION)" BUILD_DATE="$(BUILD_DATE)" $(PX) papers build all
 	@PROJECT_VERSION="$(VERSION)" BUILD_DATE="$(BUILD_DATE)" $(PX) booklets build all
 	@$(WPX) verify

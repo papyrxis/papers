@@ -50,7 +50,7 @@ Shared Python, LaTeX, logging, process, configuration and release helpers belong
 
 `workspace.yml` is the schema-v2 source of truth for publication documents and editions. Workspace owns compilation, isolated outputs, the build manifest and PDF verification. The existing paper/booklet scripts remain content adapters: they generate the entry-point TeX and booklet metadata, then delegate compilation to `px`. The bilingual booklet is one document with `en` and `fa` editions. CV generation remains separate from the publication manifest.
 
-`make build` generates entry points, builds every publication edition with the installed Workspace package, and verifies `build/manifest.json`. Workspace is pinned to the published v0.5.0 wheel in `.ci/locks/python-requirements.lock`; no Workspace checkout or submodule is required. `make clean` removes publication outputs while preserving resume artifacts.
+`make build` generates entry points, builds every publication edition with the installed Workspace package, and verifies `build/manifest.json`. Workspace is pinned to the published v0.5.1 wheel in `.ci/locks/python-requirements.lock`; no Workspace checkout or submodule is required. `make clean` removes publication outputs while preserving resume artifacts.
 
 ## Quick start
 

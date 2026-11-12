@@ -361,7 +361,7 @@ def _ensure_pxis() -> None:
     if not (ROOT / ".pxis" / "preset.tex").is_file():
         error(
             ".pxis/preset.tex is missing. Restore the tracked project preset; "
-            "Workspace v0.5.0 is installed as a Python package and does not "
+            "Workspace is installed from the version-pinned Python package and does not "
             "require a repository sync or submodule checkout."
         )
 
