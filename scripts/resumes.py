@@ -110,6 +110,8 @@ def _build_one(lang: str) -> bool:
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
         text=True,
+        encoding="utf-8",
+        errors="replace",
     )
     for line in result.stdout.splitlines():
         if any(x in line for x in ("! ", "l.", "Error", "Warning")):
