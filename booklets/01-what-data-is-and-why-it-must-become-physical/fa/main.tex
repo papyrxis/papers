@@ -82,12 +82,18 @@
 \input{chapters/chapter02}
 \input{chapters/chapter03}
 
+\renewcommand{\appendixname}{پیوست}
+\appendix
+\input{appendices}
+
 \backmatter
-% Per-booklet backmatter note:
+% Per-booklet back matter:
 \input{backmatter/note}
 \InputIfFileExists{backmatter/conclusion}{}{}
+\input{backmatter/notation}
 \input{../../shared/fa/backmatter/references}
 \InputIfFileExists{backmatter/glossary}{}{}
+\input{backmatter/further-reading}
 \input{../../shared/fa/backmatter/about-arliz}
 \input{../../shared/fa/backmatter/about-author}
 
