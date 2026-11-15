@@ -31,18 +31,24 @@
 \BookletCover{frontmatter/cover}
 \input{@SHARED_PATH@/en/frontmatter/title}
 \input{@SHARED_PATH@/en/frontmatter/copyright}
+\input{@SHARED_PATH@/en/backmatter/about-author}
 \tableofcontents
 \input{@SHARED_PATH@/en/frontmatter/how-to-read}
 \input{frontmatter/preface}
 
 \mainmatter
 @CHAPTERS@
+\input{backmatter/conclusion}
+
+\appendix
+\input{appendices}
+
 \backmatter
-\InputIfFileExists{backmatter/conclusion}{}{}
 \input{backmatter/note}
+\input{backmatter/notation}
 \input{@SHARED_PATH@/en/backmatter/references}
-\InputIfFileExists{backmatter/glossary}{}{}
+\input{backmatter/further-reading}
+\input{backmatter/glossary}
 \input{@SHARED_PATH@/en/backmatter/about-arliz}
-\input{@SHARED_PATH@/en/backmatter/about-author}
 
 \end{document}
