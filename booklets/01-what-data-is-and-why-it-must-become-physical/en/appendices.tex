@@ -1,0 +1,149 @@
+\chapter{The Assumptions Behind the Equations}
+\label{app:information-formulas}
+
+The chapter used several mathematical relations to measure information, describe channels, and explain sampling. At first glance, these relations may look like independent formulas. Each, however, belongs to a particular model. Before applying one to a new problem, it is worth asking what it measures and what assumptions it requires.
+
+\section{Counting States and Measuring Information}
+
+Suppose a message contains \(n\) positions, and each position can contain one of \(s\) symbols. The number of possible strings is:
+
+\[
+M=s^n.
+\]
+
+If all of these strings are equally likely, the information needed to identify one of them is:
+
+\[
+I=\log_2 M=n\log_2 s.
+\]
+
+This relation depends on the assumption that all possibilities are equiprobable. When some messages are much more likely than others, simply counting the possible strings does not fully describe the source's uncertainty; the probability of each message must also be taken into account.
+
+\section{Self-Information and Shannon Entropy}
+
+For a particular outcome \(x_i\) with probability \(p_i\), its self-information is defined as:
+
+\[
+I(x_i)=-\log_2 p_i.
+\]
+
+This quantity describes how surprising that outcome is under the probability model. An outcome with a lower probability carries more self-information. If an outcome is certain, \(p_i=1\), and its self-information is zero.
+
+Shannon entropy is the average self-information of the possible outcomes:
+
+\[
+H(X)=-\sum_i p_i\log_2 p_i.
+\]
+
+Here, \(X\) is a random variable, \(x_i\) is one of its possible outcomes, and \(p_i\) is the probability of that outcome. With a base-two logarithm, entropy is measured in bits. Entropy depends on a probability distribution, not on the linguistic meaning or human importance of a message.
+
+For a binary variable in which one of the two outcomes has probability \(p\), binary entropy is:
+
+\[
+H_2(p)=-p\log_2 p-(1-p)\log_2(1-p).
+\]
+
+The convention \(0\log_2 0=0\) is used, so the expression is well-defined at the endpoints by continuity.
+
+\section{Channel Capacity: Two Different Models}
+
+For a memoryless binary symmetric channel, if each transmitted symbol is inverted with probability \(p\), its capacity is:
+
+\[
+C=1-H_2(p).
+\]
+
+This relation must not be generalized to every communication path. It assumes a channel with two possible symbols, equal error probability in both directions, and independent errors across uses.
+
+For an ideal continuous channel with additive white Gaussian noise, the Shannon–Hartley relation is:
+
+\[
+C=B\log_2\left(1+\frac{S}{N}\right).
+\]
+
+Here, \(B\) is bandwidth in hertz, and \(S/N\) is the ratio of signal power to noise power. The ratio must be expressed as a linear ratio, not in decibels. In this model, \(C\) is a capacity in bits per second. The relation depends on a specific channel model and power constraint; it is not a universal formula for every real channel.
+
+\section{Kolmogorov Complexity}
+
+The Kolmogorov complexity of a string \(x\), relative to a universal description machine \(U\), is the length of the shortest program that produces that string:
+
+\[
+K_U(x)=\min_{p:U(p)=x}|p|.
+\]
+
+Here, \(p\) is a program, \(U(p)\) is its output, and \(|p|\) is the length of the program in the program's description language. This quantity is not the same as Shannon entropy: entropy concerns the probability distribution of a source, while Kolmogorov complexity concerns the shortest description of a particular string. Its exact value depends on the reference machine, although the values for suitable universal machines differ by at most an additive constant.
+
+\section{Erasure and Landauer's Principle}
+
+For the logical erasure of one unknown bit at temperature \(T\), Landauer's principle gives the lower bound on the heat released to the environment:
+
+\[
+Q_{\min}=k_{\mathrm B}T\ln 2.
+\]
+
+Here, \(k_{\mathrm B}\) is Boltzmann's constant and \(T\) is absolute temperature in kelvin. The relation concerns a logically irreversible operation such as erasure. It must not be turned into the claim that every computation or every transfer of information necessarily consumes this amount of energy. Actual energy use depends on the device, its design, operating speed, temperature, and physical mechanism.
+
+\section{Sampling and the Reconstruction Condition}
+
+If a signal is sampled \(f_s\) times per second, the time between successive samples is:
+
+\[
+T_s=\frac{1}{f_s}.
+\]
+
+For a signal ideally limited to frequencies below \(f_{\max}\), the Nyquist–Shannon sampling condition for ideal reconstruction is:
+
+\[
+f_s>2f_{\max}.
+\]
+
+This condition assumes a band-limited signal and ideal reconstruction. In real systems, pre-sampling filters, component limitations, and safety margins also matter. Merely increasing the sampling rate does not remove every error if the signal has not been properly prepared.
+
+\chapter{Physical Quantities and Units}
+\label{app:physical-quantities}
+
+In the discussion of electricity, a number alone is not enough. We must know which quantity it describes and which unit is used. The following units appear in the chapter or are needed to read its equations.
+
+\begin{description}
+  \item[\(\mathrm{bit}\)] A unit of information when logarithms are taken to base two. A bit is an information unit, not a base unit of the International System of Units.
+  \item[\(\mathrm{Hz}\)] Hertz; the unit of frequency, equal to one cycle per second, or \(\mathrm{s}^{-1}\). Sampling rates are also expressed as samples per second.
+  \item[\(\mathrm{V}\)] Volt; the unit of electric potential difference. One volt equals one joule per coulomb:
+  \[
+  1\,\mathrm{V}=1\,\frac{\mathrm{J}}{\mathrm{C}}.
+  \]
+  \item[\(\mathrm{C}\)] Coulomb; the unit of electric charge. In information-theory equations, an uppercase \(C\) also denotes channel capacity; the surrounding equation determines which meaning is intended.
+  \item[\(\mathrm{J}\)] Joule; the unit of energy and work.
+  \item[\(\mathrm{K}\)] Kelvin; the unit of thermodynamic temperature.
+  \item[\(\mathrm{s}\)] Second; the unit of time.
+\end{description}
+
+\section{Common Decimal Prefixes}
+
+Prefixes scale a base unit by powers of ten. For example:
+
+\[
+\begin{array}{c|c|c}
+\text{Prefix} & \text{Symbol} & \text{Factor}\\
+\hline
+\text{kilo} & \mathrm{k} & 10^3\\
+\text{mega} & \mathrm{M} & 10^6\\
+\text{giga} & \mathrm{G} & 10^9\\
+\text{milli} & \mathrm{m} & 10^{-3}\\
+\text{micro} & \mathrm{\mu} & 10^{-6}\\
+\text{nano} & \mathrm{n} & 10^{-9}
+\end{array}
+\]
+
+For example, \(48\,\mathrm{kHz}\) means forty-eight thousand hertz. Uppercase and lowercase prefix symbols matter: \(\mathrm{M}\) and \(\mathrm{m}\) do not mean the same thing.
+
+\section{Potential Difference and Energy}
+
+If a charge \(q\) moves between two points and its electric potential energy changes by \(\Delta U\), the potential difference between those points is:
+
+\[
+\Delta V=\frac{\Delta U}{q},
+\qquad
+\Delta U=q\Delta V.
+\]
+
+Voltage is therefore not energy itself; electric potential energy also depends on the amount of charge. The units are consistent: a joule divided by a coulomb is a volt.
