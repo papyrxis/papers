@@ -71,6 +71,7 @@
 \BookletCover{frontmatter/cover}
 \input{../../shared/fa/frontmatter/title}
 \input{../../shared/fa/frontmatter/copyright}
+\input{../../shared/fa/backmatter/about-author}
 \tableofcontents
 \input{../../shared/fa/frontmatter/how-to-read}
 \input{frontmatter/preface}
@@ -81,14 +82,19 @@
 \input{chapters/chapter01}
 \input{chapters/chapter02}
 \input{chapters/chapter03}
+\input{backmatter/conclusion}
+
+\renewcommand{\appendixname}{پیوست}
+\appendix
+\input{appendices}
 
 \backmatter
-% Per-booklet backmatter note:
+% Keep the edition note separate from the book's substantive conclusion.
 \input{backmatter/note}
-\InputIfFileExists{backmatter/conclusion}{}{}
+\input{backmatter/notation}
 \input{../../shared/fa/backmatter/references}
-\InputIfFileExists{backmatter/glossary}{}{}
+\input{backmatter/further-reading}
+\input{backmatter/glossary}
 \input{../../shared/fa/backmatter/about-arliz}
-\input{../../shared/fa/backmatter/about-author}
 
 \end{document}
